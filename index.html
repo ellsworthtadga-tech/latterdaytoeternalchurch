@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latter-Day to Eternal Church</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:        #C9A84C;
+      --gold-light:  #E8D08A;
+      --gold-dark:   #8B6914;
+      --crimson:     #7A1C2E;
+      --parchment:   #F5EDD8;
+      --parchment-dk:#E8D9B8;
+      --ink:         #1A0F05;
+      --ink-soft:    #3D2B1A;
+      --ivory:       #FAF6EE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--ink);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── DECORATIVE BACKGROUND ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #3D1A08 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 10% 50%, #5C1A10 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 90% 50%, #3D1A08 0%, transparent 60%),
+        linear-gradient(to bottom, #0D0703, #1A0F05 40%, #0D0703);
+      z-index: -2;
+    }
+
+    /* Subtle parchment texture overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ─── ORNAMENTAL RULE ───────────────────────────────────── */
+    .ornament {
+      display: flex; align-items: center; gap: 1rem;
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin: 1.5rem auto;
+      max-width: 480px;
+      justify-content: center;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent);
+    }
+
+    /* ─── NAV ───────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92));
+      border-bottom: 1px solid var(--gold-dark);
+      padding: 0.75rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(6px);
+    }
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex; gap: 2.5rem;
+    }
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment-dk);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.25s;
+      transform-origin: center;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links .active { color: var(--gold); }
+
+    /* ─── HERO ──────────────────────────────────────────────── */
+    .hero {
+      min-height: 92vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Large cross watermark */
+    .hero::before {
+      content: '✝';
+      position: absolute;
+      font-size: 60vw;
+      color: rgba(201, 168, 76, 0.03);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--parchment);
+      max-width: 900px;
+      text-shadow: 0 2px 30px rgba(201,168,76,0.25);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.45s forwards;
+    }
+    .hero-title span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-family: 'EB Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: var(--parchment-dk);
+      max-width: 640px;
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.75s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      border: none;
+      padding: 0.85rem 2.4rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+    }
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,168,76,0.45);
+    }
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid var(--gold-dark);
+      padding: 0.85rem 2.4rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.25s, color 0.25s, transform 0.25s;
+    }
+    .btn-secondary:hover {
+      background: rgba(201,168,76,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ─── SECTION SHARED ────────────────────────────────────── */
+    section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-weight: 600;
+      color: var(--parchment);
+      text-align: center;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .section-body {
+      font-size: 1.05rem;
+      color: var(--parchment-dk);
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* ─── FULL-WIDTH DIVIDER ────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent);
+      margin: 0;
+    }
+
+    /* ─── ABOUT / MISSION ───────────────────────────────────── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-text h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      color: var(--parchment);
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+    .about-text p {
+      color: var(--parchment-dk);
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+    .about-text p em {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+    .about-panel {
+      background: linear-gradient(160deg, rgba(201,168,76,0.07) 0%, rgba(122,28,46,0.06) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 3rem 2.5rem;
+      position: relative;
+    }
+    .about-panel::before,
+    .about-panel::after {
+      content: '✦';
+      position: absolute;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    .about-panel::before { top: 0.8rem; left: 1rem; }
+    .about-panel::after  { bottom: 0.8rem; right: 1rem; }
+
+    .quote-block {
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--parchment);
+      line-height: 1.9;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .quote-attr {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ─── THREE PILLARS ─────────────────────────────────────── */
+    #pillars {
+      padding-top: 0;
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .pillar-card {
+      background: linear-gradient(170deg, rgba(201,168,76,0.06), rgba(26,15,5,0.4));
+      border: 1px solid rgba(201,168,76,0.18);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .pillar-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201,168,76,0.45);
+    }
+    .pillar-icon {
+      font-size: 2.2rem;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+    .pillar-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--parchment);
+      margin-bottom: 1rem;
+    }
+    .pillar-card p {
+      font-size: 0.95rem;
+      color: var(--parchment-dk);
+      line-height: 1.75;
+    }
+
+    /* ─── FEATURED TOPICS BAND ──────────────────────────────── */
+    .topics-band {
+      background: linear-gradient(to right, rgba(122,28,46,0.12), rgba(201,168,76,0.06), rgba(122,28,46,0.12));
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .topics-band .section-title { margin-bottom: 2.5rem; }
+    .topics-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      list-style: none;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .topics-list li {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 0.55rem 1.3rem;
+      transition: background 0.25s, color 0.25s;
+      cursor: default;
+    }
+    .topics-list li:hover {
+      background: rgba(201,168,76,0.12);
+    }
+
+    /* ─── CALL TO FAITH ─────────────────────────────────────── */
+    #cta {
+      text-align: center;
+      padding: 7rem 2rem;
+    }
+    #cta .section-title { font-size: clamp(1.8rem, 3.5vw, 3rem); }
+    #cta .section-body { margin-bottom: 2.5rem; }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(232,217,184,0.55);
+      margin-bottom: 1.5rem;
+    }
+    .footer-nav {
+      list-style: none;
+      display: flex; gap: 2rem; justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .footer-nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment-dk);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--gold); }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(232,217,184,0.3);
+    }
+
+    /* ─── ANIMATIONS ────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a class="nav-brand" href="index.html">Latter-Day to Eternal Church</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="articles.html">Articles</a></li>
+      <li><a href="topics.html">Topics</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <p class="hero-eyebrow">A Catholic Apologetics Ministry</p>
+    <h1 class="hero-title">
+      Latter-Day to
+      <span>Eternal Church</span>
+    </h1>
+    <p class="hero-subtitle">
+      Tracing the unbroken thread from the Apostles to today —
+      defending the Faith once delivered to the saints.
+    </p>
+    <div class="hero-cta">
+      <a href="#about" class="btn-primary">Our Mission</a>
+      <a href="articles.html" class="btn-secondary">Explore Articles</a>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- ── ABOUT / MISSION ── -->
+  <section id="about">
+    <div class="about-text">
+      <h2>The Question Every Seeker Must Face</h2>
+      <p>
+        If Christ founded a Church that would prevail against the gates of Hell
+        (Mt 16:18), where is that Church today? This site exists to pursue that
+        question with intellectual rigor, charitable honesty, and fidelity to the
+        historical record.
+      </p>
+      <p>
+        Here you will find careful examinations of Latter-day Saint doctrine
+        measured against Scripture, the early Church Fathers, and the unbroken
+        tradition of Catholic Christianity — not to condemn, but to
+        <em>illuminate</em>.
+      </p>
+      <p>
+        Every argument is tested against primary sources. Every critique is
+        offered in a spirit of genuine dialogue, grounded in the conviction that
+        truth, followed honestly, leads to one place.
+      </p>
+      <a href="#pillars" class="btn-secondary" style="display:inline-block; margin-top:1rem;">
+        Our Approach →
+      </a>
+    </div>
+    <div class="about-panel">
+      <blockquote class="quote-block">
+        "The Church of the living God, the pillar and bulwark of the truth."
+      </blockquote>
+      <p class="quote-attr">— 1 Timothy 3:15</p>
+      <div class="ornament" style="margin: 2rem 0;">✦</div>
+      <blockquote class="quote-block">
+        "Where the bishop is present, there let the congregation gather,
+        just as where Jesus Christ is, there is the Catholic Church."
+      </blockquote>
+      <p class="quote-attr">— St. Ignatius of Antioch, c. AD 107</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── THREE PILLARS ── -->
+  <section id="pillars" style="max-width:1100px; margin:0 auto; padding:6rem 2rem;">
+    <p class="section-label">Our Method</p>
+    <h2 class="section-title">Three Pillars of Inquiry</h2>
+    <div class="ornament">✦</div>
+    <p class="section-body">
+      Sound apologetics demands more than proof-texting. We examine every
+      question through three complementary lenses.
+    </p>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <span class="pillar-icon">✝</span>
+        <h3>Biblical Exegesis</h3>
+        <p>
+          Every doctrinal claim is weighed against the full witness of Sacred
+          Scripture — read within its literary, historical, and canonical
+          context, not in isolation.
+        </p>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-icon">⛪</span>
+        <h3>Historical Continuity</h3>
+        <p>
+          The Church Fathers, early councils, and two millennia of unbroken
+          tradition provide a witness that no restoration movement can replicate
+          or explain away.
+        </p>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-icon">⚖</span>
+        <h3>Internal Coherence</h3>
+        <p>
+          We test doctrines on their own terms — showing where competing
+          systems create logical contradictions, and where Catholic teaching
+          resolves them with unity and consistency.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TOPICS BAND ── -->
+  <div class="topics-band">
+    <p class="section-label">Areas of Study</p>
+    <h2 class="section-title">Topics Covered</h2>
+    <ul class="topics-list">
+      <li>Apostolic Succession</li>
+      <li>The Nature of God</li>
+      <li>Eternal Progression</li>
+      <li>Priesthood Authority</li>
+      <li>Sola Scriptura</li>
+      <li>The Great Apostasy</li>
+      <li>Covenant Theology</li>
+      <li>Joseph Smith's Polygamy</li>
+      <li>The Canon of Scripture</li>
+      <li>Salvation & Exaltation</li>
+      <li>Patristic Evidence</li>
+      <li>Progressive Revelation</li>
+    </ul>
+  </div>
+
+  <!-- ── CALL TO ACTION ── -->
+  <section id="cta">
+    <p class="section-label">Begin the Journey</p>
+    <h2 class="section-title">Where Will the Evidence Lead You?</h2>
+    <div class="ornament">✦</div>
+    <p class="section-body">
+      Whether you are a Latter-day Saint seeking honest answers, a Catholic
+      wishing to understand your faith more deeply, or simply a seeker drawn by
+      the great questions — you are welcome here. Follow the argument wherever
+      it goes.
+    </p>
+    <div class="hero-cta" style="opacity:1; animation:none;">
+      <a href="articles.html" class="btn-primary">Read the Articles</a>
+      <a href="topics.html" class="btn-secondary">Browse by Topic</a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-brand">Latter-Day to Eternal Church</div>
+    <p class="footer-tagline">"One Lord, one faith, one baptism." — Ephesians 4:5</p>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="articles.html">Articles</a></li>
+      <li><a href="topics.html">Topics</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Latter-Day to Eternal Church. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
