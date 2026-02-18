@@ -1,0 +1,55 @@
+# Latter-Day to Eternal Church
+# https://latterdaytoeternalchurch.church
+# A Catholic apologetics ministry examining Latter-day Saint doctrine
+# through Scripture, the Church Fathers, and 2,000 years of Christian tradition.
+
+## Purpose
+This site exists to help seekers — particularly those from a Latter-day Saint
+background — examine the historical and doctrinal claims of both Catholicism and
+Mormonism with intellectual rigor and charity. All arguments are grounded in
+primary sources: Scripture, patristic texts, conciliar documents, the Catechism
+of the Catholic Church, and the LDS Church's own Gospel Topics essays.
+
+## Audience
+- Latter-day Saints curious about or investigating Catholicism
+- Catholics seeking to understand LDS doctrine and how to engage it
+- Protestant Christians comparing Catholic and LDS truth claims
+- General seekers interested in early Church history and Christian origins
+
+## Key Topics Covered
+- The Holy Eucharist and Real Presence (John 6, Church Fathers, Catholic doctrine)
+- Apostolic Succession and ecclesial authority (Ignatius, Irenaeus, Matthew 16:18)
+- The Nature of God and the Trinity vs. LDS eternal progression and polytheism
+- Salvation, grace, and LDS exaltation theology (D&C 132, King Follett Discourse)
+- Scripture, canon formation, and Sola Scriptura
+- LDS historical truth claims (Joseph Smith polygamy, First Vision accounts, Book of Mormon archaeology)
+- The Great Apostasy claim and Catholic continuity
+- Covenant theology and progressive revelation vs. LDS primordial dispensationalism
+
+## Articles
+- /ante-nicene-fathers.html — The Ante-Nicene Church Fathers and Their Catholic Doctrines
+- /fullness-of-time.html — The Fullness of Time: Progressive Revelation vs. Primordial Dispensationalism
+- /historicity-comparison.html — Historicity of Scripture: The Bible vs. The Book of Mormon
+- /holy-eucharist-real-presence.html — The Holy Eucharist: The Real Presence of Christ in the Blessed Sacrament
+- /smith_polygamy_timeline.html — The Double Life of Joseph Smith: A Timeline
+
+## Site Pages
+- / — Home and mission statement
+- /topics.html — All theological topics organized by subject
+- /resources.html — Curated books, Church Father texts, Catechism references, LDS primary sources, and websites
+
+## Methodology
+Arguments are tested across three criteria:
+1. Biblical exegesis — reading Scripture in its literary, historical, and canonical context
+2. Historical continuity — the witness of the Church Fathers and two millennia of tradition
+3. Internal coherence — testing doctrines on their own terms for logical consistency
+
+## Perspective
+This site argues from a Roman Catholic perspective and affirms the teachings of
+the Catechism of the Catholic Church. Critiques of LDS doctrine are offered
+charitably and draw from LDS primary sources wherever possible, including the
+LDS Church's own Gospel Topics essays.
+
+## Contact / Publisher
+Site: https://latterdaytoeternalchurch.church
+Sitemap: https://latterdaytoeternalchurch.church/sitemap.xml
