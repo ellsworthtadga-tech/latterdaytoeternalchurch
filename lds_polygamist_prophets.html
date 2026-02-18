@@ -100,6 +100,9 @@ body{background:#0F0F0F;color:#E8E0D4;font-family:Georgia,serif;line-height:1.6}
 .tooltip{position:absolute;top:0;background:#333;color:#E8E0D4;padding:3px 8px;border-radius:4px;font-size:0.72em;font-family:monospace;white-space:nowrap;z-index:10;pointer-events:none;display:none;border:1px solid #555}
 .bar-row:hover .tooltip{display:block}
 
+.prophet-age-mark{position:absolute;top:1px;width:2px;height:18px;background:#E8E0D4;opacity:0.6;z-index:3;border-radius:1px}
+.bar-row:hover .prophet-age-mark{opacity:1;background:#FFF}
+
 .summary{background:linear-gradient(135deg,#1A0505,#200808);border:1px solid #3A2020;border-radius:8px;padding:32px 24px;text-align:center;margin-top:32px}
 .summary h2{color:#C5A55A;font-size:1.4em;margin-bottom:16px}
 .summary-grid{display:flex;justify-content:center;flex-wrap:wrap;gap:24px;margin-bottom:20px}
@@ -155,17 +158,17 @@ body{background:#0F0F0F;color:#E8E0D4;font-family:Georgia,serif;line-height:1.6}
 <script>
 const prophets = [
   {name:"Joseph Smith",title:"1st President",years:"1830–1844",born:1805,totalWives:34,children:0,note:"0 children from plural wives",
-   wives:[{age:14,s:"single",n:"Helen Mar Kimball"},{age:14,s:"single",n:"Nancy M. Winchester"},{age:16,s:"single",n:"Fanny Alger"},{age:16,s:"single",n:"Flora Ann Woodworth"},{age:17,s:"single",n:"Sarah Ann Whitney"},{age:17,s:"single",n:"Lucy Walker"},{age:17,s:"single",n:"Sarah Lawrence"},{age:19,s:"single",n:"Emily Dow Partridge"},{age:19,s:"single",n:"Maria Lawrence"},{age:19,s:"single",n:"Melissa Lott"},{age:20,s:"married",n:"Zina Huntington Jacobs"},{age:22,s:"single",n:"Eliza Partridge"},{age:23,s:"married",n:"Sylvia Sessions Lyon"},{age:23,s:"married",n:"Mary E.R. Lightner"},{age:26,s:"single",n:"Louisa Beaman"},{age:27,s:"married",n:"Marinda N. Johnson Hyde"},{age:27,s:"single",n:"Olive Frost"},{age:29,s:"married",n:"Elvira Cowles Holmes"},{age:30,s:"single",n:"Almera W. Johnson"},{age:30,s:"single",n:"Hannah Ells"},{age:31,s:"married",n:"Presendia Huntington Buell"},{age:32,s:"single",n:"Desdemona Fullmer"},{age:33,s:"single",n:"Agnes Coolbrith"},{age:33,s:"married",n:"Ruth Vose Sayers"},{age:38,s:"single",n:"Eliza R. Snow"},{age:41,s:"married",n:"Lucinda P.M. Harris"},{age:47,s:"married",n:"Patsy Bartlett Sessions"},{age:50,s:"single",n:"Elizabeth Davis Durfee"},{age:53,s:"married",n:"Sarah K. Cleveland"},{age:56,s:"single",n:"Fanny Young"},{age:58,s:"single",n:"Rhoda Richards"}]},
+   wives:[{age:14,pa:37,s:"single",n:"Helen Mar Kimball"},{age:14,pa:37,s:"single",n:"Nancy M. Winchester"},{age:16,pa:27,s:"single",n:"Fanny Alger"},{age:16,pa:37,s:"single",n:"Flora Ann Woodworth"},{age:17,pa:36,s:"single",n:"Sarah Ann Whitney"},{age:17,pa:37,s:"single",n:"Lucy Walker"},{age:17,pa:37,s:"single",n:"Sarah Lawrence"},{age:19,pa:37,s:"single",n:"Emily Dow Partridge"},{age:19,pa:37,s:"single",n:"Maria Lawrence"},{age:19,pa:37,s:"single",n:"Melissa Lott"},{age:20,pa:36,s:"married",n:"Zina Huntington Jacobs"},{age:22,pa:37,s:"single",n:"Eliza Partridge"},{age:23,pa:36,s:"married",n:"Sylvia Sessions Lyon"},{age:23,pa:36,s:"married",n:"Mary E.R. Lightner"},{age:26,pa:35,s:"single",n:"Louisa Beaman"},{age:27,pa:36,s:"married",n:"Marinda N. Johnson Hyde"},{age:27,pa:37,s:"single",n:"Olive Frost"},{age:29,pa:37,s:"married",n:"Elvira Cowles Holmes"},{age:30,pa:37,s:"single",n:"Almera W. Johnson"},{age:30,pa:37,s:"single",n:"Hannah Ells"},{age:31,pa:36,s:"married",n:"Presendia Huntington Buell"},{age:32,pa:37,s:"single",n:"Desdemona Fullmer"},{age:33,pa:37,s:"single",n:"Agnes Coolbrith"},{age:33,pa:37,s:"married",n:"Ruth Vose Sayers"},{age:38,pa:37,s:"single",n:"Eliza R. Snow"},{age:41,pa:37,s:"married",n:"Lucinda P.M. Harris"},{age:47,pa:37,s:"married",n:"Patsy Bartlett Sessions"},{age:50,pa:37,s:"single",n:"Elizabeth Davis Durfee"},{age:53,pa:37,s:"married",n:"Sarah K. Cleveland"},{age:56,pa:37,s:"single",n:"Fanny Young"},{age:58,pa:37,s:"single",n:"Rhoda Richards"}]},
   {name:"Brigham Young",title:"2nd President",years:"1847–1877",born:1801,totalWives:55,children:57,note:"children by 16 wives",
-   wives:[{age:15,s:"single",n:"Clarissa C. Decker"},{age:16,s:"single",n:"Elizabeth Fairchild"},{age:16,s:"single",n:"Ellen Rockwood"},{age:16,s:"single",n:"Lucy Bigelow"},{age:17,s:"single",n:"Diana Chase"},{age:18,s:"single",n:"Emmeline Free"},{age:18,s:"single",n:"Mary Ann Turley"},{age:19,s:"single",n:"Harriet E. Cook"},{age:19,s:"single",n:"Mary Jane Bigelow"},{age:19,s:"single",n:"Martha Bowker"},{age:20,s:"single",n:"Lucy Ann Decker"},{age:20,s:"single",n:"Naamah K.J. Carter"},{age:22,s:"single",n:"Amelia Folsom"},{age:22,s:"single",n:"Mary Van Cott"},{age:23,s:"widow",n:"Emily Partridge"},{age:24,s:"single",n:"Harriet Barney"},{age:25,s:"widow",n:"Margaret Alley"},{age:26,s:"widow",n:"Louisa Beaman"},{age:27,s:"widow",n:"Jane Terry"},{age:28,s:"married",n:"Augusta Adams"},{age:29,s:"widow",n:"Margaret Pierce"},{age:30,s:"single",n:"Mary Ann Angel"},{age:31,s:"widow",n:"Harriet Cook"},{age:33,s:"widow",n:"Eliza Burgess"},{age:34,s:"married",n:"Zina D. Huntington"},{age:36,s:"widow",n:"Clarissa Ross"},{age:38,s:"widow",n:"Eliza R. Snow"},{age:39,s:"widow",n:"Susannah Snively"},{age:42,s:"widow",n:"Mary Oldfield"},{age:47,s:"widow",n:"Ann Eliza Webb"},{age:53,s:"single",n:"Lydia Farnsworth"},{age:56,s:"widow",n:"Hannah T. King"}]},
+   wives:[{age:15,pa:42,s:"single",n:"Clarissa C. Decker"},{age:16,pa:43,s:"single",n:"Elizabeth Fairchild"},{age:16,pa:44,s:"single",n:"Ellen Rockwood"},{age:16,pa:45,s:"single",n:"Lucy Bigelow"},{age:17,pa:43,s:"single",n:"Diana Chase"},{age:18,pa:43,s:"single",n:"Emmeline Free"},{age:18,pa:44,s:"single",n:"Mary Ann Turley"},{age:19,pa:42,s:"single",n:"Harriet E. Cook"},{age:19,pa:45,s:"single",n:"Mary Jane Bigelow"},{age:19,pa:44,s:"single",n:"Martha Bowker"},{age:20,pa:41,s:"single",n:"Lucy Ann Decker"},{age:20,pa:45,s:"single",n:"Naamah K.J. Carter"},{age:22,pa:62,s:"single",n:"Amelia Folsom"},{age:22,pa:45,s:"single",n:"Mary Van Cott"},{age:23,pa:43,s:"widow",n:"Emily Partridge"},{age:24,pa:44,s:"single",n:"Harriet Barney"},{age:25,pa:43,s:"widow",n:"Margaret Alley"},{age:26,pa:43,s:"widow",n:"Louisa Beaman"},{age:27,pa:45,s:"widow",n:"Jane Terry"},{age:28,pa:43,s:"married",n:"Augusta Adams"},{age:29,pa:44,s:"widow",n:"Margaret Pierce"},{age:30,pa:32,s:"single",n:"Mary Ann Angel"},{age:31,pa:44,s:"widow",n:"Harriet Cook"},{age:33,pa:51,s:"widow",n:"Eliza Burgess"},{age:34,pa:45,s:"married",n:"Zina D. Huntington"},{age:36,pa:43,s:"widow",n:"Clarissa Ross"},{age:38,pa:43,s:"widow",n:"Eliza R. Snow"},{age:39,pa:44,s:"widow",n:"Susannah Snively"},{age:42,pa:46,s:"widow",n:"Mary Oldfield"},{age:47,pa:67,s:"widow",n:"Ann Eliza Webb"},{age:53,pa:56,s:"single",n:"Lydia Farnsworth"},{age:56,pa:45,s:"widow",n:"Hannah T. King"}]},
   {name:"John Taylor",title:"3rd President",years:"1880–1887",born:1808,totalWives:7,children:35,note:"wrote 1886 revelation defending polygamy",
-   wives:[{age:17,s:"single",n:"Josephine Roueche"},{age:20,s:"single",n:"Mary Ann Oakley"},{age:23,s:"single",n:"Sophia Whitaker"},{age:26,s:"single",n:"Harriet Whitaker"},{age:36,s:"single",n:"Leonora Cannon"},{age:36,s:"widow",n:"Elizabeth Kaighin"},{age:56,s:"widow",n:"Jane Ballantyne"}]},
+   wives:[{age:17,pa:50,s:"single",n:"Josephine Roueche"},{age:20,pa:30,s:"single",n:"Mary Ann Oakley"},{age:23,pa:39,s:"single",n:"Sophia Whitaker"},{age:26,pa:39,s:"single",n:"Harriet Whitaker"},{age:36,pa:25,s:"single",n:"Leonora Cannon"},{age:36,pa:36,s:"widow",n:"Elizabeth Kaighin"},{age:56,pa:68,s:"widow",n:"Jane Ballantyne"}]},
   {name:"Wilford Woodruff",title:"4th President",years:"1889–1898",born:1807,totalWives:10,children:33,note:"issued 1890 Manifesto ending polygamy",
-   wives:[{age:15,s:"single",n:"Emma Smith (Smoot)"},{age:17,s:"single",n:"Mary C. Jackson"},{age:20,s:"single",n:"Sarah Brown"},{age:24,s:"single",n:"Sarah Delight Stocking"},{age:26,s:"single",n:"Eudora L. Young"},{age:27,s:"single",n:"Mary G. Webster"},{age:30,s:"single",n:"Phebe W. Carter"},{age:33,s:"widow",n:"Hannah T. Smith"},{age:33,s:"single",n:"Delight Empey"},{age:36,s:"single",n:"Sarah E. Hanks"}]},
+   wives:[{age:15,pa:46,s:"single",n:"Emma Smith (Smoot)"},{age:17,pa:46,s:"single",n:"Mary C. Jackson"},{age:20,pa:46,s:"single",n:"Sarah Brown"},{age:24,pa:50,s:"single",n:"Sarah Delight Stocking"},{age:26,pa:46,s:"single",n:"Eudora L. Young"},{age:27,pa:46,s:"single",n:"Mary G. Webster"},{age:30,pa:30,s:"single",n:"Phebe W. Carter"},{age:33,pa:46,s:"widow",n:"Hannah T. Smith"},{age:33,pa:46,s:"single",n:"Delight Empey"},{age:36,pa:46,s:"single",n:"Sarah E. Hanks"}]},
   {name:"Lorenzo Snow",title:"5th President",years:"1898–1901",born:1814,totalWives:9,children:42,note:"imprisoned 11 months for bigamy",
-   wives:[{age:15,s:"single",n:"Sarah E. Jensen"},{age:16,s:"single",n:"Mary Elizabeth Houtz"},{age:17,s:"single",n:"Phebe A. Woodruff"},{age:18,s:"single",n:"Eleanor Houtz"},{age:21,s:"single",n:"Harriet Amelia Squires"},{age:22,s:"single",n:"Sarah A. Prichard"},{age:24,s:"single",n:"Mary Adaline Goddard"},{age:25,s:"single",n:"Charlotte Squires"},{age:26,s:"single",n:"Hannah M. Goddard"}]},
+   wives:[{age:15,pa:57,s:"single",n:"Sarah E. Jensen"},{age:16,pa:42,s:"single",n:"Mary Elizabeth Houtz"},{age:17,pa:45,s:"single",n:"Phebe A. Woodruff"},{age:18,pa:31,s:"single",n:"Eleanor Houtz"},{age:21,pa:31,s:"single",n:"Harriet Amelia Squires"},{age:22,pa:31,s:"single",n:"Sarah A. Prichard"},{age:24,pa:30,s:"single",n:"Mary Adaline Goddard"},{age:25,pa:31,s:"single",n:"Charlotte Squires"},{age:26,pa:31,s:"single",n:"Hannah M. Goddard"}]},
   {name:"Joseph F. Smith",title:"6th President",years:"1901–1918",born:1838,totalWives:6,children:48,note:"issued 1904 Second Manifesto",
-   wives:[{age:16,s:"single",n:"Julina Lambson"},{age:17,s:"single",n:"Edna Lambson"},{age:17,s:"single",n:"Alice Ann Kimball"},{age:20,s:"single",n:"Mary T. Schwartz"},{age:22,s:"single",n:"Levira A. Smith"},{age:25,s:"single",n:"Sarah E. Richards"}]}
+   wives:[{age:16,pa:28,s:"single",n:"Julina Lambson"},{age:17,pa:25,s:"single",n:"Edna Lambson"},{age:17,pa:45,s:"single",n:"Alice Ann Kimball"},{age:20,pa:28,s:"single",n:"Mary T. Schwartz"},{age:22,pa:21,s:"single",n:"Levira A. Smith"},{age:25,pa:45,s:"single",n:"Sarah E. Richards"}]}
 ];
 
 function ageColor(a){
@@ -218,11 +221,15 @@ prophets.forEach((p,pi) => {
 
   let barsHtml = sorted.map((w,wi)=>{
     const barW = ((w.age-10)/50)*100;
-    const tipLeft = Math.min(barW+2, 70);
-    const tipText = `${w.n} — age ${w.age} ${statusLabel(w.s)}`;
+    const paBarW = ((w.pa-10)/50)*100;
+    const gap = w.pa - w.age;
+    const tipLeft = Math.min(paBarW+2, 55);
+    const gapText = gap > 0 ? `(gap: ${gap} yrs)` : `(gap: ${Math.abs(gap)} yrs)`;
+    const tipText = `${w.n} — her: ${w.age}  him: ${w.pa}  ${gapText} ${statusLabel(w.s)}`;
     const ringIcon = w.s==="married" ? `<div class="bar-ring">💍</div>` : "";
     return `<div class="bar-row">
       <div class="bar" style="width:${barW}%;background:linear-gradient(90deg,${ageColor(w.age)}88,${ageColor(w.age)})"></div>
+      <div class="prophet-age-mark" style="left:${paBarW}%"></div>
       ${ringIcon}
       <div class="tooltip" style="left:${tipLeft}%;border-color:${ageColor(w.age)}">${tipText}</div>
     </div>`;
@@ -233,6 +240,8 @@ prophets.forEach((p,pi) => {
   if(teens>0) qStats += `<div><span class="teen-ct">${teens}</span> teen${teens>1?"s":""}</div>`;
   if(married>0) qStats += `<div><span class="mar-ct">${married}</span> married</div>`;
   qStats += `<div>youngest: <span style="color:${ageColor(youngest)}">${youngest}</span></div>`;
+
+  const maxGap = Math.max(...sorted.map(w=>w.pa - w.age));
 
   card.innerHTML = `
     <div class="card-header" onclick="toggleCard(${pi})">
@@ -256,9 +265,10 @@ prophets.forEach((p,pi) => {
         <div class="stat-box"><div class="val" style="color:#EA580C">${teens}</div><div class="lbl">Teenagers</div></div>
         <div class="stat-box"><div class="val" style="color:#E8E0D4">💍 ${married}</div><div class="lbl">Already married</div></div>
         <div class="stat-box"><div class="val" style="color:#65A30D">${p.children}</div><div class="lbl">Children (${p.note})</div></div>
+        <div class="stat-box"><div class="val" style="color:#F59E0B">${maxGap} yrs</div><div class="lbl">Largest age gap</div></div>
       </div>
       <div>
-        <div class="chart-label">Wife ages at time of marriage (each bar = one wife)</div>
+        <div class="chart-label">Wife ages at time of marriage · <span style="color:rgba(232,224,212,0.6)">colored bar</span> = her age · <span style="color:#FFF">white line</span> = his age</div>
         <div class="chart-wrapper">
           <div class="axis-row"><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span></div>
           <div class="chart-area" style="height:${chartH}px">
