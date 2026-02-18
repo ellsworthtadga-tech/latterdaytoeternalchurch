@@ -152,18 +152,39 @@
       padding: 5rem 2rem 4rem;
       position: relative;
       overflow: hidden;
+      background-image: url('hero-bg.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
     }
+
+    /* Dark overlay so text stays readable over the photo */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(13,7,3,0.72) 0%,
+        rgba(13,7,3,0.55) 40%,
+        rgba(13,7,3,0.78) 100%
+      );
+      z-index: 0;
+    }
+
+    /* All hero children must sit above the overlay */
+    .hero > * { position: relative; z-index: 1; }
 
     /* Large cross watermark */
     .hero::before {
       content: '✝';
       position: absolute;
       font-size: 60vw;
-      color: rgba(201, 168, 76, 0.03);
+      color: rgba(201, 168, 76, 0.04);
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       line-height: 1;
+      z-index: 1;
     }
 
     .hero-eyebrow {
