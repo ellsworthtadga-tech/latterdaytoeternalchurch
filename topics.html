@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>Topics | Latter-Day to Eternal Church — Catholic Apologetics by Subject</title>
+  <meta name="description" content="Browse Catholic apologetics and LDS comparative theology by topic — the Eucharist, apostolic succession, the nature of God, salvation, scripture, and more. Organized for seekers and scholars alike." />
+  <meta name="keywords" content="Catholic apologetics topics, LDS Catholic comparison, apostolic succession, real presence, nature of God, sola scriptura, Mormon theology, Joseph Smith, Catholic truth" />
+  <meta name="author" content="Latter-Day to Eternal Church" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Topics | Latter-Day to Eternal Church" />
+  <meta property="og:description" content="Browse Catholic apologetics and LDS comparative theology by subject — organized for seekers and scholars alike." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://latterdaytoeternalchurch.church/topics.html" />
+  <meta property="og:image" content="https://latterdaytoeternalchurch.church/android-chrome-512x512.png" />
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Topics | Latter-Day to Eternal Church" />
+  <meta name="twitter:description" content="Catholic apologetics and LDS comparative theology organized by subject." />
+  <meta name="twitter:image" content="https://latterdaytoeternalchurch.church/android-chrome-512x512.png" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://latterdaytoeternalchurch.church/topics.html" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gold:        #C9A84C;
+      --gold-light:  #E8D08A;
+      --gold-dark:   #8B6914;
+      --crimson:     #7A1C2E;
+      --parchment:   #F5EDD8;
+      --parchment-dk:#E8D9B8;
+      --ink:         #1A0F05;
+      --ink-soft:    #3D2B1A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--ink);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #3D1A08 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 10% 50%, #5C1A10 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 90% 50%, #3D1A08 0%, transparent 60%),
+        linear-gradient(to bottom, #0D0703, #1A0F05 40%, #0D0703);
+      z-index: -2;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92));
+      border-bottom: 1px solid var(--gold-dark);
+      padding: 0.75rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(6px);
+    }
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment-dk);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transition: transform 0.25s; transform-origin: center;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links .active { color: var(--gold); }
+
+    /* ─── PAGE HERO ─── */
+    .page-hero {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '✝';
+      position: absolute;
+      font-size: 50vw;
+      color: rgba(201,168,76,0.03);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .page-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: var(--parchment);
+      line-height: 1.2;
+      text-shadow: 0 2px 30px rgba(201,168,76,0.2);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .page-subtitle {
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--parchment-dk);
+      max-width: 640px;
+      margin: 1.2rem auto 0;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.65s forwards;
+    }
+
+    .ornament {
+      display: flex; align-items: center; gap: 1rem;
+      color: var(--gold); font-size: 1rem;
+      margin: 1.5rem auto; max-width: 400px;
+      justify-content: center;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent);
+    }
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent);
+    }
+
+    /* ─── INTRO BAND ─── */
+    .intro-band {
+      background: linear-gradient(to right, rgba(122,28,46,0.1), rgba(201,168,76,0.05), rgba(122,28,46,0.1));
+      border-top: 1px solid rgba(201,168,76,0.12);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .intro-band p {
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      color: var(--parchment-dk);
+      font-style: italic;
+    }
+
+    /* ─── TOPICS GRID ─── */
+    .topics-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    /* ─── TOPIC CARD ─── */
+    .topic-card {
+      background: linear-gradient(160deg, rgba(201,168,76,0.06), rgba(26,15,5,0.5));
+      border: 1px solid rgba(201,168,76,0.18);
+      padding: 2.2rem 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .topic-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201,168,76,0.45);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    }
+    .topic-card:hover::before { opacity: 1; }
+
+    .topic-icon {
+      font-size: 1.8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .topic-card h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--parchment);
+      line-height: 1.4;
+    }
+    .topic-card .topic-summary {
+      font-size: 0.92rem;
+      color: var(--parchment-dk);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    /* ─── KEY QUESTIONS ─── */
+    .key-questions {
+      border-top: 1px solid rgba(201,168,76,0.15);
+      padding-top: 0.8rem;
+      margin-top: 0.2rem;
+    }
+    .key-questions p {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .key-questions ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .key-questions li {
+      font-size: 0.88rem;
+      color: var(--parchment-dk);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .key-questions li::before {
+      content: '›';
+      position: absolute; left: 0;
+      color: var(--gold-dark);
+    }
+
+    /* ─── ARTICLE LINKS WITHIN CARD ─── */
+    .topic-articles {
+      border-top: 1px solid rgba(201,168,76,0.12);
+      padding-top: 0.8rem;
+    }
+    .topic-articles p {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .topic-articles a {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--gold-light);
+      text-decoration: none;
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+      margin-bottom: 0.3rem;
+      transition: color 0.2s;
+    }
+    .topic-articles a::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--gold-dark);
+      font-size: 0.8rem;
+    }
+    .topic-articles a:hover { color: var(--gold); }
+
+    /* ─── WIDE CARD ─── */
+    .topic-card.wide { grid-column: span 2; }
+
+    /* ─── "MORE COMING" CARD ─── */
+    .topic-card.coming-soon {
+      border-style: dashed;
+      border-color: rgba(201,168,76,0.1);
+      background: transparent;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 200px;
+    }
+    .topic-card.coming-soon h2 {
+      color: rgba(232,217,184,0.35);
+      font-size: 0.85rem;
+    }
+    .topic-card.coming-soon .topic-icon {
+      color: rgba(201,168,76,0.2);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-style: italic; font-size: 0.9rem;
+      color: rgba(232,217,184,0.55); margin-bottom: 1.5rem;
+    }
+    .footer-nav { list-style: none; display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; }
+    .footer-nav a {
+      font-family: 'Cinzel', serif; font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--parchment-dk); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--gold); }
+    .footer-copy { font-size: 0.8rem; color: rgba(232,217,184,0.3); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .topics-grid { grid-template-columns: 1fr 1fr; }
+      .topic-card.wide { grid-column: span 2; }
+    }
+    @media (max-width: 600px) {
+      .topics-grid { grid-template-columns: 1fr; }
+      .topic-card.wide { grid-column: span 1; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a class="nav-brand" href="index.html">Latter-Day to Eternal Church</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#articles">Articles</a></li>
+      <li><a href="topics.html" class="active">Topics</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── PAGE HERO ── -->
+  <header class="page-hero">
+    <p class="eyebrow">Browse by Subject</p>
+    <h1 class="page-title">Topics</h1>
+    <p class="page-subtitle">
+      Every major area of Catholic and LDS comparative theology —
+      the questions that matter most, examined with rigor and charity.
+    </p>
+  </header>
+
+  <div class="ornament" style="opacity:1;">✦</div>
+
+  <div class="intro-band">
+    <p>
+      The case for the Catholic Church is not built on a single argument but on a
+      convergence of evidence across many domains. Explore each topic below to see
+      how Scripture, the Church Fathers, history, and logical coherence point in the
+      same direction.
+    </p>
+  </div>
+
+  <!-- ── TOPICS GRID ── -->
+  <div class="topics-wrapper">
+    <div class="topics-grid">
+
+      <!-- THE EUCHARIST -->
+      <div class="topic-card">
+        <div class="topic-icon">✝</div>
+        <h2>The Holy Eucharist &amp; Real Presence</h2>
+        <p class="topic-summary">
+          Did Christ mean His words at the Last Supper literally? The unanimous voice
+          of the early Church answers clearly — and the LDS tradition has no comparable
+          sacramental theology to offer.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>What did John 6 mean to the first Christians?</li>
+            <li>How did the Fathers understand "This is My Body"?</li>
+            <li>Why did early Christians die rather than offer pagan sacrifice?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="holy-eucharist-real-presence.html">The Holy Eucharist: The Real Presence of Christ</a>
+          <a href="ante-nicene-fathers.html">The Ante-Nicene Fathers &amp; Catholic Doctrines</a>
+        </div>
+      </div>
+
+      <!-- APOSTOLIC SUCCESSION -->
+      <div class="topic-card">
+        <div class="topic-icon">⛪</div>
+        <h2>Apostolic Succession &amp; Ecclesial Authority</h2>
+        <p class="topic-summary">
+          Christ promised His Church would never fail. Apostolic succession is not a
+          medieval invention — it is the very mechanism the earliest Christians
+          identified as the mark of the true Church.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>What does Matthew 16:18 actually establish?</li>
+            <li>How did Ignatius, Irenaeus, and Clement understand authority?</li>
+            <li>Can a "Great Apostasy" be reconciled with Christ's promises?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="ante-nicene-fathers.html">The Ante-Nicene Fathers &amp; Catholic Doctrines</a>
+          <a href="fullness-of-time.html">The Fullness of Time: Progressive Revelation</a>
+        </div>
+      </div>
+
+      <!-- NATURE OF GOD -->
+      <div class="topic-card">
+        <div class="topic-icon">☀</div>
+        <h2>The Nature of God &amp; the Trinity</h2>
+        <p class="topic-summary">
+          The LDS King Follett Discourse teaches that God was once a man who progressed
+          to exaltation. This is not a refinement of Christianity — it is a fundamental
+          departure from every strand of historic Christian theology.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>Is God eternal and immutable, or a progressed being?</li>
+            <li>What did "I AM WHO I AM" mean to Israel and the Fathers?</li>
+            <li>How does the Trinity differ from LDS tritheism?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="ante-nicene-fathers.html">The Ante-Nicene Fathers &amp; Catholic Doctrines</a>
+        </div>
+      </div>
+
+      <!-- SALVATION -->
+      <div class="topic-card">
+        <div class="topic-icon">✦</div>
+        <h2>Salvation, Grace &amp; Exaltation</h2>
+        <p class="topic-summary">
+          The LDS doctrine of exaltation — becoming gods — is the central soteriological
+          claim of the tradition. How does it compare to the Catholic understanding of
+          grace, divinization, and the gift of eternal life?
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>What is the Catholic doctrine of divinization (theosis)?</li>
+            <li>Does D&amp;C 132 represent a biblical vision of salvation?</li>
+            <li>How does grace differ from LDS "working toward" exaltation?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="fullness-of-time.html">The Fullness of Time: Progressive Revelation</a>
+        </div>
+      </div>
+
+      <!-- SCRIPTURE & CANON — WIDE -->
+      <div class="topic-card wide">
+        <div class="topic-icon">📜</div>
+        <h2>Scripture, Canon &amp; Sola Scriptura</h2>
+        <p class="topic-summary">
+          Both Protestantism and Mormonism, in different ways, claim the Bible as their
+          foundation — yet both reject the authority of the Church that defined its
+          canon. Who gave us the Bible, and by what authority? The historical answer
+          presents a profound challenge to both traditions.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>How was the biblical canon determined, and by whom?</li>
+            <li>Does "Sola Scriptura" appear anywhere in Scripture itself?</li>
+            <li>How does LDS "open canon" compare to the Catholic understanding of Tradition?</li>
+            <li>What do the Dead Sea Scrolls and manuscript evidence tell us about biblical reliability?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="historicity-comparison.html">Historicity of Scripture: The Bible vs. The Book of Mormon</a>
+          <a href="ante-nicene-fathers.html">The Ante-Nicene Fathers &amp; Catholic Doctrines</a>
+        </div>
+      </div>
+
+      <!-- LDS HISTORY -->
+      <div class="topic-card">
+        <div class="topic-icon">⚖</div>
+        <h2>LDS History &amp; Truth Claims</h2>
+        <p class="topic-summary">
+          A prophetic tradition rises or falls on the reliability of its historical
+          claims. Joseph Smith's plural marriages, the First Vision accounts, and
+          the archaeological silence surrounding the Book of Mormon all deserve honest
+          examination.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>Why do four First Vision accounts differ significantly?</li>
+            <li>What does archaeology say about Book of Mormon geography?</li>
+            <li>What does the LDS Church's own Gospel Topics essays concede?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="smith_polygamy_timeline.html">The Double Life of Joseph Smith: A Timeline</a>
+          <a href="historicity-comparison.html">Historicity: The Bible vs. The Book of Mormon</a>
+        </div>
+      </div>
+
+      <!-- THE GREAT APOSTASY -->
+      <div class="topic-card">
+        <div class="topic-icon">🕊</div>
+        <h2>The Great Apostasy</h2>
+        <p class="topic-summary">
+          LDS theology requires a total apostasy of Christ's Church, making a
+          restoration necessary. But the historical and biblical record presents a
+          continuous, identifiable community of faith stretching from Pentecost to today.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>Did Christ promise His Church would survive until His return?</li>
+            <li>Where is the "gap" in the patristic record?</li>
+            <li>Can restoration theology survive Matthew 16:18?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="ante-nicene-fathers.html">The Ante-Nicene Fathers &amp; Catholic Doctrines</a>
+          <a href="fullness-of-time.html">The Fullness of Time: Progressive Revelation</a>
+        </div>
+      </div>
+
+      <!-- COVENANT THEOLOGY -->
+      <div class="topic-card">
+        <div class="topic-icon">✡</div>
+        <h2>Covenant Theology &amp; Salvation History</h2>
+        <p class="topic-summary">
+          Catholic progressive revelation sees God's covenants building cumulatively
+          toward their fulfillment in Christ. LDS primordial dispensationalism inverts
+          this — placing the fullest revelation at the beginning, not the end.
+        </p>
+        <div class="key-questions">
+          <p>Key Questions</p>
+          <ul>
+            <li>How do the Old and New Covenants relate to one another?</li>
+            <li>What is "typology" and why does it matter for LDS claims?</li>
+            <li>Does the Book of Mormon present a coherent salvation history?</li>
+          </ul>
+        </div>
+        <div class="topic-articles">
+          <p>Related Articles</p>
+          <a href="fullness-of-time.html">The Fullness of Time: Progressive Revelation</a>
+        </div>
+      </div>
+
+      <!-- COMING SOON -->
+      <div class="topic-card coming-soon">
+        <div class="topic-icon">+</div>
+        <h2>More Topics Coming</h2>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-brand">Latter-Day to Eternal Church</div>
+    <p class="footer-tagline">"One Lord, one faith, one baptism." — Ephesians 4:5</p>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#articles">Articles</a></li>
+      <li><a href="topics.html">Topics</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Latter-Day to Eternal Church. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
