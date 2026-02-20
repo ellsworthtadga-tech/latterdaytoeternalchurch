@@ -67,8 +67,6 @@ body {
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
   line-height: 1.6;
-  min-height: 100vh;
-  padding: 40px 20px;
 }
 
 .page, .container {
@@ -136,7 +134,7 @@ body {
 }
 .page-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-size: clamp(2em, 4vw, 3.2em);
   font-weight: 900;
   color: #F5F0E8;
   letter-spacing: -0.5px;
@@ -492,7 +490,6 @@ body {
   text-transform: uppercase;
 }
 .consensus-card-body {
-  padding: 12px 14px;
   background: #fff;
 }
 .consensus-item {
@@ -683,7 +680,7 @@ body {
 
 
 .nav-links a:hover, .nav-links a.active { color: var(--burgundy); }
-.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dark-gold); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
 .ornament { color: var(--gold); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
 
 
@@ -709,11 +706,11 @@ body {
   text-align: right;
 }
 .tl-year {
-  font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700;
   color: var(--gold); line-height: 1; margin-bottom: 0.3rem;
 }
 .tl-era {
-  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15em;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em;
   text-transform: uppercase; color: var(--ink-light); opacity: 0.7;
 }
 
@@ -738,8 +735,8 @@ body {
 .tl-entry:last-child .tl-right { border-bottom: none; }
 
 .tl-doc {
-  font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.6rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--dark-gold); margin-bottom: 0.6rem;
 }
 
 /* Belief card */
@@ -754,7 +751,7 @@ body {
   background: rgba(197,163,85,0.07);
 }
 .belief-label {
-  font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.18em;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 .label-god { color: #7ec8a0; }
@@ -767,8 +764,8 @@ body {
   font-style: italic; margin-bottom: 0.35rem;
 }
 .tl-source {
-  font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.12em;
-  color: var(--gold-dark); text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em;
+  color: var(--dark-gold); text-transform: uppercase;
 }
 
 .tl-analysis {
@@ -786,7 +783,7 @@ body {
 }
 .conflict-icon { color: rgba(180,80,80,0.7); font-size: 0.85rem; flex-shrink: 0; }
 .conflict-text {
-  font-family: 'Cinzel', serif; font-size: 0.64rem; letter-spacing: 0.1em;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: rgba(180,80,80,0.75);
 }
 
@@ -797,7 +794,7 @@ body {
 }
 .summary-cell { padding: 1.3rem 1rem; text-align: center; background: rgba(197,163,85,0.07); }
 .summary-cell:not(:last-child) { border-right: 1px solid rgba(201,168,76,0.1); }
-.summary-year { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold); font-weight: 700; margin-bottom: 0.3rem; }
+.summary-year { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; color: var(--gold); font-weight: 700; margin-bottom: 0.3rem; }
 .summary-desc { font-size: 0.82rem; line-height: 1.5; color: var(--ink-light); opacity: 0.7; }
 .summary-arrow {
   display: flex; align-items: center; justify-content: center;
@@ -805,18 +802,18 @@ body {
 }
 
 .verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(197,163,85,0.07); text-align: center; }
-.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--burgundy); margin-bottom: 1rem; }
+.verdict-box h3 { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--burgundy); margin-bottom: 1rem; }
 .verdict-box p { font-size: 1rem; line-height: 1.85; color: var(--ink-light); max-width: 780px; margin: 0 auto; }
 .verdict-box p + p { margin-top: 0.85rem; }
 .sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(44,24,16,0.45); z-index: 150; opacity: 0; transition: opacity 0.3s; }
 .sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
-.sidebar {  position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #FAF6F0 0%, var(--cream) 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar {  position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #FAF6F0 0%, var(--cream) 100%); border-left: 1px solid var(--dark-gold); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
 .sidebar.open { transform: translateX(0); }
-.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold-dark); margin-bottom: 2rem; letter-spacing: 0.1em; }
-.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
-.sidebar a:hover { color: var(--gold-dark); padding-left: 0.5rem; }
+.sidebar-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--dark-gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--dark-gold); padding-left: 0.5rem; }
 .sidebar-ornament { text-align: center; color: var(--gold); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
-footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); }
+footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dark-gold); }
 
 
 
@@ -829,7 +826,8 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
 
 /* ── Base mobile reset ── */
 @media (max-width: 700px) {
-  body { padding: 0 !important; overflow-x: hidden; }
+  body { padding: 0 !important; overflow-x: hidden;
+}
 
   /* PAGE WRAPPER */
   .page, .container {
@@ -910,7 +908,8 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
 
 /* ── Medium screens (tablet) ── */
 @media (max-width: 960px) and (min-width: 701px) {
-  body { padding: 16px 12px !important; }
+  body {
+}
   .page, .container { padding: 36px 28px !important; }
   .site-nav .nav-links { gap: 1.2rem !important; }
   .site-nav .nav-links a { font-size: 0.68rem !important; }
@@ -1151,11 +1150,11 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
   <!-- CONTRAST BOX -->
   <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 3.5rem; border: 1px solid rgba(201,168,76,0.15);">
     <div style="padding: 1.8rem; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.1);">
-      <div style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: #7ec8a0; margin-bottom:0.8rem;">Catholic Development of Doctrine</div>
+      <div style="font-family:'JetBrains Mono',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: #7ec8a0; margin-bottom:0.8rem;">Catholic Development of Doctrine</div>
       <div style="font-size:0.92rem; line-height:1.75; color:var(--ink-light);">The Catholic doctrine of the Trinity — articulated more precisely at Nicaea (325), Constantinople (381), and Chalcedon (451) — did not change what was believed, but clarified <em>how to express</em> what Scripture and Tradition had always taught. Nicaea did not invent the Trinity; it defined the vocabulary to guard against a specific heresy (Arianism). The substance was identical to what Ignatius, Justin, and Irenaeus had taught two centuries earlier.</div>
     </div>
     <div style="padding: 1.8rem; background: rgba(107,29,42,0.06);">
-      <div style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: rgba(180,80,80,0.85); margin-bottom:0.8rem;">Smith's "Revelatory" Reversals</div>
+      <div style="font-family:'JetBrains Mono',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: rgba(180,80,80,0.85); margin-bottom:0.8rem;">Smith's "Revelatory" Reversals</div>
       <div style="font-size:0.92rem; line-height:1.75; color:var(--ink-light);">Smith's shifts are not refinements — they are categorical reversals. An "unchangeable" God who gains a body. A "personage of spirit" who acquires flesh and bones. A singular, eternal God who was once a mortal. The 1830 Book of Mormon and the 1844 King Follett Discourse cannot both be true. Yet both are presented as the word of God. This is not development; it is contradiction.</div>
     </div>
   </div>

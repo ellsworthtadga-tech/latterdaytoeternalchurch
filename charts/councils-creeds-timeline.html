@@ -67,8 +67,6 @@ body {
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
   line-height: 1.6;
-  min-height: 100vh;
-  padding: 40px 20px;
 }
 
 .page, .container {
@@ -136,7 +134,7 @@ body {
 }
 .page-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-size: clamp(2em, 4vw, 3.2em);
   font-weight: 900;
   color: #F5F0E8;
   letter-spacing: -0.5px;
@@ -492,7 +490,6 @@ body {
   text-transform: uppercase;
 }
 .consensus-card-body {
-  padding: 12px 14px;
   background: #fff;
 }
 .consensus-item {
@@ -685,7 +682,7 @@ body {
     max-width: 1100px;
     margin: 0 auto;
     background: linear-gradient(160deg, #FFFDF9 0%, var(--cream) 40%, #FFF8F0 100%);
-    border: 1px solid var(--gold-dark);
+    border: 1px solid var(--dark-gold);
     border-radius: 2px;
     position: relative;
     box-shadow:
@@ -709,10 +706,10 @@ body {
   }
 
   .header-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 4px;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     text-transform: uppercase;
     margin-bottom: 14px;
   }
@@ -723,7 +720,7 @@ body {
   }
 
   .section-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 15px;
     font-weight: 600;
     color: var(--burgundy);
@@ -738,9 +735,9 @@ body {
   }
 
   .section-num {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     background: var(--cream-dark);
     border: 1px solid var(--gold-light);
     width: 26px;
@@ -759,7 +756,7 @@ body {
     display: inline-block;
     background: var(--green-win);
     color: #fff;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     padding: 2px 7px;
@@ -772,7 +769,7 @@ body {
     display: inline-block;
     background: var(--red-loss);
     color: #fff;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     padding: 2px 7px;
@@ -789,7 +786,7 @@ body {
   }
 
   .summary-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 2px;
@@ -817,7 +814,7 @@ body {
   }
 
   .score-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
     color: var(--ink-light);
@@ -827,7 +824,7 @@ body {
   }
 
   .score-value {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 22px;
     font-weight: 700;
     display: block;
@@ -846,7 +843,7 @@ body {
   }
 
   .final-verdict-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 4px;
     color: var(--gold-light);
@@ -855,7 +852,7 @@ body {
   }
 
   .final-verdict h2 {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 24px;
     font-weight: 700;
     color: var(--gold);
@@ -893,7 +890,7 @@ body {
   }
 
   .consensus-card-header span {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
     color: var(--gold-light);
@@ -949,7 +946,7 @@ body {
   }
   .sidebar.open { right: 0; }
   .sidebar-brand {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -1203,7 +1200,8 @@ footer {
 
 /* ── Base mobile reset ── */
 @media (max-width: 700px) {
-  body { padding: 0 !important; overflow-x: hidden; }
+  body { padding: 0 !important; overflow-x: hidden;
+}
 
   /* PAGE WRAPPER */
   .page, .container {
@@ -1284,7 +1282,8 @@ footer {
 
 /* ── Medium screens (tablet) ── */
 @media (max-width: 960px) and (min-width: 701px) {
-  body { padding: 16px 12px !important; }
+  body {
+}
   .page, .container { padding: 36px 28px !important; }
   .site-nav .nav-links { gap: 1.2rem !important; }
   .site-nav .nav-links a { font-size: 0.68rem !important; }
@@ -1366,7 +1365,7 @@ footer {
 
   <div class="track-labels">
     <div class="track-label catholic">The Catholic Church<br><small style="font-size:0.62rem;letter-spacing:0.1em;opacity:0.7;">Ecumenical Councils</small></div>
-    <div class="track-label center-col"><span style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;writing-mode:vertical-lr;">A.D.</span></div>
+    <div class="track-label center-col"><span style="font-family:'JetBrains Mono',serif;font-size:0.6rem;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;writing-mode:vertical-lr;">A.D.</span></div>
     <div class="track-label lds">The LDS Church<br><small style="font-size:0.62rem;letter-spacing:0.1em;opacity:0.7;">Revelations &amp; Reversals</small></div>
   </div>
 

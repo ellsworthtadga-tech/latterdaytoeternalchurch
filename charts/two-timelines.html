@@ -67,8 +67,6 @@ body {
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
   line-height: 1.6;
-  min-height: 100vh;
-  padding: 40px 20px;
 }
 
 .page, .container {
@@ -136,7 +134,7 @@ body {
 }
 .page-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-size: clamp(2em, 4vw, 3.2em);
   font-weight: 900;
   color: #F5F0E8;
   letter-spacing: -0.5px;
@@ -496,7 +494,6 @@ body {
   text-transform: uppercase;
 }
 .consensus-card-body {
-  padding: 12px 14px;
   background: #fff;
 }
 .consensus-item {
@@ -704,15 +701,13 @@ body {
       radial-gradient(ellipse at 80% 80%, rgba(107,29,42,0.06) 0%, transparent 50%);
     font-family: 'Cormorant Garamond', Georgia, serif;
     color: var(--ink);
-    min-height: 100vh;
-    padding: 40px 20px;
-  }
+}
 
   .page {
     max-width: 1100px;
     margin: 0 auto;
     background: linear-gradient(160deg, #FFFDF9 0%, var(--cream) 40%, #FFF8F0 100%);
-    border: 1px solid var(--gold-dark);
+    border: 1px solid var(--dark-gold);
     border-radius: 2px;
     position: relative;
     box-shadow:
@@ -736,10 +731,10 @@ body {
   }
 
   .header-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 4px;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     text-transform: uppercase;
     margin-bottom: 14px;
   }
@@ -750,7 +745,7 @@ body {
   }
 
   .section-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 15px;
     font-weight: 600;
     color: var(--burgundy);
@@ -765,9 +760,9 @@ body {
   }
 
   .section-num {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     background: var(--cream-dark);
     border: 1px solid var(--gold-light);
     width: 26px;
@@ -786,7 +781,7 @@ body {
     display: inline-block;
     background: var(--green-win);
     color: #fff;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     padding: 2px 7px;
@@ -799,7 +794,7 @@ body {
     display: inline-block;
     background: var(--red-loss);
     color: #fff;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 1px;
     padding: 2px 7px;
@@ -816,7 +811,7 @@ body {
   }
 
   .summary-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 2px;
@@ -844,7 +839,7 @@ body {
   }
 
   .score-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
     color: var(--ink-light);
@@ -854,7 +849,7 @@ body {
   }
 
   .score-value {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 22px;
     font-weight: 700;
     display: block;
@@ -873,7 +868,7 @@ body {
   }
 
   .final-verdict-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 4px;
     color: var(--gold-light);
@@ -882,7 +877,7 @@ body {
   }
 
   .final-verdict h2 {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 24px;
     font-weight: 700;
     color: var(--gold);
@@ -920,7 +915,7 @@ body {
   }
 
   .consensus-card-header span {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 1px;
     color: var(--gold-light);
@@ -929,9 +924,8 @@ body {
   }
 
   .consensus-card-body {
-    padding: 12px 14px;
     background: var(--cream);
-  }
+}
 
   .consensus-item {
     font-size: 13px;
@@ -955,7 +949,8 @@ body {
   }
 
   @media (max-width: 768px) {
-    body { padding: 0 0 40px; overflow-x: hidden; }
+    body { padding: 0 0 40px; overflow-x: hidden;
+}
     .page { padding: 35px 22px 30px;
     .site-nav .nav-links { display: none; }
   }
@@ -989,7 +984,7 @@ body {
   }
   .sidebar.open { right: 0; }
   .sidebar-brand {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -1107,12 +1102,12 @@ body {
     border-top: 2px dashed rgba(107,66,38,0.4);
   }
   .legend-text {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
   }
-  .legend-text.cath { color: var(--gold-dark); }
+  .legend-text.cath { color: var(--dark-gold); }
   .legend-text.lds { color: var(--ink-light); }
   .legend-text.void { color: var(--ink-light); opacity: 0.5; }
 
@@ -1174,7 +1169,7 @@ body {
   .era-date {
     position: relative;
     z-index: 2;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -1198,7 +1193,7 @@ body {
   }
 
   .event-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -1217,7 +1212,7 @@ body {
 
   /* Void label */
   .void-label {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -1242,11 +1237,11 @@ body {
   }
   .era-divider-center {
     text-align: center;
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     padding: 0 4px;
     white-space: nowrap;
   }
@@ -1275,11 +1270,11 @@ body {
     pointer-events: none;
   }
   .verdict-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     margin-bottom: 14px;
   }
   .verdict-text {
@@ -1299,11 +1294,11 @@ body {
     border-top: 1px solid rgba(197,163,85,0.15);
   }
   .footer-brand {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     margin-bottom: 8px;
   }
   .footer-url {
@@ -1343,17 +1338,17 @@ body {
   }
   .sidebar.open { right: 0; }
   .sidebar-brand {
-    font-family: 'Cinzel', serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid rgba(201,168,76,0.2);
   }
   .sidebar-ornament {
-    color: var(--gold-dark);
+    color: var(--dark-gold);
     font-size: 11px;
     letter-spacing: 8px;
     text-align: center;
@@ -1371,7 +1366,8 @@ body {
 
 /* ── Base mobile reset ── */
 @media (max-width: 700px) {
-  body { padding: 0 !important; overflow-x: hidden; }
+  body { padding: 0 !important; overflow-x: hidden;
+}
 
   /* PAGE WRAPPER */
   .page, .container {
@@ -1452,7 +1448,8 @@ body {
 
 /* ── Medium screens (tablet) ── */
 @media (max-width: 960px) and (min-width: 701px) {
-  body { padding: 16px 12px !important; }
+  body {
+}
   .page, .container { padding: 36px 28px !important; }
   .site-nav .nav-links { gap: 1.2rem !important; }
   .site-nav .nav-links a { font-size: 0.68rem !important; }
@@ -1519,7 +1516,8 @@ body {
   .verdict { padding: 24px 14px !important; }
   .verdict-text { font-size: 0.88rem !important; line-height: 1.65 !important; }
 
-  body { padding: 0 !important; }
+  body { padding: 0 !important;
+}
 }
 
 /* ── Tablet: shrink center column, keep side-by-side ── */

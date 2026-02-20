@@ -67,8 +67,6 @@ body {
   color: var(--text);
   font-family: 'Source Serif 4', Georgia, serif;
   line-height: 1.6;
-  min-height: 100vh;
-  padding: 40px 20px;
 }
 
 .page, .container {
@@ -136,7 +134,7 @@ body {
 }
 .page-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-size: clamp(2em, 4vw, 3.2em);
   font-weight: 900;
   color: #F5F0E8;
   letter-spacing: -0.5px;
@@ -492,7 +490,6 @@ body {
   text-transform: uppercase;
 }
 .consensus-card-body {
-  padding: 12px 14px;
   background: #fff;
 }
 .consensus-item {
@@ -683,7 +680,7 @@ body {
 
 
 .nav-links a:hover, .nav-links a.active { color: var(--burgundy); }
-.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dark-gold); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
 .ornament { color: var(--gold); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
 
 
@@ -698,40 +695,40 @@ body {
 .stat-hero-block.nt { background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.1); }
 .stat-hero-block.bom { background: rgba(107,29,42,0.06); border-left: 1px solid rgba(201,168,76,0.1); }
 .stat-hero-vs { display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; background: rgba(197,163,85,0.07); }
-.vs-text { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(201,168,76,0.3); }
-.stat-big { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1; margin-bottom: 0.4rem; }
+.vs-text { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(201,168,76,0.3); }
+.stat-big { font-family: 'JetBrains Mono', monospace; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1; margin-bottom: 0.4rem; }
 .stat-big.gold { color: var(--gold); }
 .stat-big.red { color: rgba(139,45,60,0.92); }
-.stat-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; margin-bottom: 0.6rem; }
+.stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; margin-bottom: 0.6rem; }
 .stat-sub { font-size: 0.9rem; line-height: 1.6; color: var(--ink-light); opacity: 0.88; max-width: 240px; margin: 0 auto; }
 
 /* SECTION DIVIDER */
 .section-divider { margin: 3rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
 .section-divider-line { flex: 1; height: 1px; background: rgba(197,163,85,0.14); }
-.section-divider-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dark); white-space: nowrap; }
+.section-divider-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dark-gold); white-space: nowrap; }
 
 /* BAR CHART */
 .bar-chart { margin-bottom: 3rem; }
-.bar-chart-title { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 1.2rem; text-align: center; }
+.bar-chart-title { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dark-gold); margin-bottom: 1.2rem; text-align: center; }
 .bar-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
-.bar-row-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; width: 180px; flex-shrink: 0; text-align: right; }
+.bar-row-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; width: 180px; flex-shrink: 0; text-align: right; }
 .bar-track { flex: 1; height: 26px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.08); position: relative; overflow: hidden; }
 .bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; transition: width 1s ease; }
 .bar-fill.nt-fill { background: linear-gradient(90deg, rgba(126,200,160,0.5), rgba(126,200,160,0.2)); }
 .bar-fill.bom-fill { background: linear-gradient(90deg, rgba(139,45,60,0.80), rgba(180,80,80,0.2)); }
 .bar-fill.other-fill { background: linear-gradient(90deg, rgba(201,168,76,0.4), rgba(201,168,76,0.15)); }
-.bar-val { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-light); white-space: nowrap; }
-.bar-zero { font-family: 'Cinzel', serif; font-size: 0.68rem; color: rgba(139,45,60,0.88); letter-spacing: 0.08em; padding-left: 0.5rem; }
+.bar-val { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-light); white-space: nowrap; }
+.bar-zero { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: rgba(139,45,60,0.88); letter-spacing: 0.08em; padding-left: 0.5rem; }
 
 /* MANUSCRIPT TABLE */
 .ms-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
 .ms-table thead tr { background: rgba(197,163,85,0.07); border-bottom: 1px solid rgba(201,168,76,0.2); }
-.ms-table th { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1rem; text-align: left; color: var(--gold-dark); }
+.ms-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1rem; text-align: left; color: var(--dark-gold); }
 .ms-table td { font-size: 0.9rem; line-height: 1.6; padding: 0.75rem 1rem; color: var(--ink-light); border-bottom: 1px solid rgba(201,168,76,0.06); vertical-align: top; }
 .ms-table tbody tr:nth-child(even) { background: rgba(201,168,76,0.015); }
-.ms-table td:first-child { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--ink); }
-.ms-table td.num { color: #2D6A4F; font-family: 'Cinzel', serif; font-weight: 600; }
-.ms-table td.num-zero { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-weight: 600; }
+.ms-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--ink); }
+.ms-table td.num { color: #2D6A4F; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.ms-table td.num-zero { color: rgba(180,80,80,0.8); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
 
 /* GEOGRAPHIC SVG */
 .geo-section { margin-bottom: 3rem; }
@@ -739,33 +736,33 @@ body {
 
 /* COMPARISON TABLE */
 .compare-table { display: grid; grid-template-columns: 200px 1fr 1fr; gap: 0; border: 1px solid rgba(201,168,76,0.15); margin-bottom: 2rem; }
-.ct-header { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.12); }
+.ct-header { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.12); }
 .ct-header.nt-h { color: #2D6A4F; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.08); }
 .ct-header.bom-h { color: rgba(139,45,60,0.92); background: rgba(107,29,42,0.06); }
-.ct-header.label-h { color: var(--gold-dark); background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.12); }
+.ct-header.label-h { color: var(--dark-gold); background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.12); }
 .ct-row { display: contents; }
 .ct-cell { padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.9rem; line-height: 1.65; color: var(--ink-light); }
-.ct-cell.label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; }
+.ct-cell.label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; }
 .ct-cell.nt { background: rgba(126,200,160,0.02); border-right: 1px solid rgba(201,168,76,0.05); }
 .ct-cell.bom { background: rgba(107,29,42,0.06); }
 .ct-cell strong { color: var(--ink); font-weight: 500; }
-.ct-cell .good { color: #2D6A4F; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
-.ct-cell .bad { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ct-cell .good { color: #2D6A4F; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ct-cell .bad { color: rgba(180,80,80,0.8); font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
 /* VERDICT */
 .verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(197,163,85,0.07); text-align: center; }
-.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--burgundy); margin-bottom: 1rem; }
+.verdict-box h3 { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--burgundy); margin-bottom: 1rem; }
 .verdict-box p { font-size: 1rem; line-height: 1.85; color: var(--ink-light); max-width: 800px; margin: 0 auto; }
 .verdict-box p + p { margin-top: 0.85rem; }
 .sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(44,24,16,0.45); z-index: 150; opacity: 0; transition: opacity 0.3s; }
 .sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
-.sidebar {  position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #FAF6F0 0%, var(--cream) 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar {  position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #FAF6F0 0%, var(--cream) 100%); border-left: 1px solid var(--dark-gold); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
 .sidebar.open { transform: translateX(0); }
-.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold-dark); margin-bottom: 2rem; letter-spacing: 0.1em; }
-.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
-.sidebar a:hover { color: var(--gold-dark); padding-left: 0.5rem; }
+.sidebar-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--dark-gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--dark-gold); padding-left: 0.5rem; }
 .sidebar-ornament { text-align: center; color: var(--gold); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
-footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); }
+footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dark-gold); }
 
 
 
@@ -778,7 +775,8 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
 
 /* ── Base mobile reset ── */
 @media (max-width: 700px) {
-  body { padding: 0 !important; overflow-x: hidden; }
+  body { padding: 0 !important; overflow-x: hidden;
+}
 
   /* PAGE WRAPPER */
   .page, .container {
@@ -859,7 +857,8 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
 
 /* ── Medium screens (tablet) ── */
 @media (max-width: 960px) and (min-width: 701px) {
-  body { padding: 16px 12px !important; }
+  body {
+}
   .page, .container { padding: 36px 28px !important; }
   .site-nav .nav-links { gap: 1.2rem !important; }
   .site-nav .nav-links a { font-size: 0.68rem !important; }
@@ -1037,7 +1036,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
       </div>
 
     </div>
-    <p style="text-align:center; font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); margin-top:1rem;">Bar lengths proportional to manuscript count. NT bar truncated for scale. Sources: Institute for NT Textual Research (INTF) · F.F. Bruce, The New Testament Documents · Norman Geisler &amp; William Nix, A General Introduction to the Bible</p>
+    <p style="text-align:center; font-family:'JetBrains Mono',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); margin-top:1rem;">Bar lengths proportional to manuscript count. NT bar truncated for scale. Sources: Institute for NT Textual Research (INTF) · F.F. Bruce, The New Testament Documents · Norman Geisler &amp; William Nix, A General Introduction to the Bible</p>
   </div>
 
   <!-- TIMELINE: AGE OF EARLIEST COPIES -->
@@ -1130,7 +1129,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <path d="M320,120 Q360,110 375,130 Q380,160 360,200 Q345,220 330,240 Q315,220 305,190 Q300,160 310,140 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Rome dot -->
         <circle cx="340" cy="175" r="7" fill="rgba(201,168,76,0.6)" stroke="#C9A84C" stroke-width="1.2"/>
-        <text x="352" y="171" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif">Rome</text>
+        <text x="352" y="171" fill="#E8D08A" font-size="11" font-family="'JetBrains Mono', monospace">Rome</text>
 
         <!-- Greece/Balkans -->
         <path d="M380,120 Q430,110 450,135 Q445,165 420,180 Q395,175 380,155 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
@@ -1138,42 +1137,42 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <path d="M400,175 Q420,175 415,210 Q405,230 395,215 Q388,195 400,175 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Athens -->
         <circle cx="408" cy="205" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="416" y="201" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Athens</text>
+        <text x="416" y="201" fill="#E8D08A" font-size="10" font-family="'JetBrains Mono', monospace">Athens</text>
 
         <!-- Turkey/Asia Minor -->
         <path d="M450,100 Q560,90 590,120 Q600,150 570,165 Q520,175 470,165 Q445,150 450,125 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Ephesus -->
         <circle cx="490" cy="148" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="499" y="144" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Ephesus</text>
+        <text x="499" y="144" fill="#E8D08A" font-size="10" font-family="'JetBrains Mono', monospace">Ephesus</text>
         <!-- Antioch -->
         <circle cx="548" cy="148" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="556" y="144" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Antioch</text>
+        <text x="556" y="144" fill="#E8D08A" font-size="10" font-family="'JetBrains Mono', monospace">Antioch</text>
 
         <!-- Syria/Levant -->
         <path d="M550,160 Q590,155 610,180 Q605,210 585,220 Q560,215 550,195 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Jerusalem/Caesarea -->
         <circle cx="575" cy="205" r="6" fill="rgba(201,168,76,0.7)" stroke="#C9A84C" stroke-width="1.5"/>
-        <text x="584" y="201" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif" font-weight="bold">Jerusalem</text>
+        <text x="584" y="201" fill="#E8D08A" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="bold">Jerusalem</text>
 
         <!-- Egypt/North Africa -->
         <path d="M370,270 Q450,260 540,265 Q580,275 590,300 Q560,325 480,330 Q400,325 360,305 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Alexandria -->
         <circle cx="480" cy="285" r="7" fill="rgba(201,168,76,0.65)" stroke="#C9A84C" stroke-width="1.5"/>
-        <text x="491" y="281" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif">Alexandria</text>
+        <text x="491" y="281" fill="#E8D08A" font-size="11" font-family="'JetBrains Mono', monospace">Alexandria</text>
         <!-- Oxyrhynchus (papyri site) -->
         <circle cx="460" cy="308" r="5" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1.2"/>
-        <text x="469" y="304" fill="#2D6A4F" font-size="10" font-family="'Cinzel', serif">Oxyrhynchus</text>
-        <text x="469" y="316" fill="rgba(126,200,160,0.6)" font-size="9" font-family="'Cinzel', serif">(900+ papyri found here)</text>
+        <text x="469" y="304" fill="#2D6A4F" font-size="10" font-family="'JetBrains Mono', monospace">Oxyrhynchus</text>
+        <text x="469" y="316" fill="rgba(126,200,160,0.6)" font-size="9" font-family="'JetBrains Mono', monospace">(900+ papyri found here)</text>
 
         <!-- Carthage/N. Africa -->
         <path d="M230,250 Q320,240 360,265 Q355,295 310,305 Q250,300 220,280 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
         <!-- Carthage -->
         <circle cx="285" cy="272" r="5" fill="rgba(201,168,76,0.45)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="294" y="268" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Carthage</text>
+        <text x="294" y="268" fill="#E8D08A" font-size="10" font-family="'JetBrains Mono', monospace">Carthage</text>
 
         <!-- Constantinople -->
         <circle cx="445" cy="120" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="454" y="116" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Constantinople</text>
+        <text x="454" y="116" fill="#E8D08A" font-size="10" font-family="'JetBrains Mono', monospace">Constantinople</text>
 
         <!-- Scattered manuscript dots across the map -->
         <!-- Many small gold dots representing manuscript find sites -->
@@ -1204,28 +1203,28 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <!-- Legend -->
         <rect x="20" y="350" width="340" height="60" fill="rgba(0,0,0,0.4)" rx="2"/>
         <circle cx="40" cy="365" r="5" fill="rgba(201,168,76,0.6)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="52" y="369" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major NT manuscript center</text>
+        <text x="52" y="369" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'JetBrains Mono', monospace" letter-spacing="1">Major NT manuscript center</text>
         <circle cx="40" cy="385" r="4" fill="rgba(201,168,76,0.35)"/>
-        <text x="52" y="389" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">NT manuscript find site (selection)</text>
+        <text x="52" y="389" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'JetBrains Mono', monospace" letter-spacing="1">NT manuscript find site (selection)</text>
         <circle cx="40" cy="403" r="4" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1"/>
-        <text x="52" y="407" fill="rgba(126,200,160,0.7)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major papyrus cache discovery</text>
+        <text x="52" y="407" fill="rgba(126,200,160,0.7)" font-size="10" font-family="'JetBrains Mono', monospace" letter-spacing="1">Major papyrus cache discovery</text>
 
         <!-- Book of Mormon indicator — in New York, far right -->
-        <text x="760" y="120" fill="rgba(180,80,80,0.6)" font-size="11" font-family="'Cinzel', serif" text-anchor="middle">BOOK OF MORMON</text>
-        <text x="760" y="137" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">CLAIMED ORIGIN</text>
-        <text x="760" y="154" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">New York, 1827–29</text>
+        <text x="760" y="120" fill="rgba(180,80,80,0.6)" font-size="11" font-family="'JetBrains Mono', monospace" text-anchor="middle">BOOK OF MORMON</text>
+        <text x="760" y="137" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'JetBrains Mono', monospace" text-anchor="middle">CLAIMED ORIGIN</text>
+        <text x="760" y="154" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'JetBrains Mono', monospace" text-anchor="middle">New York, 1827–29</text>
         <rect x="700" y="165" width="120" height="55" fill="rgba(107,29,42,0.12)" stroke="rgba(180,80,80,0.3)" stroke-width="1" rx="1"/>
-        <text x="760" y="185" fill="rgba(139,45,60,0.88)" font-size="22" font-family="'Cinzel', serif" text-anchor="middle" font-weight="bold">0</text>
-        <text x="760" y="208" fill="rgba(180,80,80,0.4)" font-size="9" font-family="'Cinzel', serif" text-anchor="middle" letter-spacing="1">ANCIENT MANUSCRIPTS</text>
+        <text x="760" y="185" fill="rgba(139,45,60,0.88)" font-size="22" font-family="'JetBrains Mono', monospace" text-anchor="middle" font-weight="bold">0</text>
+        <text x="760" y="208" fill="rgba(180,80,80,0.4)" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle" letter-spacing="1">ANCIENT MANUSCRIPTS</text>
 
         <!-- Arrow pointing to NY area -->
         <line x1="700" y1="192" x2="660" y2="192" stroke="rgba(180,80,80,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
 
         <!-- Title -->
-        <text x="450" y="400" text-anchor="middle" fill="rgba(201,168,76,0.2)" font-size="9" font-family="'Cinzel', serif" letter-spacing="2">NT MANUSCRIPT DISTRIBUTION — SCHEMATIC · APPROXIMATELY 25,000+ TOTAL COPIES</text>
+        <text x="450" y="400" text-anchor="middle" fill="rgba(201,168,76,0.2)" font-size="9" font-family="'JetBrains Mono', monospace" letter-spacing="2">NT MANUSCRIPT DISTRIBUTION — SCHEMATIC · APPROXIMATELY 25,000+ TOTAL COPIES</text>
       </svg>
     </div>
-    <p style="font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); text-align:center; margin-top:0.8rem;">Map is schematic. Manuscript sites extend also into Armenia, Ethiopia, Georgia, Persia, and India — not all shown.</p>
+    <p style="font-family:'JetBrains Mono',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); text-align:center; margin-top:0.8rem;">Map is schematic. Manuscript sites extend also into Armenia, Ethiopia, Georgia, Persia, and India — not all shown.</p>
   </div>
 
   <!-- DETAILED COMPARISON TABLE -->
