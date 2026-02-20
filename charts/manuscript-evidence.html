@@ -39,7 +39,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(197,163,85,0.07); }
 .intro-box p { font-size: 1rem; line-height: 1.85; color: var(--ink-light); }
 .intro-box p + p { margin-top: 0.8rem; }
-.intro-box strong { color: var(--cream); font-weight: 500; }
+.intro-box strong { color: var(--ink); font-weight: 500; }
 
 /* STAT HERO */
 .stat-hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.15); }
@@ -50,9 +50,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .vs-text { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(201,168,76,0.3); }
 .stat-big { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1; margin-bottom: 0.4rem; }
 .stat-big.gold { color: var(--gold); }
-.stat-big.red { color: rgba(180,80,80,0.85); }
-.stat-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); opacity: 0.7; margin-bottom: 0.6rem; }
-.stat-sub { font-size: 0.9rem; line-height: 1.6; color: var(--ink-light); opacity: 0.7; max-width: 240px; margin: 0 auto; }
+.stat-big.red { color: rgba(139,45,60,0.92); }
+.stat-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; margin-bottom: 0.6rem; }
+.stat-sub { font-size: 0.9rem; line-height: 1.6; color: var(--ink-light); opacity: 0.88; max-width: 240px; margin: 0 auto; }
 
 /* SECTION DIVIDER */
 .section-divider { margin: 3rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
@@ -63,14 +63,14 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .bar-chart { margin-bottom: 3rem; }
 .bar-chart-title { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 1.2rem; text-align: center; }
 .bar-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
-.bar-row-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); opacity: 0.7; width: 180px; flex-shrink: 0; text-align: right; }
+.bar-row-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; width: 180px; flex-shrink: 0; text-align: right; }
 .bar-track { flex: 1; height: 26px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.08); position: relative; overflow: hidden; }
 .bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; transition: width 1s ease; }
 .bar-fill.nt-fill { background: linear-gradient(90deg, rgba(126,200,160,0.5), rgba(126,200,160,0.2)); }
-.bar-fill.bom-fill { background: linear-gradient(90deg, rgba(180,80,80,0.5), rgba(180,80,80,0.2)); }
+.bar-fill.bom-fill { background: linear-gradient(90deg, rgba(139,45,60,0.80), rgba(180,80,80,0.2)); }
 .bar-fill.other-fill { background: linear-gradient(90deg, rgba(201,168,76,0.4), rgba(201,168,76,0.15)); }
 .bar-val { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-light); white-space: nowrap; }
-.bar-zero { font-family: 'Cinzel', serif; font-size: 0.68rem; color: rgba(180,80,80,0.7); letter-spacing: 0.08em; padding-left: 0.5rem; }
+.bar-zero { font-family: 'Cinzel', serif; font-size: 0.68rem; color: rgba(139,45,60,0.88); letter-spacing: 0.08em; padding-left: 0.5rem; }
 
 /* MANUSCRIPT TABLE */
 .ms-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
@@ -78,8 +78,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .ms-table th { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1rem; text-align: left; color: var(--gold-dark); }
 .ms-table td { font-size: 0.9rem; line-height: 1.6; padding: 0.75rem 1rem; color: var(--ink-light); border-bottom: 1px solid rgba(201,168,76,0.06); vertical-align: top; }
 .ms-table tbody tr:nth-child(even) { background: rgba(201,168,76,0.015); }
-.ms-table td:first-child { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--cream); }
-.ms-table td.num { color: #7ec8a0; font-family: 'Cinzel', serif; font-weight: 600; }
+.ms-table td:first-child { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--ink); }
+.ms-table td.num { color: #2D6A4F; font-family: 'Cinzel', serif; font-weight: 600; }
 .ms-table td.num-zero { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-weight: 600; }
 
 /* GEOGRAPHIC SVG */
@@ -89,16 +89,16 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 /* COMPARISON TABLE */
 .compare-table { display: grid; grid-template-columns: 200px 1fr 1fr; gap: 0; border: 1px solid rgba(201,168,76,0.15); margin-bottom: 2rem; }
 .ct-header { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.12); }
-.ct-header.nt-h { color: #7ec8a0; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.08); }
-.ct-header.bom-h { color: rgba(180,80,80,0.85); background: rgba(107,29,42,0.06); }
+.ct-header.nt-h { color: #2D6A4F; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.08); }
+.ct-header.bom-h { color: rgba(139,45,60,0.92); background: rgba(107,29,42,0.06); }
 .ct-header.label-h { color: var(--gold-dark); background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.12); }
 .ct-row { display: contents; }
 .ct-cell { padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.9rem; line-height: 1.65; color: var(--ink-light); }
-.ct-cell.label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); opacity: 0.7; background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; }
+.ct-cell.label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); opacity: 0.88; background: rgba(197,163,85,0.07); border-right: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; }
 .ct-cell.nt { background: rgba(126,200,160,0.02); border-right: 1px solid rgba(201,168,76,0.05); }
 .ct-cell.bom { background: rgba(107,29,42,0.06); }
-.ct-cell strong { color: var(--cream); font-weight: 500; }
-.ct-cell .good { color: #7ec8a0; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ct-cell strong { color: var(--ink); font-weight: 500; }
+.ct-cell .good { color: #2D6A4F; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
 .ct-cell .bad { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
 /* VERDICT */
@@ -219,7 +219,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <div class="bar-track">
           <div class="bar-fill other-fill" style="width:1.5%">
           </div>
-          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~210 copies</span>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(44,24,16,0.55);">~210 copies</span>
         </div>
       </div>
 
@@ -228,7 +228,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <div class="bar-track">
           <div class="bar-fill other-fill" style="width:0.8%">
           </div>
-          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~251 copies</span>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(44,24,16,0.55);">~251 copies</span>
         </div>
       </div>
 
@@ -237,7 +237,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <div class="bar-track">
           <div class="bar-fill other-fill" style="width:0.15%">
           </div>
-          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~20 copies</span>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(44,24,16,0.55);">~20 copies</span>
         </div>
       </div>
 
@@ -246,7 +246,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <div class="bar-track">
           <div class="bar-fill other-fill" style="width:0.7%">
           </div>
-          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~49 copies</span>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(44,24,16,0.55);">~49 copies</span>
         </div>
       </div>
 
@@ -270,7 +270,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
 
   <div class="bar-chart" style="margin-bottom: 2.5rem;">
     <div style="max-width:800px; margin:0 auto;">
-      <p style="font-size:0.85rem; color:rgba(245,240,232,0.5); margin-bottom:1.2rem; text-align:center; font-style:italic;">Smaller gap = greater textual confidence. The NT's gap is extraordinarily small by ancient standards.</p>
+      <p style="font-size:0.85rem; color:rgba(44,24,16,0.50); margin-bottom:1.2rem; text-align:center; font-style:italic;">Smaller gap = greater textual confidence. The NT's gap is extraordinarily small by ancient standards.</p>
 
       <div class="bar-row">
         <span class="bar-row-label">John Rylands Fragment (NT)</span>
@@ -383,7 +383,7 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <text x="491" y="281" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif">Alexandria</text>
         <!-- Oxyrhynchus (papyri site) -->
         <circle cx="460" cy="308" r="5" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1.2"/>
-        <text x="469" y="304" fill="#7ec8a0" font-size="10" font-family="'Cinzel', serif">Oxyrhynchus</text>
+        <text x="469" y="304" fill="#2D6A4F" font-size="10" font-family="'Cinzel', serif">Oxyrhynchus</text>
         <text x="469" y="316" fill="rgba(126,200,160,0.6)" font-size="9" font-family="'Cinzel', serif">(900+ papyri found here)</text>
 
         <!-- Carthage/N. Africa -->
@@ -425,18 +425,18 @@ footer { background: var(--cream); text-align: center; padding: 2.5rem 2rem 3rem
         <!-- Legend -->
         <rect x="20" y="350" width="340" height="60" fill="rgba(0,0,0,0.4)" rx="2"/>
         <circle cx="40" cy="365" r="5" fill="rgba(201,168,76,0.6)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="52" y="369" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major NT manuscript center</text>
+        <text x="52" y="369" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major NT manuscript center</text>
         <circle cx="40" cy="385" r="4" fill="rgba(201,168,76,0.35)"/>
-        <text x="52" y="389" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">NT manuscript find site (selection)</text>
+        <text x="52" y="389" fill="rgba(44,24,16,0.55)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">NT manuscript find site (selection)</text>
         <circle cx="40" cy="403" r="4" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1"/>
         <text x="52" y="407" fill="rgba(126,200,160,0.7)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major papyrus cache discovery</text>
 
         <!-- Book of Mormon indicator — in New York, far right -->
         <text x="760" y="120" fill="rgba(180,80,80,0.6)" font-size="11" font-family="'Cinzel', serif" text-anchor="middle">BOOK OF MORMON</text>
-        <text x="760" y="137" fill="rgba(180,80,80,0.5)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">CLAIMED ORIGIN</text>
-        <text x="760" y="154" fill="rgba(180,80,80,0.5)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">New York, 1827–29</text>
+        <text x="760" y="137" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">CLAIMED ORIGIN</text>
+        <text x="760" y="154" fill="rgba(139,45,60,0.80)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">New York, 1827–29</text>
         <rect x="700" y="165" width="120" height="55" fill="rgba(107,29,42,0.12)" stroke="rgba(180,80,80,0.3)" stroke-width="1" rx="1"/>
-        <text x="760" y="185" fill="rgba(180,80,80,0.7)" font-size="22" font-family="'Cinzel', serif" text-anchor="middle" font-weight="bold">0</text>
+        <text x="760" y="185" fill="rgba(139,45,60,0.88)" font-size="22" font-family="'Cinzel', serif" text-anchor="middle" font-weight="bold">0</text>
         <text x="760" y="208" fill="rgba(180,80,80,0.4)" font-size="9" font-family="'Cinzel', serif" text-anchor="middle" letter-spacing="1">ANCIENT MANUSCRIPTS</text>
 
         <!-- Arrow pointing to NY area -->

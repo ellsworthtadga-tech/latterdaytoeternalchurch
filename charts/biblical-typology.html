@@ -20,6 +20,7 @@
   --burgundy: #6B1D2A;
   --burgundy-light: #8B2E3C;
   --parchment: #FAF6F0;
+  --green: #2D6A4F;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background-color: #E8E0D4; background-image: radial-gradient(ellipse at 15% 10%, rgba(197,163,85,0.10) 0%, transparent 55%), radial-gradient(ellipse at 85% 90%, rgba(107,29,42,0.08) 0%, transparent 55%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--ink); min-height: 100vh; }
@@ -39,7 +40,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(197,163,85,0.07); }
 .intro-box p { font-size: 1rem; line-height: 1.85; color: var(--ink-light); }
 .intro-box p + p { margin-top: 0.8rem; }
-.intro-box strong { color: var(--cream); font-weight: 500; }
+.intro-box strong { color: var(--ink); font-weight: 500; }
 
 /* COLUMN HEADERS */
 .typology-headers { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; margin-bottom: 0; }
@@ -83,14 +84,14 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
   color: var(--burgundy); line-height: 1.2; margin-bottom: 0.3rem;
 }
 .type-ref {
-  font-size: 0.75rem; font-style: italic; color: var(--ink-light); opacity: 0.7;
+  font-size: 0.75rem; font-style: italic; color: var(--ink-light); opacity: 0.88;
   margin-bottom: 0.7rem; font-family: 'Cormorant Garamond', serif;
 }
 .type-desc {
   font-size: 0.9rem; line-height: 1.7; color: var(--ink-light);
 }
 .type-verse {
-  font-size: 0.85rem; line-height: 1.65; color: var(--ink-light); opacity: 0.7;
+  font-size: 0.85rem; line-height: 1.65; color: var(--ink-light); opacity: 0.88;
   font-style: italic; margin-top: 0.5rem;
   border-left: 2px solid rgba(201,168,76,0.2);
   padding-left: 0.7rem;
@@ -115,19 +116,19 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
   margin-bottom: 0.5rem;
 }
 .antitype-tag.christ { color: var(--green); border: 1px solid rgba(126,200,160,0.25); background: rgba(126,200,160,0.05); }
-.antitype-tag.sacrament { color: rgba(160,200,255,0.8); border: 1px solid rgba(160,200,255,0.2); background: rgba(160,200,255,0.04); }
-.antitype-tag.both { color: rgba(200,168,100,0.9); border: 1px solid rgba(200,168,100,0.25); background: rgba(200,168,100,0.04); }
+.antitype-tag.sacrament { color: rgba(50,90,180,0.90); border: 1px solid rgba(50,90,180,0.25); background: rgba(50,90,180,0.06); }
+.antitype-tag.both { color: rgba(120,90,20,0.90); border: 1px solid rgba(120,90,20,0.30); background: rgba(120,90,20,0.06); }
 .antitype-name {
   font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600;
   color: var(--green); line-height: 1.2; margin-bottom: 0.3rem;
 }
 .antitype-ref {
-  font-size: 0.75rem; font-style: italic; color: var(--ink-light); opacity: 0.7;
+  font-size: 0.75rem; font-style: italic; color: var(--ink-light); opacity: 0.88;
   margin-bottom: 0.7rem;
 }
 .antitype-desc { font-size: 0.9rem; line-height: 1.7; color: var(--ink-light); }
 .antitype-verse {
-  font-size: 0.85rem; line-height: 1.65; color: var(--ink-light); opacity: 0.7;
+  font-size: 0.85rem; line-height: 1.65; color: var(--ink-light); opacity: 0.88;
   font-style: italic; margin-top: 0.5rem;
   border-left: 2px solid rgba(126,200,160,0.2);
   padding-left: 0.7rem;
@@ -141,9 +142,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 }
 .lds-note-label {
   font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.18em;
-  text-transform: uppercase; color: rgba(180,80,80,0.65); margin-bottom: 0.25rem;
+  text-transform: uppercase; color: rgba(139,45,60,0.88); margin-bottom: 0.25rem;
 }
-.lds-note-text { font-size: 0.82rem; line-height: 1.6; color: var(--ink-light); opacity: 0.7; }
+.lds-note-text { font-size: 0.82rem; line-height: 1.6; color: var(--ink-light); opacity: 0.88; }
 
 /* THEOLOGY BOX */
 .theology-box { margin: 3rem 0; padding: 2rem 2.2rem; border: 1px solid rgba(201,168,76,0.18); background: rgba(197,163,85,0.07); }
