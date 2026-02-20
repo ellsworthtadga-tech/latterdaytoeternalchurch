@@ -254,6 +254,41 @@
   }
   .article-card:hover .article-read-more { letter-spacing: 0.28em; }
 
+  /* ─── READING TIME ─── */
+  .article-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .article-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.55);
+    white-space: nowrap;
+  }
+
+  /* ─── FEATURED CARD VARIANT ─── */
+  .article-card.featured {
+    border-color: rgba(201,168,76,0.35);
+    background: linear-gradient(160deg, rgba(201,168,76,0.06) 0%, rgba(107,29,42,0.04) 100%);
+  }
+  .article-card.featured::before { opacity: 0.5; }
+  .featured-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgba(201,168,76,0.12);
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    line-height: 1;
+  }
+
   /* ─── SHORT FORM PLACEHOLDER ─── */
   .coming-soon-band {
     margin-top: 6rem;
@@ -431,130 +466,234 @@
 <!-- ─── MAIN ─── -->
 <main class="articles-page">
 
-  <!-- ══ LONG FORM ══ -->
+  <!-- ══ FEATURED: START HERE ══ -->
   <div class="section-intro">
     <div class="section-divider">
-      <span class="section-divider-label">Long Form Articles</span>
+      <span class="section-divider-label">Start Here</span>
     </div>
-    <p class="section-sub">Comprehensive theological analyses — biblical, historical, and philosophical examinations of the doctrines that divide and define these two traditions.</p>
+    <p class="section-sub">New to the site? These three articles lay the groundwork &mdash; epistemology, authority, and revelation.</p>
   </div>
 
   <div class="articles-grid">
 
-    <a class="article-card wide" href="ante-nicene-fathers.html">
-      <span class="article-tag">Church History &middot; Patristics</span>
-      <h3>The Ante-Nicene Church Fathers and Their Catholic Doctrines</h3>
-      <p>A comprehensive survey of the earliest post-apostolic writers — Ignatius, Justin, Irenaeus, Tertullian, and others — demonstrating their unanimous witness to distinctly Catholic teaching on the Eucharist, apostolic succession, and ecclesial authority.</p>
+    <a class="article-card featured" href="from-testimony-to-faith.html">
+      <span class="featured-number">1</span>
+      <div class="article-meta">
+        <span class="article-tag">Epistemology &middot; Faith &amp; Reason</span>
+        <span class="article-time">~16 min read</span>
+      </div>
+      <h3>From Testimony to Faith: Why the &ldquo;Burning in the Bosom&rdquo; Is Not Enough</h3>
+      <p>The fundamental difference between the LDS testimony system &mdash; built on subjective emotional experience &mdash; and the Catholic understanding of faith as an act of the intellect and will, sustained by grace. Why Moroni&rsquo;s Promise is circular, and how the Dark Night of the Soul reveals a sturdier foundation for certainty.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
+    <a class="article-card featured" href="rock-and-the-sand.html">
+      <span class="featured-number">2</span>
+      <div class="article-meta">
+        <span class="article-tag">Doctrinal Authority &middot; Church History</span>
+        <span class="article-time">~15 min read</span>
+      </div>
+      <h3>The Rock and the Sand: Doctrinal Continuity vs. Doctrinal Instability</h3>
+      <p>Catholic doctrinal permanence across two millennia set against the persistent revision of core LDS teachings &mdash; the nature of God, polygamy, the Book of Abraham, blood atonement, and the authority of living prophets.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card featured" href="angelic-authority-closed-canon.html">
+      <span class="featured-number">3</span>
+      <div class="article-meta">
+        <span class="article-tag">Revelation &middot; Canon &middot; Epistemology</span>
+        <span class="article-time">~12 min read</span>
+      </div>
+      <h3>Angels, Revelation, and the Closed Canon</h3>
+      <p>Why no angelic visitation after the apostolic age carries authority to introduce new scripture &mdash; and why Paul&rsquo;s <em>anathema</em> in Galatians 1:8&ndash;9, the Christological finality of Hebrews 1, and Jude&rsquo;s &ldquo;once for all delivered&rdquo; together foreclose the claim of Moroni&rsquo;s revelatory commission.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- ══ GOD, TRINITY & SALVATION ══ -->
+  <div class="section-intro" style="margin-top: 5rem;">
+    <div class="section-divider">
+      <span class="section-divider-label">God, Trinity &amp; Salvation</span>
+    </div>
+    <p class="section-sub">The nature of God, the purpose of the covenants, and what salvation actually means.</p>
+  </div>
+
+  <div class="articles-grid">
+
+    <a class="article-card" href="one-god-unchanging.html">
+      <div class="article-meta">
+        <span class="article-tag">Theology &middot; The Nature of God</span>
+        <span class="article-time">~8 min read</span>
+      </div>
+      <h3>One God, Unchanging and Eternal: The Catholic and Mormon Views of God in Contrast</h3>
+      <p>The chasm between the Catholic understanding of God &mdash; infinite, eternal, and absolutely unique &mdash; and the LDS doctrine of a God who was once a man, infinite regression of gods, and human exaltation to godhood.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="covenant-theology-catholic-vs-lds.html">
+      <div class="article-meta">
+        <span class="article-tag">Covenant Theology &middot; Biblical Exegesis</span>
+        <span class="article-time">~13 min read</span>
+      </div>
+      <h3>Covenant Theology &mdash; Catholic vs. LDS</h3>
+      <p>Catholic covenant theology reads salvation history as one progressive story &mdash; each covenant expanding in scope and deepening in intimacy, culminating in Christ. The LDS dispensational model of cyclical loss and restoration cannot account for what Hebrews, Jeremiah, Galatians, and Isaiah actually say.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="baptism-dead-communion-saints.html">
+      <div class="article-meta">
+        <span class="article-tag">Comparative Soteriology &middot; Pastoral Theology</span>
+        <span class="article-time">~10 min read</span>
+      </div>
+      <h3>Baptism for the Dead vs. the Communion of Saints</h3>
+      <p>The LDS concern for deceased ancestors is sincere &mdash; but proxy baptism rests on a single ambiguous verse. Catholic prayers for the dead, purgatory, indulgences, and the Communion of Saints address that same love on a foundation two thousand years deep.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="holy-eucharist-real-presence.html">
+      <div class="article-meta">
+        <span class="article-tag">Sacramental Theology</span>
+        <span class="article-time">~16 min read</span>
+      </div>
+      <h3>The Holy Eucharist: The Real Presence of Christ in the Blessed Sacrament</h3>
+      <p>A biblical and patristic defense of Christ&rsquo;s true Body and Blood in the Eucharist, tracing the doctrine from the Upper Room through the earliest centuries of the Church.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- ══ AUTHORITY & THE CHURCH ══ -->
+  <div class="section-intro" style="margin-top: 5rem;">
+    <div class="section-divider">
+      <span class="section-divider-label">Authority &amp; the Church</span>
+    </div>
+    <p class="section-sub">Apostolic succession, patristic witness, and the question of who speaks for Christ.</p>
+  </div>
+
+  <div class="articles-grid">
+
+    <a class="article-card" href="ante-nicene-fathers.html">
+      <div class="article-meta">
+        <span class="article-tag">Church History &middot; Patristics</span>
+        <span class="article-time">~18 min read</span>
+      </div>
+      <h3>The Ante-Nicene Church Fathers and Their Catholic Doctrines</h3>
+      <p>A comprehensive survey of the earliest post-apostolic writers &mdash; Ignatius, Justin, Irenaeus, Tertullian, and others &mdash; demonstrating their unanimous witness to distinctly Catholic teaching on the Eucharist, apostolic succession, and ecclesial authority.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="clement-apostolic-succession.html">
+      <div class="article-meta">
+        <span class="article-tag">Church Fathers &middot; Authority</span>
+        <span class="article-time">~7 min read</span>
+      </div>
+      <h3>Clement of Rome &amp; Apostolic Succession: A Living Chain of Authority</h3>
+      <p>How 1 Clement &mdash; written while the Apostle John still lived &mdash; confirms that the Apostles deliberately established an unbroken chain of episcopal succession to preserve the faith.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="apostolic-office-foundational.html">
+      <div class="article-meta">
+        <span class="article-tag">Ecclesiology &middot; Apostolic Office</span>
+        <span class="article-time">~12 min read</span>
+      </div>
+      <h3>The Apostolic Office: Foundational, Not Perpetual</h3>
+      <p>Why the office of Apostle was a unique, once-for-all foundational role &mdash; not a perpetually replenished quorum. Drawing on Revelation 21:14, the death of James without replacement, and the testimony of the earliest Church Fathers.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+    <a class="article-card" href="iron-scepter-eternal-city.html">
+      <div class="article-meta">
+        <span class="article-tag">Church History &middot; Salvation History &middot; Patristics</span>
+        <span class="article-time">~14 min read</span>
+      </div>
+      <h3>The Iron Scepter and the Eternal City: Why Christ&rsquo;s Church Had to Be Roman</h3>
+      <p>Drawing from Dr. Alan Fimister and Dr. Taylor Marshall, this essay argues that the <em>Romanitas</em> of the Catholic Church is not a historical accident but a providential necessity rooted in Daniel&rsquo;s prophecy of the four kingdoms.</p>
+      <span class="article-read-more">Read Article &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- ══ SCRIPTURE, REVELATION & EPISTEMOLOGY ══ -->
+  <div class="section-intro" style="margin-top: 5rem;">
+    <div class="section-divider">
+      <span class="section-divider-label">Scripture, Revelation &amp; Epistemology</span>
+    </div>
+    <p class="section-sub">How we know what we know &mdash; the canon, the evidence, and the logic of progressive revelation.</p>
+  </div>
+
+  <div class="articles-grid">
+
     <a class="article-card" href="fullness-of-time.html">
-      <span class="article-tag">Theology &middot; Revelation</span>
+      <div class="article-meta">
+        <span class="article-tag">Theology &middot; Revelation</span>
+        <span class="article-time">~17 min read</span>
+      </div>
       <h3>The Fullness of Time: Progressive Revelation vs. Primordial Dispensationalism</h3>
       <p>Contrasts the Catholic model of salvation history building toward Christ with the LDS framework of a primordial gospel repeatedly lost and restored.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
     <a class="article-card" href="historicity-comparison.html">
-      <span class="article-tag">Archaeology &middot; Scripture</span>
+      <div class="article-meta">
+        <span class="article-tag">Archaeology &middot; Scripture</span>
+        <span class="article-time">~6 min read</span>
+      </div>
       <h3>Historicity of Scripture: The Bible vs. The Book of Mormon</h3>
       <p>An archaeological, linguistic, manuscript, and historical analysis comparing the evidentiary foundations of the Bible and the Book of Mormon.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
-    <a class="article-card" href="holy-eucharist-real-presence.html">
-      <span class="article-tag">Sacramental Theology</span>
-      <h3>The Holy Eucharist: The Real Presence of Christ in the Blessed Sacrament</h3>
-      <p>A biblical and patristic defense of Christ's true Body and Blood in the Eucharist, tracing the doctrine from the Upper Room through the earliest centuries of the Church.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="catholic-lds-marriage.html">
-      <span class="article-tag">Marriage &middot; Moral Theology</span>
-      <h3>The Marriage Dilemma: Christ's Law vs. Joseph Smith's Covenant</h3>
-      <p>A biblical examination of the irreconcilable conflict between Jesus Christ's teaching on marriage — indissoluble, monogamous, and earthly — and the doctrines introduced in D&amp;C 132.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card wide" href="rock-and-the-sand.html">
-      <span class="article-tag">Doctrinal Authority &middot; Church History</span>
-      <h3>The Rock and the Sand: Doctrinal Continuity vs. Doctrinal Instability</h3>
-      <p>A comparative theological analysis of Catholic doctrinal permanence across two millennia set against the persistent revision of core LDS teachings — the nature of God, polygamy, the Book of Abraham, blood atonement, and the authority of living prophets.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="crowned-in-glory.html">
-      <span class="article-tag">Marian Theology &middot; Women &amp; the Church</span>
-      <h3>Crowned in Glory, or Threatened with Destruction?</h3>
-      <p>A comparative study of feminine dignity in Catholicism and the Latter-day Saint tradition — from Mary's queenship and the female Doctors of the Church, to Emma Smith's threatened destruction in D&amp;C 132 and the enforced silence of Heavenly Mother.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="iron-scepter-eternal-city.html">
-      <span class="article-tag">Church History &middot; Salvation History &middot; Patristics</span>
-      <h3>The Iron Scepter and the Eternal City: Why Christ's Church Had to Be Roman</h3>
-      <p>Drawing from Dr. Alan Fimister and Dr. Taylor Marshall, this essay argues that the <em>Romanitas</em> of the Catholic Church is not a historical accident but a providential necessity rooted in Daniel's prophecy of the four kingdoms, fulfilled through the trial of Christ, the martyrdom of Peter and Paul, and the Edict of Thessalonica.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="from-testimony-to-faith.html">
-      <span class="article-tag">Epistemology &middot; Faith &amp; Reason &middot; Catholic Apologetics</span>
-      <h3>From Testimony to Faith: Why the &ldquo;Burning in the Bosom&rdquo; Is Not Enough</h3>
-      <p>An exploration of the fundamental difference between the LDS testimony system &mdash; built on subjective emotional experience &mdash; and the Catholic understanding of faith as an act of the intellect and will, sustained by grace. Why Moroni&rsquo;s Promise is circular, why competing witnesses are devastating, and how the Dark Night of the Soul reveals a sturdier foundation for certainty.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="apostolic-office-foundational.html">
-      <span class="article-tag">Ecclesiology &middot; Apostolic Office &middot; Catholic vs. LDS</span>
-      <h3>The Apostolic Office: Foundational, Not Perpetual</h3>
-      <p>A biblical and historical examination of why the office of Apostle was a unique, once-for-all foundational role — not a perpetually replenished quorum. Drawing on Revelation 21:14, the death of James without replacement, the special circumstances of Matthias's election, and the testimony of the earliest Church Fathers, this essay demonstrates why Bishops — not new Apostles — are the true continuation of apostolic authority.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
   </div>
 
-  <!-- ══ SHORT FORM ══ -->
+  <!-- ══ MARRIAGE, WOMEN & LDS HISTORY ══ -->
   <div class="section-intro" style="margin-top: 5rem;">
     <div class="section-divider">
-      <span class="section-divider-label">Short Form Articles</span>
+      <span class="section-divider-label">Marriage, Women &amp; LDS History</span>
     </div>
-    <p class="section-sub">Focused, concise studies on individual doctrines, passages, and historical questions.</p>
+    <p class="section-sub">Polygamy, feminine dignity, and the documented record of the Latter-day Saint founding era.</p>
   </div>
 
   <div class="articles-grid">
 
-    <a class="article-card" href="clement-apostolic-succession.html">
-      <span class="article-tag">Church Fathers &middot; Authority</span>
-      <h3>Clement of Rome &amp; Apostolic Succession: A Living Chain of Authority</h3>
-      <p>How 1 Clement — written while the Apostle John still lived — confirms that the Apostles deliberately established an unbroken chain of episcopal succession to preserve the faith.</p>
+    <a class="article-card" href="catholic-lds-marriage.html">
+      <div class="article-meta">
+        <span class="article-tag">Marriage &middot; Moral Theology</span>
+        <span class="article-time">~10 min read</span>
+      </div>
+      <h3>The Marriage Dilemma: Christ&rsquo;s Law vs. Joseph Smith&rsquo;s Covenant</h3>
+      <p>A biblical examination of the irreconcilable conflict between Jesus Christ&rsquo;s teaching on marriage &mdash; indissoluble, monogamous, and earthly &mdash; and the doctrines introduced in D&amp;C 132.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
-    <a class="article-card" href="one-god-unchanging.html">
-      <span class="article-tag">Theology &middot; The Nature of God &middot; Comparative Doctrine</span>
-      <h3>One God, Unchanging and Eternal: The Catholic and Mormon Views of God in Contrast</h3>
-      <p>A biblical and theological examination of the chasm between the Catholic understanding of God — infinite, eternal, and absolutely unique — and the LDS doctrine of a God who was once a man, infinite regression of gods, and human exaltation to godhood.</p>
+    <a class="article-card" href="crowned-in-glory.html">
+      <div class="article-meta">
+        <span class="article-tag">Marian Theology &middot; Women &amp; the Church</span>
+        <span class="article-time">~11 min read</span>
+      </div>
+      <h3>Crowned in Glory, or Threatened with Destruction?</h3>
+      <p>A comparative study of feminine dignity in Catholicism and the Latter-day Saint tradition &mdash; from Mary&rsquo;s queenship and the female Doctors of the Church, to Emma Smith&rsquo;s threatened destruction in D&amp;C 132 and the enforced silence of Heavenly Mother.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
-    <a class="article-card" href="angelic-authority-closed-canon.html">
-      <span class="article-tag">Revelation &middot; Canon &middot; Epistemology</span>
-      <h3>Angels, Revelation, and the Closed Canon</h3>
-      <p>A biblical and patristic case for why no angelic visitation after the apostolic age carries authority to introduce new scripture or alter Christian doctrine — and why Paul&rsquo;s <em>anathema</em> in Galatians 1:8&ndash;9, the Christological finality of Hebrews 1, and Jude&rsquo;s &ldquo;once for all delivered&rdquo; together foreclose the LDS claim of Moroni&rsquo;s revelatory commission.</p>
+    <a class="article-card" href="smith_polygamy_timeline.html">
+      <div class="article-meta">
+        <span class="article-tag">LDS History &middot; Timeline</span>
+        <span class="article-time">~10 min read</span>
+      </div>
+      <h3>The Double Life of Joseph Smith: A Timeline</h3>
+      <p>A documented chronological examination of Joseph Smith&rsquo;s plural marriages &mdash; their secrecy, their subjects, and their implications for claims of prophetic authority. Drawn from the LDS Church&rsquo;s own Gospel Topics essays.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
-    <a class="article-card" href="baptism-dead-communion-saints.html">
-      <span class="article-tag">Comparative Soteriology &middot; Pastoral Theology</span>
-      <h3>Baptism for the Dead vs. the Communion of Saints</h3>
-      <p>The LDS concern for deceased ancestors is sincere &mdash; but proxy baptism rests on a single ambiguous verse. Catholic prayers for the dead, purgatory, indulgences, and the Communion of Saints address that same love on a foundation two thousand years deep.</p>
-      <span class="article-read-more">Read Article &rarr;</span>
-    </a>
-
-    <a class="article-card" href="covenant-theology-catholic-vs-lds.html">
-      <span class="article-tag">Covenant Theology &middot; Biblical Exegesis &middot; Comparative Theology</span>
-      <h3>Covenant Theology &mdash; Catholic vs. LDS</h3>
-      <p>Catholic covenant theology reads salvation history as one progressive story &mdash; each covenant expanding in scope and deepening in intimacy, culminating in Christ. The LDS dispensational model of cyclical loss and restoration cannot account for what Hebrews, Jeremiah, Galatians, and Isaiah actually say.</p>
+    <a class="article-card" href="lds_polygamist_prophets.html">
+      <div class="article-meta">
+        <span class="article-tag">LDS History &middot; Polygamy</span>
+        <span class="article-time">~3 min read</span>
+      </div>
+      <h3>The Polygamist Prophets: LDS Presidents &amp; Their Wives</h3>
+      <p>A documented accounting of the plural marriages of Latter-day Saint presidents &mdash; the number of wives, the ages, and the patterns that defined polygamy at the highest levels of Church leadership.</p>
       <span class="article-read-more">Read Article &rarr;</span>
     </a>
 
