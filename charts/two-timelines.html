@@ -1363,6 +1363,121 @@ body {
   
 
 
+
+/* ═══════════════════════════════════════════════
+   ONE FAITH DELIVERED — MOBILE RESPONSIVE STYLES
+   Applied uniformly across all chart/article pages
+   ═══════════════════════════════════════════════ */
+
+/* ── Base mobile reset ── */
+@media (max-width: 700px) {
+  body { padding: 0 !important; overflow-x: hidden; }
+
+  /* PAGE WRAPPER */
+  .page, .container {
+    padding: 20px 14px !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* NAV */
+  .site-nav { padding: 0.55rem 1rem !important; }
+  .site-nav .nav-links { display: none !important; }
+  .site-nav .nav-back  { display: none !important; }
+  /* Hamburger: always visible, pinned to right */
+  .nav-hamburger {
+    display: flex !important;
+    margin-left: auto !important;
+    order: 99 !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* PAGE HEADER */
+  .page-header { padding: 44px 18px 32px !important; }
+  .page-header h1 { font-size: clamp(1.35rem, 5.5vw, 2rem) !important; }
+  .page-header .subtitle { font-size: 0.92rem !important; }
+
+  /* INNER HEADER (used by template pages) */
+  .header { margin-bottom: 28px !important; padding-bottom: 20px !important; }
+  .header h1 { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
+
+  /* SIDEBAR: fix display:none bug — use transform instead */
+  .sidebar {
+    display: block !important;
+    transform: translateX(100%) !important;
+    right: 0 !important;
+    position: fixed !important;
+  }
+  .sidebar.open { transform: translateX(0) !important; }
+  .sidebar-inner { padding: 4rem 1.5rem 2rem !important; }
+
+  /* OVERLAY */
+  .sidebar-overlay.visible { display: block !important; }
+
+  /* COMPARISON TABLES — make scrollable rather than squash */
+  .comp-table, .ms-table, .compare-table,
+  .col-headers, .comparison-row {
+    font-size: 0.78rem !important;
+  }
+  /* Wrap wide table containers in overflow scroll */
+  .section { overflow-x: auto; }
+
+  /* SCORE GRID */
+  .score-grid { grid-template-columns: 1fr !important; }
+  .consensus-grid { grid-template-columns: 1fr !important; }
+
+  /* CONTRAST / CLOSING GRIDS */
+  .contrast-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  .contrast-points { grid-template-columns: 1fr !important; gap: 1rem !important; }
+  .contrast-point { padding: 1rem !important; }
+  .contrast-point p { font-size: 0.85rem !important; }
+
+  /* VERDICT / SUMMARY BOXES */
+  .verdict-box, .final-verdict, .summary-box {
+    padding: 24px 16px !important;
+  }
+  .verdict-box p, .final-verdict p { font-size: 0.9rem !important; }
+
+  /* GENERAL CONTENT SPACING */
+  main { padding: 0 0 2rem !important; }
+  .intro-box { padding: 1rem 1.1rem !important; }
+  .intro-box p { font-size: 0.88rem !important; }
+  .intro-verse { padding: 1rem !important; }
+  .intro-verse blockquote { font-size: 0.95rem !important; }
+
+  /* FOOTER */
+  footer { padding: 1.5rem 1rem 2rem !important; }
+}
+
+/* ── Medium screens (tablet) ── */
+@media (max-width: 960px) and (min-width: 701px) {
+  body { padding: 16px 12px !important; }
+  .page, .container { padding: 36px 28px !important; }
+  .site-nav .nav-links { gap: 1.2rem !important; }
+  .site-nav .nav-links a { font-size: 0.68rem !important; }
+}
+
+
+@media (max-width: 700px) {
+  /* Parallel timelines: stack Catholic/LDS side by side => single column */
+  .timeline-wrapper,
+  .dual-timeline { grid-template-columns: 1fr !important; }
+  .timeline-divider { display: none !important; }
+  /* Timeline nodes */
+  .tl-node { padding: 0.8rem 1rem !important; }
+  .tl-node-year { font-size: 1rem !important; }
+  .tl-node-title { font-size: 0.88rem !important; }
+  .tl-node-desc { font-size: 0.80rem !important; }
+  /* Split row */
+  .split-row { grid-template-columns: 1fr !important; }
+  .split-divider { display: none !important; }
+  body { padding: 0 !important; }
+}
+@media (max-width: 960px) and (min-width: 701px) {
+  .page { padding: 30px 20px !important; }
+}
+
 </style>
 
 <script type="application/ld+json">
