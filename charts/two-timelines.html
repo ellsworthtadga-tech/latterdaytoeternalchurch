@@ -1459,23 +1459,77 @@ body {
 }
 
 
+/* ── Two-Timelines: mobile layout for the actual .era grid ── */
 @media (max-width: 700px) {
-  /* Parallel timelines: stack Catholic/LDS side by side => single column */
-  .timeline-wrapper,
-  .dual-timeline { grid-template-columns: 1fr !important; }
-  .timeline-divider { display: none !important; }
-  /* Timeline nodes */
-  .tl-node { padding: 0.8rem 1rem !important; }
-  .tl-node-year { font-size: 1rem !important; }
-  .tl-node-title { font-size: 0.88rem !important; }
-  .tl-node-desc { font-size: 0.80rem !important; }
-  /* Split row */
-  .split-row { grid-template-columns: 1fr !important; }
-  .split-divider { display: none !important; }
+
+  /* Each .era row is: [Catholic 1fr] [date 80px] [LDS 1fr]
+     Stack vertically: Catholic → date label → LDS */
+  .era {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    min-height: unset !important;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid rgba(197,163,85,0.12);
+    padding-bottom: 2px;
+  }
+
+  /* Catholic side: full width, left-aligned with gold left-border accent */
+  .era-left {
+    text-align: left !important;
+    padding: 8px 12px 4px 12px !important;
+    grid-row: 1 !important;
+    border-right: none !important;
+    border-left: 3px solid rgba(197,163,85,0.7) !important;
+  }
+
+  /* Center column becomes a slim date tag row */
+  .era-center {
+    grid-row: 2 !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2px 12px !important;
+    min-height: 20px !important;
+  }
+
+  /* Hide the vertical running lines (they only work in the side-by-side layout) */
+  .dual-lines { display: none !important; }
+
+  .era-date {
+    font-size: 9px !important;
+    padding: 2px 8px !important;
+    background: rgba(197,163,85,0.1) !important;
+    border-radius: 2px !important;
+    position: static !important;
+  }
+
+  /* LDS side: full width, left-aligned with burgundy left-border accent */
+  .era-right {
+    text-align: left !important;
+    padding: 4px 12px 8px 12px !important;
+    grid-row: 3 !important;
+    border-left: 3px solid rgba(107,29,42,0.45) !important;
+  }
+
+  /* Text sizing */
+  .event-title { font-size: 0.80rem !important; margin-bottom: 2px !important; }
+  .event-desc  { font-size: 0.74rem !important; line-height: 1.5 !important; }
+
+  /* Verdict closing section */
+  .verdict { padding: 24px 14px !important; }
+  .verdict-text { font-size: 0.88rem !important; line-height: 1.65 !important; }
+
   body { padding: 0 !important; }
 }
+
+/* ── Tablet: shrink center column, keep side-by-side ── */
 @media (max-width: 960px) and (min-width: 701px) {
   .page { padding: 30px 20px !important; }
+  .era { grid-template-columns: 1fr 56px 1fr !important; }
+  .era-left  { padding: 10px 16px 10px 0 !important; }
+  .era-right { padding: 10px 0 10px 16px !important; }
+  .event-title { font-size: 0.82rem !important; }
+  .event-desc  { font-size: 0.77rem !important; }
 }
 
 </style>
