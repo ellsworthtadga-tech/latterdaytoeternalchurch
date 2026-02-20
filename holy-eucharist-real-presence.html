@@ -394,7 +394,10 @@
   .convergence-box::after { bottom: 10px; right: 14px; }
 
   @media (max-width: 700px) {
-    .page { padding: 40px 24px 44px; }
+    body { padding: 0 0 40px; overflow-x: hidden; }
+    .page { padding: 40px 24px 44px;
+    .site-nav .nav-links { display: none; }
+  }
     .title-main { font-size: 26px; }
     p { font-size: 15px; }
     .scripture-block { padding: 16px 18px; }
