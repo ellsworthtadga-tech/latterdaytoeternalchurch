@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salvation: Two Paths — Catholic vs. LDS Soteriology | One Faith Delivered</title>
+<meta name="description" content="Side-by-side flowcharts comparing how salvation works in Catholicism versus LDS theology — faith, sacraments, grace, exaltation, degrees of glory, and eternal progression." />
+<link rel="canonical" href="https://onefaithdelivered.org/salvation-flowchart.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A; --burgundy-light: #8B2D3A;
+  --bg: #0D0703;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 640px; margin: 0 auto; }
+main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+/* FLOWCHART LAYOUT */
+.flow-wrapper {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; align-items: start;
+}
+.flow-col { }
+.flow-header {
+  text-align: center; padding: 1.2rem 1rem;
+  border: 1px solid; margin-bottom: 1.5rem;
+  font-family: 'Cinzel', serif;
+}
+.flow-header.cath { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.35); }
+.flow-header.lds { background: rgba(107,29,42,0.1); border-color: rgba(139,45,60,0.3); }
+.flow-header .track-label { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+.flow-header.cath .track-label { color: var(--gold-dark); }
+.flow-header.lds .track-label { color: rgba(139,45,60,0.8); }
+.flow-header .track-title { font-size: 1.15rem; font-weight: 600; letter-spacing: 0.03em; }
+.flow-header.cath .track-title { color: var(--gold-light); }
+.flow-header.lds .track-title { color: rgba(245,240,232,0.75); }
+
+/* FLOW NODES */
+.flow-node {
+  position: relative; margin-bottom: 0;
+  display: flex; flex-direction: column; align-items: center;
+}
+.node-box {
+  width: 100%; padding: 1rem 1.3rem;
+  border: 1px solid; position: relative;
+  text-align: center;
+}
+.node-box.cath { background: rgba(201,168,76,0.05); border-color: rgba(201,168,76,0.25); }
+.node-box.lds { background: rgba(107,29,42,0.06); border-color: rgba(139,45,60,0.2); }
+.node-box.cath.highlight { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.5); }
+.node-box.lds.highlight { background: rgba(107,29,42,0.14); border-color: rgba(139,45,60,0.4); }
+.node-box.final-cath { background: rgba(201,168,76,0.15); border: 2px solid var(--gold); }
+.node-box.final-lds { background: rgba(107,29,42,0.2); border: 2px solid rgba(139,45,60,0.6); }
+.node-box.perdition { background: rgba(30,10,10,0.5); border: 1px solid rgba(100,20,20,0.4); }
+
+.node-step {
+  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 0.3rem; display: block;
+}
+.node-box.cath .node-step { color: var(--gold-dark); }
+.node-box.lds .node-step { color: rgba(139,45,60,0.7); }
+.node-box.perdition .node-step { color: rgba(200,80,80,0.6); }
+
+.node-title { font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.03em; margin-bottom: 0.3rem; }
+.node-box.cath .node-title { color: var(--cream); }
+.node-box.lds .node-title { color: rgba(245,240,232,0.8); }
+.node-box.final-cath .node-title { color: var(--gold-light); font-size: 1.1rem; }
+.node-box.final-lds .node-title { color: rgba(245,240,232,0.85); font-size: 1.05rem; }
+.node-box.perdition .node-title { color: rgba(200,80,80,0.8); }
+
+.node-desc { font-size: 0.88rem; line-height: 1.6; color: rgba(245,240,232,0.6); }
+.node-note { font-size: 0.78rem; font-style: italic; color: rgba(245,240,232,0.35); margin-top: 0.3rem; }
+
+/* CONNECTOR ARROWS */
+.flow-arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.5rem 0; position: relative;
+}
+.arrow-line { width: 2px; height: 30px; }
+.flow-arrow.cath .arrow-line { background: linear-gradient(to bottom, rgba(201,168,76,0.4), rgba(201,168,76,0.6)); }
+.flow-arrow.lds .arrow-line { background: linear-gradient(to bottom, rgba(139,45,60,0.3), rgba(139,45,60,0.5)); }
+.arrow-head { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; }
+.flow-arrow.cath .arrow-head { border-top: 8px solid rgba(201,168,76,0.6); }
+.flow-arrow.lds .arrow-head { border-top: 8px solid rgba(139,45,60,0.5); }
+.arrow-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+/* BRANCH (for LDS degrees of glory) */
+.branch-container { width: 100%; margin-top: 0.5rem; }
+.branch-title { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.3); text-align: center; margin-bottom: 0.8rem; padding-top: 0.5rem; }
+.branch-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+.branch-node { padding: 0.7rem 0.6rem; border: 1px solid; text-align: center; }
+.branch-node.celestial { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.08); }
+.branch-node.terrestrial { border-color: rgba(180,180,120,0.3); background: rgba(150,150,80,0.05); }
+.branch-node.telestial { border-color: rgba(100,150,200,0.3); background: rgba(80,120,160,0.05); }
+.branch-node .b-name { font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.branch-node.celestial .b-name { color: var(--gold-light); }
+.branch-node.terrestrial .b-name { color: rgba(220,220,160,0.8); }
+.branch-node.telestial .b-name { color: rgba(160,200,240,0.8); }
+.branch-node .b-desc { font-size: 0.76rem; line-height: 1.5; color: rgba(245,240,232,0.5); }
+
+/* CONTRAST NOTES */
+.contrast-section { margin-top: 4rem; }
+.contrast-section h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 2rem; text-align: center; }
+.contrast-points { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.contrast-point { padding: 1.5rem; border: 1px solid rgba(201,168,76,0.15); background: rgba(201,168,76,0.03); }
+.contrast-point h4 { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.contrast-point p { font-size: 0.92rem; line-height: 1.7; color: rgba(245,240,232,0.65); }
+
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+@media (max-width: 800px) {
+  .flow-wrapper { grid-template-columns: 1fr; }
+  .contrast-points { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) { nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html">Charts</a></li><li><a href="topics.html">Topics</a></li><li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>Salvation: Two Paths</h1>
+  <p class="subtitle">How does a soul arrive at eternal life? The Catholic and LDS answers could not be more different.</p>
+</header>
+
+<main>
+
+  <div class="flow-wrapper">
+
+    <!-- CATHOLIC FLOWCHART -->
+    <div class="flow-col">
+      <div class="flow-header cath">
+        <span class="track-label">Catholic Soteriology</span>
+        <div class="track-title">Salvation by Grace Through Faith &amp; Sacrament</div>
+      </div>
+
+      <div class="flow-node">
+        <div class="node-box cath">
+          <span class="node-step">Origin</span>
+          <div class="node-title">Original Sin &amp; the Fall</div>
+          <div class="node-desc">Every human being enters the world in a state of original sin — estranged from God, wounded in intellect and will, inclined toward evil (concupiscence). Salvation cannot be achieved; it must be given.</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box cath highlight">
+          <span class="node-step">Step 1 — Sacrament</span>
+          <div class="node-title">Baptism</div>
+          <div class="node-desc">Original sin is washed away; the soul is reborn in Christ; sanctifying grace is infused. The person becomes a member of the Body of Christ and the Church. Baptism is necessary for salvation.</div>
+          <div class="node-note">John 3:5 — "Unless one is born of water and the Spirit"</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box cath">
+          <span class="node-step">Step 2 — Ongoing</span>
+          <div class="node-title">Life in Grace</div>
+          <div class="node-desc">The Christian grows in sanctifying grace through: the Eucharist (weekly or daily), Confession (forgiveness of mortal and venial sins), prayer, Scripture, and cooperation with actual graces. Faith working through love (Gal. 5:6).</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box cath">
+          <span class="node-step">Step 3 — Sacraments</span>
+          <div class="node-title">Confirmation, Marriage or Holy Orders, Anointing of the Sick</div>
+          <div class="node-desc">At appropriate life stages, additional sacraments strengthen, consecrate, and complete the Christian's life in the Church. Each confers specific graces for specific vocations and needs.</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box cath">
+          <span class="node-step">Step 4 — Death</span>
+          <div class="node-title">Particular Judgment</div>
+          <div class="node-desc">At death, each soul faces the particular judgment — an immediate accounting before God. The soul is then destined for Heaven, Purgatory, or Hell based on its state at death.</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box cath">
+          <span class="node-step">If Necessary</span>
+          <div class="node-title">Purgatory</div>
+          <div class="node-desc">Souls who die in God's grace but not yet fully purified undergo a final purification — completing the temporal consequences of forgiven sins. The Church prays for the holy souls in Purgatory.</div>
+        </div>
+      </div>
+      <div class="flow-arrow cath"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box final-cath">
+          <span class="node-step">Eternal Destination</span>
+          <div class="node-title">Heaven — The Beatific Vision</div>
+          <div class="node-desc">The saved soul enjoys the direct, unmediated vision of God — seeing God as He sees Himself, for eternity. This is not <em>becoming</em> God but dwelling <em>with</em> God in perfect love. "We shall see him as he is" (1 John 3:2).</div>
+        </div>
+      </div>
+
+    </div><!-- end catholic col -->
+
+    <!-- LDS FLOWCHART -->
+    <div class="flow-col">
+      <div class="flow-header lds">
+        <span class="track-label">LDS Soteriology</span>
+        <div class="track-title">Salvation by Grace + Ordinances + Eternal Progression</div>
+      </div>
+
+      <div class="flow-node">
+        <div class="node-box lds">
+          <span class="node-step">Origin</span>
+          <div class="node-title">Pre-Mortal Spirit Life &amp; The Fall</div>
+          <div class="node-desc">All humans are eternal spirit children of Heavenly Father and a Heavenly Mother, who existed before birth. The Fall was a necessary and ultimately positive event — part of God's plan for humans to gain bodies and mortal experience.</div>
+          <div class="node-note">Contrast: the Fall is redemptive in LDS theology, not a catastrophic wound requiring total healing.</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box lds highlight">
+          <span class="node-step">Step 1 — Ordinance</span>
+          <div class="node-title">Baptism (by Proper Authority)</div>
+          <div class="node-desc">Baptism by immersion by one holding the LDS "Melchizedek" or "Aaronic" priesthood. Baptisms performed by non-LDS clergy — including Catholic baptisms — are considered invalid, lacking proper authority.</div>
+          <div class="node-note">Proxy baptism for the dead is also performed in LDS temples.</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box lds">
+          <span class="node-step">Step 2 — Ordinance</span>
+          <div class="node-title">Gift of the Holy Ghost (Confirmation)</div>
+          <div class="node-desc">Conferred by the laying on of hands by one with proper priesthood authority. Gives the constant companionship of the Holy Ghost. Also requires proper LDS authority — not transferable from other traditions.</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box lds">
+          <span class="node-step">Step 3 — Temple Required</span>
+          <div class="node-title">Temple Endowment &amp; Sealing</div>
+          <div class="node-desc">To attain the highest degree (Celestial Kingdom — Exaltation), an LDS member must receive: the Endowment (sacred covenants, passwords, and tokens), and Celestial Marriage (sealed for "time and all eternity" by authorized sealer). Without these, access to Exaltation is closed — regardless of other faithfulness.</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box lds">
+          <span class="node-step">Step 4 — Lifelong</span>
+          <div class="node-title">Faithful Obedience &amp; Word of Wisdom</div>
+          <div class="node-desc">Active church attendance, tithing (10% gross income), keeping the Word of Wisdom (no alcohol, coffee, tea, tobacco), following the prophet, maintaining a temple recommend, and regular ordinance participation. Salvation is, in practice, heavily works-oriented despite LDS claims of grace.</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="node-box lds">
+          <span class="node-step">Step 5 — Death</span>
+          <div class="node-title">Spirit World</div>
+          <div class="node-desc">The soul goes to the Spirit World — either Paradise (for righteous LDS) or Spirit Prison (for others). Mission work continues; proxy ordinances performed on earth by living members can retroactively save those who accept in Spirit Prison. Every person gets a "fair chance."</div>
+        </div>
+      </div>
+      <div class="flow-arrow lds"><div class="arrow-wrapper"><div class="arrow-line"></div><div class="arrow-head"></div></div></div>
+
+      <div class="flow-node">
+        <div class="branch-container">
+          <div class="branch-title">Three Degrees of Glory (after Final Judgment)</div>
+          <div class="branch-row">
+            <div class="branch-node celestial">
+              <div class="b-name">Celestial</div>
+              <div class="b-desc">Highest — Exaltation. Those sealed in temple. Become gods; have spirit children; eternal family unit. Dwell with Heavenly Father.</div>
+            </div>
+            <div class="branch-node terrestrial">
+              <div class="b-name">Terrestrial</div>
+              <div class="b-desc">Middle — Honorable people who rejected the gospel or were not valiant. Christ visits but not Heavenly Father.</div>
+            </div>
+            <div class="branch-node telestial">
+              <div class="b-name">Telestial</div>
+              <div class="b-desc">Lowest — Wicked, liars, etc. Spend time in "hell" first. Eventually inherit some glory. Visited only by Holy Ghost.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 1rem;"></div>
+      <div class="flow-node">
+        <div class="node-box perdition">
+          <span class="node-step">Extreme Case</span>
+          <div class="node-title">Outer Darkness (Sons of Perdition)</div>
+          <div class="node-desc">Reserved for those who had a perfect knowledge of God and LDS truth and then completely denied it — a very small number. Eternal separation from all glory.</div>
+        </div>
+      </div>
+
+      <div style="height: 0.5rem;"></div>
+      <div class="flow-node">
+        <div class="node-box final-lds">
+          <span class="node-step">Ultimate Goal — Celestial + Exaltation</span>
+          <div class="node-title">Exaltation: Becoming Gods</div>
+          <div class="node-desc">"As God now is, man may become." The highest LDS aspiration is not to be with God, but to <em>become</em> God — to have spirit children, preside over worlds, progress eternally. Exaltation is the apex of the Plan of Salvation.</div>
+        </div>
+      </div>
+
+    </div><!-- end lds col -->
+  </div><!-- end flow-wrapper -->
+
+  <div class="contrast-section">
+    <h3>The Fundamental Differences</h3>
+    <div class="contrast-points">
+      <div class="contrast-point">
+        <h4>Grace: Infused vs. Assisted</h4>
+        <p>In Catholic soteriology, grace is a real participation in the divine life — infused into the soul, transforming it from within. In LDS theology, grace is primarily Christ's "enabling power" that assists human effort, and it is insufficient without the completion of all required ordinances and lifelong faithfulness. The LDS formula is grace <em>after all we can do</em> (2 Nephi 25:23).</p>
+      </div>
+      <div class="contrast-point">
+        <h4>The Goal: Vision vs. Deification as Gods</h4>
+        <p>The Catholic heaven is the Beatific Vision — the direct, loving knowledge of God as He is. The redeemed remain creatures; God remains Creator. In LDS theology, the ultimate goal is for humans to <em>become</em> gods of the same type as Heavenly Father — presiding over their own worlds with their own spirit children. These are fundamentally different ultimate destinies.</p>
+      </div>
+      <div class="contrast-point">
+        <h4>Temple Exclusion vs. Universal Sacramental Access</h4>
+        <p>In Catholicism, all seven sacraments are available to every Catholic in every parish worldwide. In LDS theology, the most essential ordinances (Endowment, Celestial Marriage) require a temple recommend — denied to those who fall short of worthiness standards, miss tithing payments, or are not "active" members. Non-members (including family) cannot attend LDS temple weddings.</p>
+      </div>
+      <div class="contrast-point">
+        <h4>Finality of Death vs. Spirit Prison Second Chance</h4>
+        <p>Catholic theology holds that death finalizes the soul's fundamental disposition toward God — purgatory purifies, but does not change the fundamental choice made in life. LDS theology offers a "second chance" in the Spirit Prison, where the departed can hear the gospel and accept proxy ordinances performed by living members. "It is appointed for men to die once, and after that comes judgment" (Heb. 9:27).</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuscript Evidence Comparison | One Faith Delivered</title>
+<meta name="description" content="A visual comparison of the manuscript tradition behind the New Testament versus the single claimed source of the Book of Mormon — with no manuscript tradition whatsoever." />
+<link rel="canonical" href="https://onefaithdelivered.org/manuscript-evidence.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A; --burgundy-light: #8B2D3A;
+  --bg: #0D0703;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 640px; margin: 0 auto; }
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+.intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+.intro-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.7); }
+.intro-box p + p { margin-top: 0.8rem; }
+.intro-box strong { color: var(--cream); font-weight: 500; }
+
+/* STAT HERO */
+.stat-hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.15); }
+.stat-hero-block { padding: 2.5rem 2rem; text-align: center; }
+.stat-hero-block.nt { background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.1); }
+.stat-hero-block.bom { background: rgba(107,29,42,0.06); border-left: 1px solid rgba(201,168,76,0.1); }
+.stat-hero-vs { display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; background: rgba(201,168,76,0.02); }
+.vs-text { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(201,168,76,0.3); }
+.stat-big { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1; margin-bottom: 0.4rem; }
+.stat-big.gold { color: var(--gold); }
+.stat-big.red { color: rgba(180,80,80,0.85); }
+.stat-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-bottom: 0.6rem; }
+.stat-sub { font-size: 0.9rem; line-height: 1.6; color: rgba(245,240,232,0.5); max-width: 240px; margin: 0 auto; }
+
+/* SECTION DIVIDER */
+.section-divider { margin: 3rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.section-divider-line { flex: 1; height: 1px; background: rgba(201,168,76,0.15); }
+.section-divider-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dark); white-space: nowrap; }
+
+/* BAR CHART */
+.bar-chart { margin-bottom: 3rem; }
+.bar-chart-title { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 1.2rem; text-align: center; }
+.bar-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
+.bar-row-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.5); width: 180px; flex-shrink: 0; text-align: right; }
+.bar-track { flex: 1; height: 26px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.08); position: relative; overflow: hidden; }
+.bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; transition: width 1s ease; }
+.bar-fill.nt-fill { background: linear-gradient(90deg, rgba(126,200,160,0.5), rgba(126,200,160,0.2)); }
+.bar-fill.bom-fill { background: linear-gradient(90deg, rgba(180,80,80,0.5), rgba(180,80,80,0.2)); }
+.bar-fill.other-fill { background: linear-gradient(90deg, rgba(201,168,76,0.4), rgba(201,168,76,0.15)); }
+.bar-val { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(245,240,232,0.7); white-space: nowrap; }
+.bar-zero { font-family: 'Cinzel', serif; font-size: 0.68rem; color: rgba(180,80,80,0.7); letter-spacing: 0.08em; padding-left: 0.5rem; }
+
+/* MANUSCRIPT TABLE */
+.ms-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+.ms-table thead tr { background: rgba(201,168,76,0.06); border-bottom: 1px solid rgba(201,168,76,0.2); }
+.ms-table th { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1rem; text-align: left; color: var(--gold-dark); }
+.ms-table td { font-size: 0.9rem; line-height: 1.6; padding: 0.75rem 1rem; color: rgba(245,240,232,0.7); border-bottom: 1px solid rgba(201,168,76,0.06); vertical-align: top; }
+.ms-table tbody tr:nth-child(even) { background: rgba(201,168,76,0.015); }
+.ms-table td:first-child { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--cream); }
+.ms-table td.num { color: #7ec8a0; font-family: 'Cinzel', serif; font-weight: 600; }
+.ms-table td.num-zero { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-weight: 600; }
+
+/* GEOGRAPHIC SVG */
+.geo-section { margin-bottom: 3rem; }
+.geo-map { background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,76,0.12); padding: 1rem; display: flex; justify-content: center; }
+
+/* COMPARISON TABLE */
+.compare-table { display: grid; grid-template-columns: 200px 1fr 1fr; gap: 0; border: 1px solid rgba(201,168,76,0.15); margin-bottom: 2rem; }
+.ct-header { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.12); }
+.ct-header.nt-h { color: #7ec8a0; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.08); }
+.ct-header.bom-h { color: rgba(180,80,80,0.85); background: rgba(107,29,42,0.04); }
+.ct-header.label-h { color: var(--gold-dark); background: rgba(201,168,76,0.03); border-right: 1px solid rgba(201,168,76,0.12); }
+.ct-row { display: contents; }
+.ct-cell { padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.9rem; line-height: 1.65; color: rgba(245,240,232,0.65); }
+.ct-cell.label { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.35); background: rgba(201,168,76,0.02); border-right: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; }
+.ct-cell.nt { background: rgba(126,200,160,0.02); border-right: 1px solid rgba(201,168,76,0.05); }
+.ct-cell.bom { background: rgba(107,29,42,0.03); }
+.ct-cell strong { color: var(--cream); font-weight: 500; }
+.ct-cell .good { color: #7ec8a0; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ct-cell .bad { color: rgba(180,80,80,0.8); font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* VERDICT */
+.verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); text-align: center; }
+.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 1rem; }
+.verdict-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.65); max-width: 800px; margin: 0 auto; }
+.verdict-box p + p { margin-top: 0.85rem; }
+
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+
+@media (max-width: 700px) {
+  .stat-hero { grid-template-columns: 1fr; }
+  .stat-hero-vs { padding: 1rem; border-top: 1px solid rgba(201,168,76,0.08); border-bottom: 1px solid rgba(201,168,76,0.08); }
+  .stat-hero-block.nt { border-right: none; }
+  .stat-hero-block.bom { border-left: none; }
+  .compare-table { grid-template-columns: 120px 1fr 1fr; }
+  .bar-row-label { width: 110px; font-size: 0.55rem; }
+  nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html" class="active">Charts</a></li>
+    <li><a href="topics.html">Topics</a></li>
+    <li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>Manuscript Evidence Comparison</h1>
+  <p class="subtitle">The New Testament rests on thousands of ancient manuscripts spanning centuries and continents. The Book of Mormon rests on the testimony of one man — with no manuscript tradition whatsoever.</p>
+</header>
+
+<main>
+
+  <div class="intro-box">
+    <p>When historians evaluate ancient documents, one of their primary tools is the manuscript tradition — the physical copies, fragments, quotations, and translations that survive from antiquity. The more numerous and widespread the manuscripts, the easier it is to reconstruct the original text with confidence and to verify that it has not been substantially altered. By this standard, the New Testament is the most extraordinarily well-attested document in all of ancient literature — by a margin that is not even close.</p>
+    <p>The Book of Mormon, by contrast, has <strong>zero</strong> ancient manuscripts. It has no manuscript tradition because it claims a unique origin: gold plates retrieved from a hill in New York, translated between 1827 and 1829, and then returned to the angel Moroni. No physical evidence can be examined, challenged, carbon-dated, or independently verified. This page presents that contrast in data.</p>
+  </div>
+
+  <!-- HERO STATS -->
+  <div class="stat-hero">
+    <div class="stat-hero-block nt">
+      <div class="stat-label">New Testament Manuscripts</div>
+      <div class="stat-big gold">5,800+</div>
+      <div class="stat-label" style="margin-top:0.3rem;">Greek manuscripts alone</div>
+      <div class="stat-sub">Plus 10,000+ Latin (Vulgate) copies, 9,300+ manuscripts in other ancient languages (Syriac, Coptic, Armenian, Gothic, etc.) — totaling over 25,000 manuscript copies of portions of the New Testament.</div>
+    </div>
+    <div class="stat-hero-vs">
+      <span class="vs-text">vs.</span>
+    </div>
+    <div class="stat-hero-block bom">
+      <div class="stat-label">Book of Mormon Ancient Manuscripts</div>
+      <div class="stat-big red">0</div>
+      <div class="stat-label" style="margin-top:0.3rem;">ancient manuscripts in existence</div>
+      <div class="stat-sub">No gold plates. No archaeological fragments. No ancient copies. No translation tradition. The claimed source material was removed from human access by an angel and cannot be examined, tested, or verified by any independent scholar.</div>
+    </div>
+  </div>
+
+  <!-- BAR CHART: NT vs other ancient works -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">NT Manuscript Count vs. Other Celebrated Ancient Works</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="bar-chart">
+    <div style="max-width:800px; margin:0 auto;">
+
+      <div class="bar-row">
+        <span class="bar-row-label">New Testament (Greek)</span>
+        <div class="bar-track">
+          <div class="bar-fill nt-fill" style="width:100%">
+            <span class="bar-val">5,800+ Greek manuscripts</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">NT — All Languages</span>
+        <div class="bar-track" style="overflow:visible;">
+          <div class="bar-fill nt-fill" style="width:100%; background: linear-gradient(90deg, rgba(126,200,160,0.7), rgba(126,200,160,0.35))">
+            <span class="bar-val">25,000+ total manuscript copies</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Homer's Iliad</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:14%">
+            <span class="bar-val">~1,800 copies</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Plato's Works</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:1.5%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~210 copies</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Caesar's Gallic Wars</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:0.8%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~251 copies</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Tacitus — Annals</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:0.15%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~20 copies</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Aristotle's Works</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:0.7%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(245,240,232,0.6);">~49 copies</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Book of Mormon (ancient)</span>
+        <div class="bar-track">
+          <span class="bar-zero">0 — No ancient manuscripts exist</span>
+        </div>
+      </div>
+
+    </div>
+    <p style="text-align:center; font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); margin-top:1rem;">Bar lengths proportional to manuscript count. NT bar truncated for scale. Sources: Institute for NT Textual Research (INTF) · F.F. Bruce, The New Testament Documents · Norman Geisler &amp; William Nix, A General Introduction to the Bible</p>
+  </div>
+
+  <!-- TIMELINE: AGE OF EARLIEST COPIES -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Time Gap Between Original Writing &amp; Earliest Surviving Copy</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="bar-chart" style="margin-bottom: 2.5rem;">
+    <div style="max-width:800px; margin:0 auto;">
+      <p style="font-size:0.85rem; color:rgba(245,240,232,0.5); margin-bottom:1.2rem; text-align:center; font-style:italic;">Smaller gap = greater textual confidence. The NT's gap is extraordinarily small by ancient standards.</p>
+
+      <div class="bar-row">
+        <span class="bar-row-label">John Rylands Fragment (NT)</span>
+        <div class="bar-track">
+          <div class="bar-fill nt-fill" style="width:3%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(126,200,160,0.8);">~40–50 year gap (written c. 90 AD, fragment c. 125–130 AD)</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">NT — Average Gap</span>
+        <div class="bar-track">
+          <div class="bar-fill nt-fill" style="width:8%">
+          </div>
+          <span class="bar-val" style="padding-left:0.4rem; font-size:0.68rem; color:rgba(126,200,160,0.8);">~100–150 year average gap</span>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Homer's Iliad</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:40%">
+            <span class="bar-val" style="font-size:0.68rem;">~500 year gap</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Caesar's Gallic Wars</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:75%">
+            <span class="bar-val" style="font-size:0.68rem;">~900 year gap</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Tacitus — Annals</span>
+        <div class="bar-track">
+          <div class="bar-fill other-fill" style="width:83%">
+            <span class="bar-val" style="font-size:0.68rem;">~1,000 year gap</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-row-label">Book of Mormon</span>
+        <div class="bar-track">
+          <span class="bar-zero">No ancient copies exist — original source inaccessible</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEOGRAPHIC SPREAD MAP SVG -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Geographic Spread of NT Manuscript Discoveries</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="geo-section">
+    <div class="geo-map">
+      <svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:880px;">
+        <!-- Background -->
+        <rect width="900" height="420" fill="#060301"/>
+
+        <!-- Mediterranean sea fill -->
+        <ellipse cx="430" cy="240" rx="320" ry="90" fill="rgba(30,50,80,0.3)"/>
+
+        <!-- Rough land masses — Europe -->
+        <!-- Iberia -->
+        <path d="M140,130 Q170,110 220,120 Q250,130 260,160 Q240,190 210,200 Q170,195 150,175 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- France/Gaul -->
+        <path d="M220,90 Q280,80 320,100 Q340,130 310,165 Q270,170 250,160 Q230,140 220,120 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Italy -->
+        <path d="M320,120 Q360,110 375,130 Q380,160 360,200 Q345,220 330,240 Q315,220 305,190 Q300,160 310,140 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Rome dot -->
+        <circle cx="340" cy="175" r="7" fill="rgba(201,168,76,0.6)" stroke="#C9A84C" stroke-width="1.2"/>
+        <text x="352" y="171" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif">Rome</text>
+
+        <!-- Greece/Balkans -->
+        <path d="M380,120 Q430,110 450,135 Q445,165 420,180 Q395,175 380,155 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Greece peninsula -->
+        <path d="M400,175 Q420,175 415,210 Q405,230 395,215 Q388,195 400,175 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Athens -->
+        <circle cx="408" cy="205" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="416" y="201" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Athens</text>
+
+        <!-- Turkey/Asia Minor -->
+        <path d="M450,100 Q560,90 590,120 Q600,150 570,165 Q520,175 470,165 Q445,150 450,125 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Ephesus -->
+        <circle cx="490" cy="148" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="499" y="144" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Ephesus</text>
+        <!-- Antioch -->
+        <circle cx="548" cy="148" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="556" y="144" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Antioch</text>
+
+        <!-- Syria/Levant -->
+        <path d="M550,160 Q590,155 610,180 Q605,210 585,220 Q560,215 550,195 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Jerusalem/Caesarea -->
+        <circle cx="575" cy="205" r="6" fill="rgba(201,168,76,0.7)" stroke="#C9A84C" stroke-width="1.5"/>
+        <text x="584" y="201" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif" font-weight="bold">Jerusalem</text>
+
+        <!-- Egypt/North Africa -->
+        <path d="M370,270 Q450,260 540,265 Q580,275 590,300 Q560,325 480,330 Q400,325 360,305 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Alexandria -->
+        <circle cx="480" cy="285" r="7" fill="rgba(201,168,76,0.65)" stroke="#C9A84C" stroke-width="1.5"/>
+        <text x="491" y="281" fill="#E8D08A" font-size="11" font-family="'Cinzel', serif">Alexandria</text>
+        <!-- Oxyrhynchus (papyri site) -->
+        <circle cx="460" cy="308" r="5" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1.2"/>
+        <text x="469" y="304" fill="#7ec8a0" font-size="10" font-family="'Cinzel', serif">Oxyrhynchus</text>
+        <text x="469" y="316" fill="rgba(126,200,160,0.6)" font-size="9" font-family="'Cinzel', serif">(900+ papyri found here)</text>
+
+        <!-- Carthage/N. Africa -->
+        <path d="M230,250 Q320,240 360,265 Q355,295 310,305 Q250,300 220,280 Z" fill="#1a1206" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <!-- Carthage -->
+        <circle cx="285" cy="272" r="5" fill="rgba(201,168,76,0.45)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="294" y="268" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Carthage</text>
+
+        <!-- Constantinople -->
+        <circle cx="445" cy="120" r="5" fill="rgba(201,168,76,0.5)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="454" y="116" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Constantinople</text>
+
+        <!-- Scattered manuscript dots across the map -->
+        <!-- Many small gold dots representing manuscript find sites -->
+        <circle cx="175" cy="150" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="240" cy="145" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="295" cy="155" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="330" cy="160" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="355" cy="185" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="415" cy="185" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="500" cy="130" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="530" cy="125" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="390" cy="140" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="560" cy="190" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="430" cy="280" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="510" cy="295" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="270" cy="260" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="310" cy="275" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="200" cy="165" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="350" cy="145" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="470" cy="110" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="540" cy="155" r="3" fill="rgba(201,168,76,0.4)"/>
+        <circle cx="580" cy="170" r="3" fill="rgba(201,168,76,0.4)"/>
+
+        <!-- UK / Britannia -->
+        <path d="M190,60 Q220,50 235,70 Q225,95 200,100 Q182,85 190,60 Z" fill="#1a1206" stroke="rgba(201,168,76,0.12)" stroke-width="1"/>
+        <circle cx="210" cy="78" r="3" fill="rgba(201,168,76,0.35)"/>
+
+        <!-- Legend -->
+        <rect x="20" y="350" width="340" height="60" fill="rgba(0,0,0,0.4)" rx="2"/>
+        <circle cx="40" cy="365" r="5" fill="rgba(201,168,76,0.6)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="52" y="369" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major NT manuscript center</text>
+        <circle cx="40" cy="385" r="4" fill="rgba(201,168,76,0.35)"/>
+        <text x="52" y="389" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">NT manuscript find site (selection)</text>
+        <circle cx="40" cy="403" r="4" fill="rgba(126,200,160,0.7)" stroke="#7ec8a0" stroke-width="1"/>
+        <text x="52" y="407" fill="rgba(126,200,160,0.7)" font-size="10" font-family="'Cinzel', serif" letter-spacing="1">Major papyrus cache discovery</text>
+
+        <!-- Book of Mormon indicator — in New York, far right -->
+        <text x="760" y="120" fill="rgba(180,80,80,0.6)" font-size="11" font-family="'Cinzel', serif" text-anchor="middle">BOOK OF MORMON</text>
+        <text x="760" y="137" fill="rgba(180,80,80,0.5)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">CLAIMED ORIGIN</text>
+        <text x="760" y="154" fill="rgba(180,80,80,0.5)" font-size="10" font-family="'Cinzel', serif" text-anchor="middle">New York, 1827–29</text>
+        <rect x="700" y="165" width="120" height="55" fill="rgba(107,29,42,0.12)" stroke="rgba(180,80,80,0.3)" stroke-width="1" rx="1"/>
+        <text x="760" y="185" fill="rgba(180,80,80,0.7)" font-size="22" font-family="'Cinzel', serif" text-anchor="middle" font-weight="bold">0</text>
+        <text x="760" y="208" fill="rgba(180,80,80,0.4)" font-size="9" font-family="'Cinzel', serif" text-anchor="middle" letter-spacing="1">ANCIENT MANUSCRIPTS</text>
+
+        <!-- Arrow pointing to NY area -->
+        <line x1="700" y1="192" x2="660" y2="192" stroke="rgba(180,80,80,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Title -->
+        <text x="450" y="400" text-anchor="middle" fill="rgba(201,168,76,0.2)" font-size="9" font-family="'Cinzel', serif" letter-spacing="2">NT MANUSCRIPT DISTRIBUTION — SCHEMATIC · APPROXIMATELY 25,000+ TOTAL COPIES</text>
+      </svg>
+    </div>
+    <p style="font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(201,168,76,0.25); text-align:center; margin-top:0.8rem;">Map is schematic. Manuscript sites extend also into Armenia, Ethiopia, Georgia, Persia, and India — not all shown.</p>
+  </div>
+
+  <!-- DETAILED COMPARISON TABLE -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Head-to-Head Evidential Comparison</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="compare-table">
+    <!-- Headers -->
+    <div class="ct-header label-h">Criterion</div>
+    <div class="ct-header nt-h">✓ New Testament</div>
+    <div class="ct-header bom-h">✕ Book of Mormon</div>
+
+    <!-- Row 1 -->
+    <div class="ct-cell label">Original Source Material</div>
+    <div class="ct-cell nt"><strong>Papyrus and vellum manuscripts</strong> — physically examinable, carbon-datable, and preserved in major collections worldwide (Vatican Library, British Library, Chester Beatty Collection, etc.)</div>
+    <div class="ct-cell bom"><strong>Gold plates</strong> — claimed to have been returned to the angel Moroni after translation. Cannot be examined, tested, or verified by any independent researcher. <span class="bad">Unverifiable</span></div>
+
+    <!-- Row 2 -->
+    <div class="ct-cell label">Number of Ancient Manuscripts</div>
+    <div class="ct-cell nt"><strong class="good">5,800+</strong> Greek manuscripts. 25,000+ in all languages. Ranging from small fragments to nearly complete codices (Codex Sinaiticus, Codex Vaticanus, Codex Alexandrinus).</div>
+    <div class="ct-cell bom"><strong class="bad">Zero.</strong> No ancient copies exist. The 1830 first edition is the oldest text.</div>
+
+    <!-- Row 3 -->
+    <div class="ct-cell label">Independent Witnesses</div>
+    <div class="ct-cell nt">Manuscripts found across <strong>Egypt, Palestine, Syria, Turkey, Greece, Italy, North Africa, Armenia, Ethiopia</strong> — independently copied by communities with no contact with each other. Agreement across traditions confirms text stability.</div>
+    <div class="ct-cell bom">The witnesses to the gold plates (3 official + 8 additional) were <strong>all members of Smith's immediate circle</strong> — family and close associates. No independent, non-invested witness ever handled the plates.</div>
+
+    <!-- Row 4 -->
+    <div class="ct-cell label">Earliest Surviving Fragment</div>
+    <div class="ct-cell nt"><strong class="good">P52 (John Rylands Papyrus)</strong> — a fragment of the Gospel of John, dated to c. A.D. 125–130, within approximately 40–50 years of the original writing. Now in the John Rylands Library, Manchester.</div>
+    <div class="ct-cell bom"><strong class="bad">1830 printed first edition</strong> — published by E.B. Grandin in Palmyra, New York. There is an "Original Manuscript" (partial) and "Printer's Manuscript" from 1829, but these are Joseph Smith's handwritten copies, not independent ancient sources.</div>
+
+    <!-- Row 5 -->
+    <div class="ct-cell label">Archaeological Corroboration</div>
+    <div class="ct-cell nt">Hundreds of archaeological sites confirm NT-era geography, persons, and events — Pool of Siloam, ossuary of Caiaphas, Pilate inscription, synagogues at Capernaum, Caesarea Maritima, etc. <span class="good">Extensive</span></div>
+    <div class="ct-cell bom">No archaeological site has been identified as a Book of Mormon location. The Smithsonian Institution and the National Geographic Society have both issued statements that the Book of Mormon is not used as a guide for archaeological research. <span class="bad">None confirmed</span></div>
+
+    <!-- Row 6 -->
+    <div class="ct-cell label">Patristic Quotations</div>
+    <div class="ct-cell nt">Even if every NT manuscript were destroyed, the complete NT could be reconstructed from <strong>quotations in the writings of the Church Fathers alone</strong>. Clement, Ignatius, Justin, Irenaeus, Tertullian, and others quote the NT extensively.</div>
+    <div class="ct-cell bom">No writer before 1830 quotes the Book of Mormon. No pre-1830 document references it. It has no tradition of transmission, commentary, or quotation prior to Joseph Smith's production of the first edition. <span class="bad">No tradition</span></div>
+
+    <!-- Row 7 -->
+    <div class="ct-cell label">Textual Stability / Variants</div>
+    <div class="ct-cell nt">Variants among 5,800+ manuscripts are overwhelmingly minor (spelling, word order). No core doctrine is affected by any variant. The text's stability across independent traditions is remarkable and well-documented. <span class="good">Stable</span></div>
+    <div class="ct-cell bom">The 1830 first edition differs from the current LDS edition in over 3,900 places. Changes include theological alterations (e.g., "son of God" changed to "son of the Eternal Father"), not merely grammatical corrections. <span class="bad">~3,900+ changes</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <h3>✦ &nbsp; What the Evidence Requires &nbsp; ✦</h3>
+    <p>The historian's task is not to assume the miraculous is impossible — it is to follow the evidence. And the evidence for the New Testament is extraordinary by any standard of ancient documentation: more manuscripts, earlier manuscripts, wider geographic distribution, and stronger independent corroboration than any other work from antiquity. Scholars who reject the NT's historical reliability must do so in spite of this evidence, not because of any lack of it.</p>
+    <p>The Book of Mormon makes a different kind of claim — a 19th-century document purporting to be an ancient text, with no ancient manuscript tradition, no independently verified archaeological footprint, and a primary source that was removed from human access before it could be examined. These are not equivalent evidential foundations. The Catholic position — that the New Testament is reliably transmitted Scripture, guarded by the Church Christ founded — is supported by more physical evidence than any comparable claim in the ancient world.</p>
+  </div>
+
+</main>
+
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html" style="color:var(--gold-light)">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>

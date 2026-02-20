@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joseph Smith's God: An Evolving Theology | One Faith Delivered</title>
+<meta name="description" content="A focused timeline showing how Joseph Smith's descriptions of God changed from 1830 to 1844 — in his own words." />
+<link rel="canonical" href="https://onefaithdelivered.org/joseph-smith-evolving-god.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A; --burgundy-light: #8B2D3A;
+  --parchment: #FAF6F0; --bg: #0D0703;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 640px; margin: 0 auto; }
+main { max-width: 980px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+.intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3.5rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+.intro-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.7); }
+.intro-box strong { color: var(--cream); font-weight: 500; }
+
+/* MAIN VERTICAL TIMELINE */
+.timeline { position: relative; padding-left: 0; }
+
+/* The connecting spine */
+.timeline-spine {
+  position: absolute; left: 140px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3) 5%, rgba(201,168,76,0.3) 95%, transparent);
+}
+
+.tl-entry { display: flex; gap: 0; margin-bottom: 0; position: relative; }
+
+.tl-left {
+  width: 140px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: flex-end;
+  padding: 2rem 1.5rem 2rem 0;
+  text-align: right;
+}
+.tl-year {
+  font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700;
+  color: var(--gold); line-height: 1; margin-bottom: 0.3rem;
+}
+.tl-era {
+  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(245,240,232,0.35);
+}
+
+/* Dot on the spine */
+.tl-dot {
+  position: absolute; left: 133px; top: 2.15rem;
+  width: 16px; height: 16px;
+  border-radius: 50%; border: 2px solid var(--gold);
+  background: var(--bg); z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.tl-dot::after {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--gold);
+}
+
+.tl-right {
+  flex: 1;
+  padding: 1.8rem 0 1.8rem 2rem;
+  border-bottom: 1px solid rgba(201,168,76,0.08);
+}
+.tl-entry:last-child .tl-right { border-bottom: none; }
+
+.tl-doc {
+  font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.6rem;
+}
+
+/* Belief card */
+.belief-card {
+  border: 1px solid rgba(201,168,76,0.15);
+  background: rgba(201,168,76,0.03);
+  margin-bottom: 1rem;
+}
+.belief-card-header {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  background: rgba(201,168,76,0.04);
+}
+.belief-label {
+  font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.label-god { color: #7ec8a0; }
+.label-nature { color: var(--gold-light); }
+.label-plurality { color: rgba(200,160,80,0.9); }
+
+.belief-card-body { padding: 0.9rem 1rem; }
+.tl-quote {
+  font-size: 0.95rem; line-height: 1.75; color: rgba(245,240,232,0.82);
+  font-style: italic; margin-bottom: 0.35rem;
+}
+.tl-source {
+  font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.12em;
+  color: var(--gold-dark); text-transform: uppercase;
+}
+
+.tl-analysis {
+  font-size: 0.9rem; line-height: 1.7; color: rgba(245,240,232,0.55);
+  font-style: italic; border-left: 2px solid rgba(201,168,76,0.2);
+  padding-left: 0.9rem; margin-top: 0.8rem;
+}
+
+/* CONFLICT BANNER between stages */
+.conflict-banner {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 0 0 0 2rem; padding: 0.6rem 1rem;
+  background: rgba(107,29,42,0.12); border: 1px solid rgba(139,45,60,0.2);
+  border-left: 3px solid rgba(139,45,60,0.5);
+}
+.conflict-icon { color: rgba(180,80,80,0.7); font-size: 0.85rem; flex-shrink: 0; }
+.conflict-text {
+  font-family: 'Cinzel', serif; font-size: 0.64rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(180,80,80,0.75);
+}
+
+/* SUMMARY GRID */
+.summary-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1px; margin-top: 3.5rem; border: 1px solid rgba(201,168,76,0.15);
+}
+.summary-cell { padding: 1.3rem 1rem; text-align: center; background: rgba(201,168,76,0.02); }
+.summary-cell:not(:last-child) { border-right: 1px solid rgba(201,168,76,0.1); }
+.summary-year { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold); font-weight: 700; margin-bottom: 0.3rem; }
+.summary-desc { font-size: 0.82rem; line-height: 1.5; color: rgba(245,240,232,0.5); }
+.summary-arrow {
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(201,168,76,0.3); font-size: 1.4rem;
+}
+
+.verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); text-align: center; }
+.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 1rem; }
+.verdict-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.65); max-width: 780px; margin: 0 auto; }
+.verdict-box p + p { margin-top: 0.85rem; }
+
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+
+@media (max-width: 680px) {
+  .timeline-spine { left: 90px; }
+  .tl-left { width: 90px; padding-right: 1rem; }
+  .tl-year { font-size: 1.1rem; }
+  .tl-dot { left: 83px; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html" class="active">Charts</a></li>
+    <li><a href="topics.html">Topics</a></li>
+    <li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>Joseph Smith's God:<br>An Evolving Theology</h1>
+  <p class="subtitle">In fourteen years, Smith's God went from an eternal spirit to a formerly mortal man. In his own words.</p>
+</header>
+
+<main>
+
+  <div class="intro-box">
+    <p>The LDS Church teaches that Joseph Smith received consistent, coherent revelation from God from his First Vision in 1820 until his death in 1844. But a careful reading of his own writings and discourses — in chronological order — reveals something striking: <strong>his doctrine of God underwent four distinct, mutually contradictory phases</strong>. The God of the 1830 Book of Mormon is not the God of the 1843 D&amp;C. The God of the 1835 Lectures on Faith is not the God of the 1844 King Follett Discourse. These are not refinements of the same idea. They are categorical theological reversals — each delivered as divine revelation.</p>
+  </div>
+
+  <!-- SUMMARY ROW -->
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <div class="summary-year">1830</div>
+      <div class="summary-desc">One God, spiritual, triune — language nearly identical to orthodox Christianity</div>
+    </div>
+    <div class="summary-cell">
+      <div class="summary-year">1835</div>
+      <div class="summary-desc">Two personages — Father as a "personage of spirit," Son embodied</div>
+    </div>
+    <div class="summary-cell">
+      <div class="summary-year">1843</div>
+      <div class="summary-desc">Father gains a physical body of flesh and bones</div>
+    </div>
+    <div class="summary-cell">
+      <div class="summary-year">1844</div>
+      <div class="summary-desc">God was once a mortal man who progressed to godhood</div>
+    </div>
+  </div>
+
+  <!-- VERTICAL TIMELINE -->
+  <div class="timeline" style="margin-top: 3.5rem; position: relative;">
+    <div class="timeline-spine"></div>
+
+    <!-- 1830 -->
+    <div class="tl-entry">
+      <div class="tl-left">
+        <span class="tl-year">1830</span>
+        <span class="tl-era">Book of Mormon</span>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <div class="tl-doc">Book of Mormon — Published March 26, 1830</div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-god">On the Unity of God</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"And now, behold, this is the doctrine of Christ, and the only and true doctrine of the Father, and of the Son, and of the Holy Ghost, which is one God, without end. Amen."</div>
+            <div class="tl-source">— 2 Nephi 31:21</div>
+          </div>
+        </div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-nature">On God's Eternal, Unchanging Nature</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"For I know that God is not a partial God, neither a changeable being; but he is unchangeable from all eternity to all eternity."</div>
+            <div class="tl-source">— Moroni 8:18</div>
+          </div>
+        </div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-plurality">On Christ as Father and Son</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"And because he dwelleth in flesh he shall be called the Son of God, and having subjected the flesh to the will of the Father, being the Father and the Son — The Father, because he was conceived by the power of God; and the Son, because of the flesh; thus becoming the Father and Son."</div>
+            <div class="tl-source">— Mosiah 15:2–3</div>
+          </div>
+        </div>
+
+        <div class="tl-analysis">The 1830 Book of Mormon uses language that any Trinitarian Christian would recognize. God is "one God, without end," "unchangeable from all eternity to all eternity." Christ is simultaneously Father and Son — the classic language of Monarchianism or modalism. There is no hint of three separate beings, no embodied Father, no pre-mortal progression.</div>
+      </div>
+    </div>
+
+    <div class="conflict-banner">
+      <span class="conflict-icon">⚠</span>
+      <span class="conflict-text">Shift 1 — The Father moves from "one God" to a separate "personage of spirit"</span>
+    </div>
+
+    <!-- 1835 -->
+    <div class="tl-entry">
+      <div class="tl-left">
+        <span class="tl-year">1835</span>
+        <span class="tl-era">Lectures on Faith</span>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <div class="tl-doc">Lectures on Faith — Canonized in D&amp;C 1835–1921</div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-god">On the Nature of the Father</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"There are two personages who constitute the great, matchless, governing and supreme power over all things... The Father being a personage of spirit, glory and power: possessing all perfection and fullness; the Son, who was in the bosom of the Father, a personage of tabernacle."</div>
+            <div class="tl-source">— Lectures on Faith, Lecture 5:2 (1835)</div>
+          </div>
+        </div>
+
+        <div class="tl-analysis">By 1835, God is now explicitly two separate personages — Father and Son — not "one God." But critically, the Father is still a "personage of spirit," not embodied. The Holy Spirit is not listed as a personage at all, but as "the mind of the Father and Son." These Lectures were voted into the LDS canon at the 1835 General Assembly and remained scripture for 86 years, until they were quietly removed from the D&amp;C in 1921 — almost certainly because they contradicted the later, embodied view of God that had become standard LDS teaching.</div>
+      </div>
+    </div>
+
+    <div class="conflict-banner">
+      <span class="conflict-icon">⚠</span>
+      <span class="conflict-text">Shift 2 — The Father acquires a physical body of flesh and bones</span>
+    </div>
+
+    <!-- 1843 -->
+    <div class="tl-entry">
+      <div class="tl-left">
+        <span class="tl-year">1843</span>
+        <span class="tl-era">D&amp;C 130</span>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <div class="tl-doc">D&amp;C 130 — April 2, 1843</div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-nature">On the Embodied God</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"The Father has a body of flesh and bones as tangible as man's; the Son also; but the Holy Ghost has not a body of flesh and bones, but is a personage of Spirit. Were it not so, the Holy Ghost could not dwell in us."</div>
+            <div class="tl-source">— D&amp;C 130:22, April 2, 1843</div>
+          </div>
+        </div>
+
+        <div class="tl-analysis">Now the Father has a body of flesh and bones — a direct, categorical contradiction of the 1835 Lectures on Faith, which declared Him "a personage of spirit." This verse remains in the current LDS D&amp;C. The 1835 Lectures do not. The two cannot both be true, and both were presented as revelation. The Holy Ghost, formerly not even a separate personage, is now a personage of spirit — but without a body, for a reason Smith gives that raises more questions than it answers.</div>
+      </div>
+    </div>
+
+    <div class="conflict-banner">
+      <span class="conflict-icon">⚠</span>
+      <span class="conflict-text">Shift 3 — God the Father is revealed to have once been a mortal man</span>
+    </div>
+
+    <!-- 1844 -->
+    <div class="tl-entry">
+      <div class="tl-left">
+        <span class="tl-year">1844</span>
+        <span class="tl-era">King Follett</span>
+      </div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <div class="tl-doc">King Follett Discourse — General Conference, April 7, 1844</div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-god">On What God Once Was</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"God himself was once as we are now, and is an exalted man, and sits enthroned in yonder heavens! That is the great secret. If the veil were rent today, and the great God who holds this world in its orbit, and who upholds all worlds and all things by his power, was to make himself visible — I say, if you were to see him today, you would see him like a man in form — like yourselves in all the person, image, and very form as a man."</div>
+            <div class="tl-source">— Joseph Smith, King Follett Discourse, April 7, 1844</div>
+          </div>
+        </div>
+
+        <div class="belief-card">
+          <div class="belief-card-header"><span class="belief-label label-plurality">On Human Potential for Godhood</span></div>
+          <div class="belief-card-body">
+            <div class="tl-quote">"Here, then, is eternal life — to know the only wise and true God; and you have got to learn how to be gods yourselves, and to be kings and priests to God, the same as all gods have done before you."</div>
+            <div class="tl-source">— Joseph Smith, King Follett Discourse, April 7, 1844</div>
+          </div>
+        </div>
+
+        <div class="tl-analysis">Three months before his death, Smith delivered his most radical theological statement. The eternal, unchangeable God of Moroni 8:18 — "unchangeable from all eternity to all eternity" — has now become a formerly mortal being who achieved godhood through progression. The God who is "one God, without end" is now one of many gods, each of whom was once a man. These doctrines are not compatible with the Book of Mormon, the Lectures on Faith, or each other. Yet all were delivered as revelation.</div>
+      </div>
+    </div>
+
+  </div><!-- end timeline -->
+
+  <!-- CONTRAST BOX -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 3.5rem; border: 1px solid rgba(201,168,76,0.15);">
+    <div style="padding: 1.8rem; background: rgba(126,200,160,0.04); border-right: 1px solid rgba(201,168,76,0.1);">
+      <div style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: #7ec8a0; margin-bottom:0.8rem;">Catholic Development of Doctrine</div>
+      <div style="font-size:0.92rem; line-height:1.75; color:rgba(245,240,232,0.7);">The Catholic doctrine of the Trinity — articulated more precisely at Nicaea (325), Constantinople (381), and Chalcedon (451) — did not change what was believed, but clarified <em>how to express</em> what Scripture and Tradition had always taught. Nicaea did not invent the Trinity; it defined the vocabulary to guard against a specific heresy (Arianism). The substance was identical to what Ignatius, Justin, and Irenaeus had taught two centuries earlier.</div>
+    </div>
+    <div style="padding: 1.8rem; background: rgba(107,29,42,0.04);">
+      <div style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: rgba(180,80,80,0.85); margin-bottom:0.8rem;">Smith's "Revelatory" Reversals</div>
+      <div style="font-size:0.92rem; line-height:1.75; color:rgba(245,240,232,0.7);">Smith's shifts are not refinements — they are categorical reversals. An "unchangeable" God who gains a body. A "personage of spirit" who acquires flesh and bones. A singular, eternal God who was once a mortal. The 1830 Book of Mormon and the 1844 King Follett Discourse cannot both be true. Yet both are presented as the word of God. This is not development; it is contradiction.</div>
+    </div>
+  </div>
+
+  <div class="verdict-box" style="margin-top: 2px;">
+    <h3>✦ &nbsp; The Unavoidable Conclusion &nbsp; ✦</h3>
+    <p>If the God of the 1830 Book of Mormon is the true God, then the King Follett Discourse is false revelation. If the King Follett Discourse reveals the true God, then the Book of Mormon's declaration that God is "unchangeable from all eternity to all eternity" is wrong. And if the Lectures on Faith were true in 1835, then both are wrong in different ways. An authentic prophetic channel does not produce irreconcilable contradictions about the fundamental nature of the being it claims to represent.</p>
+    <p>The Catholic Church has never changed what it teaches about who God is. The same God confessed by Peter and Paul, articulated by Justin and Irenaeus, defined at Nicaea, is the God worshipped at every Mass today. That consistency across twenty centuries is itself a theological argument.</p>
+  </div>
+
+</main>
+
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html" style="color:var(--gold-light)">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>

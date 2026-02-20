@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblical Typology Fulfilled | One Faith Delivered</title>
+<meta name="description" content="Old Testament types — Passover Lamb, Manna, Brazen Serpent, and more — with their New Testament fulfillments in Christ and the Catholic sacraments. A visual demonstration of salvation history's coherence." />
+<link rel="canonical" href="https://onefaithdelivered.org/biblical-typology.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A; --burgundy-light: #8B2D3A;
+  --bg: #0D0703;
+  --green: #7ec8a0; --green-dim: rgba(126,200,160,0.6);
+  --red-dim: rgba(180,80,80,0.7);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 640px; margin: 0 auto; }
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+.intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+.intro-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.7); }
+.intro-box p + p { margin-top: 0.8rem; }
+.intro-box strong { color: var(--cream); font-weight: 500; }
+
+/* COLUMN HEADERS */
+.typology-headers { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; margin-bottom: 0; }
+.typology-col-header { padding: 0.9rem 1.5rem; text-align: center; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid rgba(201,168,76,0.15); }
+.typology-col-header.ot { color: var(--gold); background: rgba(201,168,76,0.05); border-right: none; }
+.typology-col-header.arrow-h { background: rgba(201,168,76,0.02); border-left: none; border-right: none; color: transparent; }
+.typology-col-header.nt { color: var(--green); background: rgba(126,200,160,0.04); border-left: none; }
+
+/* TYPOLOGY PAIR */
+.typology-section-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dark); padding: 1.2rem 0 0.5rem; display: flex; align-items: center; gap: 0.8rem; }
+.typology-section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.12); }
+.typology-section-label::before { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.12); }
+
+.typology-row {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  border: 1px solid rgba(201,168,76,0.1);
+  border-top: none;
+  position: relative;
+}
+.typology-row:first-of-type { border-top: 1px solid rgba(201,168,76,0.1); }
+.typology-row:nth-child(even) { background: rgba(201,168,76,0.012); }
+
+/* TYPE CARD (OT) */
+.type-card {
+  padding: 1.4rem 1.5rem;
+  border-right: 1px solid rgba(201,168,76,0.06);
+}
+.type-tag {
+  display: inline-block;
+  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold-dark);
+  border: 1px solid rgba(201,168,76,0.2);
+  background: rgba(201,168,76,0.04);
+  padding: 0.15rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.type-name {
+  font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600;
+  color: var(--gold-light); line-height: 1.2; margin-bottom: 0.3rem;
+}
+.type-ref {
+  font-size: 0.75rem; font-style: italic; color: rgba(245,240,232,0.35);
+  margin-bottom: 0.7rem; font-family: 'Cormorant Garamond', serif;
+}
+.type-desc {
+  font-size: 0.9rem; line-height: 1.7; color: rgba(245,240,232,0.65);
+}
+.type-verse {
+  font-size: 0.85rem; line-height: 1.65; color: rgba(245,240,232,0.5);
+  font-style: italic; margin-top: 0.5rem;
+  border-left: 2px solid rgba(201,168,76,0.2);
+  padding-left: 0.7rem;
+}
+
+/* ARROW COLUMN */
+.arrow-col {
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid rgba(201,168,76,0.06);
+  border-left: 1px solid rgba(201,168,76,0.06);
+  background: rgba(201,168,76,0.015);
+  position: relative;
+}
+.arrow-svg { width: 40px; height: 40px; }
+
+/* ANTITYPE CARD (NT/Sacrament) */
+.antitype-card { padding: 1.4rem 1.5rem; }
+.antitype-tag {
+  display: inline-block;
+  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.18em;
+  text-transform: uppercase; padding: 0.15rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.antitype-tag.christ { color: var(--green); border: 1px solid rgba(126,200,160,0.25); background: rgba(126,200,160,0.05); }
+.antitype-tag.sacrament { color: rgba(160,200,255,0.8); border: 1px solid rgba(160,200,255,0.2); background: rgba(160,200,255,0.04); }
+.antitype-tag.both { color: rgba(200,168,100,0.9); border: 1px solid rgba(200,168,100,0.25); background: rgba(200,168,100,0.04); }
+.antitype-name {
+  font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600;
+  color: var(--green); line-height: 1.2; margin-bottom: 0.3rem;
+}
+.antitype-ref {
+  font-size: 0.75rem; font-style: italic; color: rgba(245,240,232,0.35);
+  margin-bottom: 0.7rem;
+}
+.antitype-desc { font-size: 0.9rem; line-height: 1.7; color: rgba(245,240,232,0.65); }
+.antitype-verse {
+  font-size: 0.85rem; line-height: 1.65; color: rgba(245,240,232,0.5);
+  font-style: italic; margin-top: 0.5rem;
+  border-left: 2px solid rgba(126,200,160,0.2);
+  padding-left: 0.7rem;
+}
+
+/* LDS DISRUPTION NOTE */
+.lds-note {
+  margin-top: 0.8rem; padding: 0.6rem 0.8rem;
+  background: rgba(107,29,42,0.08); border: 1px solid rgba(139,45,60,0.2);
+  border-left: 3px solid rgba(139,45,60,0.4);
+}
+.lds-note-label {
+  font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(180,80,80,0.65); margin-bottom: 0.25rem;
+}
+.lds-note-text { font-size: 0.82rem; line-height: 1.6; color: rgba(245,240,232,0.45); }
+
+/* THEOLOGY BOX */
+.theology-box { margin: 3rem 0; padding: 2rem 2.2rem; border: 1px solid rgba(201,168,76,0.18); background: rgba(201,168,76,0.03); }
+.theology-box h3 { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--gold-light); margin-bottom: 1rem; text-align: center; }
+.theology-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.theology-item h4 { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.5rem; }
+.theology-item p { font-size: 0.9rem; line-height: 1.75; color: rgba(245,240,232,0.6); }
+
+/* VERDICT */
+.verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); text-align: center; }
+.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 1rem; }
+.verdict-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.65); max-width: 800px; margin: 0 auto; }
+.verdict-box p + p { margin-top: 0.85rem; }
+
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+
+@media (max-width: 720px) {
+  .typology-row { grid-template-columns: 1fr; }
+  .typology-headers { display: none; }
+  .arrow-col { padding: 0.5rem; height: 36px; border-left: none; border-right: none; background: transparent; }
+  .type-card { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.08); }
+  .theology-grid { grid-template-columns: 1fr; }
+  nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html" class="active">Charts</a></li>
+    <li><a href="topics.html">Topics</a></li>
+    <li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>Biblical Typology Fulfilled</h1>
+  <p class="subtitle">The Old Testament is not merely history — it is prophecy in action. Every major type finds its perfect fulfillment in Christ and His Church. The LDS dispensational model disrupts this coherence.</p>
+</header>
+
+<main>
+
+  <div class="intro-box">
+    <p><strong>Typology</strong> is the interpretive principle — taught by Christ Himself and developed extensively by St. Paul and the Church Fathers — that persons, events, and institutions of the Old Testament are divinely intended foreshadowings (<em>types</em>) of their New Testament fulfillments (<em>antitypes</em>). The types do not merely illustrate the antitypes; they are constitutively ordered toward them. God designed history so that the Passover Lamb would prefigure the Lamb of God, that manna would prefigure the Eucharist, that the Levitical priesthood would be perfected in the eternal priesthood of Christ.</p>
+    <p>This typological structure is the backbone of Catholic salvation history and sacramental theology. It is also what the LDS model of cyclical apostasy and restoration fundamentally disrupts: if the fullness of the gospel was given, lost, and had to be re-revealed by Joseph Smith, then the typological fulfillments of the Old Testament — already accomplished in Christ — are rendered incomplete or reversible. The coherence of Scripture depends on the continuity that only the Catholic model preserves.</p>
+  </div>
+
+  <!-- COLUMN HEADERS -->
+  <div class="typology-headers">
+    <div class="typology-col-header ot">✦ Old Testament Type</div>
+    <div class="typology-col-header arrow-h"></div>
+    <div class="typology-col-header nt">Fulfillment in Christ &amp; His Church ✦</div>
+  </div>
+
+  <!-- ═══ SECTION: SACRIFICE & ATONEMENT ═══ -->
+  <div class="typology-section-label">Sacrifice &amp; Atonement</div>
+
+  <!-- 1. Passover Lamb -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Exodus</span>
+      <div class="type-name">The Passover Lamb</div>
+      <div class="type-ref">Exodus 12:1–28 · c. 1446 B.C.</div>
+      <div class="type-desc">An unblemished male lamb is slain; its blood is applied to the doorposts of each house, causing the angel of death to "pass over" the household. The lamb's bones must not be broken. The Passover is to be kept as a perpetual memorial — not merely remembered, but re-enacted with the actual lamb and its blood.</div>
+      <div class="type-verse">"Your lamb shall be without blemish, a male a year old... and the blood shall be a sign for you, on the houses where you are. And when I see the blood, I will pass over you." — Exod. 12:5, 13</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah1)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; Eucharist</span>
+      <div class="antitype-name">Jesus Christ, the Lamb of God · The Mass</div>
+      <div class="antitype-ref">John 1:29 · 1 Cor. 5:7 · Rev. 5:6</div>
+      <div class="antitype-desc">Christ is the true Passover Lamb — without blemish (sinless), whose bones are not broken (John 19:36), whose blood applied through Baptism delivers from eternal death. The Eucharist is the New Passover sacrifice, re-presenting Calvary as the Passover was re-presented at each annual feast — not a mere symbol, but the actual Body and Blood.</div>
+      <div class="antitype-verse">"Christ, our Passover lamb, has been sacrificed." — 1 Cor. 5:7 · "Behold, the Lamb of God, who takes away the sin of the world." — John 1:29</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">LDS theology treats the sacrament as a memorial symbol only, severing the typological connection between Passover sacrifice and Eucharistic sacrifice. The very mechanism of the type — the actual blood of an actual lamb producing actual deliverance — becomes a mere illustration with no substance in the antitype.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Day of Atonement -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Leviticus</span>
+      <div class="type-name">The Day of Atonement (Yom Kippur)</div>
+      <div class="type-ref">Leviticus 16 · annually</div>
+      <div class="type-desc">Once a year, the High Priest alone enters the Holy of Holies — beyond the veil — with the blood of a bull and a goat to make atonement for the sins of all Israel. A second goat (the scapegoat) has the sins of Israel laid upon it and is driven into the wilderness, carrying Israel's guilt away. No other priest may be in the Tent of Meeting during this act.</div>
+      <div class="type-verse">"He shall make atonement for the Holy Place, because of the uncleannesses of the people of Israel and because of their transgressions, all their sins." — Lev. 16:16</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag christ">Christ</span>
+      <div class="antitype-name">Christ's One Eternal Sacrifice</div>
+      <div class="antitype-ref">Hebrews 9:11–14, 24–28</div>
+      <div class="antitype-desc">Christ is simultaneously the High Priest and the sacrifice. He enters not into a tent made with hands, but into heaven itself, presenting His own blood — once, for all — before the Father. The veil of the Temple is torn at His death (Matt. 27:51): the barrier separating man from God's presence is destroyed. The scapegoat's carrying of sins prefigures Christ bearing the sins of the world.</div>
+      <div class="antitype-verse">"He entered once for all into the holy places, not by means of the blood of goats and calves but by means of his own blood, thus securing an eternal redemption." — Heb. 9:12</div>
+    </div>
+  </div>
+
+  <!-- 3. Brazen Serpent -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Numbers</span>
+      <div class="type-name">The Bronze Serpent on the Pole</div>
+      <div class="type-ref">Numbers 21:4–9</div>
+      <div class="type-desc">Israel is plagued by fiery serpents as judgment for their complaints against God and Moses. God commands Moses to fashion a bronze serpent and lift it on a pole: all who look upon it will live. Healing comes not from the bronze serpent itself, but from the obedient act of looking toward what God has lifted up.</div>
+      <div class="type-verse">"And Moses made a bronze serpent and set it on a pole. And if a serpent bit anyone, he would look at the bronze serpent and live." — Num. 21:9</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag christ">Christ</span>
+      <div class="antitype-name">Christ Lifted Up on the Cross</div>
+      <div class="antitype-ref">John 3:14–15 · John 12:32</div>
+      <div class="antitype-desc">Jesus Himself interprets this type. As Moses lifted up the serpent, so must the Son of Man be "lifted up" — on the Cross — so that all who believe in Him may have eternal life. The serpent (symbol of sin and death) made of bronze (symbol of judgment) is lifted high: Christ, made sin for us (2 Cor. 5:21), is lifted on the Cross, and those who look to Him in faith receive life.</div>
+      <div class="antitype-verse">"As Moses lifted up the serpent in the wilderness, so must the Son of Man be lifted up, that whoever believes in him may have eternal life." — John 3:14–15</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">Christ's explicit self-interpretation of this type (John 3) anchors the crucifixion as its fulfillment. LDS theology's de-emphasis of the Cross in favor of the Garden of Gethsemane as the primary locus of the Atonement severs Christ's own typological link to the bronze serpent on the pole.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: BREAD & WATER ═══ -->
+  <div class="typology-section-label">Bread, Water &amp; the Eucharist</div>
+
+  <!-- 4. Manna -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Exodus / Numbers</span>
+      <div class="type-name">The Manna in the Wilderness</div>
+      <div class="type-ref">Exodus 16 · Psalm 78:24–25</div>
+      <div class="type-desc">God feeds Israel in the wilderness with manna — "bread from heaven." It appears each morning, must be gathered daily (except on the Sabbath), cannot be stored or hoarded, and sustains the whole nation through their journey. A jar of manna is preserved and kept in the Ark of the Covenant as a perpetual memorial. The Psalmist calls it "the bread of angels."</div>
+      <div class="type-verse">"Behold, I am about to rain bread from heaven for you, and the people shall go out and gather a day's portion every day." — Exod. 16:4</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah4" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah4)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; Eucharist</span>
+      <div class="antitype-name">The Bread of Life · The Holy Eucharist</div>
+      <div class="antitype-ref">John 6:31–58 · Rev. 2:17</div>
+      <div class="antitype-desc">In John 6, Jesus explicitly contrasts manna with the true Bread from heaven. The manna sustained bodily life temporarily; the Eucharist gives eternal life. "Your fathers ate the manna in the wilderness, and they died. This is the bread that comes down from heaven, so that one may eat of it and not die" (John 6:49–50). The Eucharist is not a symbol of the manna — it is what the manna always pointed toward: the actual Body of Christ, given daily to sustain pilgrims on their journey.</div>
+      <div class="antitype-verse">"I am the living bread that came down from heaven. If anyone eats of this bread, he will live forever. And the bread that I will give for the life of the world is my flesh." — John 6:51</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">When Jesus says in John 6:55 "my flesh is true food and my blood is true drink," LDS sacramental theology treats this as metaphorical — the sacramental water and bread are symbols only. This collapses the typology: if the antitype is merely symbolic, the type (actual manna, actual bread) becomes more substantial than what it foreshadowed — the very inverse of what typology requires.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Water from the Rock -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Exodus</span>
+      <div class="type-name">Water from the Rock at Horeb</div>
+      <div class="type-ref">Exodus 17:1–7 · Numbers 20:1–13</div>
+      <div class="type-desc">In the desert, Israel is dying of thirst. God commands Moses to strike the rock at Horeb, and water gushes forth to give life to the entire nation. Paul tells us the rock was Christ (1 Cor. 10:4). The same life-giving act is repeated at Meribah — this time Moses is commanded to speak to the rock, not strike it, and his failure to obey brings judgment.</div>
+      <div class="type-verse">"Behold, I will stand before you there on the rock at Horeb, and you shall strike the rock, and water shall come out of it, and the people will drink." — Exod. 17:6</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah5" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah5)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; Baptism</span>
+      <div class="antitype-name">Christ the Rock · Baptismal Water</div>
+      <div class="antitype-ref">1 Cor. 10:4 · John 7:37–39 · John 19:34</div>
+      <div class="antitype-desc">Paul explicitly identifies the rock as Christ: "they drank from the spiritual Rock that followed them, and the Rock was Christ" (1 Cor. 10:4). Christ "struck" on the Cross pours forth living water — from His pierced side flows blood and water (John 19:34), which the Fathers universally identify as the sacraments of Eucharist and Baptism. The water of Baptism flows from the struck Christ as the water of life flowed from the struck rock.</div>
+      <div class="antitype-verse">"If anyone thirsts, let him come to me and drink. Whoever believes in me, as the Scripture has said, 'Out of his heart will flow rivers of living water.'" — John 7:37–38</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: PRIESTHOOD ═══ -->
+  <div class="typology-section-label">Priesthood &amp; Mediation</div>
+
+  <!-- 6. Melchizedek -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Genesis</span>
+      <div class="type-name">Melchizedek, Priest-King of Salem</div>
+      <div class="type-ref">Genesis 14:18–20 · Psalm 110:4</div>
+      <div class="type-desc">After Abraham's victory in battle, Melchizedek — king of Salem (peace), priest of God Most High — comes out to meet him. He brings bread and wine and blesses Abraham. Melchizedek has no recorded genealogy, no beginning or end of days mentioned — he appears in the text as a perpetual figure. David's messianic Psalm 110 declares: "You are a priest forever after the order of Melchizedek."</div>
+      <div class="type-verse">"And Melchizedek king of Salem brought out bread and wine. (He was priest of God Most High.) And he blessed him..." — Gen. 14:18–19</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah6" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah6)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; Eucharist</span>
+      <div class="antitype-name">Christ the Eternal High Priest · The Mass</div>
+      <div class="antitype-ref">Hebrews 5–7 · Psalm 110:4</div>
+      <div class="antitype-desc">The Letter to the Hebrews devotes three full chapters to the Melchizedek type. Christ is the eternal High Priest "after the order of Melchizedek" — not of the Levitical line, but of a superior and eternal priesthood. He offers not animals but Himself. The Church Fathers (Justin, Irenaeus, Clement of Alexandria) identified the offering of bread and wine by Melchizedek as a direct type of the Eucharistic sacrifice. Christ offers the same elements — bread and wine — now transformed into His Body and Blood.</div>
+      <div class="antitype-verse">"You are a priest forever, after the order of Melchizedek." — Heb. 5:6, citing Ps. 110:4</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">LDS theology claims a restored "Melchizedek priesthood" — but the New Testament explicitly teaches that this priesthood belongs solely and permanently to Christ, who "holds his priesthood permanently, because he continues forever" (Heb. 7:24). The Greek term (aparabaton) means "non-transferable." The LDS claim to hold this priesthood contradicts the very passage that defines it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Levitical Priesthood -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Leviticus</span>
+      <div class="type-name">The Levitical Priesthood &amp; Sacrifice System</div>
+      <div class="type-ref">Leviticus 1–7 · Numbers 3–4</div>
+      <div class="type-desc">God establishes a hereditary priesthood from the tribe of Levi, with Aaron as High Priest. They offer daily sacrifices — morning and evening — in the Tabernacle and later the Temple. Only priests may approach the altar; only the High Priest may enter the Holy of Holies. The entire system is designed for mediation between a holy God and a sinful people.</div>
+      <div class="type-verse">"The LORD said to Moses, 'Bring the tribe of Levi near, and set them before Aaron the priest, that they may minister to him.'" — Num. 3:5–6</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah7" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah7)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">perfects</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; Holy Orders</span>
+      <div class="antitype-name">The Catholic Priesthood &amp; the Eucharistic Sacrifice</div>
+      <div class="antitype-ref">Hebrews 7:11–28 · Malachi 1:11</div>
+      <div class="antitype-desc">The Levitical priesthood was imperfect — priests died and had to be replaced; sacrifices had to be repeated daily because they could never permanently remove sin. Christ's priesthood is perfect and eternal. His one sacrifice accomplishes what thousands of animal sacrifices could not. The Catholic ministerial priesthood participates in Christ's priesthood — priests do not offer a new sacrifice at Mass but re-present the one eternal sacrifice of Calvary, fulfilling Malachi's prophecy of a "pure offering in every place."</div>
+      <div class="antitype-verse">"In every place incense will be offered to my name, and a pure offering." — Mal. 1:11 (cited by Justin Martyr as prophesying the Eucharist, c. A.D. 155)</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: COVENANT & KINGDOM ═══ -->
+  <div class="typology-section-label">Covenant, Kingdom &amp; Temple</div>
+
+  <!-- 8. Ark of the Covenant / Mary -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Exodus</span>
+      <div class="type-name">The Ark of the Covenant</div>
+      <div class="type-ref">Exodus 25:10–22 · 2 Samuel 6</div>
+      <div class="type-desc">The Ark contains the manna (bread from heaven), Aaron's rod (priestly authority), and the tablets of the Law (the Word of God). It is covered by the Mercy Seat, where God's presence dwells. It is so holy that Uzzah dies when he touches it without authorization. David leaps and dances before it as it enters Jerusalem. The Ark causes Elizabeth's child to leap with joy in her womb.</div>
+      <div class="type-verse">"Who am I that the ark of the Lord should come to me?" — 2 Sam. 6:9 (echoed in Luke 1:43)</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah8" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah8)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag christ">Mary, Mother of God</span>
+      <div class="antitype-name">The Blessed Virgin Mary — New Ark of the Covenant</div>
+      <div class="antitype-ref">Luke 1:39–45 · Rev. 11:19–12:1</div>
+      <div class="antitype-desc">Luke's account of the Visitation is constructed with deliberate parallels to 2 Samuel 6. Elizabeth asks the same question as David: "Why is this granted to me, that the mother of my Lord should come to me?" (Luke 1:43). John leaps in the womb as the Ark caused David to leap. Mary remains with Elizabeth three months — as the Ark remained in the house of Obed-edom three months. Mary carries within her the true manna (Christ's Body), the true priestly authority, and the true Word of God incarnate.</div>
+      <div class="antitype-verse">"Why is this granted to me, that the mother of my Lord should come to me?" — Luke 1:43 (cf. "Who am I that the ark of the Lord should come to me?" — 2 Sam. 6:9)</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">LDS theology grants Mary no special theological role — she is a righteous woman but not Theotokos and not the New Ark. This collapses one of Scripture's most carefully constructed typological parallels, which Luke constructed through direct literary allusion to 2 Samuel 6. The typological argument for Mary's unique dignity is embedded in the inspired text itself.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Davidic King -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · 2 Samuel</span>
+      <div class="type-name">The Davidic Covenant &amp; the Son of David</div>
+      <div class="type-ref">2 Samuel 7:12–16 · Psalm 2 · Isaiah 9:6–7</div>
+      <div class="type-desc">God promises David that his throne will be established forever and that his descendant will be God's Son: "I will be to him a father, and he shall be to me a son" (2 Sam. 7:14). The Davidic king rules from Jerusalem; his kingdom is God's kingdom. Isaiah expands this: the coming Son of David will be called "Wonderful Counselor, Mighty God, Everlasting Father, Prince of Peace," whose government "shall increase without end."</div>
+      <div class="type-verse">"Your house and your kingdom shall be made sure forever before me. Your throne shall be established forever." — 2 Sam. 7:16</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah9" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah9)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag both">Christ &amp; the Church</span>
+      <div class="antitype-name">Jesus Christ, King of Kings · The Church as His Eternal Kingdom</div>
+      <div class="antitype-ref">Luke 1:32–33 · Matt. 16:18–19 · Rev. 19:16</div>
+      <div class="antitype-desc">The angel Gabriel announces to Mary that her Son will receive "the throne of his father David, and he will reign over the house of Jacob forever, and of his kingdom there will be no end" (Luke 1:32–33). The Church is the fulfillment of the Davidic kingdom — extended to all nations, with Peter as the prime minister (cf. Isaiah 22:22, the key of David). The Church's indefectibility is grounded in the typological promise that David's throne will be established forever.</div>
+      <div class="antitype-verse">"He will be great and will be called the Son of the Most High. And the Lord God will give to him the throne of his father David, and he will reign over the house of Jacob forever." — Luke 1:32–33</div>
+      <div class="lds-note">
+        <div class="lds-note-label">LDS Disruption</div>
+        <div class="lds-note-text">The LDS Great Apostasy claim requires that the Davidic kingdom — the Church — was entirely overthrown after the Apostles died. But this contradicts God's explicit covenantal promise that the throne of David will be "established forever." A kingdom that requires total restoration after 1,700 years of absence is not an eternal kingdom — it is a failed one. The Catholic position alone is consistent with the Davidic covenant.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Jonah -->
+  <div class="typology-row">
+    <div class="type-card">
+      <span class="type-tag">Type · Jonah</span>
+      <div class="type-name">Jonah — Three Days in the Belly of the Fish</div>
+      <div class="type-ref">Jonah 1:17 · 2:1–10</div>
+      <div class="type-desc">Jonah, fleeing from God, is swallowed by a great fish and remains in its belly for three days and three nights — in a state of death and burial. He prays from within and is delivered, "resurrected" from the deep, to complete his mission to Nineveh. Jesus identifies this event as the one sign He will give to an unbelieving generation — the sign of His own death and resurrection.</div>
+      <div class="type-verse">"For just as Jonah was three days and three nights in the belly of the great fish, so will the Son of Man be three days and three nights in the heart of the earth." — Matt. 12:40</div>
+    </div>
+    <div class="arrow-col">
+      <svg class="arrow-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah10" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(201,168,76,0.6)"/></marker></defs>
+        <line x1="4" y1="20" x2="30" y2="20" stroke="rgba(201,168,76,0.5)" stroke-width="1.5" marker-end="url(#ah10)"/>
+        <text x="20" y="12" text-anchor="middle" fill="rgba(201,168,76,0.35)" font-size="7" font-family="'Cinzel',serif">fulfills</text>
+      </svg>
+    </div>
+    <div class="antitype-card">
+      <span class="antitype-tag christ">Christ</span>
+      <div class="antitype-name">The Death, Burial &amp; Resurrection of Christ</div>
+      <div class="antitype-ref">Matthew 12:39–41 · 1 Cor. 15:3–4</div>
+      <div class="antitype-desc">Christ's own typological exegesis — the sign of Jonah — is the most explicit self-interpretation in the Gospels. Three days in the earth, then resurrection to complete His mission: the pattern is perfect. The Resurrection is not merely a historical claim; it is the culmination of a divinely choreographed typological narrative that God was writing through centuries of Israel's history. The sign of Jonah is the sign of the Resurrection itself.</div>
+      <div class="antitype-verse">"For I delivered to you as of first importance what I also received: that Christ died for our sins in accordance with the Scriptures, that he was buried, that he was raised on the third day in accordance with the Scriptures." — 1 Cor. 15:3–4</div>
+    </div>
+  </div>
+
+  <!-- THEOLOGY SUMMARY -->
+  <div class="theology-box">
+    <h3>✦ &nbsp; What Typology Demonstrates About Salvation History &nbsp; ✦</h3>
+    <div class="theology-grid">
+      <div class="theology-item">
+        <h4>The Catholic Model: Progressive Fulfillment</h4>
+        <p>Each covenant stage does not replace the previous one but <em>completes</em> it. The Mosaic Law is not abolished by Christ — it is fulfilled. The types do not become irrelevant; they become transparent. The Passover is not canceled by the Eucharist; it is elevated into what it always pointed toward. This is what St. Augustine meant: "The New Testament lies hidden in the Old; the Old Testament is made plain in the New."</p>
+      </div>
+      <div class="theology-item">
+        <h4>The LDS Model: Dispensational Disruption</h4>
+        <p>If the fulness of the gospel was lost in a Great Apostasy and had to be restored by Joseph Smith in 1830, then the Eucharist — the antitype of the Passover and the manna — was absent from the earth for nearly 1,700 years. This means the type (Passover, manna) had no corresponding antitype for most of Christian history, rendering the typological structure of Scripture incoherent. A God who designs history to point forward to a fulfillment that then disappears has authored a story that collapses.</p>
+      </div>
+      <div class="theology-item">
+        <h4>Typology as Argument for Sacramental Realism</h4>
+        <p>The typological argument for the Real Presence is independent of later theological formulation. If the Passover Lamb was a real lamb whose real blood produced real deliverance, then its antitype must be equally or more substantial — not less. If the manna was real bread that really sustained life, its antitype must be real food that really gives eternal life. The logic of typology demands sacramental realism; it cannot tolerate a merely symbolic antitype.</p>
+      </div>
+      <div class="theology-item">
+        <h4>Typology as Argument Against Sola Scriptura</h4>
+        <p>The typological readings presented here are not individual interpretations — they are the unanimous reading of the ante-Nicene Fathers, who received this interpretive tradition from the Apostles. Justin Martyr identifies Melchizedek's offering as a type of the Eucharist (c. A.D. 155). Irenaeus reads the manna typologically. Tertullian uses the water from the rock as a type of Baptism. This tradition of interpretation is itself part of the apostolic deposit that the living Magisterium guards.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict-box">
+    <h3>✦ &nbsp; The Coherence Only Catholicism Preserves &nbsp; ✦</h3>
+    <p>Every type examined above was divinely designed — not accidentally similar, but intentionally structured by God as a foreshadowing. Christ Himself interpreted the brazen serpent and the sign of Jonah. Paul interpreted the manna and the water from the rock. The Letter to the Hebrews is almost entirely a typological treatise on the Levitical priesthood and the Day of Atonement. The Fathers developed this tradition across the entire breadth of Scripture.</p>
+    <p>The Catholic Church is the only Christian tradition that can preserve the full integrity of this typological structure: the Eucharist as true fulfillment of both the Passover and the manna; the Mass as the true fulfillment of the Levitical and Melchizedekian sacrifices; the ministerial priesthood as a real participation in Christ's eternal priesthood; Mary as the true New Ark of the Covenant. Remove any one of these, and the corresponding Old Testament type becomes a pointer to nothing. The LDS dispensational model, which requires a 1,700-year interruption of this fulfilled economy, does not merely modify salvation history — it renders it unintelligible.</p>
+  </div>
+
+</main>
+
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html" style="color:var(--gold-light)">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>

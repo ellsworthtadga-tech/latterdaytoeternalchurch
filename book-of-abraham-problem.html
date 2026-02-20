@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Book of Abraham Problem | One Faith Delivered</title>
+<meta name="description" content="A side-by-side examination of what Joseph Smith claimed to translate from the Egyptian papyri versus what professional Egyptologists say the texts actually say." />
+<link rel="canonical" href="https://onefaithdelivered.org/book-of-abraham-problem.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A; --burgundy-light: #8B2D3A;
+  --parchment: #FAF6F0; --bg: #0D0703;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 640px; margin: 0 auto; }
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+.intro-box { padding: 1.8rem 2.2rem; margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+.intro-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.7); }
+.intro-box p + p { margin-top: 0.8rem; }
+.intro-box strong { color: var(--cream); font-weight: 500; }
+
+/* TIMELINE BAR */
+.history-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-bottom: 3.5rem; border: 1px solid rgba(201,168,76,0.15); }
+.history-cell { padding: 1.1rem; text-align: center; background: rgba(201,168,76,0.02); }
+.history-year { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); font-weight: 700; margin-bottom: 0.3rem; }
+.history-desc { font-size: 0.82rem; line-height: 1.5; color: rgba(245,240,232,0.5); }
+
+/* SECTION TITLE */
+.section-divider { margin: 3rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.section-divider-line { flex: 1; height: 1px; background: rgba(201,168,76,0.15); }
+.section-divider-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dark); white-space: nowrap; }
+
+/* FACSIMILE COMPARISON BLOCK */
+.fac-block { margin-bottom: 3rem; border: 1px solid rgba(201,168,76,0.15); }
+.fac-header { padding: 1rem 1.5rem; background: rgba(201,168,76,0.05); border-bottom: 1px solid rgba(201,168,76,0.12); display: flex; align-items: baseline; gap: 1rem; }
+.fac-num { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-light); font-weight: 600; }
+.fac-name { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+
+/* SVG DIAGRAM AREA */
+.fac-diagram { padding: 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.08); background: rgba(0,0,0,0.2); display: flex; justify-content: center; }
+.fac-diagram svg { max-width: 100%; }
+
+/* COMPARISON GRID */
+.fac-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.fac-col { padding: 1.3rem 1.5rem; }
+.fac-col:first-child { border-right: 1px solid rgba(201,168,76,0.08); background: rgba(107,29,42,0.04); }
+.fac-col:last-child { background: rgba(126,200,160,0.03); }
+.fac-col-label { font-family: 'Cinzel', serif; font-size: 0.63rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,168,76,0.1); }
+.label-smith { color: rgba(180,80,80,0.85); }
+.label-egypt { color: #7ec8a0; }
+
+.fig-row { margin-bottom: 0.85rem; display: flex; gap: 0.5rem; align-items: flex-start; }
+.fig-num { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--gold-dark); letter-spacing: 0.08em; flex-shrink: 0; width: 42px; text-align: right; padding-top: 0.1rem; }
+.fig-text { font-size: 0.9rem; line-height: 1.65; color: rgba(245,240,232,0.7); }
+.fig-text.wrong { color: rgba(245,240,232,0.55); }
+.fig-text strong { color: var(--cream); font-weight: 500; }
+.fig-text em { color: rgba(180,80,80,0.75); font-style: normal; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-left: 0.3rem; }
+
+/* SOURCE BOX */
+.source-strip { padding: 0.7rem 1.5rem; border-top: 1px solid rgba(201,168,76,0.08); background: rgba(201,168,76,0.02); }
+.source-strip p { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); }
+
+/* THE KEY PROBLEM SECTION */
+.problem-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 1rem; border: 1px solid rgba(201,168,76,0.15); }
+.problem-card { padding: 1.4rem; background: rgba(107,29,42,0.04); }
+.problem-card:not(:last-child) { border-right: 1px solid rgba(201,168,76,0.1); }
+.problem-card-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.problem-card-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.6rem; }
+.problem-card-text { font-size: 0.9rem; line-height: 1.7; color: rgba(245,240,232,0.6); }
+
+/* LDS RESPONSES */
+.response-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 1rem; border: 1px solid rgba(201,168,76,0.15); }
+.response-card { padding: 1.4rem; }
+.response-card:first-child { border-right: 1px solid rgba(201,168,76,0.1); background: rgba(201,168,76,0.02); }
+.response-card:last-child { background: rgba(107,29,42,0.04); }
+.response-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.label-theory { color: var(--gold-dark); }
+.label-rebuttal { color: rgba(180,80,80,0.8); }
+.response-text { font-size: 0.9rem; line-height: 1.7; color: rgba(245,240,232,0.65); }
+
+.verdict-box { margin-top: 3.5rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); text-align: center; }
+.verdict-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 1rem; }
+.verdict-box p { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.65); max-width: 800px; margin: 0 auto; }
+.verdict-box p + p { margin-top: 0.85rem; }
+
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+
+@media (max-width: 750px) {
+  .fac-compare { grid-template-columns: 1fr; }
+  .fac-col:first-child { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.08); }
+  .problem-cards { grid-template-columns: 1fr; }
+  .response-grid { grid-template-columns: 1fr; }
+  .history-bar { grid-template-columns: 1fr 1fr; }
+  nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html" class="active">Charts</a></li>
+    <li><a href="topics.html">Topics</a></li>
+    <li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>The Book of Abraham Problem</h1>
+  <p class="subtitle">What Joseph Smith claimed to translate from the Egyptian papyri — and what professional Egyptologists say they actually say.</p>
+</header>
+
+<main>
+
+  <div class="intro-box">
+    <p>In 1835, Joseph Smith purchased four Egyptian mummies and several papyrus scrolls from a traveling exhibition. He claimed to translate one of these scrolls as "the writings of Abraham, while he was in Egypt, called the Book of Abraham, written by his own hand, upon papyrus." The book was published in 1842, with three illustrated "facsimiles" and Smith's own explanations of each figure. It was canonized as LDS scripture in 1880 and remains so today in the Pearl of Great Price.</p>
+    <p><strong>The problem:</strong> In 1966, portions of the original papyri were discovered in the Metropolitan Museum of Art in New York. They were transferred to the LDS Church, which published photographs in 1968. Professional Egyptologists — both LDS and non-LDS — were then able to compare Smith's "translations" against the actual documents. <strong>Their verdict was unanimous: the papyri are standard Egyptian funerary texts with no connection to Abraham whatsoever.</strong> This page presents that comparison in detail.</p>
+  </div>
+
+  <!-- HISTORY BAR -->
+  <div class="history-bar">
+    <div class="history-cell">
+      <div class="history-year">1835</div>
+      <div class="history-desc">Smith purchases Egyptian papyri and mummies. Announces they contain writings of Abraham.</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">1842</div>
+      <div class="history-desc">Book of Abraham published in Times and Seasons with three facsimiles and Smith's explanations.</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">1966–68</div>
+      <div class="history-desc">Original papyri found at the Metropolitan Museum. Transferred to LDS Church. Egyptologists translate them.</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">2014</div>
+      <div class="history-desc">LDS Church's own Gospel Topics Essay concedes the papyri are "standard funerary texts" with no reference to Abraham.</div>
+    </div>
+  </div>
+
+  <!-- ═══ FACSIMILE 1 ═══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Facsimile No. 1 — The Lion Couch Scene</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="fac-block">
+    <div class="fac-header">
+      <span class="fac-num">Facsimile 1</span>
+      <span class="fac-name">Published by Joseph Smith, Times and Seasons, March 1, 1842</span>
+    </div>
+
+    <!-- SVG diagram of facsimile 1 -->
+    <div class="fac-diagram">
+      <svg viewBox="0 0 700 300" width="680" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+        <!-- Background -->
+        <rect width="700" height="300" fill="#0a0501"/>
+        <!-- Papyrus area -->
+        <rect x="20" y="20" width="660" height="260" rx="2" fill="#0f0904" stroke="#8B6914" stroke-width="1"/>
+
+        <!-- Lion couch (bier) -->
+        <rect x="180" y="165" width="200" height="14" rx="3" fill="#5a4020" stroke="#C9A84C" stroke-width="0.8"/>
+        <!-- Lion legs -->
+        <rect x="190" y="179" width="12" height="22" rx="2" fill="#5a4020" stroke="#C9A84C" stroke-width="0.7"/>
+        <rect x="358" y="179" width="12" height="22" rx="2" fill="#5a4020" stroke="#C9A84C" stroke-width="0.7"/>
+        <!-- Lion head (left side) -->
+        <ellipse cx="185" cy="173" rx="12" ry="10" fill="#5a4020" stroke="#C9A84C" stroke-width="0.7"/>
+
+        <!-- Figure on couch (Hor / "Abraham") — horizontal, arms raised -->
+        <ellipse cx="300" cy="150" rx="14" ry="14" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+        <line x1="300" y1="164" x2="300" y2="190" stroke="#C9A84C" stroke-width="1.2"/>
+        <!-- Arm raised (figure 1) -->
+        <line x1="300" y1="172" x2="280" y2="158" stroke="#C9A84C" stroke-width="1.2"/>
+        <line x1="280" y1="158" x2="272" y2="148" stroke="#C9A84C" stroke-width="1"/>
+        <!-- Phallus (censored in Smith's version) -->
+        <line x1="300" y1="185" x2="310" y2="185" stroke="rgba(201,168,76,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
+
+        <!-- Fig 2: Anubis / "Priest of Elkenah" standing -->
+        <ellipse cx="390" cy="120" rx="11" ry="11" fill="none" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="390" y1="131" x2="390" y2="168" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="390" y1="145" x2="370" y2="135" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="390" y1="145" x2="410" y2="138" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="390" y1="168" x2="378" y2="195" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="390" y1="168" x2="402" y2="195" stroke="#C9A84C" stroke-width="1.1"/>
+        <!-- Jackal head (Anubis) — pointed snout -->
+        <path d="M385,112 Q390,103 395,112" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.8"/>
+        <line x1="395" y1="112" x2="402" y2="107" stroke="#C9A84C" stroke-width="0.8"/>
+
+        <!-- Fig 3: Bird (human-headed falcon = ba) above figure 1 -->
+        <ellipse cx="290" cy="115" rx="8" ry="8" fill="none" stroke="#C9A84C" stroke-width="0.9"/>
+        <path d="M282,115 Q280,108 298,115" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <path d="M298,115 Q300,108 284,115" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <!-- Human face indicator -->
+        <text x="290" y="118" text-anchor="middle" fill="#C9A84C" font-size="7">☥</text>
+
+        <!-- Altar beneath fig 1 -->
+        <rect x="255" y="192" width="90" height="12" rx="1" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.7"/>
+        <rect x="265" y="204" width="70" height="8" rx="1" fill="#2a1a08" stroke="#8B6914" stroke-width="0.5"/>
+
+        <!-- Canopic jars (fig 4,5,6,7 beneath altar) -->
+        <ellipse cx="245" cy="230" rx="8" ry="11" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.7"/>
+        <ellipse cx="265" cy="230" rx="8" ry="11" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.7"/>
+        <ellipse cx="285" cy="230" rx="8" ry="11" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.7"/>
+        <ellipse cx="305" cy="230" rx="8" ry="11" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.7"/>
+
+        <!-- FIGURE LABELS -->
+        <text x="300" y="102" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 1</text>
+        <text x="390" y="108" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 2</text>
+        <text x="270" y="108" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 3</text>
+        <text x="245" y="252" text-anchor="middle" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">4</text>
+        <text x="265" y="252" text-anchor="middle" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">5</text>
+        <text x="285" y="252" text-anchor="middle" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">6</text>
+        <text x="305" y="252" text-anchor="middle" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">7</text>
+
+        <!-- Hieratic text columns on left -->
+        <text x="80" y="80" fill="rgba(201,168,76,0.25)" font-size="9" font-family="serif">𓄿𓏏𓇋</text>
+        <text x="70" y="100" fill="rgba(201,168,76,0.2)" font-size="9" font-family="serif">𓅓𓂝𓈖</text>
+        <text x="80" y="120" fill="rgba(201,168,76,0.25)" font-size="9" font-family="serif">𓇋𓏏𓆑</text>
+        <text x="70" y="140" fill="rgba(201,168,76,0.2)" font-size="9" font-family="serif">𓄿𓈖𓊪</text>
+        <text x="80" y="160" fill="rgba(201,168,76,0.25)" font-size="9" font-family="serif">𓅱𓏏𓄿</text>
+        <text x="70" y="180" fill="rgba(201,168,76,0.2)" font-size="9" font-family="serif">𓇋𓆑𓄿</text>
+
+        <!-- Caption -->
+        <text x="350" y="270" text-anchor="middle" fill="rgba(201,168,76,0.3)" font-size="9" font-family="'Cinzel', serif" letter-spacing="1">SCHEMATIC REPRESENTATION — NOT ORIGINAL ARTWORK</text>
+      </svg>
+    </div>
+
+    <div class="fac-compare">
+      <div class="fac-col">
+        <div class="fac-col-label label-smith">Joseph Smith's Explanation (1842)</div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text wrong">"The Angel of the Lord." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 2</span>
+          <span class="fig-text wrong">"Abraham fastened upon an altar." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text wrong">"The idolatrous priest of Elkenah attempting to offer up Abraham as a sacrifice." (Smith also drew a human head on this figure in the filled-in lacuna — where the original was missing.) <em>✕ Incorrect — and forged</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Figs. 4–7</span>
+          <span class="fig-text wrong">"The idolatrous gods of Elkenah, Libnah, Mahmackrah, Korash." Names not found in any known Egyptian religion or mythology. <em>✕ Invented</em></span>
+        </div>
+      </div>
+      <div class="fac-col">
+        <div class="fac-col-label label-egypt">Egyptological Translation</div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text">The god <strong>Anubis</strong> (jackal-headed), performing the funerary rite of resurrection over the mummy of the deceased priest <strong>Hor</strong> (the papyrus owner). A completely standard Egyptian embalming scene.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 2</span>
+          <span class="fig-text">The mummy of <strong>Hor</strong>, depicted on a lion-couch (funerary bier). His phallus is visible in the original — indicating resurrection imagery, following the Osiris myth. Smith omitted this in publication.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text">The <strong>ba-bird</strong> (human-headed falcon) — the soul of Hor hovering above his body, a universal Egyptian funerary symbol. Smith filled the damaged area with a human head and knife, which Egyptologist Robert Ritner has called "crude pencil additions" not supported by any parallel Egyptian source.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Figs. 4–7</span>
+          <span class="fig-text">The <strong>four canopic jars</strong> (sons of Horus): Imsety, Hapy, Duamutef, and Qebehsenuef — protecting the internal organs of the deceased. Standard funerary equipment present in nearly every Egyptian burial context.</span>
+        </div>
+      </div>
+    </div>
+    <div class="source-strip">
+      <p>Sources: Robert K. Ritner (Univ. of Chicago), "Translation and Historicity of the Book of Abraham — A Response" (2014) · LDS Gospel Topics Essay: "Translation and Historicity of the Book of Abraham" (2014) · Michael D. Rhodes, BYU, "Teaching the Book of Abraham Facsimiles" (2003)</p>
+    </div>
+  </div>
+
+  <!-- ═══ FACSIMILE 2 ═══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Facsimile No. 2 — The Hypocephalus</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="fac-block">
+    <div class="fac-header">
+      <span class="fac-num">Facsimile 2</span>
+      <span class="fac-name">Published by Joseph Smith, Times and Seasons, March 15, 1842</span>
+    </div>
+
+    <!-- SVG for Facsimile 2 — circular hypocephalus -->
+    <div class="fac-diagram">
+      <svg viewBox="0 0 500 280" width="500" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+        <rect width="500" height="280" fill="#0a0501"/>
+        <!-- Outer circle -->
+        <circle cx="250" cy="140" r="120" fill="#0f0904" stroke="#8B6914" stroke-width="1.5"/>
+        <!-- Inner ring -->
+        <circle cx="250" cy="140" r="85" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="0.8"/>
+        <!-- Inner circle -->
+        <circle cx="250" cy="140" r="50" fill="#0a0602" stroke="rgba(201,168,76,0.25)" stroke-width="0.8"/>
+
+        <!-- Central figure (Khnum-Ra / "Kolob") — four-headed figure -->
+        <line x1="250" y1="115" x2="250" y2="165" stroke="#C9A84C" stroke-width="1.2"/>
+        <!-- heads -->
+        <ellipse cx="250" cy="112" rx="7" ry="7" fill="none" stroke="#C9A84C" stroke-width="0.9"/>
+        <ellipse cx="250" cy="112" rx="4" ry="7" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="0.5"/>
+        <text x="250" y="145" text-anchor="middle" fill="rgba(201,168,76,0.3)" font-size="8">Fig. 1</text>
+
+        <!-- Outer band figures (clockwise) -->
+        <!-- Fig 2 top right -->
+        <ellipse cx="320" cy="100" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="335" y="96" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">2</text>
+        <!-- Fig 3 right -->
+        <ellipse cx="355" cy="145" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="370" y="149" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">3</text>
+        <!-- Fig 4 bottom right -->
+        <ellipse cx="320" cy="190" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="333" y="200" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">4</text>
+        <!-- Fig 5 bottom left -->
+        <ellipse cx="180" cy="190" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="158" y="200" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">5</text>
+        <!-- Fig 6 left -->
+        <ellipse cx="145" cy="145" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="122" y="149" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">6</text>
+        <!-- Fig 7 top left -->
+        <ellipse cx="180" cy="100" rx="9" ry="9" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <text x="158" y="96" fill="#E8D08A" font-size="9" font-family="'Cinzel', serif">7</text>
+
+        <!-- Hieratic script band (between rings) -->
+        <text x="250" y="232" text-anchor="middle" fill="rgba(201,168,76,0.2)" font-size="8" font-family="serif">𓄿𓏏𓇋𓅓𓂝𓈖𓇋𓏏𓆑𓄿𓈖𓊪</text>
+
+        <!-- Label -->
+        <text x="250" y="272" text-anchor="middle" fill="rgba(201,168,76,0.3)" font-size="9" font-family="'Cinzel', serif" letter-spacing="1">HYPOCEPHALUS — SCHEMATIC</text>
+      </svg>
+    </div>
+
+    <div class="fac-compare">
+      <div class="fac-col">
+        <div class="fac-col-label label-smith">Joseph Smith's Explanation (1842)</div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text wrong">"Kolob, signifying the first creation, nearest to the celestial, or the residence of God." <em>✕ Not found in Egyptology</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 2</span>
+          <span class="fig-text wrong">"Stands next to Kolob, called by the Egyptians Oliblish... a governing power also." <em>✕ Name not in any Egyptian text</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text wrong">"Is made to represent God, sitting upon his throne, clothed with power and authority; with a crown of eternal light upon his head." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Figs. 4–7</span>
+          <span class="fig-text wrong">Further explanations of LDS cosmological concepts — Shinehah (sun), Kokob (star), Olea, Flossis — names completely invented, appearing nowhere in Egyptian religion. <em>✕ No Egyptological basis</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Figs. 8–21</span>
+          <span class="fig-text wrong">Smith states these contain "too sacred to be revealed" content. These figures are actually standard hieratic Egyptian text, which can now be fully translated. <em>✕ Deciphered — not sacred secrets</em></span>
+        </div>
+      </div>
+      <div class="fac-col">
+        <div class="fac-col-label label-egypt">Egyptological Translation</div>
+        <div class="fig-row">
+          <span class="fig-num">Overview</span>
+          <span class="fig-text">Facsimile 2 is a <strong>hypocephalus</strong> — a circular funerary amulet placed under the head of the deceased. Over 100 examples exist in museum collections worldwide. They were used to keep the deceased warm in the underworld by identifying them with the sun god. This one belonged to <strong>Hor</strong>, the same priest from Facsimile 1.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text"><strong>Khnum-Ra</strong> — a four-headed deity representing the sun god in his different aspects. Standard hypocephalus imagery found in dozens of parallel documents.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text">The <strong>ithyphallic Min</strong> (or Amun-Min) — an Egyptian fertility deity. Smith's Facsimile 2 has a hand covering the figure's phallus, an alteration not present in the original Egyptian source.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Figs. 8–21</span>
+          <span class="fig-text">Standard <strong>hieratic Egyptian text</strong> — the LDS Church's own 2014 essay acknowledges these are "not well understood by Egyptologists." In reality, the Egyptologist Michael D. Rhodes translated the visible portions as invoking Osiris and identifying the deceased as Hor. The text is a prayer for the deceased's resurrection, not esoteric cosmological revelation.</span>
+        </div>
+      </div>
+    </div>
+    <div class="source-strip">
+      <p>Sources: Michael D. Rhodes, "The Joseph Smith Hypocephalus — Seventeen Years Later" (1994) · Marc Coenen, Egyptologist, KU Leuven · Robert K. Ritner (2014)</p>
+    </div>
+  </div>
+
+  <!-- ═══ FACSIMILE 3 ═══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Facsimile No. 3 — The Throne Scene</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="fac-block">
+    <div class="fac-header">
+      <span class="fac-num">Facsimile 3</span>
+      <span class="fac-name">Published by Joseph Smith, Times and Seasons, May 16, 1842</span>
+    </div>
+
+    <!-- SVG for Facsimile 3 -->
+    <div class="fac-diagram">
+      <svg viewBox="0 0 640 260" width="620" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+        <rect width="640" height="260" fill="#0a0501"/>
+        <rect x="20" y="20" width="600" height="220" rx="2" fill="#0f0904" stroke="#8B6914" stroke-width="1"/>
+
+        <!-- Throne (Osiris / "Abraham's throne") left center -->
+        <rect x="90" y="90" width="55" height="80" rx="2" fill="#1a0f05" stroke="#C9A84C" stroke-width="1"/>
+        <rect x="85" y="80" width="65" height="15" rx="1" fill="#2a1a08" stroke="#C9A84C" stroke-width="0.8"/>
+        <!-- Osiris seated on throne -->
+        <ellipse cx="118" cy="72" rx="13" ry="13" fill="none" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="118" y1="85" x2="118" y2="130" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="118" y1="100" x2="98" y2="90" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="118" y1="100" x2="138" y2="90" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="118" y1="130" x2="105" y2="158" stroke="#C9A84C" stroke-width="1.1"/>
+        <line x1="118" y1="130" x2="131" y2="158" stroke="#C9A84C" stroke-width="1.1"/>
+        <!-- Atef crown (Osiris) -->
+        <rect x="113" y="55" width="10" height="18" rx="1" fill="none" stroke="#C9A84C" stroke-width="0.8"/>
+        <line x1="108" y1="62" x2="113" y2="60" stroke="#C9A84C" stroke-width="0.7"/>
+        <line x1="127" y1="62" x2="123" y2="60" stroke="#C9A84C" stroke-width="0.7"/>
+        <text x="118" y="175" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 1</text>
+
+        <!-- Isis standing (Fig 2) -->
+        <ellipse cx="200" cy="80" rx="11" ry="11" fill="none" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="200" y1="91" x2="200" y2="140" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="200" y1="110" x2="180" y2="100" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="200" y1="110" x2="220" y2="100" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="200" y1="140" x2="188" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="200" y1="140" x2="212" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <!-- Isis headdress — throne symbol -->
+        <rect x="196" y="67" width="8" height="5" rx="0" fill="none" stroke="#C9A84C" stroke-width="0.7"/>
+        <text x="200" y="185" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 2</text>
+
+        <!-- "Abraham" / Hor standing (Fig 3) -->
+        <ellipse cx="290" cy="80" rx="11" ry="11" fill="none" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="290" y1="91" x2="290" y2="140" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="290" y1="110" x2="268" y2="102" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="290" y1="110" x2="312" y2="100" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="290" y1="140" x2="278" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="290" y1="140" x2="302" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <text x="290" y="185" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 3</text>
+
+        <!-- Maat (Fig 4) -->
+        <ellipse cx="380" cy="80" rx="11" ry="11" fill="none" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="380" y1="91" x2="380" y2="140" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="380" y1="110" x2="360" y2="100" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="380" y1="110" x2="400" y2="102" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="380" y1="140" x2="368" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="380" y1="140" x2="392" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <!-- Maat feather -->
+        <path d="M380,67 Q384,57 383,55 Q380,58 376,55 Q375,57 380,67" fill="none" stroke="#C9A84C" stroke-width="0.7"/>
+        <text x="380" y="185" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 4</text>
+
+        <!-- Shulem / Hor (Fig 5) -->
+        <ellipse cx="470" cy="80" rx="11" ry="11" fill="none" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="470" y1="91" x2="470" y2="140" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="470" y1="110" x2="450" y2="100" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="470" y1="110" x2="490" y2="102" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="470" y1="140" x2="458" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <line x1="470" y1="140" x2="482" y2="168" stroke="#C9A84C" stroke-width="1"/>
+        <text x="470" y="185" text-anchor="middle" fill="#E8D08A" font-size="10" font-family="'Cinzel', serif">Fig. 5</text>
+
+        <!-- Hieroglyphs above -->
+        <text x="320" y="45" text-anchor="middle" fill="rgba(201,168,76,0.25)" font-size="10" font-family="serif">𓇋𓄿𓏏𓅓𓂝𓈖𓄿𓇋𓆑</text>
+        <text x="320" y="235" text-anchor="middle" fill="rgba(201,168,76,0.3)" font-size="9" font-family="'Cinzel', serif" letter-spacing="1">SCHEMATIC REPRESENTATION — NOT ORIGINAL ARTWORK</text>
+      </svg>
+    </div>
+
+    <div class="fac-compare">
+      <div class="fac-col">
+        <div class="fac-col-label label-smith">Joseph Smith's Explanation (1842)</div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text wrong">"Abraham sitting upon Pharaoh's throne, by the politeness of the king, with a crown upon his head, representing the Priesthood." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 2</span>
+          <span class="fig-text wrong">"King Pharaoh, whose name is given in the characters above his hand." <em>✕ Doubly incorrect: wrong gender, wrong identity</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text wrong">"Signifies Abraham in Egypt." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 4</span>
+          <span class="fig-text wrong">"Prince of Pharaoh, King of Egypt, as written above the hand." <em>✕ Incorrect</em></span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 5</span>
+          <span class="fig-text wrong">"Shulem, one of the king's principal waiters, as represented by the characters above his hand." — "Shulem" appears in no Egyptian text. <em>✕ Name invented</em></span>
+        </div>
+      </div>
+      <div class="fac-col">
+        <div class="fac-col-label label-egypt">Egyptological Translation</div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 1</span>
+          <span class="fig-text"><strong>Osiris</strong> seated on his throne — the god of the dead and the afterlife, presiding over the judgment scene. The hieroglyphs above this figure read "Osiris." This is confirmed by both LDS Egyptologist Michael D. Rhodes and University of Chicago's Robert Ritner.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 2</span>
+          <span class="fig-text"><strong>Isis</strong> — the goddess, a <em>female</em> figure — stands before Osiris. Smith identified her as the male "King Pharaoh." The hieroglyphs above her identify her as "Isis the great, the god's mother." Smith confused a goddess for a king.</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 3</span>
+          <span class="fig-text">The deceased <strong>Hor</strong> being presented to Osiris for judgment — a scene found in hundreds of funerary papyri across Egyptian history. The hieroglyphs above name him as "Hor, the justified."</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 4</span>
+          <span class="fig-text"><strong>Maat</strong> — the goddess of truth and cosmic order, identifiable by the feather on her head. A female deity Smith called a male "prince."</span>
+        </div>
+        <div class="fig-row">
+          <span class="fig-num">Fig. 5</span>
+          <span class="fig-text">The name above this figure is <strong>Hor</strong> — the same priest who owned the entire papyrus. Smith read this as "Shulem, one of the king's principal waiters" — an invented name for an invented character. The hieroglyphs are unambiguous.</span>
+        </div>
+      </div>
+    </div>
+    <div class="source-strip">
+      <p>Sources: Robert K. Ritner (2014): "In Facsimile 3, Smith confuses human and animal heads and males with females. No amount of special pleading can change the female 'Isis the great, the god's mother' (Fig. 2) into the male 'King Pharaoh.'" · Michael D. Rhodes, BYU (concurs on identifications of Osiris, Isis, and Hor) · LDS Gospel Topics Essay (2014)</p>
+    </div>
+  </div>
+
+  <!-- THE CORE PROBLEM -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">The Three Core Problems</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="problem-cards">
+    <div class="problem-card">
+      <div class="problem-card-icon">📜</div>
+      <div class="problem-card-title">Wrong Text</div>
+      <div class="problem-card-text">The actual papyri are the <em>Breathing Permit of Hôr</em> — a common Egyptian funerary document dating to c. 200 B.C., more than 1,600 years after Abraham lived. The LDS Church's own 2014 essay concedes: "None of the characters on the papyrus fragments mentioned Abraham's name or any of the events recorded in the book of Abraham." Every Egyptologist who has examined the text — LDS and non-LDS alike — agrees on this.</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-card-icon">🪄</div>
+      <div class="problem-card-title">Wrong Figures</div>
+      <div class="problem-card-text">In Facsimile 3 alone, Smith misidentified 5 out of 5 figures: he called a goddess a king, a deceased priest "Abraham," and invented names (Shulem) found in no Egyptian language. He confused female deities with male figures multiple times. LDS apologist Michael D. Rhodes — a faithful Latter-day Saint Egyptologist at BYU — confirmed the correct Egyptological identifications in 2003, inadvertently validating the critics' readings.</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-card-icon">✏️</div>
+      <div class="problem-card-title">Altered Evidence</div>
+      <div class="problem-card-text">In Facsimile 1, portions of the original papyrus were damaged (lacunae). Smith filled these gaps before publication — drawing a human head on the priest figure and a knife in his hand. When compared to intact parallel Egyptian documents, these additions are incorrect. The original damaged section would have shown an animal (likely jackal) head — not a human one. The "translation" thus also contains fabrications of the physical evidence.</div>
+    </div>
+  </div>
+
+  <!-- LDS RESPONSES -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">LDS Responses &amp; Their Problems</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="response-grid">
+    <div class="response-card">
+      <div class="response-label label-theory">Theory 1: The "Missing Scroll"</div>
+      <div class="response-text">The Book of Abraham was translated from a <em>different scroll</em> — one that was lost in the 1871 Chicago fire. The surviving papyri are not the source. Therefore the Egyptological critique is irrelevant.</div>
+    </div>
+    <div class="response-card">
+      <div class="response-label label-rebuttal">Why This Fails</div>
+      <div class="response-text">The "Kirtland Egyptian Papers" — documents in Smith's own handwriting — show Egyptian characters from the surviving papyri matched line-by-line to the English text of the Book of Abraham. Smith's own scribes linked the text to the existing papyri. Additionally, the Facsimiles are embedded in the Book of Abraham text itself, with internal references directing the reader to the illustrations as part of the same document. The missing scroll theory requires ignoring Smith's own working papers.</div>
+    </div>
+    <div class="response-card">
+      <div class="response-label label-theory">Theory 2: The "Catalyst" Theory</div>
+      <div class="response-text">Smith used the papyri as a spiritual catalyst — looking at the characters and receiving <em>inspired revelation</em> about Abraham that had no relation to what the characters actually said. It was a vision, not a translation.</div>
+    </div>
+    <div class="response-card">
+      <div class="response-label label-rebuttal">Why This Fails</div>
+      <div class="response-text">This concedes that Smith's claim to have "translated" the papyri was false — he did not translate. Yet he consistently described his work as translation, the book's introduction still reads "translated from the papyri," and the Book of Abraham explicitly directs the reader to the facsimiles as integral parts of the record ("I will refer you to the representation at the commencement of this record," Abr. 1:12). The catalyst theory also cannot explain why a revelation-by-inspiration would produce wrong identifications of Egyptian figures that happen to match the actual papyri's content.</div>
+    </div>
+  </div>
+
+  <div class="verdict-box">
+    <h3>✦ &nbsp; The Evidential Weight of This Problem &nbsp; ✦</h3>
+    <p>The Book of Abraham issue is unusual in apologetics because it does not require theological argument — it is a falsifiable, empirical claim. Joseph Smith said he translated a specific set of documents that still exist. Professional scholars in the relevant discipline have translated those same documents. The translations do not match. This is not a matter of interpretation or hermeneutics. It is a matter of whether Egyptian means what Egyptologists say it means.</p>
+    <p>Both the LDS Church's own 2014 Gospel Topics Essay and its faithful Egyptologist at BYU (Michael D. Rhodes) agree on the Egyptological identifications that contradict Smith's explanations. The point of divergence is not the facts, but what conclusions to draw from them. For the Catholic apologist, those conclusions are clear: a genuine prophet of God, claiming to translate a specific ancient text by divine authority, would not produce a document unrelated to the source material, with fictional names, misidentified genders, and physically altered evidence.</p>
+  </div>
+
+</main>
+
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html" style="color:var(--gold-light)">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Nature of God: Three Views | One Faith Delivered</title>
+<meta name="description" content="A three-column comparative infographic examining the nature of God across Catholic, LDS, and Biblical frameworks — eternal vs. created, immaterial vs. embodied, one Being vs. three separate beings." />
+<link rel="canonical" href="https://onefaithdelivered.org/nature-of-god-three-views.html" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C; --gold-light: #E8D08A; --gold-dark: #8B6914;
+  --cream: #F5F0E8; --burgundy: #6B1D2A;
+  --bg: #0D0703;
+  --col-cath: rgba(201,168,76,0.08);
+  --col-lds: rgba(107,29,42,0.08);
+  --col-bib: rgba(201,168,76,0.04);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--bg); background-image: radial-gradient(ellipse at 20% 0%, rgba(107,29,42,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.10) 0%, transparent 50%); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--cream); min-height: 100vh; }
+nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(13,7,3,0.98), rgba(13,7,3,0.92)); border-bottom: 1px solid var(--gold-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); }
+.nav-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold-light); text-transform: uppercase; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream); text-decoration: none; transition: color 0.25s; }
+.nav-links a:hover { color: var(--gold-light); }
+.page-header { text-align: center; padding: 5rem 2rem 3rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+.back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+.ornament { color: var(--gold-dark); font-size: 1.2rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
+.page-header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 600; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 0.8rem; }
+.page-header .subtitle { font-size: 1.1rem; font-style: italic; color: rgba(245,240,232,0.6); max-width: 600px; margin: 0 auto; }
+main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+/* THREE-COLUMN GRID */
+.col-headers {
+  display: grid; grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 0; margin-bottom: 0;
+}
+.col-header {
+  padding: 1.2rem 1.5rem; text-align: center;
+  font-family: 'Cinzel', serif; border: 1px solid rgba(201,168,76,0.15);
+  border-bottom: none;
+}
+.col-header-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 0.4rem; display: block; }
+.col-header-title { font-size: 1.15rem; font-weight: 600; letter-spacing: 0.03em; }
+.col-attr { border-color: rgba(201,168,76,0.12); background: rgba(201,168,76,0.03); }
+.col-cath-h { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.25); }
+.col-cath-h .col-header-label { color: var(--gold-dark); }
+.col-cath-h .col-header-title { color: var(--gold-light); }
+.col-lds-h { background: rgba(107,29,42,0.08); border-color: rgba(139,45,60,0.2); }
+.col-lds-h .col-header-label { color: rgba(139,45,60,0.8); }
+.col-lds-h .col-header-title { color: rgba(245,240,232,0.7); }
+.col-bib-h { background: rgba(201,168,76,0.04); border-color: rgba(201,168,76,0.15); }
+.col-bib-h .col-header-label { color: var(--gold-dark); }
+.col-bib-h .col-header-title { color: rgba(245,240,232,0.8); }
+
+/* COMPARISON ROWS */
+.comparison-row {
+  display: grid; grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 0; border: 1px solid rgba(201,168,76,0.1);
+  border-bottom: none; min-height: 100px;
+}
+.comparison-row:last-child { border-bottom: 1px solid rgba(201,168,76,0.1); }
+.comparison-row:nth-child(even) { background: rgba(201,168,76,0.01); }
+
+.cell-attr {
+  padding: 1.2rem 1.2rem; display: flex; align-items: center;
+  border-right: 2px solid rgba(201,168,76,0.2);
+  background: rgba(201,168,76,0.04);
+}
+.cell-attr-inner { }
+.attr-name { font-family: 'Cinzel', serif; font-size: 0.88rem; font-weight: 600; color: var(--gold); letter-spacing: 0.03em; margin-bottom: 0.2rem; }
+.attr-question { font-size: 0.82rem; font-style: italic; color: rgba(245,240,232,0.4); line-height: 1.4; }
+
+.cell-cath, .cell-lds, .cell-bib {
+  padding: 1.2rem 1.4rem;
+  border-right: 1px solid rgba(201,168,76,0.08);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.cell-bib { border-right: none; }
+
+.position-label {
+  font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 0.4rem; display: inline-block; padding: 0.15rem 0.5rem; border: 1px solid;
+}
+.cell-cath .position-label { color: var(--gold); border-color: rgba(201,168,76,0.3); }
+.cell-lds .position-label { color: rgba(200,100,100,0.9); border-color: rgba(200,100,100,0.3); }
+.cell-bib .position-label { color: rgba(245,240,232,0.6); border-color: rgba(245,240,232,0.15); }
+
+.position-text { font-size: 0.92rem; line-height: 1.65; color: rgba(245,240,232,0.7); }
+.cell-cath .position-text { color: rgba(245,240,232,0.8); }
+.scripture { font-size: 0.82rem; font-style: italic; color: rgba(201,168,76,0.7); margin-top: 0.4rem; }
+.contradiction-flag {
+  display: inline-block; font-family: 'Cinzel', serif;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #C47C3A; border: 1px solid rgba(196,124,58,0.35);
+  padding: 0.12rem 0.45rem; margin-top: 0.4rem;
+}
+.align-flag {
+  display: inline-block; font-family: 'Cinzel', serif;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(201,168,76,0.3);
+  padding: 0.12rem 0.45rem; margin-top: 0.4rem;
+}
+
+/* CATEGORY SEPARATOR */
+.category-sep {
+  display: grid; grid-template-columns: 200px 1fr 1fr 1fr;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-bottom: none;
+}
+.category-sep-label {
+  grid-column: 1 / -1; padding: 0.6rem 1.2rem;
+  font-family: 'Cinzel', serif; font-size: 0.65rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+/* SUMMARY */
+.summary-box { margin-top: 4rem; padding: 2.5rem; border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); }
+.summary-box h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); margin-bottom: 1rem; text-align: center; }
+.summary-box p { font-size: 1rem; line-height: 1.8; color: rgba(245,240,232,0.65); max-width: 800px; margin: 0 auto; text-align: center; }
+
+footer { text-align: center; padding: 2.5rem 2rem 3rem; border-top: 1px solid rgba(201,168,76,0.15); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(201,168,76,0.35); }
+.nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; cursor: pointer; background: none; border: none; padding: 0; z-index: 201; }
+.nav-hamburger span { display: block; width: 100%; height: 2px; background: var(--gold-light); border-radius: 1px; }
+.sidebar-overlay { display: none; pointer-events: none; position: fixed; inset: 0; background: rgba(13,7,3,0.6); z-index: 150; opacity: 0; transition: opacity 0.3s; }
+.sidebar-overlay.visible { pointer-events: auto; opacity: 1; }
+.sidebar { display: none; position: fixed; top: 0; right: 0; width: 280px; max-width: 80vw; height: 100vh; background: linear-gradient(170deg, #0D0703 0%, #1A0F05 100%); border-left: 1px solid var(--gold-dark); z-index: 200; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
+.sidebar.open { transform: translateX(0); }
+.sidebar-inner { padding: 5rem 2rem 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-brand { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 2rem; letter-spacing: 0.1em; }
+.sidebar a { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); transition: color 0.2s, padding-left 0.2s; display: block; }
+.sidebar a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.sidebar-ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; margin-top: 2rem; letter-spacing: 8px; }
+@media (max-width: 900px) {
+  .col-headers, .comparison-row, .category-sep { grid-template-columns: 140px 1fr 1fr 1fr; }
+  .cell-attr .attr-name { font-size: 0.78rem; }
+}
+@media (max-width: 680px) {
+  .col-headers { display: none; }
+  .comparison-row { grid-template-columns: 1fr; border: 1px solid rgba(201,168,76,0.12); margin-bottom: 1rem; }
+  .cell-attr { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .category-sep { grid-template-columns: 1fr; }
+  .cell-cath, .cell-lds, .cell-bib { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.08); }
+}
+@media (max-width: 600px) { nav .nav-links { display: none; } .nav-hamburger { display: flex; } .sidebar { display: block; } .sidebar-overlay { display: block; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="index.html">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="articles.html">Articles</a></li>
+    <li><a href="charts.html">Charts</a></li><li><a href="topics.html">Topics</a></li><li><a href="resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="charts.html">← Back to Charts &amp; Visual Resources</a>
+  <span class="ornament">✦ ✦ ✦</span>
+  <h1>The Nature of God: Three Views</h1>
+  <p class="subtitle">Catholic · LDS · Biblical — A systematic comparison of divine attributes across three frameworks</p>
+</header>
+
+<main>
+
+  <!-- COLUMN HEADERS -->
+  <div class="col-headers">
+    <div class="col-header col-attr"><span class="col-header-label">Attribute</span><span class="col-header-title" style="color:rgba(245,240,232,0.4);">Topic</span></div>
+    <div class="col-header col-cath-h"><span class="col-header-label">Catholic Position</span><span class="col-header-title">The Catholic Church</span></div>
+    <div class="col-header col-lds-h"><span class="col-header-label">LDS Position</span><span class="col-header-title">The LDS Church</span></div>
+    <div class="col-header col-bib-h"><span class="col-header-label">Biblical Witness</span><span class="col-header-title">Scripture</span></div>
+  </div>
+
+  <!-- CATEGORY: BEING & EXISTENCE -->
+  <div class="category-sep"><div class="category-sep-label">I. Being &amp; Existence</div></div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Eternality</div><div class="attr-question">Has God always existed as God?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God is eternally and necessarily existent — the uncaused First Cause. He has no origin, no beginning, and is outside of time entirely. He is not a being among beings but Being Itself (<em>ipsum esse subsistens</em>).</div>
+      <div class="scripture">Ex. 3:14 — "I AM WHO I AM"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">God the Father was once a mortal man who was exalted to godhood. He had a Father before Him, and so on eternally backward. He "progressed" to become God — He did not always exist as God.</div>
+      <div class="scripture">"God himself was once as we are now" — King Follett Discourse (1844)</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">Scripture consistently presents God as without origin: "Before the mountains were born or you brought forth the whole world, from everlasting to everlasting you are God" (Ps. 90:2). "I am the first and the last" (Is. 44:6). God has no predecessor.</div>
+    </div>
+  </div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Immutability</div><div class="attr-question">Does God change?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God is absolutely immutable — He cannot change, improve, or develop. All perfection exists in Him infinitely and eternally. Change implies transition from potential to act; God is pure act with no unrealized potential.</div>
+      <div class="scripture">Mal. 3:6 — "I the LORD do not change"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">God progressed to become God. The entire LDS system of <em>eternal progression</em> implies that God Himself once stood at a lower rung of the same ladder humans now climb. Change and growth are fundamental to LDS cosmology — even for deity.</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"Every good gift and every perfect gift is from above, coming down from the Father of lights, with whom there is no variation or shadow due to change" (Jas. 1:17). "Jesus Christ is the same yesterday and today and forever" (Heb. 13:8).</div>
+    </div>
+  </div>
+
+  <!-- CATEGORY: NATURE & SUBSTANCE -->
+  <div class="category-sep"><div class="category-sep-label">II. Nature &amp; Substance</div></div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Corporeality</div><div class="attr-question">Does God have a physical body?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God is pure spirit — utterly incorporeal. The Second Person of the Trinity took on a human body in the Incarnation, but God the Father and the Holy Spirit have no physical body. God transcends matter.</div>
+      <div class="scripture">John 4:24 — "God is spirit"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">God the Father has "a body of flesh and bones as tangible as man's" (D&amp;C 130:22). He is a glorified, resurrected, embodied being who resides near the star Kolob. The Father is spatially located.</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"God is spirit, and those who worship him must worship in spirit and truth" (John 4:24). "A spirit does not have flesh and bones" (Luke 24:39 — Christ distinguishing His resurrection body from a spirit). God fills heaven and earth (Jer. 23:24).</div>
+    </div>
+  </div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Omnipresence</div><div class="attr-question">Is God present everywhere?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God is omnipresent — present everywhere in His essence, power, and knowledge simultaneously. He is not contained by space but contains and sustains all things in being. He is "closer to me than I am to myself" (Augustine).</div>
+      <div class="scripture">Ps. 139:7–8 — "Where can I flee from your presence?"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">Because God has a physical body, He cannot be omnipresent in the classical sense. LDS theology resolves this by saying God's influence (the "Light of Christ" or the Holy Spirit) is omnipresent — but the Father Himself is spatially located near Kolob.</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"Can a man hide himself in secret places so that I cannot see him? declares the LORD. Do I not fill heaven and earth?" (Jer. 23:24). A physically embodied God cannot fill heaven and earth simultaneously.</div>
+    </div>
+  </div>
+
+  <!-- CATEGORY: TRINITY & PERSONS -->
+  <div class="category-sep"><div class="category-sep-label">III. Trinity &amp; Persons</div></div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Unity of Being</div><div class="attr-question">Is there one God or three gods?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">There is one God in three divine Persons — Father, Son, and Holy Spirit — who share one divine nature, one substance (<em>homoousios</em>). The Persons are really distinct but not separate beings. There is absolutely only one God.</div>
+      <div class="scripture">Deut. 6:4 — "The LORD our God, the LORD is one"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">Father, Son, and Holy Ghost are three entirely separate and distinct beings — three gods, united in purpose but not in nature or substance. This is not Trinitarianism; it is social tritheism, or a form of polytheism. LDS scripture notes "countless" gods exist (Abraham 3:9).</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">Scripture is emphatically monotheist: "I am the LORD, and there is no other; apart from me there is no God" (Is. 45:5). "Hear, O Israel: The LORD our God, the LORD is one" (Deut. 6:4). Yet Father, Son, and Spirit are each distinctly divine — demanding a Trinitarian framework, not polytheism.</div>
+    </div>
+  </div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Divinity of Christ</div><div class="attr-question">Is Christ truly and fully God?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">Christ is the eternal Son of God, the Second Person of the Trinity — fully God and fully man, sharing the one divine nature with the Father. He is not a created being, not a lesser god, and not a promoted human. He is <em>homoousios</em> with the Father (Nicaea, 325).</div>
+      <div class="scripture">John 1:1 — "the Word was God"</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">Christ is a separate god from the Father — an exalted, resurrected being. In LDS theology, Christ is the firstborn spirit child of Heavenly Father, who progressed to godhood. He is divine but in a categorically different way than Catholic Trinitarianism affirms. Lucifer is His spirit brother.</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"In the beginning was the Word, and the Word was with God, and the Word was God... All things were made through him" (John 1:1,3). "He is the image of the invisible God, the firstborn of all creation" — "firstborn" as title of supremacy, not temporal priority (Col. 1:15). Thomas confesses "My Lord and my God!" (John 20:28).</div>
+    </div>
+  </div>
+
+  <!-- CATEGORY: ATTRIBUTES -->
+  <div class="category-sep"><div class="category-sep-label">IV. Divine Attributes</div></div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Omniscience</div><div class="attr-question">Does God know all things, including the future?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God knows all things — past, present, and future — in one eternal act. He knows all possibilities, all contingencies, and all free choices before they are made, without thereby determining them. His knowledge is infinite and perfect.</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">Some LDS thinkers (open theists within Mormonism) have argued that God's knowledge grows with time. Most LDS theology holds that God knows all things — but since God progressed to omniscience from a prior mortal state, His omniscience is acquired, not intrinsic.</div>
+      <span class="contradiction-flag">⚠ Internally Problematic</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"Known to God from eternity are all his works" (Acts 15:18). "I am God, and there is none like me, declaring the end from the beginning and from ancient times things not yet done" (Is. 46:9–10).</div>
+    </div>
+  </div>
+
+  <div class="comparison-row">
+    <div class="cell-attr"><div class="cell-attr-inner"><div class="attr-name">Creator of Matter</div><div class="attr-question">Did God create matter from nothing?</div></div></div>
+    <div class="cell-cath">
+      <span class="position-label">Catholic</span>
+      <div class="position-text">God created all things <em>ex nihilo</em> — from nothing. Matter itself is a creature of God. Nothing exists apart from God's creative act. This radical dependence of all creation on God is fundamental to Catholic theology.</div>
+      <div class="scripture">Gen. 1:1; John 1:3; Rom. 4:17</div>
+      <span class="align-flag">✦ Aligns with Scripture</span>
+    </div>
+    <div class="cell-lds">
+      <span class="position-label">LDS</span>
+      <div class="position-text">God organized pre-existing, co-eternal matter — He did not create from nothing. Matter is self-existent and eternal, not dependent on God for its existence. God is more of an architect than an absolute creator. "Intelligence" also is co-eternal with God and uncreated.</div>
+      <span class="contradiction-flag">⚠ Contradicts Scripture</span>
+    </div>
+    <div class="cell-bib">
+      <span class="position-label">Biblical</span>
+      <div class="position-text">"By faith we understand that the universe was formed at God's command, so that what is seen was not made out of what was visible" (Heb. 11:3). "All things were made through him, and without him was not any thing made that was made" (John 1:3). No eternal, co-existing matter is contemplated.</div>
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <h3>The Fundamental Divide</h3>
+    <p>The God of Catholicism and the God of LDS theology are not two descriptions of the same being. The Catholic God is eternal, immaterial, omnipresent, immutable, and the absolute Creator of all things from nothing. The LDS God is an exalted man — corporeal, spatially located, a product of prior cosmic processes, and a sculptor of pre-existing matter. These are not minor theological nuances. They represent fundamentally different ultimate realities. The Catholic God corresponds to the God described in Scripture; the LDS God corresponds to the God described in the King Follett Discourse of 1844, which departed significantly from the Book of Mormon's own earlier portrayal.</p>
+  </div>
+
+</main>
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="index.html">Home</a><a href="articles.html">Articles</a><a href="charts.html">Charts</a><a href="topics.html">Topics</a><a href="resources.html">Resources</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'), sidebar = document.querySelector('.sidebar'), overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) { sidebar.classList.remove('open'); btn.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+  else { sidebar.classList.add('open'); btn.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar(); });
+</script>
+</body>
+</html>
