@@ -689,108 +689,92 @@ body {
 
 
   /* ── MOBILE STYLES ── */
+  /* ── Mobile (≤700px) ── */
   @media (max-width: 700px) {
 
-    /* NAV */
+    /* NAV: hide desktop links, show hamburger pinned to right */
     .site-nav {
       padding: 0.6rem 1rem;
+      justify-content: space-between;
     }
-    .nav-links { display: none; }
-    .nav-back { display: none; }
+    .site-nav .nav-links { display: none !important; }
+    .site-nav .nav-back  { display: none !important; }
     .nav-hamburger {
-      display: flex;
+      display: flex !important;
       margin-left: auto;
-      order: 3;
+      flex-shrink: 0;
+      order: 99;
     }
-    .site-nav a.nav-home { order: 1; }
 
     /* PAGE HEADER */
-    .page-header {
-      padding: 48px 20px 36px;
-    }
-    .page-header h1 {
-      font-size: clamp(1.4rem, 6vw, 2rem);
-    }
-    .page-header .subtitle {
-      font-size: 0.95rem;
-    }
+    .page-header { padding: 44px 18px 32px; }
+    .page-header h1 { font-size: clamp(1.35rem, 5.5vw, 2rem); }
+    .page-header .subtitle { font-size: 0.92rem; }
 
-    /* MAIN CONTENT */
-    main {
-      padding: 0;
-    }
+    /* MAIN */
+    main { padding: 0; }
 
-    /* FLOWCHART: stack columns vertically */
+    /* FLOWCHART: single column, each path full-width */
     .flow-wrapper {
-      display: flex;
-      flex-direction: column;
+      display: flex !important;
+      flex-direction: column !important;
       gap: 0;
       padding: 1rem;
     }
-
-    .flow-col {
-      margin-bottom: 2.5rem;
-    }
-
+    .flow-col { margin-bottom: 2.5rem; }
     .flow-header {
-      padding: 1rem;
+      padding: 0.9rem 1rem;
       margin-bottom: 1rem;
     }
-    .flow-header .track-title {
-      font-size: 0.95rem;
-    }
+    .flow-header .track-title { font-size: 0.92rem; }
+    .flow-header .track-label { font-size: 0.58rem; }
 
     /* NODES */
-    .node-box {
-      padding: 0.85rem 1rem;
-    }
-    .node-title {
-      font-size: 0.88rem;
-    }
-    .node-desc {
-      font-size: 0.82rem;
-    }
-    .node-note {
-      font-size: 0.74rem;
-    }
+    .node-box { padding: 0.8rem 0.9rem; }
+    .node-step { font-size: 0.55rem; }
+    .node-title { font-size: 0.85rem; }
+    .node-desc  { font-size: 0.80rem; line-height: 1.55; }
+    .node-note  { font-size: 0.72rem; }
 
-    /* BRANCH ROW: stack on mobile */
+    /* ARROWS */
+    .flow-arrow { padding: 0.3rem 0; }
+    .arrow-line { height: 20px; }
+
+    /* BRANCH ROW (LDS degrees of glory): single column */
     .branch-row {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
+      grid-template-columns: 1fr !important;
+      gap: 0.4rem;
     }
-    .branch-node .b-desc {
-      font-size: 0.78rem;
-    }
+    .branch-node { padding: 0.6rem 0.7rem; }
+    .branch-node .b-name { font-size: 0.70rem; }
+    .branch-node .b-desc { font-size: 0.74rem; line-height: 1.45; }
 
     /* CONTRAST SECTION */
-    .contrast-section {
-      margin-top: 2rem;
-      padding: 0 1rem;
-    }
+    .contrast-section { margin-top: 2rem; padding: 0 1rem; }
     .contrast-points {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+      grid-template-columns: 1fr !important;
+      gap: 0.9rem;
     }
-    .contrast-point {
-      padding: 1rem;
-    }
-    .contrast-point p {
-      font-size: 0.86rem;
-    }
+    .contrast-point { padding: 1rem; }
+    .contrast-point h4 { font-size: 0.68rem; }
+    .contrast-point p { font-size: 0.84rem; line-height: 1.65; }
 
-    /* SIDEBAR */
-    .sidebar { display: block; }
+    /* FOOTER */
+    footer { padding: 1.5rem 1rem 2rem; }
+
+    /* SIDEBAR: already uses transform, just ensure padding */
     .sidebar-inner { padding: 4rem 1.5rem 2rem; }
   }
 
-  /* Medium screens */
+  /* ── Tablet (701–900px): side-by-side but compressed ── */
   @media (max-width: 900px) and (min-width: 701px) {
-    .flow-wrapper { gap: 1.5rem; }
-    .node-desc { font-size: 0.83rem; }
-    .branch-row { gap: 0.35rem; }
-    .branch-node .b-desc { font-size: 0.72rem; }
+    .flow-wrapper { gap: 1.2rem; }
+    .node-title { font-size: 0.88rem; }
+    .node-desc  { font-size: 0.80rem; }
+    .branch-row { gap: 0.3rem; }
+    .branch-node .b-desc { font-size: 0.70rem; }
     .contrast-points { gap: 1rem; }
+    .contrast-point p { font-size: 0.88rem; }
   }
 .back-link { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
 .ornament { color: var(--gold); font-size: 1.1rem; letter-spacing: 12px; margin-bottom: 1.5rem; display: block; }
