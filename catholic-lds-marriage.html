@@ -479,6 +479,174 @@
 }
 .site-nav .nav-links a:hover { color: #E8D08A; }
 </style>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 
@@ -537,6 +705,58 @@
   </div>
 
   <p>When the Mosaic concession was raised, Jesus answered plainly: Moses permitted divorce "because of your hardness of heart, but from the beginning it was not so." He thereby superseded not only the Mosaic divorce law, but all other Old Testament marital concessions — including the tolerated polygamy of Abraham, Jacob, David, and Solomon — by restoring the original creational ideal of monogamous, lifelong union.</p>
+
+<!-- INFOGRAPHIC: Marriage Comparison -->
+<div class="infographic-section">
+  <p class="infographic-title">Christ's Law of Marriage vs. D&amp;C 132 · Doctrinal Comparison</p>
+  <div class="infographic-box">
+    <div class="comparison-grid">
+      <div class="comp-col catholic">
+        <div class="comp-col-label">Christ's Teaching (Matthew 19; Mark 12)</div>
+        <div class="comp-row"><strong>Form of Marriage</strong>One man, one woman — creation's original design, restored by Christ (Matt. 19:4–6)</div>
+        <div class="comp-row"><strong>Duration</strong>For life — "What God has joined together, let not man separate" (Matt. 19:6)</div>
+        <div class="comp-row"><strong>Divorce &amp; Remarriage</strong>Remarriage after divorce is adultery (Matt. 19:9; Luke 16:18)</div>
+        <div class="comp-row"><strong>Marriage After Death</strong>The marital bond ends at death — "in the resurrection they neither marry nor are given in marriage" (Matt. 22:30)</div>
+        <div class="comp-row"><strong>Polygamy</strong>Implicitly foreclosed by the monogamous creational ideal; tolerated under Moses due to hardness of heart, but abolished by Christ</div>
+      </div>
+      <div class="comp-col lds">
+        <div class="comp-col-label">D&amp;C 132 — Joseph Smith (1843)</div>
+        <div class="comp-row"><strong>Form of Marriage</strong>The "new and everlasting covenant" permits plural wives as necessary for the highest celestial exaltation (D&amp;C 132:4, 19)</div>
+        <div class="comp-row"><strong>Duration</strong>"Sealed for time and all eternity" — the marital bond continues beyond death into eternal life</div>
+        <div class="comp-row"><strong>Divorce &amp; Remarriage</strong>Temple sealings can be cancelled and reperformed; celestial marriage supersedes civil marriage</div>
+        <div class="comp-row"><strong>Marriage After Death</strong>Eternal marriage is essential to celestial exaltation — the opposite of Christ's teaching in Matt. 22:30</div>
+        <div class="comp-row"><strong>Polygamy</strong>Commanded as God's higher law for righteous men; Abraham, Isaac, and Jacob held up as models (D&amp;C 132:37)</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(197,163,85,0.4);">
+      <div class="infographic-title" style="margin-bottom: 14px;">The Four Pillars of Christ's Marriage Law</div>
+      <div class="three-col-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="three-col-card">
+          <span class="card-icon">💍</span>
+          <div class="card-title">Indissolubility</div>
+          <div class="card-body">"What God has joined together, let not man separate." The bond is real and permanent — not merely a legal or social arrangement. The Catholic Church has held this without exception for 2,000 years.</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">🕊️</span>
+          <div class="card-title">Monogamy</div>
+          <div class="card-body">Christ's appeal to Genesis 2:24 — "the two shall become one flesh" — closes the door on polygamy. Not three, not four: two, united in one flesh, imaging the singular union of Christ and His Church.</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">⚖️</span>
+          <div class="card-title">No Remarriage</div>
+          <div class="card-body">Remarriage after divorce constitutes adultery because the first bond still exists. The Church can declare a marriage invalid from the beginning (annulment), but cannot dissolve a valid sacramental marriage.</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">✝️</span>
+          <div class="card-title">Earthly Duration</div>
+          <div class="card-body">"In the resurrection they neither marry nor are given in marriage" (Matt. 22:30). The marital bond is beautiful and sanctifying — but it is ordered to this life. The eternal union is with God Himself.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <div class="section-heading">No Marriage in the Resurrection — Mark 12:25</div>
 

@@ -471,6 +471,174 @@
   }
 }
   </script>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 <nav class="site-nav">
@@ -509,6 +677,86 @@
     <h2 class="intro-heading">Introduction: A Teaching Worth Examining</h2>
     <p>Of all the doctrines that divide Christians, perhaps none is more ancient, more scriptural, or more consequential than the teaching on the Holy Eucharist. For roughly fifteen hundred years, the universal Christian Church held with one voice that in the Eucharist, the bread and wine truly become the Body, Blood, Soul, and Divinity of Jesus Christ. It was not until the Protestant Reformation of the sixteenth century that this teaching was widely challenged, and even then, Martin Luther himself affirmed a form of the Real Presence and sharply rebuked those who denied it.</p>
     <p>This essay is addressed to sincere Protestant and Latter-day Saint Christians who may have been taught that the Eucharist is merely a symbol — a memorial meal with no deeper reality. The invitation here is simple: examine the Scriptures, consult the earliest Christian witnesses, and consider whether the symbolic view can bear the weight of the biblical and historical evidence. What follows is a cumulative case drawn from the Old Testament foreshadowings, the explicit words of Christ, the testimony of the Apostles, and the unanimous witness of the early Church Fathers. The argument is not that any single piece of evidence is irrefutable in isolation, but that taken together, the convergence of Scripture, typology, and early testimony points overwhelmingly toward one conclusion: the Eucharist is what Christ said it is — His true Body and Blood.</p>
+
+<!-- INFOGRAPHIC: Eucharist Real Presence -->
+<div class="infographic-section">
+  <p class="infographic-title">Old Testament Foreshadowings of the Eucharist</p>
+  <div class="infographic-box">
+    <div class="three-col-grid">
+      <div class="three-col-card">
+        <span class="card-icon">🍞</span>
+        <div class="card-title">Melchizedek (Gen. 14)</div>
+        <div class="card-body">The priest-king offers bread and wine to Abram. The Letter to the Hebrews identifies Christ as a priest "after the order of Melchizedek" — His defining priestly act is also bread and wine.</div>
+      </div>
+      <div class="three-col-card">
+        <span class="card-icon">🐑</span>
+        <div class="card-title">Passover Lamb (Ex. 12)</div>
+        <div class="card-body">The lamb must be slain and eaten — not merely killed. Paul calls Christ "our Passover Lamb" (1 Cor. 5:7). The Eucharist is the fulfillment: the Lamb's flesh truly consumed.</div>
+      </div>
+      <div class="three-col-card">
+        <span class="card-icon">✨</span>
+        <div class="card-title">Manna (Ex. 16 / John 6)</div>
+        <div class="card-body">Israel ate bread from heaven in the wilderness. Jesus says: "Your fathers ate the manna and died. I am the living bread from heaven — whoever eats this bread will live forever."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="infographic-section">
+  <p class="infographic-title">Patristic Witness to the Real Presence · Timeline</p>
+  <div class="infographic-box">
+    <div class="timeline-wrap">
+      <div class="timeline-line"></div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 33 — The Upper Room</div>
+        <div class="timeline-text">Christ institutes the Eucharist: "This is my body… This is my blood." Paul records the tradition received "from the Lord" (1 Cor. 11:23–26).</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 70–90 — The Didache</div>
+        <div class="timeline-text">"Let no one eat or drink of your Eucharist unless they have been baptized." The Eucharist is treated as sacred food — not mere symbol — requiring right standing with God.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 107 — St. Ignatius of Antioch</div>
+        <div class="timeline-text">Writing to the Smyrnaeans, Ignatius condemns those who "abstain from the Eucharist… because they do not confess that the Eucharist is the flesh of our Savior Jesus Christ." He calls the Eucharist "the medicine of immortality."</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 150 — St. Justin Martyr</div>
+        <div class="timeline-text">In his First Apology, Justin explicitly states: "This food is called among us the Eucharist… not as common bread and common drink… but the flesh and blood of that incarnated Jesus."</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 200 — Tertullian &amp; Origen</div>
+        <div class="timeline-text">Tertullian speaks of the Eucharist as the Body of Christ; Origen treats it as a holy object demanding worthy reception, consistent with Real Presence theology.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. A.D. 350 — St. Cyril of Jerusalem</div>
+        <div class="timeline-text">"Do not regard the bread and the cup as simple elements, for they are, according to the Lord's declaration, the Body and Blood of Christ." His Mystagogical Catecheses give the fullest early exposition of Eucharistic doctrine.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot" style="background:#6B1D2A;"></div>
+        <div class="timeline-year">c. A.D. 1517 — Protestant Reformation</div>
+        <div class="timeline-text">For the first time in Christian history, widespread denial of the Real Presence emerges. Even Luther retained "consubstantiation." The purely symbolic view has no precedent in 1,500 years of unbroken Christian witness.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 16px 20px; background: rgba(107,29,42,0.05); border-left: 3px solid #6B1D2A; font-size: 14px; color: #2C1810; line-height: 1.6; font-style: italic;">
+      The LDS sacrament of bread and water is explicitly symbolic and commemorative — a meaningful ordinance of remembrance, but categorically different from the Real Presence affirmed by every Christian community for fifteen centuries.
+    </div>
+  </div>
+</div>
+
   </div>
 
   <!-- Part I -->

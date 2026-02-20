@@ -452,6 +452,174 @@
   }
 }
 </script>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 <nav class="site-nav">
@@ -498,6 +666,74 @@
   <div class="intro-body">
     <p>Why is the Catholic Church Roman? At first glance, the question seems almost impertinent. Christ was born in Bethlehem, raised in Nazareth, preached in Galilee, and was crucified and rose again in Jerusalem. The apostles were Jews. The first Christian communities emerged in Palestine. If Christianity is the fulfillment of the promises made to Abraham, Isaac, and Jacob, then it would seem natural — even necessary — that Christ's Church should be centered in Jerusalem, the Holy City, the site of the Temple, the dwelling place of God among His people. And yet, from the earliest centuries, the Church has identified herself not as the Jerusalemite Catholic Church, nor the Antiochian, nor the Alexandrian, but as the <em>Roman</em> Catholic Church.</p>
     <p>She is governed from the city on the Tiber, her supreme pontiff bears the title once held by the chief priest of the Roman Republic, her universal liturgical language for most of her history has been Latin, and even her Eastern Catholic children — Byzantine, Maronite, Chaldean — are, in the deepest theological sense, Roman.</p>
+
+<!-- INFOGRAPHIC: Iron Scepter / Daniel's Kingdoms -->
+<div class="infographic-section">
+  <p class="infographic-title">Daniel's Four Kingdoms &amp; the Messianic Fifth · Prophetic Timeline</p>
+  <div class="infographic-box">
+    <div class="timeline-wrap">
+      <div class="timeline-line"></div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. 605 B.C. — Babylon (The Golden Head)</div>
+        <div class="timeline-text">Nebuchadnezzar's empire — the first of the four world powers in Daniel's vision of the great statue (Dan. 2) and the four beasts (Dan. 7). Israel is exiled; the Temple is destroyed.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. 539 B.C. — Medo-Persia (The Silver Chest)</div>
+        <div class="timeline-text">Cyrus the Great conquers Babylon. A pagan king issues the decree for Israel's return. God uses pagan empire as the instrument of providential history.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">c. 331 B.C. — Greece (The Bronze Thighs)</div>
+        <div class="timeline-text">Alexander the Great's conquest spreads Hellenistic culture across the known world — providentially preparing a common language (Koine Greek) in which the New Testament would be written.</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot" style="background:#6B1D2A;"></div>
+        <div class="timeline-year">c. 63 B.C.–A.D. 476 — Rome (The Iron Legs)</div>
+        <div class="timeline-text">The fourth and final empire. Rome unifies the world under a single political structure, establishes universal law, builds roads connecting all nations, and — crucially — is the empire in which the Messiah is born, crucified, and rises. The Son of Man comes "during the days of those kings" (Dan. 2:44).</div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-dot" style="background:#C5A355; border-color:#C5A355; width:16px; height:16px; left:-31px;"></div>
+        <div class="timeline-year">c. A.D. 33 — The Stone Cut Without Hands (Dan. 2:44–45)</div>
+        <div class="timeline-text">The Messianic Kingdom — the Church — is inaugurated not by human power but by God, "during the days of those kings." It does not replace Rome by war but by inner transformation, growing until it fills the whole earth. The Roman Church is not an accident of history: it is the prophesied seat of the eternal kingdom.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="infographic-section">
+  <p class="infographic-title">Why Rome? · Providential Architecture</p>
+  <div class="infographic-box">
+    <div class="three-col-grid">
+      <div class="three-col-card">
+        <span class="card-icon">📜</span>
+        <div class="card-title">Universal Law</div>
+        <div class="card-body">Rome gave the world a common legal framework — preparing civilization to receive the universal moral law of the Gospel, promulgated from the same city.</div>
+      </div>
+      <div class="three-col-card">
+        <span class="card-icon">🛣️</span>
+        <div class="card-title">Universal Roads</div>
+        <div class="card-body"><em>Via Romana</em> — Rome's road network connected Britain to Mesopotamia, enabling the Apostles to carry the Gospel to every corner of the known world within a generation.</div>
+      </div>
+      <div class="three-col-card">
+        <span class="card-icon">⚖️</span>
+        <div class="card-title">Universal Peace</div>
+        <div class="card-body">The <em>Pax Romana</em> — Roman imperial peace — created the stable political conditions under which the Church could plant herself and grow before any organized persecution began.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 16px 20px; background: rgba(107,29,42,0.05); border-left: 3px solid #6B1D2A; font-size: 14px; color: #2C1810; line-height: 1.6; font-style: italic;">
+      The LDS restoration narrative, centered in upstate New York in 1830, has no prophetic anticipation in Scripture. Daniel's vision ends with Rome — not with a nineteenth-century American republic. The question must be asked: which institution better fits the prophetic pattern — the Church of Rome tracing her episcopal lineage to Peter and Paul, or a movement founded by Joseph Smith with no patristic roots?
+    </div>
+  </div>
+</div>
+
     <p>This essay argues that the <em>Romanitas</em> of the Church is not a historical accident, not a contingent outcome of imperial politics, but a providential necessity rooted in Old Testament prophecy, fulfilled in the New Testament, and confirmed by the unanimous witness of the Church Fathers. Drawing principally upon the work of Dr. Alan Fimister and Dr. Taylor Marshall, this essay will demonstrate that the Church's Roman character constitutes what Pius XII called a fifth "note" of the Church — alongside one, holy, catholic, and apostolic — and that the Messiah was prophesied to reign precisely through the institution of the Roman polity.</p>
   </div>
 

@@ -433,6 +433,50 @@
     .sidebar-overlay { display: block; }
     .coming-soon-band { flex-direction: column; gap: 1rem; }
   }
+
+  /* ─── TOPIC QUICK-JUMP NAV ─── */
+  .topic-jump-nav {
+    margin: 3.5rem auto 0;
+    max-width: 900px;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 4px;
+    background: rgba(201,168,76,0.04);
+  }
+  .topic-jump-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 1.1rem;
+  }
+  .topic-jump-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  .topic-jump-btn {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 3px;
+    padding: 0.55rem 1.1rem;
+    background: rgba(201,168,76,0.06);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .topic-jump-btn:hover {
+    background: rgba(201,168,76,0.16);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
 </style>
 </head>
 <body>
@@ -511,8 +555,19 @@
 
   </div>
 
+  <!-- ══ TOPIC QUICK-JUMP ══ -->
+  <nav class="topic-jump-nav" aria-label="Jump to topic section">
+    <p class="topic-jump-label">Jump to a Topic</p>
+    <div class="topic-jump-buttons">
+      <a href="#god-trinity-salvation" class="topic-jump-btn">God, Trinity &amp; Salvation</a>
+      <a href="#authority-church" class="topic-jump-btn">Authority &amp; the Church</a>
+      <a href="#scripture-revelation" class="topic-jump-btn">Scripture, Revelation &amp; Epistemology</a>
+      <a href="#marriage-women-history" class="topic-jump-btn">Marriage, Women &amp; LDS History</a>
+    </div>
+  </nav>
+
   <!-- ══ GOD, TRINITY & SALVATION ══ -->
-  <div class="section-intro" style="margin-top: 5rem;">
+  <div id="god-trinity-salvation" class="section-intro" style="margin-top: 5rem;">
     <div class="section-divider">
       <span class="section-divider-label">God, Trinity &amp; Salvation</span>
     </div>
@@ -566,7 +621,7 @@
   <!-- ══ AUTHORITY & THE CHURCH ══ -->
   <div class="section-intro" style="margin-top: 5rem;">
     <div class="section-divider">
-      <span class="section-divider-label">Authority &amp; the Church</span>
+      <span id="authority-church" class="section-divider-label">Authority &amp; the Church</span>
     </div>
     <p class="section-sub">Apostolic succession, patristic witness, and the question of who speaks for Christ.</p>
   </div>
@@ -618,7 +673,7 @@
   <!-- ══ SCRIPTURE, REVELATION & EPISTEMOLOGY ══ -->
   <div class="section-intro" style="margin-top: 5rem;">
     <div class="section-divider">
-      <span class="section-divider-label">Scripture, Revelation &amp; Epistemology</span>
+      <span id="scripture-revelation" class="section-divider-label">Scripture, Revelation &amp; Epistemology</span>
     </div>
     <p class="section-sub">How we know what we know &mdash; the canon, the evidence, and the logic of progressive revelation.</p>
   </div>
@@ -650,7 +705,7 @@
   <!-- ══ MARRIAGE, WOMEN & LDS HISTORY ══ -->
   <div class="section-intro" style="margin-top: 5rem;">
     <div class="section-divider">
-      <span class="section-divider-label">Marriage, Women &amp; LDS History</span>
+      <span id="marriage-women-history" class="section-divider-label">Marriage, Women &amp; LDS History</span>
     </div>
     <p class="section-sub">Polygamy, feminine dignity, and the documented record of the Latter-day Saint founding era.</p>
   </div>

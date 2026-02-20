@@ -539,6 +539,174 @@
 }
 .site-nav .nav-links a:hover { color: #E8D08A; }
 </style>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 
@@ -594,6 +762,60 @@
   <p>Perhaps no doctrine better illustrates Catholic continuity than the Church's teaching on the Real Presence of Christ in the Eucharist. From the earliest post-apostolic writings to the present Catechism, the Church has consistently maintained that the bread and wine, once consecrated, become in substance the Body and Blood of Jesus Christ. This teaching has never been reversed, softened into mere symbolism, or relegated to "past prophetic opinion."</p>
 
   <p>The chain of testimony begins in the New Testament itself. St. Paul warns the Corinthians that whoever eats the bread or drinks the cup "in an unworthy manner will be guilty of profaning the body and blood of the Lord" (1 Cor. 11:27). The Lord Himself, in the Bread of Life Discourse in John 6, insists that His flesh is "true food" and His blood "true drink" — a teaching so scandalous that many disciples abandoned Him over it (John 6:53–66).</p>
+
+<!-- INFOGRAPHIC: Rock and the Sand -->
+<div class="infographic-section">
+  <p class="infographic-title">Doctrinal Stability · Catholic vs. LDS · Comparative Chart</p>
+  <div class="infographic-box">
+    <div class="comparison-grid">
+      <div class="comp-col catholic">
+        <div class="comp-col-label">The Catholic Church — Built on Rock</div>
+        <div class="comp-row"><strong>The Eucharist</strong>Real Presence affirmed continuously from the Didache (c. 70 A.D.) through every ecumenical council. Never revised, never retracted.</div>
+        <div class="comp-row"><strong>The Trinity</strong>Defined at Nicaea (325) and Constantinople (381). Upheld without alteration through every subsequent century.</div>
+        <div class="comp-row"><strong>Marriage</strong>One man, one woman, for life — taught without exception since the Apostolic era. No council has ever reversed this.</div>
+        <div class="comp-row"><strong>Papal Authority</strong>Peter's primacy recognized from the earliest Fathers. Developed in articulation; unchanged in substance.</div>
+        <div class="comp-row"><strong>Canon of Scripture</strong>The 73-book canon formally defined at councils in the 4th–5th century and confirmed at Trent (1546). Unchanged.</div>
+      </div>
+      <div class="comp-col lds">
+        <div class="comp-col-label">The LDS Tradition — Built on Sand</div>
+        <div class="comp-row"><strong>Polygamy</strong>Commanded as celestial law in D&amp;C 132 (1843); officially abandoned in the 1890 Manifesto under federal pressure. Still binding "eternally"?</div>
+        <div class="comp-row"><strong>Nature of God</strong>Originally monotheistic in the Book of Mormon ("Eternal God"); evolved toward polytheism in the King Follett Discourse (1844) and Abraham 4–5.</div>
+        <div class="comp-row"><strong>The Adam-God Doctrine</strong>Brigham Young taught Adam was God the Father. Subsequent LDS leaders quietly abandoned this teaching with no formal repudiation.</div>
+        <div class="comp-row"><strong>Book of Abraham</strong>Presented as a literal translation of Egyptian papyri. Egyptology has demonstrated it is not — yet the text remains canonical scripture.</div>
+        <div class="comp-row"><strong>Temple Ordinances</strong>Endowment ceremony revised multiple times (1990 removal of penalties, etc.) — raising the question of which version was divinely revealed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="infographic-section">
+  <p class="infographic-title">The Vincentian Canon vs. The Living Prophet Principle</p>
+  <div class="infographic-box">
+    <div class="three-col-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="three-col-card" style="text-align:left; padding: 24px;">
+        <div class="card-title" style="font-size:11px; margin-bottom:10px;">St. Vincent of Lérins (c. A.D. 434)</div>
+        <div class="card-body" style="font-size:14px; line-height: 1.7;">
+          Authentic Christian doctrine is that which has been believed <em>"everywhere, always, and by all"</em> — <em>ubique, semper, et ab omnibus</em>. Development deepens understanding; it never contradicts what has been previously defined.
+          <br><br>
+          An acorn becomes an oak — never a different tree.
+        </div>
+      </div>
+      <div class="three-col-card" style="text-align:left; padding: 24px; border-color: rgba(197,163,85,0.5);">
+        <div class="card-title" style="font-size:11px; margin-bottom:10px; color:#A68A3E;">Elder Ezra Taft Benson (1980, BYU)</div>
+        <div class="card-body" style="font-size:14px; line-height: 1.7;">
+          "The living prophet is more important to us than a dead prophet." The current prophet's word supersedes all previous prophets — meaning any prior teaching can be revised at any time by the current office-holder.
+          <br><br>
+          There is no fixed deposit of faith — only the most recent revelation.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 16px 20px; background: rgba(107,29,42,0.05); border-left: 3px solid #6B1D2A; font-size: 14px; color: #2C1810; line-height: 1.6; font-style: italic;">
+      The practical consequence of the LDS model is this: converts in 1844 who accepted polygamy as a celestial law, the Adam-God doctrine as revealed truth, and the Book of Abraham as a literal translation, were embracing a different religion than converts in 2025. The Catholic Church does not face this problem. A convert today embraces the same Eucharist, the same Trinity, the same marriage doctrine as a convert in A.D. 200.
+    </div>
+  </div>
+</div>
+
 
   <div class="father-block">
     <div class="father-name-tag">St. Ignatius of Antioch &mdash; c. A.D. 110</div>

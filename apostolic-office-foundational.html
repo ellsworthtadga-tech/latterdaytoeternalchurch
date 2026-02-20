@@ -446,6 +446,174 @@
   }
 }
 </script>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 <nav class="site-nav">
@@ -484,6 +652,53 @@
     <h2 class="intro-heading">A Question of Office</h2>
     <p>The Latter-day Saint Church teaches that the office of Apostle is a living, continuously replenished quorum — that the Church cannot exist in its fullness without twelve men holding the title and authority of Apostle at any given moment, and that when one dies, another must be called and ordained to fill the vacancy. It is a cornerstone claim of the LDS restoration narrative: the primitive Church lost its Apostles and thus its authority, necessitating a divine re-establishment through Joseph Smith. On the surface, this might seem plausible to someone unfamiliar with the biblical text. After all, did not the early Church replace Judas Iscariot with Matthias? Does that not establish a precedent for perpetual apostolic succession in the LDS sense?</p>
     <p>A careful examination of Scripture reveals the opposite. The biblical evidence — drawn from the book of Acts, the letters of Paul, and the apocalyptic vision of Revelation — consistently presents the Twelve Apostles not as a perpetually rotating governing quorum, but as a unique, once-for-all foundational college whose historical role was irreplaceable and unrepeatable. Authority did not disappear when the Apostles died. It was deliberately transmitted — not to new Apostles, but to Bishops, the successors whom the Apostles themselves appointed. The LDS model misreads the replacement of Judas, misunderstands the silence surrounding Matthias, and ignores the theological significance of James the son of Zebedee being killed without replacement. When these three strands of evidence are drawn together alongside the witness of the early Church Fathers, the picture becomes clear: the office of Apostle was designed to be foundational, not continuous.</p>
+
+<!-- INFOGRAPHIC: Apostolic Office -->
+<div class="infographic-section">
+  <p class="infographic-title">At a Glance · Comparative Chart</p>
+  <div class="infographic-box">
+    <div class="comparison-grid">
+      <div class="comp-col catholic">
+        <div class="comp-col-label">Catholic Understanding</div>
+        <div class="comp-row"><strong>Nature of the Office</strong>Foundational &amp; unrepeatable — the Twelve laid a once-for-all foundation (Rev. 21:14)</div>
+        <div class="comp-row"><strong>Succession Vehicle</strong>Bishops — appointed by the Apostles themselves to carry authority forward</div>
+        <div class="comp-row"><strong>Judas Replacement</strong>Matthias fills the Twelfth seat before Pentecost; the college is then closed as foundation</div>
+        <div class="comp-row"><strong>James's Death (Acts 12)</strong>James killed; no replacement made — the office was not meant to rotate perpetually</div>
+        <div class="comp-row"><strong>Scriptural Image</strong>"Twelve foundations" — permanent, load-bearing, named (Rev. 21:14)</div>
+      </div>
+      <div class="comp-col lds">
+        <div class="comp-col-label">LDS Claim</div>
+        <div class="comp-row"><strong>Nature of the Office</strong>Perpetual governing quorum — must be actively filled at all times for the Church to function</div>
+        <div class="comp-row"><strong>Succession Vehicle</strong>New Apostles continuously called to replace deceased members of the Quorum of the Twelve</div>
+        <div class="comp-row"><strong>Judas Replacement</strong>Cited as proof that the office must always be replenished</div>
+        <div class="comp-row"><strong>James's Death (Acts 12)</strong>Largely unaddressed — no explanation for why James was not replaced as Judas was</div>
+        <div class="comp-row"><strong>Scriptural Image</strong>Revolving leadership quorum modeled on corporate succession</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(197,163,85,0.4);">
+      <div class="infographic-title" style="margin-bottom: 14px;">Three Decisive Biblical Moments</div>
+      <div class="three-col-grid">
+        <div class="three-col-card">
+          <span class="card-icon">⚓</span>
+          <div class="card-title">Acts 1 — Matthias</div>
+          <div class="card-body">Judas replaced before Pentecost to restore the Twelve as a symbolic totality, not to establish a precedent of rotation. The criteria required being an eyewitness of the Resurrection.</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">⚔️</span>
+          <div class="card-title">Acts 12 — James</div>
+          <div class="card-body">James the son of Zebedee is martyred. No replacement is made. The Church continues without a full Twelve. This silence demolishes the "perpetual quorum" thesis.</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">🏛️</span>
+          <div class="card-title">Rev. 21:14 — Twelve Names</div>
+          <div class="card-body">The foundations of the heavenly Jerusalem bear the twelve names permanently. Foundations do not rotate. They are laid once, and the building rises upon them forever.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 
   <!-- Part I -->

@@ -503,6 +503,174 @@
   }
 }
 </script>
+
+<style>
+/* ── Infographic Shared Styles ── */
+.infographic-section {
+  margin: 52px 0;
+  padding: 0;
+}
+.infographic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #A68A3E;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.infographic-box {
+  border: 1px solid #C5A355;
+  background: linear-gradient(160deg, #FFFDF9, #F5F0E8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  box-shadow: inset 0 0 0 1px rgba(197,163,85,0.15), 0 4px 20px rgba(44,24,16,0.08);
+  overflow-x: auto;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comp-col {
+  padding: 22px 20px;
+  border-radius: 2px;
+}
+.comp-col.catholic {
+  background: linear-gradient(160deg, rgba(107,29,42,0.06), rgba(107,29,42,0.03));
+  border: 1px solid rgba(107,29,42,0.25);
+}
+.comp-col.lds {
+  background: linear-gradient(160deg, rgba(197,163,85,0.08), rgba(197,163,85,0.03));
+  border: 1px solid rgba(197,163,85,0.35);
+}
+.comp-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid currentColor;
+}
+.comp-col.catholic .comp-col-label { color: #6B1D2A; }
+.comp-col.lds .comp-col-label { color: #A68A3E; }
+.comp-row {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  color: #4A3728;
+  margin-bottom: 2px;
+}
+.timeline-wrap {
+  position: relative;
+  padding: 0 0 0 36px;
+}
+.timeline-line {
+  position: absolute;
+  left: 14px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #C5A355, #6B1D2A);
+}
+.timeline-event {
+  position: relative;
+  margin-bottom: 22px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -29px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #C5A355;
+  border: 2px solid #6B1D2A;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  margin-bottom: 2px;
+}
+.timeline-text {
+  font-size: 14px;
+  color: #2C1810;
+  line-height: 1.5;
+}
+.key-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.key-points-list li {
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid rgba(197,163,85,0.3);
+  font-size: 14.5px;
+  color: #2C1810;
+  line-height: 1.5;
+  position: relative;
+}
+.key-points-list li:last-child { border-bottom: none; }
+.key-points-list li::before {
+  content: '✦';
+  color: #C5A355;
+  font-size: 9px;
+  position: absolute;
+  left: 4px;
+  top: 13px;
+}
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.three-col-card {
+  padding: 18px 16px;
+  border: 1px solid rgba(197,163,85,0.4);
+  background: rgba(255,253,249,0.8);
+  border-radius: 1px;
+  text-align: center;
+}
+.three-col-card .card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+.three-col-card .card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6B1D2A;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.three-col-card .card-body {
+  font-size: 13px;
+  color: #4A3728;
+  line-height: 1.5;
+}
+.divider-ornament {
+  text-align: center;
+  color: #C5A355;
+  font-size: 11px;
+  letter-spacing: 8px;
+  margin: 40px 0;
+}
+@media (max-width: 600px) {
+  .comparison-grid, .three-col-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 
@@ -546,6 +714,53 @@
   <p>The LDS doctrine is straightforward: every person who has ever lived must receive certain ordinances — baptism, confirmation, endowment, and sealing — in order to enter the celestial kingdom. Since billions of people lived and died without access to LDS ordinances, the living must perform these rites vicariously on their behalf. A living person enters the temple, is baptized by immersion in the name of a deceased person, and that person's soul — waiting in the spirit world — may then accept or reject the ordinance.</p>
 
   <p>The scriptural basis for this entire system rests on a single verse:</p>
+
+<!-- INFOGRAPHIC: Baptism for the Dead vs Communion of Saints -->
+<div class="infographic-section">
+  <p class="infographic-title">Two Ways of Caring for the Dead · Comparative Overview</p>
+  <div class="infographic-box">
+    <div class="comparison-grid">
+      <div class="comp-col lds">
+        <div class="comp-col-label">LDS Proxy Baptism</div>
+        <div class="comp-row"><strong>Biblical Basis</strong>1 Corinthians 15:29 — a single ambiguous verse Paul never endorses or repeats</div>
+        <div class="comp-row"><strong>Mechanism</strong>Living person is baptized by immersion in the deceased's name; soul in "spirit world" may accept or reject</div>
+        <div class="comp-row"><strong>Historical Attestation</strong>No record in any Christian community for 1,800 years; introduced by Joseph Smith in 1840 in Nauvoo</div>
+        <div class="comp-row"><strong>Theological Problem</strong>Implies salvation depends on an ordinance performed by the living — not on Christ's merit or the soul's own response to grace</div>
+        <div class="comp-row"><strong>Patristic Witness</strong>Zero Church Fathers interpret 1 Cor. 15:29 as a mandate for proxy baptism</div>
+      </div>
+      <div class="comp-col catholic">
+        <div class="comp-col-label">Catholic Communion of Saints</div>
+        <div class="comp-row"><strong>Biblical Basis</strong>2 Macc. 12:46; 1 Cor. 3:15; 1 Peter 3:19–20; the Lord's Prayer ("forgive us our trespasses") &amp; Matt. 12:32</div>
+        <div class="comp-row"><strong>Mechanism</strong>Prayers, Masses, indulgences, and the merits of Christ &amp; saints applied to souls in Purgatory through the Church's intercession</div>
+        <div class="comp-row"><strong>Historical Attestation</strong>Prayers for the dead attested by Tertullian (c. 200), Cyprian, Origen, Chrysostom, Augustine — continuously since the 2nd century</div>
+        <div class="comp-row"><strong>Theological Strength</strong>Preserves the sovereignty of God, the sufficiency of Christ's merits, and human freedom; Purgatory is purification, not a second chance</div>
+        <div class="comp-row"><strong>Patristic Witness</strong>Unanimous and continuous witness across East and West</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(197,163,85,0.4);">
+      <div class="infographic-title" style="margin-bottom: 14px;">The Three-Tiered Catholic Vision of the Church</div>
+      <div class="three-col-grid">
+        <div class="three-col-card">
+          <span class="card-icon">👑</span>
+          <div class="card-title">Church Triumphant</div>
+          <div class="card-body">The saints in heaven who intercede for us — the Blessed Virgin, the martyrs, and all who have entered into the beatific vision</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">🕯️</span>
+          <div class="card-title">Church Suffering</div>
+          <div class="card-body">The souls in Purgatory being purified of the temporal effects of sin, aided by the prayers, Masses, and indulgences of the living</div>
+        </div>
+        <div class="three-col-card">
+          <span class="card-icon">✝️</span>
+          <div class="card-title">Church Militant</div>
+          <div class="card-body">The faithful on earth, united with the saints above and the souls below in one Mystical Body, praying and interceding across the veil of death</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <div class="scripture-block">
     <p class="scripture-text">Otherwise, what do people mean by being baptized on behalf of the dead? If the dead are not raised at all, why are people baptized on their behalf?</p>
