@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Follow the Quote — Citation Tracer | One Faith Delivered</title>
+<meta name="description" content="An interactive citation tracer: enter a famous LDS or Catholic theological claim and follow its primary source trail, visually showing how far back — or how recently — the evidence actually goes." />
+<link rel="canonical" href="https://onefaithdelivered.org/charts/citation-tracer.html" />
+<link rel="icon" href="../favicons/favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   FOLLOW THE QUOTE — CITATION TRACER
+   Design system: matches One Faith Delivered site aesthetic
+   Special feature: animated citation depth chain
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --crimson:       #8B0000;
+  --dark-crimson:  #5C0000;
+  --gold:          #C5A55A;
+  --dark-gold:     #8B7335;
+  --parchment:     #F5F0E8;
+  --text:          #2A2A2A;
+  --muted:         #666;
+  --line-gray:     #D0C8B8;
+  --problem-blue:  #1E3A5F;
+
+  /* Depth / era colors — the heart of this tool */
+  --era-apostolic: #1A5C2A;   /* deep forest green — AD 33–100   */
+  --era-patristic: #2E5C3E;   /* green — AD 100–325              */
+  --era-nicene:    #1E3A5F;   /* navy — AD 325–600               */
+  --era-medieval:  #5A4500;   /* dark amber — 600–1500           */
+  --era-reform:    #7A3A00;   /* burnt orange — 1500–1800        */
+  --era-lds:       #4A1A6B;   /* purple — 1820–1900              */
+  --era-modern:    #8B0000;   /* crimson — 1900–present          */
+  --era-none:      #999;      /* gray — no patristic support     */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--parchment);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SITE NAV ── */
+.site-nav {
+  position: sticky; top: 0; z-index: 9999;
+  background: linear-gradient(to bottom, rgba(245,240,232,0.98), rgba(240,235,225,0.95));
+  border-bottom: 1px solid var(--line-gray);
+  padding: 0.75rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.site-nav a.nav-home {
+  font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.05em; color: var(--crimson); text-decoration: none; transition: color 0.2s;
+}
+.site-nav a.nav-home:hover { color: var(--dark-crimson); }
+.site-nav .nav-links { display: flex; gap: 2rem; list-style: none; }
+.site-nav .nav-links a {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; transition: color 0.2s;
+}
+.site-nav .nav-links a:hover { color: var(--crimson); }
+.nav-print-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dark-gold); background: none;
+  border: 1px solid rgba(139,115,53,0.35); padding: 0.4rem 1.1rem;
+  border-radius: 3px; cursor: pointer; transition: background 0.2s, color 0.2s;
+  display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+}
+.nav-print-btn:hover { background: rgba(139,115,53,0.08); color: var(--crimson); }
+
+/* ── HAMBURGER ── */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center;
+  gap: 5px; width: 36px; height: 36px; cursor: pointer;
+  background: none; border: 1px solid rgba(139,115,53,0.3);
+  border-radius: 3px; padding: 6px; z-index: 10001;
+}
+.nav-hamburger span {
+  display: block; height: 2px; background: var(--text);
+  border-radius: 2px; transition: all 0.25s; transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── SIDEBAR ── */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 10000; backdrop-filter: blur(2px);
+}
+.sidebar-overlay.visible { display: block; }
+.sidebar {
+  position: fixed; top: 0; right: -280px; width: 260px; height: 100%;
+  background: linear-gradient(to bottom, #FAF6F0, #F5F0E8);
+  border-left: 1px solid var(--line-gray);
+  z-index: 10002; transition: right 0.3s ease; overflow-y: auto;
+}
+.sidebar.open { right: 0; }
+.sidebar-inner { padding: 5rem 2rem 2rem; display: flex; flex-direction: column; gap: 0; }
+.sidebar-brand {
+  font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700;
+  color: var(--crimson); margin-bottom: 2rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line-gray);
+}
+.sidebar-inner a {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text);
+  text-decoration: none; padding: 0.85rem 0; border-bottom: 1px solid rgba(208,200,184,0.5);
+  transition: color 0.2s;
+}
+.sidebar-inner a:hover { color: var(--crimson); }
+.sidebar-inner a.sidebar-back {
+  color: var(--dark-gold); margin-top: 1.5rem;
+  border: 1px solid rgba(139,115,53,0.3); padding: 0.7rem 1rem;
+  text-align: center; border-radius: 2px;
+}
+.sidebar-ornament { color: var(--gold); font-size: 11px; letter-spacing: 8px; text-align: center; margin-top: 2rem; }
+
+/* ── READING PROGRESS BAR ── */
+#reading-progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(to right, #8B0000, #C5A55A);
+  z-index: 99999; transition: width 0.12s linear;
+  pointer-events: none; border-radius: 0 2px 2px 0;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: linear-gradient(135deg, #4A0F1A 0%, #6B1D2A 40%, #3D1520 100%);
+  color: #F5F0E8; padding: 72px 40px 56px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+    rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+  pointer-events: none;
+}
+.ornament {
+  display: block; color: var(--gold); font-size: 1rem;
+  letter-spacing: 12px; margin-bottom: 1.2rem; opacity: 0.7; position: relative; z-index: 1;
+}
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8em, 4vw, 3em); font-weight: 900;
+  letter-spacing: -0.5px; color: #F5F0E8; margin-bottom: 14px;
+  line-height: 1.2; position: relative; z-index: 1;
+}
+.page-header h1 span { color: var(--gold); }
+.page-header .subtitle {
+  font-family: 'Source Serif 4', serif; font-size: 1.1em;
+  font-weight: 300; font-style: italic;
+  color: rgba(245,240,232,0.75); max-width: 680px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.page-header .meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68em;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(197,165,90,0.65); margin-top: 1.4rem; position: relative; z-index: 1;
+}
+
+/* ══════════════════════════════════════════════════
+   MAIN LAYOUT — two-column: browse panel + tracer
+   ══════════════════════════════════════════════════ */
+.tool-layout {
+  max-width: 1200px; margin: 0 auto;
+  padding: 40px 24px 88px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── LEFT PANEL: Browse & Search ── */
+.browse-panel {
+  position: sticky; top: 72px;
+}
+
+.search-box {
+  background: #fff; border: 1px solid var(--line-gray);
+  border-radius: 4px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+.search-box-header {
+  background: linear-gradient(135deg, #4A0F1A, #6B1D2A);
+  padding: 14px 18px;
+}
+.search-box-header-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 6px;
+}
+.search-box-header p {
+  font-family: 'Source Serif 4', serif; font-size: 0.82em;
+  font-style: italic; color: rgba(245,240,232,0.7); line-height: 1.5;
+}
+.search-inner { padding: 14px; }
+.search-field-wrap { position: relative; margin-bottom: 12px; }
+.search-field-wrap svg {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 14px; stroke: var(--muted); pointer-events: none;
+}
+#claim-search {
+  width: 100%; padding: 9px 12px 9px 34px;
+  font-family: 'Source Serif 4', serif; font-size: 0.88rem; font-style: italic;
+  background: var(--parchment); border: 1px solid var(--line-gray); border-radius: 3px;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+}
+#claim-search:focus { border-color: var(--gold); background: #fff; }
+#claim-search::placeholder { color: var(--muted); }
+
+/* Category filter pills */
+.cat-filters {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+}
+.cat-pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58em;
+  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; cursor: pointer;
+  border: 1px solid; transition: all 0.18s; background: transparent;
+}
+.cat-pill[data-cat="all"]       { border-color: #888; color: #888; }
+.cat-pill[data-cat="god"]       { border-color: #8B0000; color: #8B0000; }
+.cat-pill[data-cat="church"]    { border-color: #1E3A5F; color: #1E3A5F; }
+.cat-pill[data-cat="eucharist"] { border-color: #6B3A2A; color: #6B3A2A; }
+.cat-pill[data-cat="marriage"]  { border-color: #7A2040; color: #7A2040; }
+.cat-pill[data-cat="scripture"] { border-color: #5A4500; color: #5A4500; }
+.cat-pill[data-cat="history"]   { border-color: #4A1A6B; color: #4A1A6B; }
+.cat-pill[data-cat="salvation"] { border-color: #2E5C3E; color: #2E5C3E; }
+.cat-pill.active { color: #fff !important; }
+.cat-pill.active[data-cat="all"]       { background: #888; }
+.cat-pill.active[data-cat="god"]       { background: #8B0000; }
+.cat-pill.active[data-cat="church"]    { background: #1E3A5F; }
+.cat-pill.active[data-cat="eucharist"] { background: #6B3A2A; }
+.cat-pill.active[data-cat="marriage"]  { background: #7A2040; }
+.cat-pill.active[data-cat="scripture"] { background: #5A4500; }
+.cat-pill.active[data-cat="history"]   { background: #4A1A6B; }
+.cat-pill.active[data-cat="salvation"] { background: #2E5C3E; }
+
+/* Claim list */
+.claim-list {
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  max-height: calc(100vh - 280px); overflow-y: auto;
+}
+.claim-list-item {
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(208,200,184,0.5);
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.claim-list-item:last-child { border-bottom: none; }
+.claim-list-item:hover { background: rgba(197,165,90,0.06); }
+.claim-list-item.active { background: rgba(139,0,0,0.04); border-left: 3px solid var(--crimson); }
+.claim-list-depth {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+.claim-list-text {
+  flex: 1;
+}
+.claim-list-title {
+  font-family: 'Playfair Display', serif; font-size: 0.85em; font-weight: 700;
+  color: var(--crimson); line-height: 1.3; margin-bottom: 2px;
+}
+.claim-list-meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58em; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.claim-list-item.hidden { display: none; }
+
+/* ── RIGHT PANEL: Tracer Output ── */
+.tracer-panel { min-height: 500px; }
+
+/* Welcome / empty state */
+.tracer-welcome {
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  padding: 48px 40px; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.tracer-welcome .welcome-ornament {
+  font-size: 2.5rem; color: var(--gold); opacity: 0.5; margin-bottom: 20px;
+}
+.tracer-welcome h2 {
+  font-family: 'Playfair Display', serif; font-size: 1.4em; font-weight: 700;
+  color: var(--crimson); margin-bottom: 12px;
+}
+.tracer-welcome p {
+  font-size: 0.95em; font-style: italic; color: var(--muted);
+  max-width: 420px; margin: 0 auto; line-height: 1.8;
+}
+
+/* Active tracer card */
+.tracer-card { display: none; }
+.tracer-card.visible { display: block; }
+
+/* Claim header */
+.claim-header {
+  background: #fff; border: 1px solid var(--line-gray);
+  border-radius: 4px; padding: 24px 28px; margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.claim-header-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.claim-tradition-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62em; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px;
+  border-radius: 2px; color: #fff; flex-shrink: 0;
+}
+.badge-catholic  { background: var(--crimson); }
+.badge-lds       { background: #4A1A6B; }
+.badge-both      { background: #1E3A5F; }
+
+.claim-title {
+  font-family: 'Playfair Display', serif; font-size: 1.5em; font-weight: 900;
+  color: var(--crimson); line-height: 1.25; flex: 1;
+}
+.claim-quote-block {
+  background: var(--parchment); border-left: 4px solid var(--gold);
+  padding: 16px 20px; margin: 14px 0;
+  border-radius: 0 4px 4px 0;
+}
+.claim-quote-block blockquote {
+  font-family: 'Playfair Display', serif; font-size: 1.05em;
+  font-style: italic; color: #3A1A1A; line-height: 1.7;
+}
+.claim-quote-block .quote-attr {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark-gold);
+  margin-top: 10px; display: block;
+}
+.claim-summary {
+  font-size: 0.95em; line-height: 1.85; color: var(--text);
+}
+.claim-summary strong { color: var(--crimson); font-weight: 600; }
+
+/* ── DEPTH METER ── */
+.depth-section {
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  margin-bottom: 24px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.depth-section-header {
+  background: linear-gradient(to right, #FAF6F0, #F5F0E8);
+  padding: 14px 24px; border-bottom: 1px solid var(--line-gray);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.depth-section-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--dark-gold);
+}
+.depth-verdict {
+  font-family: 'Playfair Display', serif; font-size: 0.88em; font-weight: 700;
+  font-style: italic; padding: 4px 14px; border-radius: 20px; color: #fff;
+}
+
+/* The meter bar */
+.depth-meter-wrap { padding: 20px 24px 10px; }
+.depth-axis {
+  display: flex; justify-content: space-between; margin-bottom: 8px;
+}
+.depth-axis-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.55em; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.depth-bar-track {
+  height: 20px; background: #F0EBE0; border-radius: 3px; position: relative;
+  overflow: hidden; margin-bottom: 6px;
+  border: 1px solid var(--line-gray);
+}
+.depth-bar-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+.depth-bar-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0) 60%, rgba(255,255,255,0.2));
+}
+.depth-ticks {
+  position: relative; height: 12px;
+}
+.depth-tick {
+  position: absolute; transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.5em; font-weight: 600;
+  color: var(--muted); text-align: center; white-space: nowrap;
+}
+.depth-tick::before {
+  content: ''; display: block; width: 1px; height: 5px;
+  background: var(--line-gray); margin: 0 auto 2px;
+}
+/* Era legend below bar */
+.era-legend {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  padding: 12px 24px 18px;
+  border-top: 1px solid rgba(208,200,184,0.5);
+}
+.era-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.57em;
+  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+}
+.era-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── CITATION CHAIN ── */
+.chain-section {
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+}
+.chain-section-header {
+  background: linear-gradient(to right, #FAF6F0, #F5F0E8);
+  padding: 14px 24px; border-bottom: 1px solid var(--line-gray);
+  display: flex; align-items: center; gap: 12px;
+}
+.chain-section-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--dark-gold);
+}
+.chain-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62em; font-weight: 600;
+  letter-spacing: 0.08em; color: var(--muted);
+  margin-left: auto;
+}
+.chain-body { padding: 24px 28px; }
+
+/* Individual citation node */
+.citation-node {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0 20px;
+  position: relative;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.citation-node.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Year column */
+.node-year-col {
+  display: flex; flex-direction: column; align-items: center;
+}
+.node-year {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7em; font-weight: 600;
+  letter-spacing: 0.05em; text-align: center; white-space: nowrap;
+  padding: 5px 6px; border-radius: 3px; color: #fff;
+  width: 100%;
+  line-height: 1.2;
+}
+.node-spine {
+  flex: 1; width: 2px; margin: 6px auto;
+  min-height: 24px;
+}
+.citation-node:last-child .node-spine { display: none; }
+
+/* Content column */
+.node-content {
+  padding-bottom: 28px;
+}
+.citation-node:last-child .node-content { padding-bottom: 0; }
+
+.node-source-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6em; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+  padding: 2px 8px; border-radius: 2px; display: inline-block; margin-bottom: 6px;
+}
+.node-title {
+  font-family: 'Playfair Display', serif; font-size: 1.05em; font-weight: 700;
+  color: var(--crimson); margin-bottom: 6px; line-height: 1.3;
+}
+.node-quote {
+  font-style: italic; color: #3A1A1A;
+  background: rgba(197,165,90,0.07); border-left: 3px solid var(--gold);
+  padding: 10px 14px; margin: 8px 0 10px;
+  font-size: 0.92em; line-height: 1.7; border-radius: 0 3px 3px 0;
+}
+.node-commentary {
+  font-size: 0.88em; line-height: 1.8; color: var(--text);
+}
+.node-commentary strong { color: var(--crimson); font-weight: 600; }
+.node-significance {
+  display: inline-block; margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6em; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 2px; border: 1px solid;
+}
+.sig-primary   { color: var(--era-apostolic); border-color: var(--era-apostolic); }
+.sig-confirms  { color: var(--era-patristic); border-color: var(--era-patristic); }
+.sig-defines   { color: var(--era-nicene);    border-color: var(--era-nicene); }
+.sig-develops  { color: var(--era-medieval);  border-color: var(--era-medieval); }
+.sig-invents   { color: var(--era-lds);       border-color: var(--era-lds); }
+.sig-disavows  { color: var(--era-modern);    border-color: var(--era-modern); }
+.sig-absent    { color: var(--era-none);      border-color: var(--era-none); }
+
+/* connector line between nodes */
+.node-connector {
+  position: absolute; left: 35px; top: 0; bottom: 0; width: 2px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── VERDICT BOX ── */
+.verdict-box {
+  background: linear-gradient(135deg, #4A0F1A, #6B1D2A);
+  color: #F5F0E8; border-radius: 6px; padding: 32px 36px;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.verdict-box::before {
+  content: ''; position: absolute; inset: 8px;
+  border: 1px solid rgba(197,165,90,0.25); border-radius: 4px; pointer-events: none;
+}
+.verdict-box-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 12px; display: block; position: relative; z-index: 1;
+}
+.verdict-box-text {
+  font-size: 0.95em; line-height: 1.9;
+  color: rgba(245,240,232,0.9); position: relative; z-index: 1;
+}
+.verdict-box-text + .verdict-box-text { margin-top: 10px; }
+.verdict-box-link {
+  display: inline-block; margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  border-bottom: 1px solid rgba(197,165,90,0.4); padding-bottom: 1px;
+  position: relative; z-index: 1; transition: border-color 0.2s;
+}
+.verdict-box-link:hover { border-color: var(--gold); }
+
+/* ── FOOTER ── */
+footer {
+  background: #fff; text-align: center; padding: 28px 20px;
+  border-top: 1px solid var(--line-gray);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68em; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+}
+.print-colophon { display: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .tool-layout { grid-template-columns: 1fr; }
+  .browse-panel { position: static; }
+  .claim-list { max-height: 320px; }
+}
+@media (max-width: 700px) {
+  .nav-hamburger { display: flex; margin-left: auto; order: 99; flex-shrink: 0; }
+  .site-nav .nav-links { display: none; }
+  .nav-print-btn { display: none; }
+  .site-nav { padding: 0.55rem 1rem; }
+  .sidebar { display: block; transform: translateX(100%); right: 0; position: fixed; }
+  .sidebar.open { transform: translateX(0); }
+  .page-header { padding: 48px 20px 36px; }
+  .tool-layout { padding: 24px 14px 60px; }
+  .citation-node { grid-template-columns: 56px 1fr; }
+  .chain-body { padding: 18px; }
+  .claim-header { padding: 18px 20px; }
+}
+@media print {
+  #reading-progress-bar, .site-nav, .sidebar-overlay, .sidebar,
+  .nav-print-btn, .browse-panel, footer { display: none !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 10pt; }
+  .tool-layout { grid-template-columns: 1fr !important; padding: 0 !important; }
+  .page-header {
+    background: none !important; color: #000 !important;
+    border-bottom: 2pt solid #8B0000; padding: 0.4cm 0 0.5cm !important;
+  }
+  .page-header h1, .page-header h1 span { color: #8B0000 !important; }
+  .citation-node { opacity: 1 !important; transform: none !important; page-break-inside: avoid; }
+  .print-colophon {
+    display: block !important; margin-top: 2cm; padding-top: 0.5cm;
+    border-top: 1pt solid #ccc; font-family: monospace; font-size: 8pt; color: #666; text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="reading-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <a href="../index.html" class="nav-home">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../articles.html">Articles</a></li>
+    <li><a href="../charts.html">Charts</a></li>
+    <li><a href="../topics.html">Topics</a></li>
+    <li><a href="../resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-print-btn" onclick="window.print()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </svg>
+    Print
+  </button>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
+  <h1>"Follow the <span>Quote"</span></h1>
+  <p class="subtitle">Select any famous LDS or Catholic claim and trace its primary source trail — visually seeing how far back into history the evidence actually goes.</p>
+  <p class="meta">Interactive Citation Tracer &nbsp;·&nbsp; Primary Sources &nbsp;·&nbsp; Historical Evidence</p>
+</header>
+
+<!-- ── TOOL LAYOUT ── -->
+<div class="tool-layout">
+
+  <!-- ══ LEFT: BROWSE PANEL ══ -->
+  <aside class="browse-panel">
+    <div class="search-box">
+      <div class="search-box-header">
+        <span class="search-box-header-label">Choose a Claim</span>
+        <p>Select any claim to trace its source trail from today back through history.</p>
+      </div>
+      <div class="search-inner">
+        <div class="search-field-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="claim-search" placeholder="Search claims…" autocomplete="off">
+        </div>
+        <div class="cat-filters" id="cat-filters">
+          <button class="cat-pill active" data-cat="all">All</button>
+          <button class="cat-pill" data-cat="god">God</button>
+          <button class="cat-pill" data-cat="church">Church</button>
+          <button class="cat-pill" data-cat="eucharist">Eucharist</button>
+          <button class="cat-pill" data-cat="marriage">Marriage</button>
+          <button class="cat-pill" data-cat="scripture">Scripture</button>
+          <button class="cat-pill" data-cat="history">History</button>
+          <button class="cat-pill" data-cat="salvation">Salvation</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-list" id="claim-list">
+      <!-- Populated by JS -->
+    </div>
+  </aside>
+
+  <!-- ══ RIGHT: TRACER PANEL ══ -->
+  <div class="tracer-panel" id="tracer-panel">
+    <div class="tracer-welcome" id="tracer-welcome">
+      <div class="welcome-ornament">✦</div>
+      <h2>Select a claim to begin</h2>
+      <p>Choose any theological claim from the left panel to trace its primary source trail — following the evidence from today's assertion back through the centuries, or revealing when a claim first appears.</p>
+    </div>
+
+    <div class="tracer-card" id="tracer-card">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+</div><!-- end tool-layout -->
+
+<div class="print-colophon">One Faith Delivered &nbsp;&middot;&nbsp; <span id="print-url-text">onefaithdelivered.org</span></div>
+
+<footer>&copy; 2026 One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="../index.html">Home</a>
+    <a href="../articles.html">Articles</a>
+    <a href="../charts.html">Charts</a>
+    <a href="../topics.html">Topics</a>
+    <a href="../resources.html">Resources</a>
+    <a href="../charts.html" class="sidebar-back">&#8592; All Charts</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CITATION DATABASE
+   Each claim has:
+   - id, title, category, tradition
+   - claim: the assertion being traced
+   - claimant: who says it / where it appears
+   - summary: brief framing paragraph
+   - depthYear: earliest supporting source year (for meter)
+   - depthLabel: human-readable depth verdict
+   - depthColor: CSS var for the bar
+   - depthPct: 0–100 bar fill (100 = apostolic, 0 = modern-only)
+   - verdictText: the apologetic payoff paragraph
+   - articleLink, articleLabel: optional related article
+   - citations[]: the chain nodes, oldest first
+     Each node: { year, yearLabel, era, sourceTag, title, quote, commentary, significance }
+   ═══════════════════════════════════════════════════════════ */
+
+var CLAIMS = [
+
+  /* ═══ EUCHARIST ═══ */
+  {
+    id: 'real-presence',
+    title: 'The Real Presence of Christ in the Eucharist',
+    category: 'eucharist',
+    tradition: 'catholic',
+    claim: '"This is My Body… This is My Blood" — the bread and wine become the true Body and Blood of Christ.',
+    claimant: 'Jesus Christ at the Last Supper; Roman Catholic dogma',
+    summary: 'The Catholic Church teaches that in the Eucharist the substance of bread and wine is wholly changed into the Body and Blood of Christ — a doctrine often attacked as a medieval invention. <strong>The source trail tells a dramatically different story.</strong>',
+    depthYear: 33,
+    depthLabel: 'Apostolic — AD 33',
+    depthColor: '#1A5C2A',
+    depthPct: 100,
+    verdictText: 'The Real Presence is among the most extensively attested doctrines in early Christianity. The claim that it was invented at the Fourth Lateran Council (1215) collapses under the weight of sources predating that council by over a millennium. Ignatius, Justin, Irenaeus, Cyril — all writing before any medieval synthesis — treat the Eucharistic transformation as received apostolic teaching, not theological novelty.',
+    articleLink: '../articles/holy-eucharist-real-presence.html',
+    articleLabel: 'Read: The Holy Eucharist — Real Presence →',
+    citations: [
+      {
+        year: 33, yearLabel: 'c. AD 33', era: 'apostolic',
+        sourceTag: 'Scripture',
+        title: 'Institution of the Eucharist — Matthew 26:26–28',
+        quote: '"Take, eat; this is my body… Drink from it, all of you, for this is my blood of the covenant."',
+        commentary: 'Christ\'s words at the Last Supper are the irreducible foundation. The verb <em>estin</em> ("is") in Greek is straightforwardly predicative — the bread is His body, not merely represents it. The early Church read these words literally, which is why Paul warns that eating "unworthily" is eating the Body of the Lord to one\'s judgment (1 Cor 11:27–29).',
+        significance: 'sig-primary', sigLabel: 'Primary Source'
+      },
+      {
+        year: 80, yearLabel: 'c. AD 80', era: 'apostolic',
+        sourceTag: 'Didache',
+        title: 'Didache 9–10 — Eucharist as the "broken bread"',
+        quote: '"Let no one eat or drink of your Eucharist but those who have been baptized into the name of the Lord."',
+        commentary: 'The Didache — one of the earliest Christian documents outside the New Testament — treats the Eucharist as a sacred reality restricted to the baptized. The language of guarding it from the uninitiated reflects a theology of objective presence, not mere memorial.',
+        significance: 'sig-primary', sigLabel: 'Apostolic Witness'
+      },
+      {
+        year: 107, yearLabel: 'c. AD 107', era: 'patristic',
+        sourceTag: 'Ignatius of Antioch',
+        title: 'To the Smyrnaeans — The Eucharist is "the Flesh of Christ"',
+        quote: '"They abstain from the Eucharist and from prayer, because they confess not the Eucharist to be the Flesh of our Savior Jesus Christ."',
+        commentary: 'Ignatius — disciple of John, martyred c. AD 107 — condemns Docetists precisely because their denial of Christ\'s real flesh led them to reject the Eucharist as His real flesh. His logic only holds if the Eucharist is genuinely Christ\'s body. This is the first explicit written attestation of the Real Presence outside Scripture.',
+        significance: 'sig-primary', sigLabel: 'Primary Patristic'
+      },
+      {
+        year: 155, yearLabel: 'c. AD 155', era: 'patristic',
+        sourceTag: 'Justin Martyr',
+        title: 'First Apology 66 — "Not common bread"',
+        quote: '"The food which is blessed by the prayer of His word… is the Flesh and Blood of that Jesus who was made flesh — we have been taught this."',
+        commentary: 'Justin, writing to the pagan Emperor Antoninus Pius, explains Christian worship to outsiders. His language is precise: the Eucharistic food is "not common bread" — it is the actual flesh and blood of the Incarnate Christ. He says this is what "we have been taught," appealing to received apostolic tradition.',
+        significance: 'sig-confirms', sigLabel: 'Confirms Apostolic'
+      },
+      {
+        year: 185, yearLabel: 'c. AD 185', era: 'patristic',
+        sourceTag: 'Irenaeus of Lyon',
+        title: 'Against Heresies IV.18 — The Eucharist as sacrifice of first-fruits',
+        quote: '"The bread over which thanks have been given is the Body of their Lord, and the cup is His Blood."',
+        commentary: 'Irenaeus uses the Real Presence as a theological argument against Gnosticism: if the Eucharistic bread is truly the Body of Christ, then Christ\'s body must be genuinely material — refuting Docetic claims that His flesh was illusory. The Real Presence is deployed as a given, not argued for.',
+        significance: 'sig-confirms', sigLabel: 'Confirms & Develops'
+      },
+      {
+        year: 350, yearLabel: 'c. AD 350', era: 'nicene',
+        sourceTag: 'Cyril of Jerusalem',
+        title: 'Mystagogical Catecheses IV — "Doubt not… it is His Body"',
+        quote: '"Since He Himself declared and said of the Bread, \'This is My Body\', who shall dare to doubt any longer?"',
+        commentary: 'Cyril instructs the newly baptized in the meaning of the sacraments they have received. He treats the Real Presence not as a subtle theological position requiring defense but as the plain meaning of Christ\'s words, now experienced in the Eucharist they have received. His catecheses show the Real Presence as standard liturgical catechesis by the mid-fourth century.',
+        significance: 'sig-defines', sigLabel: 'Defines for Catechumens'
+      },
+      {
+        year: 1215, yearLabel: 'AD 1215', era: 'medieval',
+        sourceTag: 'Fourth Lateran Council',
+        title: 'Formal Definition of "Transubstantiation"',
+        quote: '"His body and blood are truly contained in the sacrament of the altar under the forms of bread and wine, the bread being transubstantiated into the body."',
+        commentary: 'The Fourth Lateran Council gives the philosophical term <em>transubstantiation</em> its formal dogmatic definition — but it is defining language for a reality already universally attested, not inventing a new doctrine. The substance of the teaching is the same as Ignatius in AD 107; only the Aristotelian vocabulary is new. This is authentic doctrinal development, not invention.',
+        significance: 'sig-defines', sigLabel: 'Defines Formally'
+      }
+    ]
+  },
+
+  /* ═══ GOD ═══ */
+  {
+    id: 'god-was-man',
+    title: '"As man now is, God once was"',
+    category: 'god',
+    tradition: 'lds',
+    claim: 'God the Father was once a mortal man who progressed through obedience to become God.',
+    claimant: 'Lorenzo Snow (LDS Prophet); Joseph Smith, King Follett Discourse (1844)',
+    summary: 'The Lorenzo Snow couplet — "As man now is, God once was; as God now is, man may become" — encapsulates a theology radically unlike anything in classical Christianity. <strong>The question is: when does this teaching first appear?</strong>',
+    depthYear: 1840,
+    depthLabel: 'Modern — AD 1840',
+    depthColor: '#4A1A6B',
+    depthPct: 4,
+    verdictText: 'The teaching that God the Father was once a mortal man who progressed to divinity has no precedent in any Christian tradition before 1840. Every ante-Nicene, Nicene, and medieval source affirms divine immutability — that God is eternally and unchangeably what He is, incapable of growth, development, or mortal experience. More significantly, the Book of Mormon itself contradicts this doctrine, declaring God "unchangeable from all eternity to all eternity" (Moroni 8:18).',
+    articleLink: '../articles/a-house-divided-against-itself.html',
+    articleLabel: 'Read: A House Divided Against Itself →',
+    citations: [
+      {
+        year: 107, yearLabel: 'c. AD 107', era: 'patristic',
+        sourceTag: 'Ignatius of Antioch',
+        title: 'To the Polycarp — God is "eternal, invisible, impalpable"',
+        quote: '"There is one God who manifested Himself through Jesus Christ His Son — who is His Word that proceeded from silence."',
+        commentary: 'Ignatius — writing within the apostolic generation — describes God in terms entirely incompatible with the Lorenzo Snow couplet: eternal, invisible, impalpable. A God who was once a mortal man is by definition not eternal, not invisible, and not impalpable. The ante-Nicene evidence <strong>uniformly contradicts</strong> the LDS doctrine of God\'s mortal origin.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 225, yearLabel: 'c. AD 225', era: 'patristic',
+        sourceTag: 'Origen of Alexandria',
+        title: 'De Principiis I.1 — "God admits no change of any kind"',
+        quote: '"The nature of God… admits no change of any kind… He is the same yesterday, today, and forever."',
+        commentary: 'Origen — the most prolific early Christian scholar — makes divine immutability a foundation of theological reasoning. A God who progresses through mortality to divinity is a God who was once not omniscient, not omnipotent, not perfectly good. Origen explicitly forecloses this possibility as incompatible with the biblical witness.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 325, yearLabel: 'AD 325', era: 'nicene',
+        sourceTag: 'Council of Nicaea',
+        title: 'Nicene Creed — God is "Light from Light, True God from True God"',
+        quote: '"I believe in one God, the Father Almighty, maker of heaven and earth, of all things visible and invisible."',
+        commentary: 'The Nicene Creed defines the Father as the uncreated, eternal source of all things. A being who was once mortal — who existed before his deification as a creature subject to time — cannot be the uncreated maker of all things. The Nicene definition is structurally incompatible with LDS theology of God\'s progression.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 1830, yearLabel: 'AD 1830', era: 'lds',
+        sourceTag: 'Book of Mormon',
+        title: 'Moroni 8:18 — "Unchangeable from all eternity to all eternity"',
+        quote: '"God is not a partial God, neither a changeable being; but he is unchangeable from all eternity to all eternity."',
+        commentary: 'Even the Book of Mormon — produced by Joseph Smith himself — contradicts the later doctrine. A being who was once a mortal man is by definition a "changeable being." The Book of Mormon\'s monotheism is closer to classical Christian theism than to the theology Joseph Smith would articulate fourteen years later in the King Follett Discourse.',
+        significance: 'sig-absent', sigLabel: 'Internal Contradiction'
+      },
+      {
+        year: 1840, yearLabel: 'AD 1840', era: 'lds',
+        sourceTag: 'Lorenzo Snow',
+        title: 'Snow Couplet — First Articulation',
+        quote: '"As man now is, God once was; as God now is, man may become."',
+        commentary: 'This is the <strong>first appearance</strong> of the doctrine in LDS history — fourteen years after the founding of the Church, twenty-four years after Joseph Smith\'s claimed First Vision, and a decade after the Book of Mormon was published. It has no antecedent in any Christian tradition. Its novelty is total.',
+        significance: 'sig-invents', sigLabel: 'First Appearance'
+      },
+      {
+        year: 1844, yearLabel: 'AD 1844', era: 'lds',
+        sourceTag: 'Joseph Smith',
+        title: 'King Follett Discourse — God\'s Mortal Origin Declared Publicly',
+        quote: '"God himself was once as we are now, and is an exalted man, and sits enthroned in yonder heavens."',
+        commentary: 'Joseph Smith publicly teaches for the first time that God the Father was once a mortal man on another world. This represents the most radical theological departure in LDS history — a complete break from the monotheistic God of the Old Testament, the New Testament, and the Book of Mormon.',
+        significance: 'sig-invents', sigLabel: 'Publicly Taught'
+      }
+    ]
+  },
+
+  /* ═══ CHURCH ═══ */
+  {
+    id: 'apostolic-succession',
+    title: 'Apostolic Succession — Unbroken from Peter',
+    category: 'church',
+    tradition: 'catholic',
+    claim: 'The Catholic Church can trace an unbroken chain of episcopal succession from Peter and the Apostles to the present Pope and bishops.',
+    claimant: 'Catholic Church; Irenaeus of Lyon (c. AD 180)',
+    summary: 'Catholic apologetics rests heavily on the claim of apostolic succession — that authority was transmitted through an unbroken historical chain, not lost and restored. <strong>The primary sources supporting this claim are among the earliest in Christian history.</strong>',
+    depthYear: 95,
+    depthLabel: 'Apostolic — AD 95',
+    depthColor: '#1A5C2A',
+    depthPct: 98,
+    verdictText: 'No other Christian teaching is as abundantly documented in the earliest sources as the principle of apostolic succession. Clement of Rome, Ignatius of Antioch, Irenaeus of Lyon — all writing within a century of the Apostles — affirm it as the mechanism by which authentic Christian teaching is preserved and transmitted. The LDS counter-claim — that succession was entirely lost — must grapple with a historical record that shows no awareness of any such rupture.',
+    articleLink: '../articles/ante-nicene-fathers.html',
+    articleLabel: 'Read: The Ante-Nicene Fathers →',
+    citations: [
+      {
+        year: 95, yearLabel: 'c. AD 95', era: 'apostolic',
+        sourceTag: 'Clement of Rome',
+        title: '1 Clement 44 — Bishops appointed by the Apostles',
+        quote: '"Our Apostles knew through our Lord Jesus Christ that there would be strife for the title of bishop. For this cause… they appointed the aforesaid persons, and afterwards added the codicil that if they should fall asleep, other approved men should succeed to their ministry."',
+        commentary: 'Clement — third successor of Peter at Rome — writing within living memory of the Apostles, explicitly describes the Apostles planning for ordained succession. This is not merely the development of an institution — it is the deliberate apostolic provision for the continuation of the Church\'s governing ministry. Written c. AD 95, within a generation of Peter and Paul\'s deaths.',
+        significance: 'sig-primary', sigLabel: 'Primary Source'
+      },
+      {
+        year: 107, yearLabel: 'c. AD 107', era: 'patristic',
+        sourceTag: 'Ignatius of Antioch',
+        title: 'To the Trallians — The Bishop as center of the Church',
+        quote: '"Do nothing without the bishop… For where the bishop is present, there let the congregation gather."',
+        commentary: 'Ignatius — a disciple of the Apostle John, martyred under Trajan — writes to churches across Asia Minor insisting on the centrality of the bishop as the living symbol of apostolic authority. His repeated insistence on the bishop as the anchor of the Church reflects a fully developed succession theology within the apostolic generation.',
+        significance: 'sig-confirms', sigLabel: 'Confirms & Develops'
+      },
+      {
+        year: 180, yearLabel: 'c. AD 180', era: 'patristic',
+        sourceTag: 'Irenaeus of Lyon',
+        title: 'Against Heresies III.3 — The Roman episcopal list',
+        quote: '"Linus… Anacletus… Clement… Evaristus… Alexander… Sixtus… Telesphorus… Hyginus… Pius… Anicetus… Soter… Eleutherus — in him the tradition from the Apostles has been preserved."',
+        commentary: 'Irenaeus provides the full unbroken list of Roman bishops from Peter to his own day — the most powerful historical argument for apostolic succession ever made. He offers this list as a <em>verifiable</em> test of authentic tradition: anyone claiming to teach apostolic truth must show this kind of traceable connection. The LDS Great Apostasy theory requires this documented chain to have secretly collapsed — but Irenaeus, writing from the inside, sees no rupture.',
+        significance: 'sig-defines', sigLabel: 'Defines the Argument'
+      },
+      {
+        year: 200, yearLabel: 'c. AD 200', era: 'patristic',
+        sourceTag: 'Tertullian',
+        title: 'Prescription Against Heretics 32 — "Show your succession"',
+        quote: '"Let them produce the original records of their churches; let them unfold the roll of their bishops… so running down from the beginning in such a manner that their first bishop shall be able to show for his ordainer and predecessor some one of the Apostles."',
+        commentary: 'Tertullian makes apostolic succession the decisive criterion for distinguishing authentic Christianity from heresy. His challenge to heretics — "show your succession" — is the very argument applied to LDS claims eighteen centuries later. By Tertullian\'s standard, a church that cannot trace its episcopal line to an Apostle has no standing to claim apostolic authority.',
+        significance: 'sig-confirms', sigLabel: 'Formalizes Criterion'
+      },
+      {
+        year: 1869, yearLabel: 'AD 1869–70', era: 'modern',
+        sourceTag: 'Vatican I',
+        title: 'Pastor Aeternus — Papal succession formally defined',
+        quote: '"The Roman Pontiff… is the successor of Blessed Peter, Prince of the Apostles, true Vicar of Christ, head of the whole Church."',
+        commentary: 'Vatican I gives dogmatic definition to the nature of Petrine succession and papal primacy — the apex of a theological development that began in AD 95. The definition is not an invention but the formal articulation of what the Church has practiced and understood since Clement wrote to the Corinthians.',
+        significance: 'sig-defines', sigLabel: 'Formally Defined'
+      }
+    ]
+  },
+
+  /* ═══ HISTORY ═══ */
+  {
+    id: 'great-apostasy',
+    title: 'The Great Apostasy — All Churches Fell Away',
+    category: 'history',
+    tradition: 'lds',
+    claim: 'The Church Christ founded fell into total apostasy shortly after the death of the Apostles, losing all valid authority and doctrine until Joseph Smith\'s restoration in 1820.',
+    claimant: 'LDS Church; Joseph Smith — History 1:19; D&C 1:30',
+    summary: 'The Great Apostasy is the foundational premise of the entire LDS claim to authority. Without it, the Restoration has no rationale. <strong>The question is whether the historical record supports a total collapse of the Church within the apostolic generation.</strong>',
+    depthYear: 1820,
+    depthLabel: 'Modern — AD 1820',
+    depthColor: '#4A1A6B',
+    depthPct: 3,
+    verdictText: 'The Great Apostasy theory faces a fundamental problem: the very sources it would need to be true are the sources that contradict it. The Ante-Nicene Fathers — writing between AD 95 and AD 325, precisely during the period when the alleged apostasy occurred — show no awareness of any catastrophic rupture. They describe a Church in continuity with the Apostles, preserving their teaching through documented episcopal succession, celebrating recognizably Catholic sacraments, and governed by recognizably Catholic structures. The silence of history on the alleged apostasy is deafening.',
+    articleLink: '../articles/ante-nicene-fathers.html',
+    articleLabel: 'Read: The Ante-Nicene Fathers →',
+    citations: [
+      {
+        year: 107, yearLabel: 'c. AD 107', era: 'patristic',
+        sourceTag: 'Ignatius of Antioch',
+        title: 'Seven Letters — A Church in confident continuity',
+        quote: '"Where the bishop is present, there let the congregation gather, just as where Jesus Christ is, there is the Catholic Church."',
+        commentary: 'Ignatius writes seven letters to churches across the Roman world from his transport to martyrdom — c. AD 107, within a decade of the last Apostle\'s death. His letters show a Church with clear episcopal structure, sacramental theology, and universal self-understanding. There is no hint of crisis, collapse, or lost authority. If the apostasy had already begun, Ignatius — a bishop who knew John personally — is entirely unaware of it.',
+        significance: 'sig-absent', sigLabel: 'No Awareness of Apostasy'
+      },
+      {
+        year: 155, yearLabel: 'c. AD 155', era: 'patristic',
+        sourceTag: 'Justin Martyr',
+        title: 'First Apology — A thriving, structured Church',
+        quote: '"We always have each other in memory; and for all those who are in want, the president of the brethren comes to their aid."',
+        commentary: 'Justin describes Sunday Christian worship to the Emperor: Scripture readings, a homily, intercessory prayer, the Eucharist, and distribution of alms. The structure is identical to the Catholic Mass. A Church in total apostasy cannot simultaneously be producing such detailed, coherent, and recognizably Catholic liturgical practice.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 180, yearLabel: 'c. AD 180', era: 'patristic',
+        sourceTag: 'Irenaeus of Lyon',
+        title: 'Against Heresies — The Church guards the deposit',
+        quote: '"The Church… though dispersed throughout the whole world, carefully guards the faith as if she occupied but one house."',
+        commentary: 'Irenaeus writes the most comprehensive refutation of second-century heresy — Gnosticism. He makes the Church\'s apostolic succession and universal doctrinal unity his primary argument against the Gnostics. His premise is the opposite of the Great Apostasy: the Church\'s strength is its visible, documented continuity with the Apostles.',
+        significance: 'sig-absent', sigLabel: 'No Apostasy Detected'
+      },
+      {
+        year: 325, yearLabel: 'AD 325', era: 'nicene',
+        sourceTag: 'Council of Nicaea',
+        title: 'First Ecumenical Council — 318 bishops in unity',
+        quote: '"We believe in one holy catholic and apostolic Church."',
+        commentary: 'More than 300 bishops from across the Roman world gather at Nicaea — not to restore a lost church but to clarify the theology of a living one. They articulate and define the faith they have received. A Church that had suffered total apostasy centuries earlier cannot produce a gathering of this scope and doctrinal seriousness in AD 325.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 1820, yearLabel: 'AD 1820', era: 'lds',
+        sourceTag: 'Joseph Smith',
+        title: 'First Vision — All churches declared wrong',
+        quote: '"I was answered that I must join none of them, for they were all wrong; and the Personage who addressed me said that all their creeds were an abomination."',
+        commentary: 'The canonical 1838 account of Joseph Smith\'s First Vision — written eighteen years after the claimed event — is the <strong>first appearance</strong> of the Great Apostasy doctrine as a formal theological claim. There is no record of it in the 1832 or 1835 accounts. The doctrine itself therefore has no source earlier than 1820 at the most generous reading, and no written documentation until 1838.',
+        significance: 'sig-invents', sigLabel: 'First Appearance'
+      }
+    ]
+  },
+
+  /* ═══ MARRIAGE ═══ */
+  {
+    id: 'celestial-marriage',
+    title: 'Celestial Marriage — Essential for Exaltation',
+    category: 'marriage',
+    tradition: 'lds',
+    claim: 'Temple marriage sealed by priesthood authority is required for the highest degree of salvation. Without it, one cannot attain exaltation.',
+    claimant: 'D&C 131:1–4; D&C 132; Joseph Smith (1843)',
+    summary: 'The LDS doctrine that eternal marriage is a prerequisite for the highest salvation is one of the most distinctive features of LDS theology. <strong>The trace reveals when it first enters Christian thought — and what Christ Himself said about marriage in the resurrection.</strong>',
+    depthYear: 1843,
+    depthLabel: 'Modern — AD 1843',
+    depthColor: '#4A1A6B',
+    depthPct: 3,
+    verdictText: 'Christ\'s explicit teaching in Matthew 22:30 — "in the resurrection they neither marry nor are given in marriage" — directly contradicts the doctrine that marriage extends into the celestial kingdom and is required for the highest salvation. Every patristic source that addresses the question affirms that marriage belongs to this temporal life and is not carried into the resurrection. The doctrine of celestial marriage has no source earlier than Joseph Smith in 1843.',
+    articleLink: '../articles/catholic-lds-marriage.html',
+    articleLabel: 'Read: The Marriage Dilemma →',
+    citations: [
+      {
+        year: 33, yearLabel: 'c. AD 33', era: 'apostolic',
+        sourceTag: 'Jesus Christ',
+        title: 'Matthew 22:30 — "They neither marry nor are given in marriage"',
+        quote: '"In the resurrection they neither marry nor are given in marriage, but are like angels in heaven."',
+        commentary: 'Christ\'s direct answer to the Sadducees\' question about marriage in the resurrection is unambiguous: marriage is a temporal institution that does not extend beyond death into the resurrection. This is the primary source against which any doctrine of eternal marriage must be measured. The LDS doctrine of celestial marriage requires this text to mean something other than what it plainly says.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 58, yearLabel: 'c. AD 58', era: 'apostolic',
+        sourceTag: 'Paul',
+        title: 'Romans 7:2–3 — "She is free from that law"',
+        quote: '"A wife is bound to her husband as long as he lives. But if her husband dies, she is free from that law."',
+        commentary: 'Paul treats the marriage bond as explicitly coextensive with mortal life — not extending beyond death. The logic of the passage depends on marriage ending at death; if it were eternal, Paul\'s entire argument would collapse. This is consistent with Christ\'s teaching in Matthew 22:30.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 177, yearLabel: 'c. AD 177', era: 'patristic',
+        sourceTag: 'Athenagoras',
+        title: 'A Plea for Christians 33 — Marriage dissolved by death',
+        quote: '"A second marriage is only a specious adultery… the marriage that is contracted is dissolved by death."',
+        commentary: 'Athenagoras, in defending Christianity to Marcus Aurelius, states plainly that the marriage bond is dissolved by death — consistent with Christ\'s teaching. If marriage extended into eternity, his entire argument about the sanctity of the marital bond would need to be completely restructured. The assumption that marriage ends at death is so universal among the Fathers that it requires no argument.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 217, yearLabel: 'c. AD 217', era: 'patristic',
+        sourceTag: 'Tertullian',
+        title: 'On Monogamy 10 — Plainly stated from the Lord\'s teaching',
+        quote: '"When the Lord says \'In that resurrection they neither marry nor are given in marriage,\' He plainly teaches that the bond of marriage is dissolved by death."',
+        commentary: 'Tertullian cites Matthew 22:30 as a settled datum about the nature of resurrection life — not a puzzle requiring interpretation but a plain teaching of the Lord. For Tertullian, the question of whether marriage continues after death is already answered.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 1843, yearLabel: 'AD 1843', era: 'lds',
+        sourceTag: 'Joseph Smith',
+        title: 'D&C 132 — Revelation on Celestial Marriage',
+        quote: '"If a man marry a wife by my word… and it is sealed unto them by the Holy Spirit of promise… they shall inherit thrones, kingdoms, principalities… it shall be done unto them in all things whatsoever my servant Joseph Smith hath put upon them."',
+        commentary: 'This revelation — recorded in 1843 and canonized in the Doctrine and Covenants — is the <strong>first appearance in any source</strong> of the doctrine that marriage sealed by priesthood authority extends eternally and is required for the highest salvation. It has no precursor in Scripture, the Fathers, or any Christian tradition.',
+        significance: 'sig-invents', sigLabel: 'First Appearance'
+      }
+    ]
+  },
+
+  /* ═══ SCRIPTURE ═══ */
+  {
+    id: 'book-of-mormon',
+    title: 'The Book of Mormon as Scripture',
+    category: 'scripture',
+    tradition: 'lds',
+    claim: 'The Book of Mormon is a historical record of ancient Israelites in the Americas and is the word of God — "the most correct of any book on earth."',
+    claimant: 'Joseph Smith; LDS Church; Articles of Faith 8',
+    summary: 'The Book of Mormon\'s claim to be ancient scripture rests on its historicity: if its peoples, places, and events are not real, its theological content has no divine authority. <strong>The source trail examines what the evidence actually shows.</strong>',
+    depthYear: 1830,
+    depthLabel: 'Modern — AD 1830',
+    depthColor: '#4A1A6B',
+    depthPct: 3,
+    verdictText: 'The Book of Mormon presents a comprehensive narrative of ancient civilizations in the Americas that left no archaeological, genetic, or linguistic trace recoverable by modern scholarship. Its claimed pre-Columbian artifacts — horses, chariots, steel, wheat, barley, elephants — are anachronistic to the periods described. DNA evidence has consistently failed to show Israelite ancestry in pre-Columbian American populations. These are not peripheral objections but strike at the historicity the Book of Mormon itself demands.',
+    articleLink: '../charts/historicity-comparison.html',
+    articleLabel: 'Read: Bible vs. Book of Mormon Historicity →',
+    citations: [
+      {
+        year: 1830, yearLabel: 'AD 1830', era: 'lds',
+        sourceTag: 'Joseph Smith',
+        title: 'Book of Mormon Published — Claims ancient provenance',
+        quote: '"I told the brethren that the Book of Mormon was the most correct of any book on earth, and the keystone of our religion."',
+        commentary: 'The Book of Mormon is published in Palmyra, New York. It claims to be a record of Israelites who migrated to the Americas c. 600 BC, maintained civilizations lasting over 1,000 years, and built cities, temples, and military systems on a large scale. Joseph Smith claims to have translated it from golden plates via the Urim and Thummim. This is the <strong>only source</strong> for any of these claims.',
+        significance: 'sig-invents', sigLabel: 'Only Source'
+      },
+      {
+        year: 1842, yearLabel: 'AD 1842', era: 'lds',
+        sourceTag: 'Joseph Smith / Times and Seasons',
+        title: 'Smith claims Central American ruins as Book of Mormon evidence',
+        quote: '"We feel justified in saying that in this city [Quiriguá] stood a Zarahemla."',
+        commentary: 'Joseph Smith (likely the author of this editorial) identifies Central American ruins as Book of Mormon cities. The problem: subsequent archaeology has identified these ruins as belonging to the Maya — a completely unrelated civilization with no Hebrew linguistic, cultural, or genetic connection. The identification was wrong.',
+        significance: 'sig-absent', sigLabel: 'Claim Unverified'
+      },
+      {
+        year: 1966, yearLabel: 'AD 1966', era: 'modern',
+        sourceTag: 'Metropolitan Museum of Art',
+        title: 'Book of Abraham Papyri Rediscovered',
+        quote: 'The papyri Smith used to produce the Book of Abraham are identified as standard Egyptian funerary texts — the Book of Breathings — entirely unrelated to Abraham.',
+        commentary: 'The papyri Joseph Smith purchased in 1835 and "translated" as the Book of Abraham survive — they were presumed lost in the 1871 Chicago Fire but were preserved in the Metropolitan Museum. Egyptologists — including LDS scholars — confirm they are standard funerary documents with no relationship to Abraham. Smith\'s "translation" and the actual content of the papyri do not correspond at any point.',
+        significance: 'sig-disavows', sigLabel: 'Evidence Contradicts'
+      },
+      {
+        year: 2006, yearLabel: 'AD 2006', era: 'modern',
+        sourceTag: 'LDS Church / Apostle Jeffrey R. Holland',
+        title: 'Gospel Topics Essays acknowledge translation concerns',
+        quote: '"The explanation for the origin of the Book of Mormon… leaves significant questions that faithful study and inspiration can help address."',
+        commentary: 'The LDS Church\'s own Gospel Topics Essays, published 2013–14, acknowledge that the Book of Mormon was translated not through direct reading of golden plates through the Urim and Thummim as depicted in official artwork, but through a seer stone placed in a hat — and that Joseph Smith dictated with his face buried in the hat, the plates often not present. This shifts the translation claim significantly.',
+        significance: 'sig-disavows', sigLabel: 'Church Acknowledges Issues'
+      }
+    ]
+  },
+
+  /* ═══ SALVATION ═══ */
+  {
+    id: 'purgatory',
+    title: 'Purgatory — Purification After Death',
+    category: 'salvation',
+    tradition: 'catholic',
+    claim: 'Those who die in God\'s grace but imperfectly purified undergo a final purification before entering the fullness of heaven.',
+    claimant: 'Catholic Church; Council of Florence (1438); Council of Trent (1563)',
+    summary: 'Purgatory is one of the most criticized Catholic doctrines — often dismissed as a medieval invention with no biblical basis. <strong>The source trail shows a more complex and older picture.</strong>',
+    depthYear: 211,
+    depthLabel: 'Early Patristic — c. AD 211',
+    depthColor: '#2E5C3E',
+    depthPct: 72,
+    verdictText: 'While the formal dogmatic definition of Purgatory is medieval, the underlying idea — that some purification or process may occur between death and full heavenly glory — appears in multiple early patristic sources and is rooted in Jewish practice documented in Scripture. The concept develops organically rather than appearing suddenly in the medieval period. It is far from a pure invention, though Protestant objections to specific elaborations of the doctrine have some historical force.',
+    citations: [
+      {
+        year: -150, yearLabel: 'c. 150 BC', era: 'apostolic',
+        sourceTag: '2 Maccabees',
+        title: '2 Maccabees 12:44–46 — Prayers for the dead',
+        quote: '"He made atonement for the dead, that they might be delivered from their sin."',
+        commentary: '2 Maccabees — included in the Catholic Old Testament, excluded from the Protestant canon — describes Judas Maccabeus making prayers and sacrifices for fallen soldiers who had sinned, "in view of the splendid reward that awaits those who had gone to rest in godliness." The prayer only makes sense if the dead can benefit from the prayers of the living — a practice implying some intermediate state where purification can occur.',
+        significance: 'sig-primary', sigLabel: 'Biblical Foundation'
+      },
+      {
+        year: 211, yearLabel: 'c. AD 211', era: 'patristic',
+        sourceTag: 'Tertullian',
+        title: 'Monogamy 10 — Prayers for the dead as established practice',
+        quote: '"We offer oblations for the dead as birthday honors, and we count it as neglect not to make such offerings."',
+        commentary: 'Tertullian describes offering prayers for the dead as an established, unremarkable Christian practice — not a new idea requiring defense but an inherited custom. The practice only makes theological sense if the dead can benefit from prayer — implying some state where purification or improvement is possible before final glory.',
+        significance: 'sig-confirms', sigLabel: 'Attests Practice'
+      },
+      {
+        year: 248, yearLabel: 'c. AD 248', era: 'patristic',
+        sourceTag: 'Origen of Alexandria',
+        title: 'Homilies on Jeremiah — Purifying fire after death',
+        quote: '"If a man departs this life with lighter faults, he is condemned to fire which burns away the lighter materials, and prepares him for the kingdom of God."',
+        commentary: 'Origen articulates what is recognizably a purgatorial concept — a purifying fire after death for those with "lighter faults." His language is speculative rather than dogmatic, but it reflects an early Christian theological instinct that death does not binary-sort all the imperfect into either heaven or hell with no intermediate purification.',
+        significance: 'sig-develops', sigLabel: 'Early Concept'
+      },
+      {
+        year: 400, yearLabel: 'c. AD 400', era: 'nicene',
+        sourceTag: 'Augustine of Hippo',
+        title: 'Enchiridion 69 — Purifying fire for some after death',
+        quote: '"Some of the faithful may be saved through a kind of purgatorial fire, according as the love of perishable things has been more or less dominant in them."',
+        commentary: 'Augustine gives the purgatorial concept its most developed patristic form — not as speculation but as a reasonable inference from Scripture and practice. He is careful to limit it to those already saved ("some of the faithful"), distinguishing it from any second-chance salvation for the damned.',
+        significance: 'sig-defines', sigLabel: 'Patristic Development'
+      },
+      {
+        year: 1438, yearLabel: 'AD 1438', era: 'medieval',
+        sourceTag: 'Council of Florence',
+        title: 'Laetentur Caeli — Formal definition of Purgatory',
+        quote: '"If they have not done penance for their sins of commission and omission… their souls are cleansed after death by purgatorial punishments."',
+        commentary: 'The Council of Florence gives the first conciliar dogmatic definition of Purgatory — not creating a new doctrine but formally defining what had been the common teaching of the Western Church for centuries, rooted in the patristic tradition traced above.',
+        significance: 'sig-defines', sigLabel: 'Formally Defined'
+      }
+    ]
+  },
+
+  /* ═══ GOD ═══ */
+  {
+    id: 'trinity-nicaea',
+    title: 'The Trinity — One God in Three Persons',
+    category: 'god',
+    tradition: 'catholic',
+    claim: 'God is one Being in three co-equal, co-eternal Persons: Father, Son, and Holy Spirit — sharing one divine substance.',
+    claimant: 'Council of Nicaea (AD 325); Nicene Creed',
+    summary: 'LDS theology argues the Trinity is a post-apostolic philosophical invention imposed on a simpler, more primitive faith. <strong>The source trail tests this claim against the actual chronology of the evidence.</strong>',
+    depthYear: 33,
+    depthLabel: 'Apostolic — AD 33',
+    depthColor: '#1A5C2A',
+    depthPct: 100,
+    verdictText: 'The Trinity is not a fourth-century invention — the materials for Trinitarian theology are present in the New Testament itself, and the ante-Nicene Fathers show sophisticated Trinitarian reasoning well before Nicaea. What Nicaea did was give precise philosophical definition to a received theological conviction — exactly how authentic doctrinal development works. The LDS Godhead, by contrast, has no precedent in any Christian source before 1820.',
+    articleLink: '../articles/ante-nicene-fathers.html',
+    articleLabel: 'Read: The Ante-Nicene Fathers →',
+    citations: [
+      {
+        year: 33, yearLabel: 'c. AD 33', era: 'apostolic',
+        sourceTag: 'Matthew 28:19',
+        title: 'The Baptismal Formula — Trinitarian from the beginning',
+        quote: '"Baptize them in the name of the Father and of the Son and of the Holy Spirit."',
+        commentary: 'The baptismal formula — singular "name" but three Persons — is itself a Trinitarian formula. The unity of one divine name shared by three distinct Persons is the nucleus of Trinitarian theology. This text predates all patristic theology and all councils. If the Trinity is a later invention, one must explain why Christ commanded baptism in a Trinitarian formula.',
+        significance: 'sig-primary', sigLabel: 'Apostolic Source'
+      },
+      {
+        year: 107, yearLabel: 'c. AD 107', era: 'patristic',
+        sourceTag: 'Ignatius of Antioch',
+        title: 'To the Ephesians — Christ addressed as God',
+        quote: '"There is one physician, both carnal and spiritual… Jesus Christ our Lord."',
+        commentary: 'Ignatius addresses Christ as God directly and repeatedly across his seven letters. He also distinguishes Father, Son, and Spirit as three distinct realities while maintaining monotheism — the pre-Nicene Trinitarian instinct. A disciple of John the Apostle, he shows this is not a philosophical imposition but an inherited apostolic conviction.',
+        significance: 'sig-confirms', sigLabel: 'Pre-Nicene Witness'
+      },
+      {
+        year: 155, yearLabel: 'c. AD 155', era: 'patristic',
+        sourceTag: 'Justin Martyr',
+        title: 'First Apology 65 — Three-fold naming in baptism',
+        quote: '"In the name of God the Father and Lord of all, and of our Savior Jesus Christ, and of the Holy Spirit."',
+        commentary: 'Justin describes the baptismal practice of his community — Trinitarian, consistent with Matthew 28:19. He also describes worship directed to the Son alongside the Father — monotheistic yet clearly acknowledging the distinct divine status of Christ. This is Trinitarian theology a century and a half before Nicaea.',
+        significance: 'sig-confirms', sigLabel: 'Pre-Nicene Practice'
+      },
+      {
+        year: 213, yearLabel: 'c. AD 213', era: 'patristic',
+        sourceTag: 'Tertullian',
+        title: 'Against Praxeas — "Trinitas" coined',
+        quote: '"These three are one substance… not one person. The Father and Son and Spirit are three… Three, however, not in condition, but in degree; not in substance, but in form."',
+        commentary: 'Tertullian coins the Latin term <em>Trinitas</em> and articulates the formula <em>una substantia, tres personae</em> — one substance, three persons — that will become the standard Latin Trinitarian definition. This is a century before Nicaea. Tertullian is developing, not inventing: his vocabulary is new but the underlying conviction is the same as Ignatius\'s.',
+        significance: 'sig-defines', sigLabel: 'Coins the Language'
+      },
+      {
+        year: 325, yearLabel: 'AD 325', era: 'nicene',
+        sourceTag: 'Council of Nicaea',
+        title: 'Nicene Creed — <em>homoousios</em> defined',
+        quote: '"We believe in one Lord Jesus Christ… God from God, Light from Light, true God from true God, begotten, not made, of one Being (<em>homoousios</em>) with the Father."',
+        commentary: 'Nicaea gives the precise philosophical term for what the Church had confessed since the Apostles: the Son is <em>homoousios</em> — of the same substance — with the Father. The council does not invent the doctrine; it rules on which vocabulary most accurately captures the apostolic conviction against Arius\'s novelty. The LDS critique misunderstands the council\'s function.',
+        significance: 'sig-defines', sigLabel: 'Formally Defined'
+      }
+    ]
+  },
+
+  /* ═══ HISTORY ═══ */
+  {
+    id: 'polygamy-command',
+    title: 'Plural Marriage Commanded by God — D&C 132',
+    category: 'history',
+    tradition: 'lds',
+    claim: 'God revealed to Joseph Smith that plural marriage — polygamy — is an everlasting covenant required for the highest exaltation.',
+    claimant: 'D&C 132 (recorded 1843); Joseph Smith',
+    summary: 'D&C 132 presents polygamy as divinely commanded — the violation of which incurs damnation. <strong>Tracing this claim reveals a direct collision not only with Christian tradition but with the Book of Mormon itself.</strong>',
+    depthYear: 1843,
+    depthLabel: 'Modern — AD 1843',
+    depthColor: '#4A1A6B',
+    depthPct: 3,
+    verdictText: 'The command to practice plural marriage has no source before 1843 and contradicts both Christ\'s explicit teaching (Mt 19:4–8) and the Book of Mormon\'s own condemnation of the practice (Jacob 2:24–27). It was suspended in 1890 under federal pressure while D&C 132 — which calls it an "everlasting covenant" — remains canonical. The internal LDS contradiction is as severe as the external one.',
+    articleLink: '../articles/catholic-lds-marriage.html',
+    articleLabel: 'Read: The Marriage Dilemma →',
+    citations: [
+      {
+        year: 33, yearLabel: 'c. AD 30', era: 'apostolic',
+        sourceTag: 'Jesus Christ',
+        title: 'Matthew 19:4–8 — Monogamy restored as the divine standard',
+        quote: '"From the beginning it was not so… What God has joined together, let not man separate."',
+        commentary: 'Christ explicitly restores the original creational norm of monogamy, closing the Mosaic allowance for divorce and implicitly for polygamy as accommodations to "hardness of heart." His appeal to "the beginning" — one man, one woman — is the theological argument against any divine sanction for polygamy. The divine standard, fully revealed in Christ, is strict monogamy.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 140, yearLabel: 'c. AD 140', era: 'patristic',
+        sourceTag: 'Hermas',
+        title: 'The Shepherd — One wife only',
+        quote: '"He who marries another wife while his wife is alive commits adultery."',
+        commentary: 'Hermas — writing c. AD 140, in a text held nearly canonical in parts of the early Church — states monogamy plainly as the Christian standard. There is no voice in the Ante-Nicene period endorsing polygamy as a Christian practice.',
+        significance: 'sig-absent', sigLabel: 'Contradicts Claim'
+      },
+      {
+        year: 1830, yearLabel: 'AD 1830', era: 'lds',
+        sourceTag: 'Book of Mormon — Jacob 2:24–27',
+        title: 'David and Solomon\'s polygamy called "abominable"',
+        quote: '"Behold, David and Solomon truly had many wives and concubines, which thing was abominable before me, saith the Lord."',
+        commentary: 'The Book of Mormon — produced by Joseph Smith himself — explicitly condemns polygamy as "abominable" and commands: "There shall not any man among you have save it be one wife." This is published in 1830. Thirteen years later, D&C 132 directly contradicts it, declaring David\'s wives were given to him by God and he sinned "in nothing" regarding them (D&C 132:38).',
+        significance: 'sig-absent', sigLabel: 'Internal Contradiction'
+      },
+      {
+        year: 1843, yearLabel: 'AD 1843', era: 'lds',
+        sourceTag: 'D&C 132',
+        title: 'Revelation on Celestial and Plural Marriage',
+        quote: '"If any man espouse a virgin, and desire to espouse another, and the first give her consent… then is he justified."',
+        commentary: 'D&C 132 — recorded in 1843 — is the <strong>first and only divine command for polygamy</strong> in any Christian tradition. It directly contradicts Jacob 2 and Matthew 19. By 1843, Joseph Smith has privately contracted approximately 30 plural marriages, many conducted without Emma\'s knowledge. The revelation justifies what has already been practiced in secret.',
+        significance: 'sig-invents', sigLabel: 'First Appearance'
+      },
+      {
+        year: 1890, yearLabel: 'AD 1890', era: 'modern',
+        sourceTag: 'Wilford Woodruff',
+        title: 'Official Declaration 1 — Polygamy suspended',
+        quote: '"Inasmuch as laws have been enacted by Congress forbidding plural marriages… I hereby declare my intention to submit to those laws."',
+        commentary: 'The practice is suspended under federal pressure. D&C 132 — which describes plural marriage as an "everlasting covenant" whose rejection incurs damnation — remains in the LDS canon today unchanged. Fundamentalist LDS splinter groups continue practicing polygamy, citing D&C 132, which has never been rescinded.',
+        significance: 'sig-disavows', sigLabel: 'Practice Suspended'
+      }
+    ]
+  },
+
+  /* ═══ CHURCH ═══ */
+  {
+    id: 'priesthood-ban',
+    title: 'The LDS Racial Priesthood Ban — Lifted 1978',
+    category: 'history',
+    tradition: 'lds',
+    claim: 'Black men were excluded from the LDS priesthood due to divine revelation, grounded in pre-mortal conduct. This was taught by multiple LDS prophets as the word of God.',
+    claimant: 'Brigham Young (1849); multiple LDS prophets; reversed by Official Declaration 2 (1978)',
+    summary: 'The LDS priesthood ban on Black members is one of the most significant doctrinal reversals in LDS history. <strong>Tracing the claim reveals both its origins and its official disavowal — a case study in the structural problem of a mutable prophetic authority.</strong>',
+    depthYear: 1849,
+    depthLabel: 'Modern — AD 1849',
+    depthColor: '#8B0000',
+    depthPct: 2,
+    verdictText: 'The priesthood ban was taught by Brigham Young and multiple subsequent LDS prophets as divine revelation — not human policy. In 2013, the LDS Church\'s Gospel Topics Essay officially disavowed the theological justifications, stating they "never reflected the official doctrine of the Church." This means multiple LDS prophets taught as divine revelation something the Church now says was never true. This is the clearest possible illustration of why an authority structure that can reverse any doctrine provides no stable foundation for doctrinal certainty.',
+    articleLink: '../articles/rock-and-the-sand.html',
+    articleLabel: 'Read: The Rock and the Sand →',
+    citations: [
+      {
+        year: 1849, yearLabel: 'AD 1849', era: 'lds',
+        sourceTag: 'Brigham Young',
+        title: 'Journal of Discourses — Ban first formalized',
+        quote: '"The Lord told Cain that he should not receive the blessings of the priesthood, nor his seed, until the last of the posterity of Abel had received the priesthood."',
+        commentary: 'Brigham Young — second LDS prophet — formalized the exclusion of Black men from the priesthood, grounding it in pre-mortal conduct and the "curse of Cain" theology. This is the <strong>first appearance</strong> of the policy as a formal theological position. Joseph Smith had in fact ordained at least one Black man to the priesthood; the ban is not traceable to him with certainty.',
+        significance: 'sig-invents', sigLabel: 'Policy Formalized'
+      },
+      {
+        year: 1949, yearLabel: 'AD 1949', era: 'modern',
+        sourceTag: 'LDS First Presidency',
+        title: 'Official Statement — Ban declared divine, not human',
+        quote: '"The attitude of the Church… is not a matter of the declaration of a policy but of direct commandment from the Lord."',
+        commentary: 'The LDS First Presidency issues an official statement declaring the ban is not merely a human policy but a "direct commandment from the Lord." Multiple apostles and presidents throughout the twentieth century reiterate this teaching as divine revelation — not human prejudice.',
+        significance: 'sig-invents', sigLabel: 'Affirmed as Revelation'
+      },
+      {
+        year: 1978, yearLabel: 'AD 1978', era: 'modern',
+        sourceTag: 'Spencer W. Kimball',
+        title: 'Official Declaration 2 — Ban reversed',
+        quote: '"The Lord… has heard our prayers, and by revelation has confirmed that the long-promised day has come when every faithful, worthy man in the Church may receive the holy priesthood."',
+        commentary: 'President Kimball announces the reversal of the ban — framed as new divine revelation. But if it is new revelation, the prior revelation commanding the ban was wrong. If the prior policy was human error, multiple prophets attributed human error to God. Either way, the structural problem of an authority that can declare anything divine and then rescind it is exposed.',
+        significance: 'sig-disavows', sigLabel: 'Reversed'
+      },
+      {
+        year: 2013, yearLabel: 'AD 2013', era: 'modern',
+        sourceTag: 'LDS Church',
+        title: 'Gospel Topics Essay — Theological justifications disavowed',
+        quote: '"Today the Church disavows the theories advanced in the past that black skin is a sign of divine disfavor… These theories… were never endorsed by the Church Councils and therefore were simply theories."',
+        commentary: 'The LDS Church officially disavows the theological justifications that multiple prophets had taught as divine revelation. The Essay acknowledges that the origins of the ban "remain unknown" — directly contradicting the 1949 First Presidency statement that it was a "direct commandment from the Lord." The epistemological consequence is severe: if this was human error attributed to God, how does any LDS member know which prophetic statements are reliable?',
+        significance: 'sig-disavows', sigLabel: 'Officially Disavowed'
+      }
+    ]
+  }
+
+]; /* end CLAIMS */
+
+/* ═══════════════════════════════════════════════════════════
+   ERA CONFIG
+   ═══════════════════════════════════════════════════════════ */
+var ERAS = {
+  apostolic: { color: '#1A5C2A', label: 'Apostolic (AD 33–100)' },
+  patristic: { color: '#2E5C3E', label: 'Patristic (AD 100–325)' },
+  nicene:    { color: '#1E3A5F', label: 'Nicene Era (325–600)' },
+  medieval:  { color: '#5A4500', label: 'Medieval (600–1500)' },
+  reform:    { color: '#7A3A00', label: 'Reformation (1500–1800)' },
+  lds:       { color: '#4A1A6B', label: 'LDS Era (1820–1900)' },
+  modern:    { color: '#8B0000', label: 'Modern (1900–present)' }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER: CLAIM LIST
+   ═══════════════════════════════════════════════════════════ */
+function renderClaimList(filter, searchTerm) {
+  var list = document.getElementById('claim-list');
+  list.innerHTML = '';
+  var shown = 0;
+
+  CLAIMS.forEach(function(claim) {
+    var catMatch = filter === 'all' || claim.category === filter;
+    var searchMatch = !searchTerm ||
+      claim.title.toLowerCase().indexOf(searchTerm) !== -1 ||
+      claim.claim.toLowerCase().indexOf(searchTerm) !== -1 ||
+      claim.category.toLowerCase().indexOf(searchTerm) !== -1;
+
+    var item = document.createElement('div');
+    item.className = 'claim-list-item' + (catMatch && searchMatch ? '' : ' hidden');
+    item.setAttribute('data-id', claim.id);
+    item.innerHTML =
+      '<div class="claim-list-depth" style="background:' + claim.depthColor + '"></div>' +
+      '<div class="claim-list-text">' +
+        '<div class="claim-list-title">' + claim.title + '</div>' +
+        '<div class="claim-list-meta">' + claim.tradition.toUpperCase() + ' &nbsp;·&nbsp; ' + claim.category + '</div>' +
+      '</div>';
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.claim-list-item').forEach(function(el) { el.classList.remove('active'); });
+      item.classList.add('active');
+      renderTracer(claim);
+    });
+    list.appendChild(item);
+    if (catMatch && searchMatch) shown++;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER: TRACER CARD
+   ═══════════════════════════════════════════════════════════ */
+function renderTracer(claim) {
+  var welcome = document.getElementById('tracer-welcome');
+  var card    = document.getElementById('tracer-card');
+
+  welcome.style.display = 'none';
+  card.className = 'tracer-card visible';
+
+  var tradBadge = claim.tradition === 'catholic' ? 'badge-catholic' :
+                  claim.tradition === 'lds'      ? 'badge-lds' : 'badge-both';
+  var tradLabel = claim.tradition === 'catholic' ? 'Catholic Claim' :
+                  claim.tradition === 'lds'      ? 'LDS Claim' : 'Shared Question';
+
+  /* Build era legend for depth section */
+  var erasSeen = {};
+  claim.citations.forEach(function(c) { erasSeen[c.era] = true; });
+  var legendHTML = '';
+  Object.keys(ERAS).forEach(function(k) {
+    if (erasSeen[k]) {
+      legendHTML += '<div class="era-legend-item"><div class="era-pip" style="background:' + ERAS[k].color + '"></div>' + ERAS[k].label + '</div>';
+    }
+  });
+
+  /* Build citation chain */
+  var chainHTML = '';
+  claim.citations.forEach(function(c, i) {
+    var eraColor = ERAS[c.era] ? ERAS[c.era].color : '#999';
+    chainHTML +=
+      '<div class="citation-node" data-index="' + i + '">' +
+        '<div class="node-year-col">' +
+          '<div class="node-year" style="background:' + eraColor + '">' + c.yearLabel.replace('c. ','') + '</div>' +
+          '<div class="node-spine" style="background:linear-gradient(to bottom,' + eraColor + ',rgba(208,200,184,0.3))"></div>' +
+        '</div>' +
+        '<div class="node-content">' +
+          '<span class="node-source-tag" style="background:' + eraColor + '">' + c.sourceTag + '</span>' +
+          '<div class="node-title">' + c.title + '</div>' +
+          (c.quote ? '<div class="node-quote">' + c.quote + '</div>' : '') +
+          '<div class="node-commentary">' + c.commentary + '</div>' +
+          '<span class="node-significance ' + c.significance + '">' + c.sigLabel + '</span>' +
+        '</div>' +
+      '</div>';
+  });
+
+  /* Depth verdict color */
+  var verdictBg = claim.depthColor;
+
+  card.innerHTML =
+    /* CLAIM HEADER */
+    '<div class="claim-header">' +
+      '<div class="claim-header-top">' +
+        '<div class="claim-title">' + claim.title + '</div>' +
+        '<span class="claim-tradition-badge ' + tradBadge + '">' + tradLabel + '</span>' +
+      '</div>' +
+      '<div class="claim-quote-block">' +
+        '<blockquote>' + claim.claim + '</blockquote>' +
+        '<span class="quote-attr">— ' + claim.claimant + '</span>' +
+      '</div>' +
+      '<p class="claim-summary">' + claim.summary + '</p>' +
+    '</div>' +
+
+    /* DEPTH METER */
+    '<div class="depth-section">' +
+      '<div class="depth-section-header">' +
+        '<span class="depth-section-title">Evidential Depth Meter</span>' +
+        '<span class="depth-verdict" style="background:' + verdictBg + '">' + claim.depthLabel + '</span>' +
+      '</div>' +
+      '<div class="depth-meter-wrap">' +
+        '<div class="depth-axis">' +
+          '<span class="depth-axis-label">AD 33 — Apostolic</span>' +
+          '<span class="depth-axis-label">Modern Only</span>' +
+        '</div>' +
+        '<div class="depth-bar-track">' +
+          '<div class="depth-bar-fill" id="depth-bar" style="width:0%;background:' + verdictBg + '"></div>' +
+        '</div>' +
+        '<div class="depth-ticks">' +
+          '<span class="depth-tick" style="left:0%">AD 33</span>' +
+          '<span class="depth-tick" style="left:20%">AD 325</span>' +
+          '<span class="depth-tick" style="left:40%">AD 600</span>' +
+          '<span class="depth-tick" style="left:65%">AD 1500</span>' +
+          '<span class="depth-tick" style="left:87%">AD 1820</span>' +
+          '<span class="depth-tick" style="left:100%">Today</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="era-legend">' + legendHTML + '</div>' +
+    '</div>' +
+
+    /* CITATION CHAIN */
+    '<div class="chain-section">' +
+      '<div class="chain-section-header">' +
+        '<span class="chain-section-title">Primary Source Trail</span>' +
+        '<span class="chain-count">' + claim.citations.length + ' source' + (claim.citations.length !== 1 ? 's' : '') + '</span>' +
+      '</div>' +
+      '<div class="chain-body">' + chainHTML + '</div>' +
+    '</div>' +
+
+    /* VERDICT */
+    '<div class="verdict-box">' +
+      '<span class="verdict-box-label">✦ &nbsp; Apologetic Assessment</span>' +
+      '<p class="verdict-box-text">' + claim.verdictText + '</p>' +
+      (claim.articleLink ? '<a class="verdict-box-link" href="' + claim.articleLink + '">' + claim.articleLabel + '</a>' : '') +
+    '</div>';
+
+  /* Animate depth bar */
+  setTimeout(function() {
+    var bar = document.getElementById('depth-bar');
+    if (bar) bar.style.width = claim.depthPct + '%';
+  }, 80);
+
+  /* Stagger animate citation nodes */
+  var nodes = card.querySelectorAll('.citation-node');
+  nodes.forEach(function(node, i) {
+    node.style.transitionDelay = (i * 0.08) + 's';
+    setTimeout(function() { node.classList.add('animate-in'); }, 120 + i * 80);
+  });
+
+  /* Scroll tracer into view on mobile */
+  if (window.innerWidth <= 900) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════ */
+var activeCat   = 'all';
+var searchTerm  = '';
+
+renderClaimList('all', '');
+
+/* Category pills */
+document.querySelectorAll('.cat-pill').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.cat-pill').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    activeCat = this.getAttribute('data-cat');
+    renderClaimList(activeCat, searchTerm);
+  });
+});
+
+/* Search */
+var searchTO;
+document.getElementById('claim-search').addEventListener('input', function() {
+  clearTimeout(searchTO);
+  var v = this.value.trim().toLowerCase();
+  searchTO = setTimeout(function() {
+    searchTerm = v;
+    renderClaimList(activeCat, searchTerm);
+  }, 180);
+});
+
+/* Sidebar */
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'),
+      sb  = document.querySelector('.sidebar'),
+      ov  = document.querySelector('.sidebar-overlay');
+  var open = sb.classList.contains('open');
+  if (open) {
+    sb.classList.remove('open'); btn.classList.remove('open');
+    ov.classList.remove('visible'); document.body.style.overflow = '';
+  } else {
+    sb.classList.add('open'); btn.classList.add('open');
+    ov.classList.add('visible'); document.body.style.overflow = 'hidden';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar();
+});
+
+/* Reading progress bar */
+(function() {
+  var bar = document.getElementById('reading-progress-bar');
+  function upd() {
+    if (!bar) return;
+    var s = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? Math.min(100, (s / h) * 100) : 0;
+    bar.style.width = p + '%'; bar.setAttribute('aria-valuenow', Math.round(p));
+  }
+  if (bar) { window.addEventListener('scroll', upd, { passive: true }); upd(); }
+  var urlEl = document.getElementById('print-url-text');
+  if (urlEl) {
+    var href = window.location.href;
+    urlEl.textContent = href && href !== 'about:blank' ? href : 'onefaithdelivered.org';
+  }
+})();
+
+/* Auto-load first claim */
+setTimeout(function() {
+  var first = document.querySelector('.claim-list-item');
+  if (first) first.click();
+}, 300);
+</script>
+
+</body>
+</html>

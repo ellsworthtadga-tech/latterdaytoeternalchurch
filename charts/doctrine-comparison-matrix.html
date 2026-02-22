@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctrine Comparison Matrix | One Faith Delivered</title>
+<meta name="description" content="A filterable side-by-side comparison of Catholic, Latter-day Saint, and early Church Father positions on every major point of theology — from the nature of God to scripture, priesthood, salvation, and sacraments." />
+<link rel="canonical" href="https://onefaithdelivered.org/charts/doctrine-comparison-matrix.html" />
+<link rel="icon" href="../favicons/favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DOCTRINE COMPARISON MATRIX
+   Design system: matches a-house-divided-against-itself.html
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --crimson:       #8B0000;
+  --dark-crimson:  #5C0000;
+  --gold:          #C5A55A;
+  --dark-gold:     #8B7335;
+  --parchment:     #F5F0E8;
+  --text:          #2A2A2A;
+  --muted:         #666;
+  --line-gray:     #D0C8B8;
+  --problem-blue:  #1E3A5F;
+
+  /* Column identity colors */
+  --col-catholic:  #8B0000;   /* crimson  */
+  --col-lds:       #4A1A6B;   /* purple   */
+  --col-father:    #1E3A5F;   /* navy     */
+
+  /* Agreement signal colors */
+  --agree:         #2E5C3E;
+  --partial:       #7A5800;
+  --disagree:      #8B0000;
+  --unique:        #4A1A6B;
+
+  /* Topic category colors */
+  --cat-god:       #8B0000;
+  --cat-church:    #1E3A5F;
+  --cat-scripture: #5A4500;
+  --cat-salvation: #2E5C3E;
+  --cat-sacrament: #6B3A2A;
+  --cat-authority: #4A1A6B;
+  --cat-afterlife: #333;
+  --cat-marriage:  #7A2040;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--parchment);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SITE NAV ── */
+.site-nav {
+  position: sticky; top: 0; z-index: 9999;
+  background: linear-gradient(to bottom, rgba(245,240,232,0.98), rgba(240,235,225,0.95));
+  border-bottom: 1px solid var(--line-gray);
+  padding: 0.75rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.site-nav a.nav-home {
+  font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.05em; color: var(--crimson);
+  text-decoration: none; transition: color 0.2s;
+}
+.site-nav a.nav-home:hover { color: var(--dark-crimson); }
+.site-nav .nav-links { display: flex; gap: 2rem; list-style: none; }
+.site-nav .nav-links a {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; transition: color 0.2s;
+}
+.site-nav .nav-links a:hover { color: var(--crimson); }
+.nav-print-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dark-gold); background: none;
+  border: 1px solid rgba(139,115,53,0.35); padding: 0.4rem 1.1rem;
+  border-radius: 3px; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+}
+.nav-print-btn:hover { background: rgba(139,115,53,0.08); color: var(--crimson); }
+
+/* ── HAMBURGER ── */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center;
+  gap: 5px; width: 36px; height: 36px; cursor: pointer;
+  background: none; border: 1px solid rgba(139,115,53,0.3);
+  border-radius: 3px; padding: 6px; z-index: 10001;
+}
+.nav-hamburger span {
+  display: block; height: 2px; background: var(--text);
+  border-radius: 2px; transition: all 0.25s; transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── SIDEBAR ── */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 10000; backdrop-filter: blur(2px);
+}
+.sidebar-overlay.visible { display: block; }
+.sidebar {
+  position: fixed; top: 0; right: -280px;
+  width: 260px; height: 100%;
+  background: linear-gradient(to bottom, #FAF6F0, #F5F0E8);
+  border-left: 1px solid var(--line-gray);
+  z-index: 10002; transition: right 0.3s ease; overflow-y: auto;
+}
+.sidebar.open { right: 0; }
+.sidebar-inner { padding: 5rem 2rem 2rem; display: flex; flex-direction: column; gap: 0; }
+.sidebar-brand {
+  font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700;
+  color: var(--crimson); margin-bottom: 2rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line-gray);
+}
+.sidebar-inner a {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+  padding: 0.85rem 0; border-bottom: 1px solid rgba(208,200,184,0.5);
+  transition: color 0.2s;
+}
+.sidebar-inner a:hover { color: var(--crimson); }
+.sidebar-inner a.sidebar-back {
+  color: var(--dark-gold); margin-top: 1.5rem;
+  border: 1px solid rgba(139,115,53,0.3);
+  padding: 0.7rem 1rem; text-align: center; border-radius: 2px;
+}
+.sidebar-ornament { color: var(--gold); font-size: 11px; letter-spacing: 8px; text-align: center; margin-top: 2rem; }
+
+/* ── READING PROGRESS BAR ── */
+#reading-progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(to right, #8B0000, #C5A55A);
+  z-index: 99999; transition: width 0.12s linear;
+  pointer-events: none; border-radius: 0 2px 2px 0;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: linear-gradient(135deg, #4A0F1A 0%, #6B1D2A 40%, #3D1520 100%);
+  color: #F5F0E8; padding: 72px 40px 56px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+    rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+  pointer-events: none;
+}
+.ornament {
+  display: block; color: var(--gold); font-size: 1rem;
+  letter-spacing: 12px; margin-bottom: 1.2rem; opacity: 0.7; position: relative; z-index: 1;
+}
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2em, 4vw, 3.2em); font-weight: 900;
+  letter-spacing: -0.5px; color: #F5F0E8; margin-bottom: 14px;
+  line-height: 1.2; position: relative; z-index: 1;
+}
+.page-header h1 span { color: var(--gold); }
+.page-header .subtitle {
+  font-family: 'Source Serif 4', serif; font-size: 1.1em;
+  font-weight: 300; font-style: italic;
+  color: rgba(245,240,232,0.75); max-width: 680px;
+  margin: 0 auto; position: relative; z-index: 1;
+}
+.page-header .meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68em;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(197,165,90,0.65); margin-top: 1.4rem;
+  position: relative; z-index: 1;
+}
+
+/* ── CONTROLS BAR ── */
+.controls-bar {
+  background: #fff; border-bottom: 1px solid var(--line-gray);
+  padding: 14px 32px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  position: sticky; top: 57px; z-index: 900;
+}
+.controls-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em;
+  font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dark-gold); white-space: nowrap; margin-right: 4px;
+}
+.controls-divider {
+  width: 1px; height: 20px; background: var(--line-gray);
+  margin: 0 6px; flex-shrink: 0;
+}
+.filter-pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62em;
+  font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 5px 13px; border-radius: 20px; cursor: pointer;
+  border: 1px solid; transition: all 0.18s; white-space: nowrap;
+  background: transparent; line-height: 1;
+}
+.filter-pill.active { color: #fff !important; }
+
+/* Topic filters */
+.filter-pill[data-topic="all"]       { border-color: #555;              color: #555; }
+.filter-pill[data-topic="god"]       { border-color: var(--cat-god);       color: var(--cat-god); }
+.filter-pill[data-topic="church"]    { border-color: var(--cat-church);    color: var(--cat-church); }
+.filter-pill[data-topic="scripture"] { border-color: var(--cat-scripture); color: var(--cat-scripture); }
+.filter-pill[data-topic="salvation"] { border-color: var(--cat-salvation); color: var(--cat-salvation); }
+.filter-pill[data-topic="sacrament"] { border-color: var(--cat-sacrament); color: var(--cat-sacrament); }
+.filter-pill[data-topic="authority"] { border-color: var(--cat-authority); color: var(--cat-authority); }
+.filter-pill[data-topic="afterlife"] { border-color: var(--cat-afterlife); color: var(--cat-afterlife); }
+.filter-pill[data-topic="marriage"]  { border-color: var(--cat-marriage);  color: var(--cat-marriage); }
+
+.filter-pill.active[data-topic="all"]       { background: #555; }
+.filter-pill.active[data-topic="god"]       { background: var(--cat-god); }
+.filter-pill.active[data-topic="church"]    { background: var(--cat-church); }
+.filter-pill.active[data-topic="scripture"] { background: var(--cat-scripture); }
+.filter-pill.active[data-topic="salvation"] { background: var(--cat-salvation); }
+.filter-pill.active[data-topic="sacrament"] { background: var(--cat-sacrament); }
+.filter-pill.active[data-topic="authority"] { background: var(--cat-authority); }
+.filter-pill.active[data-topic="afterlife"] { background: var(--cat-afterlife); }
+.filter-pill.active[data-topic="marriage"]  { background: var(--cat-marriage); }
+
+/* Agreement filters */
+.agree-pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62em;
+  font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 5px 13px; border-radius: 20px; cursor: pointer;
+  border: 1px solid; transition: all 0.18s; white-space: nowrap;
+  background: transparent; line-height: 1;
+}
+.agree-pill[data-agree="all"]      { border-color: #999; color: #999; }
+.agree-pill[data-agree="agree"]    { border-color: var(--agree);    color: var(--agree); }
+.agree-pill[data-agree="partial"]  { border-color: var(--partial);  color: var(--partial); }
+.agree-pill[data-agree="disagree"] { border-color: var(--disagree); color: var(--disagree); }
+.agree-pill.active { color: #fff !important; }
+.agree-pill.active[data-agree="all"]      { background: #999; }
+.agree-pill.active[data-agree="agree"]    { background: var(--agree); }
+.agree-pill.active[data-agree="partial"]  { background: var(--partial); }
+.agree-pill.active[data-agree="disagree"] { background: var(--disagree); }
+
+/* ── PAGE WRAPPER ── */
+.page-wrapper {
+  max-width: 1160px; margin: 0 auto; padding: 48px 24px 88px;
+}
+
+/* ── INTRO BOX ── */
+.intro-box {
+  background: #fff; border: 1px solid var(--line-gray);
+  border-left: 5px solid var(--crimson); border-radius: 4px;
+  padding: 28px 32px; margin-bottom: 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.intro-box p { font-size: 1.02rem; line-height: 1.9; color: var(--text); }
+.intro-box p + p { margin-top: 0.8rem; }
+.intro-box strong { color: var(--crimson); font-weight: 600; }
+
+/* ── LEGEND ROW ── */
+.legend-row {
+  display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+  margin-bottom: 28px;
+}
+.legend-block {
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  padding: 12px 18px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+  flex: 1; min-width: 240px;
+}
+.legend-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6em; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--dark-gold);
+  margin-right: 4px; white-space: nowrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62em;
+  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+}
+.legend-pip {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.legend-pip.agree    { background: var(--agree); }
+.legend-pip.partial  { background: var(--partial); }
+.legend-pip.disagree { background: var(--disagree); }
+
+/* ── SEARCH BOX ── */
+.search-wrap {
+  position: relative; margin-bottom: 28px;
+}
+.search-wrap svg {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 15px; height: 15px; stroke: var(--muted); pointer-events: none;
+}
+#matrix-search {
+  width: 100%; padding: 10px 14px 10px 40px;
+  font-family: 'Source Serif 4', serif; font-size: 0.95rem; font-style: italic;
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+#matrix-search:focus { border-color: var(--gold); }
+#matrix-search::placeholder { color: var(--muted); }
+
+/* ── MATRIX TABLE ── */
+.matrix-wrap {
+  border: 1px solid var(--line-gray); border-radius: 6px; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+
+/* Sticky column headers */
+.matrix-table {
+  width: 100%; border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Column widths */
+.col-topic   { width: 17%; }
+.col-agree   { width: 4%; }
+.col-catholic{ width: 26%; }
+.col-lds     { width: 26%; }
+.col-father  { width: 27%; }
+
+/* ── HEADER ROW ── */
+.matrix-table thead tr {
+  background: linear-gradient(135deg, #4A0F1A 0%, #6B1D2A 100%);
+}
+.matrix-table thead th {
+  padding: 16px 18px; text-align: left; vertical-align: bottom;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68em;
+  font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  position: sticky; top: 0;
+}
+.matrix-table thead th:last-child { border-right: none; }
+.th-topic { color: var(--gold); }
+.th-agree { color: rgba(255,255,255,0.5); text-align: center; }
+.th-catholic {
+  color: #fff;
+  border-top: 3px solid rgba(197,165,90,0.8);
+}
+.th-lds {
+  color: #C8A0E8;
+  border-top: 3px solid #6B3A9A;
+}
+.th-father {
+  color: #A0B8D8;
+  border-top: 3px solid #3A6A9A;
+}
+.th-label {
+  font-size: 0.95em; display: block; margin-bottom: 3px;
+}
+.th-sub {
+  font-size: 0.72em; opacity: 0.6; font-weight: 400; letter-spacing: 0.08em;
+  display: block; font-style: italic; font-family: 'Source Serif 4', serif;
+}
+
+/* ── SECTION HEADER ROW ── */
+.section-row td {
+  background: #FAF6F0;
+  border-top: 2px solid var(--line-gray);
+  border-bottom: 1px solid var(--line-gray);
+  padding: 10px 18px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--dark-gold);
+}
+.section-row .section-dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-right: 8px; vertical-align: middle;
+}
+
+/* ── DATA ROWS ── */
+.matrix-row td {
+  padding: 16px 18px; vertical-align: top;
+  border-bottom: 1px solid var(--line-gray);
+  border-right: 1px solid var(--line-gray);
+  font-size: 0.88em; line-height: 1.75;
+}
+.matrix-row td:last-child { border-right: none; }
+.matrix-row:last-child td { border-bottom: none; }
+
+/* alternating row tint */
+.matrix-row:nth-child(even) .td-catholic { background: rgba(139,0,0,0.02); }
+.matrix-row:nth-child(even) .td-lds      { background: rgba(74,26,107,0.02); }
+.matrix-row:nth-child(even) .td-father   { background: rgba(30,58,95,0.02); }
+.matrix-row:nth-child(odd)  .td-catholic { background: rgba(255,248,248,0.5); }
+.matrix-row:nth-child(odd)  .td-lds      { background: rgba(248,245,255,0.5); }
+.matrix-row:nth-child(odd)  .td-father   { background: rgba(245,248,255,0.5); }
+
+/* Topic cell */
+.td-topic {
+  background: #FAF6F0 !important;
+  border-right: 1px solid var(--line-gray) !important;
+}
+.topic-name {
+  font-family: 'Playfair Display', serif; font-size: 1.05em;
+  font-weight: 700; color: var(--crimson); margin-bottom: 4px;
+  line-height: 1.3;
+}
+.topic-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6em;
+  font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 2px; color: #fff;
+  display: inline-block; margin-top: 2px;
+}
+.topic-link {
+  display: block; margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6em;
+  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--dark-gold); text-decoration: none;
+  border-bottom: 1px dotted var(--dark-gold);
+  width: fit-content; transition: color 0.2s;
+}
+.topic-link:hover { color: var(--crimson); border-color: var(--crimson); }
+
+/* Agreement cell */
+.td-agree {
+  text-align: center; background: #FAF6F0 !important;
+  border-right: 1px solid var(--line-gray) !important;
+  padding: 16px 8px !important;
+}
+.agree-dot {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 50%; border: 2px solid var(--parchment);
+}
+.agree-dot.agree    { background: var(--agree);    box-shadow: 0 0 0 2px var(--agree); }
+.agree-dot.partial  { background: var(--partial);  box-shadow: 0 0 0 2px var(--partial); }
+.agree-dot.disagree { background: var(--disagree); box-shadow: 0 0 0 2px var(--disagree); }
+.agree-label {
+  display: block; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52em; font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-top: 5px; color: var(--muted);
+}
+
+/* Content cells */
+.td-catholic, .td-lds, .td-father { color: var(--text); }
+.cell-quote {
+  font-style: italic; color: #3A1A1A; margin-bottom: 6px;
+  padding-left: 10px; border-left: 3px solid var(--gold);
+  font-size: 0.92em; line-height: 1.65;
+}
+.cell-source {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58em;
+  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--dark-gold); margin-top: 8px; display: block;
+}
+.cell-text { line-height: 1.75; }
+.cell-text em { color: var(--crimson); font-style: italic; }
+
+/* ── HIDDEN / FILTER STATES ── */
+.matrix-row.hidden { display: none; }
+.section-row.hidden { display: none; }
+
+/* ── EMPTY STATE ── */
+#empty-state {
+  display: none; text-align: center; padding: 60px 24px;
+  background: #fff; border: 1px solid var(--line-gray); border-radius: 4px;
+  margin-top: 24px;
+}
+#empty-state p {
+  font-family: 'Playfair Display', serif; font-size: 1.1em;
+  font-style: italic; color: var(--muted);
+}
+
+/* ── RESULTS COUNT ── */
+.results-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.results-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65em; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #fff; text-align: center; padding: 28px 20px;
+  border-top: 1px solid var(--line-gray);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68em;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted);
+}
+.print-colophon { display: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .col-topic   { width: 22%; }
+  .col-agree   { width: 5%; }
+  .col-catholic{ width: 24.33%; }
+  .col-lds     { width: 24.33%; }
+  .col-father  { width: 24.33%; }
+  .matrix-table thead th, .matrix-row td { padding: 12px 12px; }
+}
+@media (max-width: 700px) {
+  .nav-hamburger { display: flex; margin-left: auto; order: 99; flex-shrink: 0; }
+  .site-nav .nav-links { display: none; }
+  .nav-print-btn { display: none; }
+  .site-nav { padding: 0.55rem 1rem; }
+  .sidebar { display: block; transform: translateX(100%); right: 0; position: fixed; }
+  .sidebar.open { transform: translateX(0); }
+  .controls-bar { padding: 10px 12px; top: 48px; overflow-x: auto; flex-wrap: nowrap; }
+  .controls-divider { display: none; }
+  .page-header { padding: 48px 20px 36px; }
+  .page-wrapper { padding: 24px 12px 60px; }
+  .matrix-wrap { overflow-x: auto; }
+  .matrix-table { min-width: 700px; }
+  .intro-box { padding: 20px 18px; }
+}
+@media print {
+  #reading-progress-bar, .site-nav, .sidebar-overlay, .sidebar,
+  .nav-print-btn, .controls-bar, .search-wrap, footer { display: none !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 9pt; }
+  .page-header {
+    background: none !important; color: #000 !important;
+    border-bottom: 2pt solid #8B0000; padding: 0.4cm 0 0.5cm !important;
+  }
+  .page-header h1, .page-header h1 span { color: #8B0000 !important; }
+  .page-header .subtitle, .page-header .meta { color: #333 !important; }
+  .page-wrapper { padding: 0 !important; max-width: 100% !important; }
+  .matrix-row { page-break-inside: avoid; }
+  .print-colophon {
+    display: block !important; margin-top: 2cm; padding-top: 0.5cm;
+    border-top: 1pt solid #ccc; font-family: monospace;
+    font-size: 8pt; color: #666; text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="reading-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <a href="../index.html" class="nav-home">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../articles.html">Articles</a></li>
+    <li><a href="../charts.html">Charts</a></li>
+    <li><a href="../topics.html">Topics</a></li>
+    <li><a href="../resources.html">Resources</a></li>
+  </ul>
+  <button class="nav-print-btn" onclick="window.print()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </svg>
+    Print
+  </button>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
+  <h1>Doctrine <span>Comparison Matrix</span></h1>
+  <p class="subtitle">Catholic, Latter-day Saint, and early Church Father positions on every major point of theology — compared side by side, filterable by topic and agreement.</p>
+  <p class="meta">Interactive Chart &nbsp;·&nbsp; Comparative Theology &nbsp;·&nbsp; Apologetics</p>
+</header>
+
+<!-- ── CONTROLS BAR (sticky) ── -->
+<div class="controls-bar">
+  <span class="controls-label">Topic:</span>
+  <button class="filter-pill active" data-topic="all">All Topics</button>
+  <button class="filter-pill" data-topic="god">Nature of God</button>
+  <button class="filter-pill" data-topic="church">Church</button>
+  <button class="filter-pill" data-topic="scripture">Scripture</button>
+  <button class="filter-pill" data-topic="salvation">Salvation</button>
+  <button class="filter-pill" data-topic="sacrament">Sacraments</button>
+  <button class="filter-pill" data-topic="authority">Authority</button>
+  <button class="filter-pill" data-topic="afterlife">Afterlife</button>
+  <button class="filter-pill" data-topic="marriage">Marriage</button>
+  <div class="controls-divider"></div>
+  <span class="controls-label">Agreement:</span>
+  <button class="agree-pill active" data-agree="all">All</button>
+  <button class="agree-pill" data-agree="agree">Agree</button>
+  <button class="agree-pill" data-agree="partial">Partial</button>
+  <button class="agree-pill" data-agree="disagree">Disagree</button>
+</div>
+
+<!-- ── PAGE BODY ── -->
+<div class="page-wrapper">
+
+  <div class="intro-box">
+    <p>This matrix maps the positions of <strong>Catholic Christianity</strong>, <strong>Latter-day Saint theology</strong>, and <strong>the early Church Fathers</strong> on thirty-two major doctrinal questions. The "Agreement" column indicates whether the Catholic and LDS positions align, partially overlap, or stand in direct opposition. Church Father citations in the rightmost column demonstrate which tradition the earliest post-apostolic witnesses support — the most historically significant question in the Catholic-LDS debate.</p>
+    <p><strong>How to use this matrix:</strong> Use the filters above to narrow by theological topic or by agreement level. The search box filters by keyword across all cells simultaneously. Click any article link in the Topic column to read the full argument. The agreement indicator reflects Catholic-vs-LDS comparison; green does not imply the Catholic position is wrong where it differs from LDS teaching.</p>
+  </div>
+
+  <!-- Legend + Search -->
+  <div class="legend-row">
+    <div class="legend-block">
+      <span class="legend-title">Agreement Key:</span>
+      <div class="legend-item"><div class="legend-pip agree"></div> Catholic &amp; LDS Agree</div>
+      <div class="legend-item"><div class="legend-pip partial"></div> Partial Overlap</div>
+      <div class="legend-item"><div class="legend-pip disagree"></div> Direct Conflict</div>
+    </div>
+    <div class="legend-block" style="flex:2">
+      <span class="legend-title">Columns:</span>
+      <div class="legend-item" style="color:var(--col-catholic)">■ Catholic — the position of the Roman Catholic Church, per Scripture, Tradition, and the Magisterium.</div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" id="matrix-search" placeholder="Search any doctrine, term, or source…" autocomplete="off">
+  </div>
+
+  <div class="results-bar">
+    <span class="results-count" id="results-count">32 doctrines displayed</span>
+  </div>
+
+  <!-- ── THE MATRIX TABLE ── -->
+  <div class="matrix-wrap">
+    <table class="matrix-table" id="matrix-table">
+      <colgroup>
+        <col class="col-topic">
+        <col class="col-agree">
+        <col class="col-catholic">
+        <col class="col-lds">
+        <col class="col-father">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="th-topic">
+            <span class="th-label">Doctrine / Topic</span>
+            <span class="th-sub">+ linked articles</span>
+          </th>
+          <th class="th-agree">
+            <span class="th-label">⬤</span>
+          </th>
+          <th class="th-catholic">
+            <span class="th-label">Catholic Position</span>
+            <span class="th-sub">Scripture &amp; Tradition</span>
+          </th>
+          <th class="th-lds">
+            <span class="th-label">LDS Position</span>
+            <span class="th-sub">Standard Works &amp; Prophets</span>
+          </th>
+          <th class="th-father">
+            <span class="th-label">Early Church Fathers</span>
+            <span class="th-sub">Pre-Nicene witness (AD 95–325)</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body">
+
+        <!-- ══ SECTION: NATURE OF GOD ══ -->
+        <tr class="section-row" data-section="god">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-god)"></span>
+            Nature of God &amp; the Trinity
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="god" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Monotheism</div>
+            <span class="topic-tag" style="background:var(--cat-god)">God</span>
+            <a class="topic-link" href="../articles/a-house-divided-against-itself.html">↗ A House Divided</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">One God — infinite, eternal, immaterial, and perfectly simple — identical with His own existence (<em>ipsum esse subsistens</em>). The Trinity is one Being in three Persons, not three gods.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Three wholly separate beings who are one in purpose but not in substance. Described as "three Gods" by LDS apostle Bruce R. McConkie. An explicitly polytheistic framework: gods exist in infinite number.</div>
+            <span class="cell-source">McConkie, Mormon Doctrine; King Follett Discourse (1844)</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"There is one God who manifested Himself through Jesus Christ His Son."</div>
+            <span class="cell-source">Ignatius of Antioch, To the Magnesians, c. AD 107</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="god" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Divine Corporeality</div>
+            <span class="topic-tag" style="background:var(--cat-god)">God</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">God is pure spirit — without body, parts, or passions. The Incarnation does not give God a body; it is the eternal Son who takes on a human nature. The Father remains incorporeal.</div>
+            <span class="cell-source">Fourth Lateran Council (1215); CCC 42, 370</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">God the Father has "a body of flesh and bones as tangible as man's." He is a glorified, resurrected, embodied being. The Holy Ghost alone is immaterial.</div>
+            <span class="cell-source">D&amp;C 130:22; Joseph Smith, King Follett Discourse</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"God is not as man… He is without form and incomprehensible."</div>
+            <span class="cell-source">Justin Martyr, First Apology, c. AD 155</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="god" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Divine Immutability</div>
+            <span class="topic-tag" style="background:var(--cat-god)">God</span>
+            <a class="topic-link" href="../articles/rock-and-the-sand.html">↗ Rock and the Sand</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">God is absolutely unchangeable — He cannot grow, diminish, learn, or progress. His perfections are infinite and complete from eternity. "I am the LORD; I do not change" (Mal 3:6).</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">God the Father was once a mortal man who progressed to godhood through obedience. The Lorenzo Snow couplet: "As man now is, God once was; as God now is, man may become." God exists within time and continues to grow with His creation.</div>
+            <span class="cell-source">Lorenzo Snow, Millennial Star, 1840; King Follett Discourse</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The nature of God admits no change of any kind."</div>
+            <span class="cell-source">Origen, De Principiis I.1, c. AD 225</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="god" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">The Trinity</div>
+            <span class="topic-tag" style="background:var(--cat-god)">God</span>
+            <a class="topic-link" href="../articles/ante-nicene-fathers.html">↗ Ante-Nicene Fathers</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">One God in three co-equal, co-eternal, consubstantial Persons: Father, Son, Holy Spirit. The three share one divine substance (<em>ousia</em>). Defined at Nicaea (325) and Constantinople (381); rooted in Scripture and apostolic tradition.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Three wholly separate beings — the "LDS Godhead." Father and Son are physically distinct, embodied individuals. They share purpose and will, not nature or substance. Closer to ancient tritheism than Nicene orthodoxy.</div>
+            <span class="cell-source">Articles of Faith 1; D&amp;C 130:22</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"There is one God… the Father, the Son, and the Holy Spirit."</div>
+            <span class="cell-source">Tertullian, Against Praxeas 2, c. AD 213 — coining "Trinitas"</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="god" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Human Deification / Exaltation</div>
+            <span class="topic-tag" style="background:var(--cat-god)">God</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text"><em>Theosis</em>: believers participate in the divine nature by grace (2 Pet 1:4), becoming "partakers of divinity" — but always as creatures, never becoming identical with or equal to God. The Creator-creature distinction is eternal.</div>
+            <span class="cell-source">Athanasius, On the Incarnation, c. AD 318; CCC 460</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Exaltation: faithful Latter-day Saints become gods in the fullest sense — ruling their own worlds, procreating spirit children, possessing the same divine nature as Heavenly Father. The Creator-creature distinction is collapsed entirely.</div>
+            <span class="cell-source">D&amp;C 132:20; Lorenzo Snow couplet</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"God became man that man might become god" — but always by participation, never by nature.</div>
+            <span class="cell-source">Athanasius, On the Incarnation 54, c. AD 318</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: CHURCH & AUTHORITY ══ -->
+        <tr class="section-row" data-section="church">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-church)"></span>
+            The Church &amp; Ecclesiology
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="church" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">The Great Apostasy</div>
+            <span class="topic-tag" style="background:var(--cat-church)">Church</span>
+            <a class="topic-link" href="../articles/ante-nicene-fathers.html">↗ Ante-Nicene Fathers</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">The Church is indefectible. Christ's promise — "the gates of hell shall not prevail" (Mt 16:18) — is a divine guarantee that the Church cannot cease to exist or lose the deposit of faith. No total apostasy is possible.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">The Church Christ founded fell into total apostasy shortly after the Apostles died — losing both its authority and doctrinal integrity. This necessitated a complete Restoration through Joseph Smith in 1820. Without this premise, LDS claims have no rationale.</div>
+            <span class="cell-source">Articles of Faith; D&amp;C 1:30; Joseph Smith — History 1:19</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The Church… though dispersed throughout the whole world… carefully guards the faith as if she occupied but one house."</div>
+            <span class="cell-source">Irenaeus, Against Heresies I.10, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="church" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Apostolic Succession</div>
+            <span class="topic-tag" style="background:var(--cat-church)">Church</span>
+            <a class="topic-link" href="../articles/ante-nicene-fathers.html">↗ Ante-Nicene Fathers</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">An unbroken chain of episcopal ordination from the Apostles to the present bishops. Authority is transmitted historically through the laying on of hands — not through direct heavenly commission. Irenaeus lists the Roman bishops as proof of continuity.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Traditional succession was entirely lost in the Great Apostasy. Authority could not be recovered — only restored by direct angelic visitation. John the Baptist restored the Aaronic Priesthood (1829); Peter, James, and John the Melchizedek Priesthood.</div>
+            <span class="cell-source">Joseph Smith — History 1:68–72; D&amp;C 27:12</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"It is necessary to obey the presbyters who are in the Church — those who… have received the certain gift of truth according to the good pleasure of the Father."</div>
+            <span class="cell-source">Irenaeus, Against Heresies IV.26, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="church" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Papal Primacy</div>
+            <span class="topic-tag" style="background:var(--cat-church)">Church</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">The Bishop of Rome, as successor of Peter, holds a primacy of jurisdiction over the universal Church (Mt 16:18–19). Papal infallibility — narrowly defined — preserves the Pope from error when formally defining faith or morals for the whole Church.</div>
+            <span class="cell-source">Vatican I, Pastor Aeternus (1870)</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">No Roman papacy is recognized. Authority is vested in the LDS First Presidency and Quorum of the Twelve Apostles. The living prophet's word supersedes that of his predecessors and may override prior "revelation."</div>
+            <span class="cell-source">D&amp;C 107:22–24; LDS Church governance</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Because of her more powerful principality, it is necessary that every church agree with this church" — i.e. Rome.</div>
+            <span class="cell-source">Irenaeus, Against Heresies III.3, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="church" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Priesthood Structure</div>
+            <span class="topic-tag" style="background:var(--cat-church)">Church</span>
+            <a class="topic-link" href="../articles/ante-nicene-fathers.html">↗ Ante-Nicene Fathers</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Holy Orders — Bishop, Priest, Deacon — is a sacrament transmitting the one priesthood of Christ through apostolic succession. The ministerial priesthood differs in kind (not degree) from the common priesthood of all the baptized. No "Aaronic" tier exists; the Levitical priesthood is fulfilled and superseded in Christ.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Two priesthood orders: Aaronic (lesser, received by worthy males at age 12) and Melchizedek (higher, for adult males). Both were entirely lost and restored through angelic visitation in 1829. The Aaronic Priesthood continues alongside the Melchizedek as a distinct tier.</div>
+            <span class="cell-source">D&amp;C 107; Joseph Smith — History 1:68–72</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Let no one do anything pertaining to the church without the bishop… wherever the bishop appears, let the congregation be present."</div>
+            <span class="cell-source">Ignatius, To the Smyrnaeans 8, c. AD 107</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: SCRIPTURE ══ -->
+        <tr class="section-row" data-section="scripture">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-scripture)"></span>
+            Scripture &amp; Revelation
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="scripture" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Canon of Scripture</div>
+            <span class="topic-tag" style="background:var(--cat-scripture)">Scripture</span>
+            <a class="topic-link" href="../charts/historicity-comparison.html">↗ Historicity Comparison</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">73 books (46 OT, 27 NT), defined by Church authority, closed with the death of the last Apostle. The Church produced and authenticates Scripture — Scripture does not stand apart from the Tradition that formed it.</div>
+            <span class="cell-source">Council of Trent (1546); CCC 120</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Four "standard works": KJV Bible (qualified: "as far as correctly translated"), Book of Mormon, Doctrine &amp; Covenants, Pearl of Great Price. Canon is open — a living prophet can add scripture. The Bible is most susceptible to transmission error.</div>
+            <span class="cell-source">Articles of Faith 8–9; 8th Article of Faith</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The Scriptures are the voice of the Holy Spirit."</div>
+            <span class="cell-source">Clement of Rome, 1 Clement 45, c. AD 95</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="scripture" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Sola Scriptura</div>
+            <span class="topic-tag" style="background:var(--cat-scripture)">Scripture</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Rejected. Scripture and Tradition form a single source of divine revelation; neither is complete without the other. The Magisterium authoritatively interprets both. Private interpretation divorced from the Church's living Tradition is insufficient and dangerous.</div>
+            <span class="cell-source">Dei Verbum 9–10, Vatican II</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Also rejected — but for different reasons. Latter-day Saints appeal not to Tradition but to continuing revelation through a living prophet. The Bible's reliability is itself questioned wherever it conflicts with LDS teaching.</div>
+            <span class="cell-source">Articles of Faith 9; Joseph Smith — History 1:12</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"One must not seek among others the truth that can be found easily in the Church."</div>
+            <span class="cell-source">Irenaeus, Against Heresies III.4, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="scripture" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Continuing Revelation</div>
+            <span class="topic-tag" style="background:var(--cat-scripture)">Scripture</span>
+            <a class="topic-link" href="../articles/fullness-of-time.html">↗ Fullness of Time</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Public revelation closed with the death of the last Apostle. The deposit of faith is complete in Christ (Heb 1:1–2). No new public revelation can add to it. Private revelations (approved apparitions) may edify but carry no universal binding authority and cannot contradict defined doctrine.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Revelation is open and ongoing. The Ninth Article of Faith explicitly affirms future revelation. The living prophet receives binding new revelation for the whole Church. Individuals receive personal revelation confirming Church teaching. The canon is never closed.</div>
+            <span class="cell-source">Articles of Faith 9; D&amp;C 68:4</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Even if an angel from heaven should preach a gospel contrary to what we have preached — let him be anathema."</div>
+            <span class="cell-source">Paul, Galatians 1:8 — cited by Irenaeus as the rule against all novelty</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="scripture" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Book of Mormon Historicity</div>
+            <span class="topic-tag" style="background:var(--cat-scripture)">Scripture</span>
+            <a class="topic-link" href="../charts/historicity-comparison.html">↗ Historicity Comparison</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">The Book of Mormon lacks archaeological, genetic, linguistic, or historical corroboration for its claimed ancient American Israelite civilization. No evidence of horses, chariots, steel, wheat, or Hebrew linguistic traces in the relevant pre-Columbian context has been found.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">The Book of Mormon is a historical record of ancient Israelites in the Americas (c. 600 BC – AD 421), abridged by the prophet Mormon and translated by Joseph Smith. It is "the most correct of any book on earth." Its historicity is foundational to LDS truth claims.</div>
+            <span class="cell-source">Joseph Smith, History of the Church 4:461</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-text">Not applicable — no patristic engagement with the Book of Mormon. The relevant question is whether the Ante-Nicene Church shows any awareness of a "restoration" gospel in the Americas, or any doctrine distinctive to the Book of Mormon. It does not.</div>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: SALVATION ══ -->
+        <tr class="section-row" data-section="salvation">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-salvation)"></span>
+            Salvation &amp; Grace
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="salvation" data-agree="partial">
+          <td class="td-topic">
+            <div class="topic-name">Original Sin</div>
+            <span class="topic-tag" style="background:var(--cat-salvation)">Salvation</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Adam's sin wounded human nature — darkening the intellect, weakening the will, introducing disordered concupiscence and death. All humans inherit this privation, not by imitation but by origin. Only Baptism restores the soul to grace. (Rom 5:12–19)</div>
+            <span class="cell-source">Council of Trent, Decree on Original Sin (1546); CCC 402–406</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Original sin substantially rejected. The Second Article of Faith: "We believe men will be punished for their own sins, and not for Adam's transgression." The Fall is often cast as a "fortunate fall" enabling mortal progress. Infants are born innocent; accountability begins at age 8.</div>
+            <span class="cell-source">2nd Article of Faith; Moroni 8:8–12; D&amp;C 29:46–47</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Death passed upon all men, in whom all sinned" — original sin is inherited, not merely imitated.</div>
+            <span class="cell-source">Tertullian, A Treatise on the Soul 40, c. AD 210; Origen similarly affirms universal inherited guilt</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="salvation" data-agree="partial">
+          <td class="td-topic">
+            <div class="topic-name">Justification / Grace</div>
+            <span class="topic-tag" style="background:var(--cat-salvation)">Salvation</span>
+            <a class="topic-link" href="../articles/fullness-of-time.html">↗ Fullness of Time</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Justification is by grace through faith — effected by God alone, received through the sacraments and free cooperation of the will. Grace is not a legal imputation but a real, ontological transformation of the soul. Works performed in grace are meritorious only instrumentally.</div>
+            <span class="cell-source">Council of Trent, Decree on Justification; CCC 1987–1995</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Salvation requires grace plus ordinances, covenants, and commandments. The classic LDS formulation: "after all we can do" (2 Ne 25:23). Grace enables and completes human effort; it does not primarily initiate salvation. Exaltation (highest salvation) requires temple ordinances and celestial marriage.</div>
+            <span class="cell-source">2 Nephi 25:23; D&amp;C 131:1–4; Gospel Principles</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"It is not possible that he should be saved who does not believe in Christ; and salvation is the gift of God."</div>
+            <span class="cell-source">Origen, Commentary on Romans 4, c. AD 240</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="salvation" data-agree="agree">
+          <td class="td-topic">
+            <div class="topic-name">Universal Resurrection</div>
+            <span class="topic-tag" style="background:var(--cat-salvation)">Salvation</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot agree"></span>
+            <span class="agree-label">Agree</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">All the dead will be raised in a bodily resurrection at the Last Judgment (Jn 5:28–29; 1 Cor 15). The same body that died — albeit glorified — will be reunited with the soul. The resurrection is the foundation of Christian hope.</div>
+            <span class="cell-source">CCC 988–1004; Athanasian Creed</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">All humans — regardless of obedience or belief — will be resurrected through the Atonement of Christ. This "general salvation" is universal and unconditional. Resurrection alone does not constitute exaltation; it is merely the restoration of body and spirit.</div>
+            <span class="cell-source">Alma 11:42–44; Articles of Faith 3</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The resurrection of the flesh… is for those who have been good, for eternal life; for those who have done evil, for eternal punishment."</div>
+            <span class="cell-source">Justin Martyr, First Apology 52, c. AD 155</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: SACRAMENTS ══ -->
+        <tr class="section-row" data-section="sacrament">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-sacrament)"></span>
+            Sacramental Theology
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="sacrament" data-agree="partial">
+          <td class="td-topic">
+            <div class="topic-name">Baptism</div>
+            <span class="topic-tag" style="background:var(--cat-sacrament)">Sacrament</span>
+            <a class="topic-link" href="../articles/a-house-divided-against-itself.html">↗ A House Divided</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">The first sacrament of initiation — necessary for salvation — which effects rebirth (Jn 3:5), removes original sin, infuses sanctifying grace, and incorporates the person into the Body of Christ. Infant baptism is ancient and theologically grounded in original sin. Any Christian may baptize validly with water and Trinitarian formula.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Required ordinance for entrance into God's kingdom, valid only by one holding Aaronic Priesthood authority. Removes personal sins (not original sin, which LDS denies). Proxy baptism for the dead is practiced for deceased ancestors. Infant baptism is explicitly condemned in the Book of Mormon (Moroni 8).</div>
+            <span class="cell-source">Moroni 8; D&amp;C 20:37; D&amp;C 128</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"We… lead them to the water, and they are reborn in the same manner in which we ourselves were reborn."</div>
+            <span class="cell-source">Justin Martyr, First Apology 61, c. AD 155</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="sacrament" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">The Eucharist / Real Presence</div>
+            <span class="topic-tag" style="background:var(--cat-sacrament)">Sacrament</span>
+            <a class="topic-link" href="../articles/holy-eucharist-real-presence.html">↗ The Holy Eucharist</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">The central sacrament of Catholic worship. At every valid Mass, the bread and wine become — through transubstantiation — the true Body, Blood, Soul, and Divinity of Christ. This is ontological, not symbolic. Every Mass makes present the one sacrifice of Calvary.</div>
+            <span class="cell-source">Fourth Lateran Council (1215); CCC 1374–1381</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">The weekly "Sacrament" (bread and water) is a memorial ordinance renewing baptismal covenants. No Real Presence is claimed — the bread and water remain bread and water. It is a spiritual aid to remembrance, not an objective efficacious encounter with Christ's Body.</div>
+            <span class="cell-source">D&amp;C 20:75–79; LDS Church Handbook</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The bread which we call Eucharist… is not common bread: but as Jesus Christ our Savior was made flesh… so likewise have we been taught that the food… is the Flesh and Blood of that Jesus who was made flesh."</div>
+            <span class="cell-source">Justin Martyr, First Apology 66, c. AD 155</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="sacrament" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Confession / Penance</div>
+            <span class="topic-tag" style="background:var(--cat-sacrament)">Sacrament</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">One of the seven sacraments — the ordinary means by which sins committed after Baptism are forgiven. Christ granted the Apostles authority to forgive and retain sins (Jn 20:22–23). Absolution by a validly ordained priest is efficacious ex opere operato.</div>
+            <span class="cell-source">Council of Trent; CCC 1440–1460</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Repentance is required for post-baptismal sin, including confession to a bishop for serious sins. The bishop counsels and determines whether formal Church discipline is needed. Absolution is not understood sacramentally — it is a judicial-pastoral function, not an ex opere operato efficacious act.</div>
+            <span class="cell-source">D&amp;C 58:42–43; LDS General Handbook</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Confess your sins in church… so that your offering may be pure."</div>
+            <span class="cell-source">Didache 14, c. AD 100</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="sacrament" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Baptism for the Dead</div>
+            <span class="topic-tag" style="background:var(--cat-sacrament)">Sacrament</span>
+            <a class="topic-link" href="../articles/a-house-divided-against-itself.html">↗ A House Divided</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Not practiced. Those who die without explicit knowledge of the Gospel may be saved through the grace of Christ applied in ways known to God (Lumen Gentium 16). God's mercy is not limited to the sacramentally baptized; proxy rituals are not necessary or valid.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Essential practice — deceased ancestors must receive proxy baptism in LDS temples to access the highest salvation. This drives the entire LDS genealogical enterprise. Based on 1 Corinthians 15:29. Contradicts the Book of Mormon's own teaching that "baptism availeth nothing" for those who die without the law (Moroni 8:22).</div>
+            <span class="cell-source">D&amp;C 127–128; 1 Corinthians 15:29</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-text">No endorsement in any ante-Nicene father. The Patristic consensus is that death closes the window for conversion. Tertullian mentions the practice among a heretical group (Marcionites) — using it as evidence of error, not approval.</div>
+            <span class="cell-source">Tertullian, Against Marcion 5.10, c. AD 207</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: AUTHORITY ══ -->
+        <tr class="section-row" data-section="authority">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-authority)"></span>
+            Authority &amp; Revelation
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="authority" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Living Prophet</div>
+            <span class="topic-tag" style="background:var(--cat-authority)">Authority</span>
+            <a class="topic-link" href="../articles/rock-and-the-sand.html">↗ Rock and the Sand</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Public revelation closed with the Apostles. No ongoing institutional prophetic office can add to the deposit of faith. The Pope teaches infallibly under very specific conditions — but he clarifies and guards existing truth; he cannot generate new binding doctrine.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">The LDS President holds the office of "prophet, seer, and revelator" — an ongoing prophetic office that can receive new scripture and binding revelation. The living prophet's word supersedes all past prophets, including, in principle, Joseph Smith. Without a living prophet, the Church would fall into apostasy again.</div>
+            <span class="cell-source">D&amp;C 21:4–6; LDS Articles of Faith</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The tradition… which comes from the apostles, and is preserved in the churches through the successions of presbyters, is to be tested and rejected [when it contradicts] the truth."</div>
+            <span class="cell-source">Irenaeus, Against Heresies III.2–4, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="authority" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Doctrinal Reversals</div>
+            <span class="topic-tag" style="background:var(--cat-authority)">Authority</span>
+            <a class="topic-link" href="../articles/rock-and-the-sand.html">↗ Rock and the Sand</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Defined dogmas are irreversible — they cannot be contradicted by later popes or councils. Authentic doctrinal development deepens understanding without contradicting prior teaching (Newman's criterion). The papacy exists to guard, not override, the deposit of faith.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Core LDS doctrines have been officially reversed: polygamy commanded (D&amp;C 132) then suspended; the priesthood ban taught as divine revelation then disavowed; the Adam-God theory taught by Brigham Young then condemned. Each reversal is described as "further revelation."</div>
+            <span class="cell-source">Official Declaration 1 (1890); Official Declaration 2 (1978); 2013 Gospel Topics Essays</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"It belongs to a sound mind… to reckon that truth is to be found in… the Church… while the Marcionites and Valentinians… who meet beyond the pale of the Church, are in error."</div>
+            <span class="cell-source">Irenaeus, Against Heresies IV.33, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="authority" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Sacred Tradition</div>
+            <span class="topic-tag" style="background:var(--cat-authority)">Authority</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Sacred Tradition is the living transmission of the apostolic deposit through the Church's preaching, worship, and governance. Along with Scripture, it forms the single source of divine revelation. The two are inseparable — Scripture itself emerged from and is interpreted within Tradition.</div>
+            <span class="cell-source">Dei Verbum 9–10, Vatican II; CCC 80–83</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Catholic-style Tradition is largely rejected as the mechanism of corruption that produced the Great Apostasy. "Traditions of men" is standard LDS vocabulary for dismissed inherited doctrines. The living prophet's teaching supersedes accumulated tradition.</div>
+            <span class="cell-source">Joseph Smith — History 1:19; D&amp;C 93:39</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The apostolic tradition… preserved in the churches is the index of truth."</div>
+            <span class="cell-source">Irenaeus, Against Heresies III.3, c. AD 180</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: AFTERLIFE ══ -->
+        <tr class="section-row" data-section="afterlife">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-afterlife)"></span>
+            Afterlife &amp; Eschatology
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="afterlife" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Heaven / Celestial Kingdom</div>
+            <span class="topic-tag" style="background:var(--cat-afterlife)">Afterlife</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Heaven is the beatific vision — direct, unmediated knowledge of and union with God the Trinity. It is not a place but a state of perfect blessedness: the creature fully united to the Creator by love. No further progression is possible or necessary; the desire for God is perfectly satisfied.</div>
+            <span class="cell-source">CCC 1023–1029; Rev 21–22</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Three degrees of post-mortem glory: Celestial (highest — for fully obedient Latter-day Saints with temple ordinances), Terrestrial (honorable people who rejected the fulness), and Telestial (wicked). Only those in the highest Celestial degree become gods. Most humans attain some degree of glory.</div>
+            <span class="cell-source">D&amp;C 76; D&amp;C 131:1–4</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"The righteous will see the face of God and rejoice in His light… the life that endures forever."</div>
+            <span class="cell-source">Irenaeus, Against Heresies IV.20, c. AD 180</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="afterlife" data-agree="partial">
+          <td class="td-topic">
+            <div class="topic-name">Purgatory / Spirit Prison</div>
+            <span class="topic-tag" style="background:var(--cat-afterlife)">Afterlife</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Purgatory is the state of purification for those who die in God's grace but imperfectly purified — not a "second chance" for those who rejected God, but completion of sanctification for those who accepted Him. The Church prays for the dead (2 Macc 12:46).</div>
+            <span class="cell-source">Council of Florence (1438); Council of Trent (1563); CCC 1030–1032</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">A "spirit world" (paradise and spirit prison) exists between death and resurrection. In spirit prison, the gospel is preached to those who did not hear it in mortality — enabling post-mortem conversion and the later reception of proxy ordinances performed by the living. Death is not the final boundary for repentance.</div>
+            <span class="cell-source">D&amp;C 138; Alma 40; Gospel Principles</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"If a man departs this life with lighter faults, he is condemned to fire which burns away the lighter materials."</div>
+            <span class="cell-source">Origen, Homilies on Jeremiah, c. AD 240 — early purgatorial concept</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="afterlife" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Post-Mortem Repentance</div>
+            <span class="topic-tag" style="background:var(--cat-afterlife)">Afterlife</span>
+            <a class="topic-link" href="../articles/a-house-divided-against-itself.html">↗ A House Divided</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Death closes the window for conversion. Purgatory purifies those already saved, not those who rejected God. "It is appointed for men to die once, and after that comes judgment" (Heb 9:27). The Church teaches that one's fundamental orientation at death is definitive.</div>
+            <span class="cell-source">CCC 1013–1014; Heb 9:27</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Post-mortem conversion is possible through the spirit world missionary program. This directly contradicts the Book of Mormon: "This life is the time for men to prepare to meet God… Do not procrastinate the day of your repentance even until death" (Alma 34:32–35).</div>
+            <span class="cell-source">D&amp;C 138; Alma 34:32–35 (in contradiction)</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"After we go hence there is no place for confession; no place for repentance."</div>
+            <span class="cell-source">John Chrysostom, Homilies on Hebrews 10, c. AD 403</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="afterlife" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Hell / Outer Darkness</div>
+            <span class="topic-tag" style="background:var(--cat-afterlife)">Afterlife</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Hell is the eternal state of those who freely choose to reject God definitively. It is not annihilation but the permanent absence of God — the logical consequence of final, unrepented refusal of love. The Church affirms hell's existence and real possibility without speculating about its population.</div>
+            <span class="cell-source">CCC 1033–1036; Mt 25:41</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">"Outer darkness" is reserved for "sons of perdition" — those who knew God directly and completely denied Him. Very few qualify; most humans attain some degree of glory regardless of their earthly choices. The LDS afterlife is notably optimistic compared to traditional Christianity.</div>
+            <span class="cell-source">D&amp;C 76:31–37; D&amp;C 88:24</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Eternal punishment… is prepared for the devil and his angels… and those who do not obey the Lord."</div>
+            <span class="cell-source">Justin Martyr, First Apology 28, c. AD 155</span>
+          </td>
+        </tr>
+
+
+        <!-- ══ SECTION: MARRIAGE ══ -->
+        <tr class="section-row" data-section="marriage">
+          <td colspan="5">
+            <span class="section-dot" style="background:var(--cat-marriage)"></span>
+            Marriage &amp; Moral Theology
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="marriage" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Monogamy</div>
+            <span class="topic-tag" style="background:var(--cat-marriage)">Marriage</span>
+            <a class="topic-link" href="../articles/catholic-lds-marriage.html">↗ The Marriage Dilemma</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Marriage is inherently monogamous — one man, one woman. Christ explicitly restored the original creational norm of monogamy in Matthew 19:4–8, closing the Mosaic tolerance for polygamy as an accommodation to hardness of heart. This is not disciplinary but doctrinal.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Plural marriage (polygamy) was revealed as a divine requirement (D&amp;C 132), practiced by Joseph Smith and early LDS leaders, and is theologically still an "everlasting covenant." It was suspended in 1890 under federal pressure but the revelation commanding it remains canonical. The Book of Mormon condemns polygamy (Jacob 2:24–27).</div>
+            <span class="cell-source">D&amp;C 132; Jacob 2:24–27 (in contradiction)</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"He who marries another wife while his first wife is alive commits adultery."</div>
+            <span class="cell-source">Hermas, The Shepherd, Mandate 4.1, c. AD 140</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="marriage" data-agree="disagree">
+          <td class="td-topic">
+            <div class="topic-name">Eternal / Celestial Marriage</div>
+            <span class="topic-tag" style="background:var(--cat-marriage)">Marriage</span>
+            <a class="topic-link" href="../articles/catholic-lds-marriage.html">↗ The Marriage Dilemma</a>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot disagree"></span>
+            <span class="agree-label">Conflict</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">Marriage is temporal — it belongs to this world, not the next. "In the resurrection they neither marry nor are given in marriage, but are like angels in heaven" (Mt 22:30). Marriage is ordered toward the good of the spouses and procreation in this life; it is consummated fully in heaven through union with God.</div>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Celestial (temple) marriage is essential for exaltation — without it, one cannot attain the highest degree of the celestial kingdom (D&amp;C 131:1–4). Marriage is "sealed" by priesthood authority and extends eternally. Marriage and procreation continue in the celestial kingdom.</div>
+            <span class="cell-source">D&amp;C 131:1–4; D&amp;C 132:19–20</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"When the Lord says 'In that resurrection they neither marry nor are given in marriage,' He plainly teaches that the bond of marriage is dissolved by death."</div>
+            <span class="cell-source">Tertullian, On Monogamy 10, c. AD 217</span>
+          </td>
+        </tr>
+
+        <tr class="matrix-row" data-topic="marriage" data-agree="partial">
+          <td class="td-topic">
+            <div class="topic-name">Divorce</div>
+            <span class="topic-tag" style="background:var(--cat-marriage)">Marriage</span>
+          </td>
+          <td class="td-agree">
+            <span class="agree-dot partial"></span>
+            <span class="agree-label">Partial</span>
+          </td>
+          <td class="td-catholic">
+            <div class="cell-text">A valid, consummated sacramental marriage is absolutely indissoluble — no civil or ecclesial authority can dissolve it. Annulments declare a marriage never validly occurred; they do not dissolve it. "What God has joined, let no man separate" (Mt 19:6).</div>
+            <span class="cell-source">CCC 1614–1615; Code of Canon Law</span>
+          </td>
+          <td class="td-lds">
+            <div class="cell-text">Divorce (and "cancellation of sealing") is possible through Church processes. An LDS divorce does not automatically dissolve a temple sealing; a formal "sealing cancellation" requires First Presidency approval. Remarriage in the temple is possible. The system is more permissive than Catholic sacramental indissolubility.</div>
+            <span class="cell-source">LDS General Handbook; D&amp;C 132</span>
+          </td>
+          <td class="td-father">
+            <div class="cell-quote">"Marriage once made is not dissolved… a woman cannot marry again while her husband is alive."</div>
+            <span class="cell-source">Athenagoras, A Plea for Christians 33, c. AD 177</span>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div><!-- end matrix-wrap -->
+
+  <div id="empty-state">
+    <p>No doctrines match the current filters. Try adjusting your topic or agreement selection.</p>
+  </div>
+
+</div><!-- end page-wrapper -->
+
+<div class="print-colophon">One Faith Delivered &nbsp;&middot;&nbsp; <span id="print-url-text">onefaithdelivered.org</span></div>
+
+<footer>&copy; 2026 One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="../index.html">Home</a>
+    <a href="../articles.html">Articles</a>
+    <a href="../charts.html">Charts</a>
+    <a href="../topics.html">Topics</a>
+    <a href="../resources.html">Resources</a>
+    <a href="../charts.html" class="sidebar-back">&#8592; All Charts</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+
+<script>
+/* ── Sidebar ── */
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'),
+      sidebar = document.querySelector('.sidebar'),
+      overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open'); btn.classList.remove('open');
+    overlay.classList.remove('visible'); document.body.style.overflow = '';
+  } else {
+    sidebar.classList.add('open'); btn.classList.add('open');
+    overlay.classList.add('visible'); document.body.style.overflow = 'hidden';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar();
+});
+
+/* ── FILTER LOGIC ── */
+var activeTopic = 'all';
+var activeAgree = 'all';
+var searchTerm  = '';
+
+function applyFilters() {
+  var rows     = document.querySelectorAll('.matrix-row');
+  var sections = document.querySelectorAll('.section-row');
+  var visible  = 0;
+
+  rows.forEach(function(row) {
+    var topic   = row.getAttribute('data-topic');
+    var agree   = row.getAttribute('data-agree');
+    var text    = row.textContent.toLowerCase();
+
+    var topicOk  = activeTopic === 'all' || topic === activeTopic;
+    var agreeOk  = activeAgree === 'all' || agree === activeAgree;
+    var searchOk = searchTerm === '' || text.indexOf(searchTerm) !== -1;
+
+    if (topicOk && agreeOk && searchOk) {
+      row.classList.remove('hidden');
+      visible++;
+    } else {
+      row.classList.add('hidden');
+    }
+  });
+
+  // Hide section headers if all their rows are hidden
+  sections.forEach(function(sec) {
+    var sectionName = sec.getAttribute('data-section');
+    var hasVisible = false;
+    rows.forEach(function(row) {
+      if (row.getAttribute('data-topic') === sectionName && !row.classList.contains('hidden')) {
+        hasVisible = true;
+      }
+    });
+    // Special case: topic filter may show rows from mixed sections
+    // Just show/hide based on whether any visible row follows this section
+    sec.classList.remove('hidden');
+  });
+
+  // Count display
+  var countEl = document.getElementById('results-count');
+  countEl.textContent = visible + (visible === 1 ? ' doctrine' : ' doctrines') + ' displayed';
+
+  // Empty state
+  document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+  document.getElementById('matrix-table').style.display = visible === 0 ? 'none' : '';
+}
+
+// Topic filter buttons
+document.querySelectorAll('.filter-pill').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-pill').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    activeTopic = this.getAttribute('data-topic');
+    applyFilters();
+  });
+});
+
+// Agreement filter buttons
+document.querySelectorAll('.agree-pill').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.agree-pill').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    activeAgree = this.getAttribute('data-agree');
+    applyFilters();
+  });
+});
+
+// Search
+var searchTimeout;
+document.getElementById('matrix-search').addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  var val = this.value.trim().toLowerCase();
+  searchTimeout = setTimeout(function() {
+    searchTerm = val;
+    applyFilters();
+  }, 180);
+});
+
+/* ── READING PROGRESS BAR ── */
+(function() {
+  var bar = document.getElementById('reading-progress-bar');
+  function update() {
+    if (!bar) return;
+    var s = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? Math.min(100, (s / h) * 100) : 0;
+    bar.style.width = p + '%';
+    bar.setAttribute('aria-valuenow', Math.round(p));
+  }
+  if (bar) { window.addEventListener('scroll', update, { passive: true }); update(); }
+  var urlEl = document.getElementById('print-url-text');
+  if (urlEl) {
+    var href = window.location.href;
+    urlEl.textContent = href && href !== 'about:blank' ? href : 'onefaithdelivered.org';
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Different Jesus | One Faith Delivered</title>
+<meta name="description" content="A systematic examination of how the Latter-day Saint conception of Jesus Christ differs from the Jesus revealed in Scripture, the Creeds, and the Catholic theological tradition." />
+<link rel="canonical" href="https://onefaithdelivered.org/articles/different-jesus.html" />
+<link rel="icon" href="../favicons/favicon.ico" sizes="any" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   A DIFFERENT JESUS — One Faith Delivered
+   Design system: matches book-of-abraham-problem.html
+   Fonts: Playfair Display + Source Serif 4 + JetBrains Mono
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --crimson:      #8B0000;
+  --dark-crimson: #5C0000;
+  --gold:         #C5A55A;
+  --dark-gold:    #8B7335;
+  --parchment:    #F5F0E8;
+  --dark-bg:      #1A1A1A;
+  --text:         #2A2A2A;
+  --muted:        #666;
+  --lds-amber:    #A06020;
+  --catholic-blue:#1E3A5F;
+  --line-gray:    #D0C8B8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--parchment);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  line-height: 1.6;
+}
+
+/* ── SITE NAV ── */
+.site-nav {
+  position: sticky; top: 0; z-index: 9999;
+  background: linear-gradient(to bottom, rgba(245,240,232,0.98), rgba(240,235,225,0.95));
+  border-bottom: 1px solid var(--line-gray);
+  padding: 0.75rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(6px);
+  font-family: 'Source Serif 4', serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.site-nav a.nav-home {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--crimson);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.site-nav a.nav-home:hover { color: var(--dark-crimson); }
+.site-nav .nav-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dark-gold);
+  text-decoration: none;
+  border: 1px solid rgba(139,115,53,0.35);
+  padding: 0.4rem 1.1rem;
+  border-radius: 3px;
+  transition: background 0.2s, color 0.2s;
+}
+.site-nav .nav-back:hover {
+  background: rgba(139,115,53,0.08);
+  color: var(--crimson);
+}
+.site-nav .nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+.site-nav .nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.site-nav .nav-links a:hover { color: var(--crimson); }
+
+/* ── Hamburger ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  background: none;
+  border: 1px solid rgba(139,115,53,0.3);
+  border-radius: 3px;
+  padding: 6px;
+  z-index: 10001;
+}
+.nav-hamburger span {
+  display: block; height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.25s;
+  transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Sidebar ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+}
+.sidebar-overlay.visible { display: block; }
+.sidebar {
+  position: fixed;
+  top: 0; right: -280px;
+  width: 260px; height: 100%;
+  background: linear-gradient(to bottom, #FAF6F0, #F5F0E8);
+  border-left: 1px solid var(--line-gray);
+  z-index: 10002;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+.sidebar.open { right: 0; }
+.sidebar-inner {
+  padding: 5rem 2rem 2rem;
+  display: flex; flex-direction: column; gap: 0;
+}
+.sidebar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--crimson);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line-gray);
+}
+.sidebar-inner a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(208,200,184,0.5);
+  transition: color 0.2s;
+}
+.sidebar-inner a:hover { color: var(--crimson); }
+.sidebar-inner a.sidebar-back {
+  color: var(--dark-gold);
+  margin-top: 1.5rem;
+  border: 1px solid rgba(139,115,53,0.3);
+  padding: 0.7rem 1rem;
+  text-align: center;
+  border-radius: 2px;
+}
+.sidebar-ornament {
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 8px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* ── HERO / PAGE HEADER ── */
+.page-header {
+  background: linear-gradient(135deg, #0D1F3C 0%, #1E3A5F 45%, #0A1628 100%);
+  color: #F5F0E8;
+  padding: 72px 40px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px);
+  pointer-events: none;
+}
+.back-link {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  margin-bottom: 1.8rem;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  position: relative;
+  z-index: 1;
+}
+.back-link:hover { opacity: 1; }
+.ornament {
+  display: block;
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 12px;
+  margin-bottom: 1.2rem;
+  opacity: 0.7;
+  position: relative;
+  z-index: 1;
+}
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2em, 4vw, 3.2em);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #F5F0E8;
+  margin-bottom: 14px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+.page-header h1 span { color: var(--gold); }
+.page-header .subtitle {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.1em;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(245,240,232,0.75);
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.page-header .tag-line {
+  margin-top: 22px;
+  position: relative;
+  z-index: 1;
+}
+.page-header .tag-line span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(197,165,90,0.7);
+  border: 1px solid rgba(197,165,90,0.25);
+  padding: 4px 12px;
+  border-radius: 2px;
+  margin: 0 4px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* ── MAIN CONTENT AREA ── */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 50px 24px 80px;
+}
+
+/* ── INTRO BOX ── */
+.intro-box {
+  background: #fff;
+  border: 1px solid var(--line-gray);
+  border-left: 5px solid var(--catholic-blue);
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 48px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.intro-box p {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+.intro-box p + p { margin-top: 0.9rem; }
+.intro-box strong { color: var(--catholic-blue); font-weight: 700; }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  margin: 44px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--line-gray);
+}
+.section-divider-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dark-gold);
+  white-space: nowrap;
+}
+
+/* ── DOCTRINE COMPARISON BLOCK ── */
+.doctrine-block {
+  background: #fff;
+  border: 1px solid var(--line-gray);
+  border-radius: 6px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+  transition: box-shadow 0.2s;
+}
+.doctrine-block:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.11); }
+
+.doctrine-header {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #0D1F3C, #1E3A5F);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.doctrine-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--gold);
+}
+.doctrine-topic {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.65);
+}
+
+.doctrine-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.doctrine-col {
+  padding: 24px 26px;
+}
+.doctrine-col:first-child {
+  border-right: 1px solid var(--line-gray);
+  background: #FFF8F0;
+}
+.doctrine-col:last-child {
+  background: #F5F8FF;
+}
+.doctrine-col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid;
+}
+.label-lds {
+  color: var(--lds-amber);
+  border-color: var(--lds-amber);
+}
+.label-catholic {
+  color: var(--catholic-blue);
+  border-color: var(--catholic-blue);
+}
+.doctrine-text {
+  font-size: 0.92em;
+  line-height: 1.78;
+  color: var(--text);
+}
+.doctrine-text strong {
+  font-weight: 600;
+}
+.doctrine-text em {
+  color: var(--dark-gold);
+  font-style: italic;
+}
+.doctrine-text .citation {
+  display: block;
+  margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.doctrine-source {
+  padding: 10px 20px;
+  border-top: 1px solid var(--line-gray);
+  background: #FAFAF8;
+}
+.doctrine-source p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── KEY CONTRAST CARDS ── */
+.contrast-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+.contrast-card {
+  background: #fff;
+  border: 1px solid var(--line-gray);
+  border-top: 4px solid var(--catholic-blue);
+  border-radius: 4px;
+  padding: 22px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.contrast-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+}
+.contrast-card-icon { font-size: 1.4em; margin-bottom: 10px; }
+.contrast-card-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.05em;
+  color: var(--catholic-blue);
+  margin-bottom: 8px;
+}
+.contrast-card-text {
+  font-size: 0.88em;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* ── SCRIPTURE STRIP ── */
+.scripture-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--line-gray);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.scripture-cell {
+  padding: 22px 24px;
+}
+.scripture-cell:first-child {
+  background: linear-gradient(135deg, #FFFCF0, #FFF8E0);
+  border-right: 1px solid var(--line-gray);
+}
+.scripture-cell:last-child {
+  background: linear-gradient(135deg, #F5F8FF, #EEF3FF);
+}
+.scripture-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid;
+}
+.scripture-label.lds { color: var(--lds-amber); border-color: var(--lds-amber); }
+.scripture-label.catholic { color: var(--catholic-blue); border-color: var(--catholic-blue); }
+.scripture-text {
+  font-size: 0.92em;
+  line-height: 1.75;
+  color: var(--text);
+  font-style: italic;
+}
+.scripture-ref {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-style: normal;
+}
+
+/* ── HISTORY BAR ── */
+.history-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 48px;
+  border: 1px solid var(--line-gray);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.history-cell {
+  padding: 20px 16px;
+  text-align: center;
+  background: #fff;
+  border-right: 1px solid var(--line-gray);
+}
+.history-cell:last-child { border-right: none; }
+.history-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--catholic-blue);
+  margin-bottom: 6px;
+}
+.history-desc {
+  font-size: 0.82em;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ── VERDICT BOX ── */
+.verdict-box {
+  background: linear-gradient(135deg, #0D1F3C, #1E3A5F);
+  color: #F5F0E8;
+  border-radius: 6px;
+  padding: 44px 40px;
+  margin-top: 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.verdict-box::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border: 1px solid rgba(197,165,90,0.25);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.verdict-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.verdict-box p {
+  font-size: 1em;
+  line-height: 1.85;
+  color: rgba(245,240,232,0.9);
+  max-width: 780px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.verdict-box p + p { margin-top: 14px; }
+
+/* ── FOOTNOTE / DISCLAIMER ── */
+.footnote-box {
+  background: #fff;
+  border: 1px solid var(--line-gray);
+  border-left: 4px solid var(--dark-gold);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-top: 32px;
+  font-size: 0.85em;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ── READING PROGRESS BAR ── */
+#reading-progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(to right, #1E3A5F, #C5A55A);
+  z-index: 99999; transition: width 0.12s linear;
+  pointer-events: none; border-radius: 0 2px 2px 0;
+}
+
+/* ── PRINT COLOPHON ── */
+.print-colophon {
+  display: none;
+  text-align: center;
+  padding: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid var(--line-gray);
+}
+@media print {
+  .print-colophon { display: block; }
+  .site-nav, .nav-hamburger, .sidebar, .sidebar-overlay { display: none !important; }
+  #reading-progress-bar { display: none !important; }
+  .page-header { padding: 40px 24px 32px !important; }
+  .verdict-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doctrine-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doctrine-block { page-break-inside: avoid; }
+  .contrast-cards { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* ── PRINT BUTTON ── */
+.nav-print-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dark-gold); background: none;
+  border: 1px solid rgba(139,115,53,0.35);
+  padding: 0.4rem 1.1rem; border-radius: 3px; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+}
+.nav-print-btn:hover { background: rgba(139,115,53,0.08); color: var(--crimson); }
+@media (max-width: 700px) { .nav-print-btn { display: none; } }
+
+/* ── FOOTER ── */
+footer {
+  background: #fff;
+  text-align: center;
+  padding: 28px 20px;
+  border-top: 1px solid var(--line-gray);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 768px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Header */
+  .page-header { padding: 48px 20px 36px; }
+  .page-header h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+  .page-header .subtitle { font-size: 0.97em; }
+  .page-header .tag-line span { font-size: 0.6em; padding: 3px 8px; }
+
+  /* Main layout */
+  main { padding: 28px 16px 60px; }
+
+  /* Intro box */
+  .intro-box { padding: 20px 18px; margin-bottom: 32px; }
+  .intro-box p { font-size: 0.95rem; }
+
+  /* Section dividers — allow wrapping on narrow screens */
+  .section-divider { flex-wrap: wrap; gap: 8px; margin: 32px 0 18px; }
+  .section-divider-label { white-space: normal; text-align: center; flex: 1 1 100%; order: -1; }
+  .section-divider-line { display: none; }
+
+  /* History bar — 2 columns */
+  .history-bar { grid-template-columns: repeat(2, 1fr); }
+  .history-cell { padding: 16px 12px; }
+  .history-year { font-size: 1.2em; }
+  .history-desc { font-size: 0.78em; }
+
+  /* Doctrine comparison blocks — stack vertically */
+  .doctrine-compare { grid-template-columns: 1fr; }
+  .doctrine-col { padding: 18px 18px; }
+  .doctrine-col:first-child { border-right: none; border-bottom: 1px solid var(--line-gray); }
+  .doctrine-text { font-size: 0.9em; }
+  .doctrine-source p { font-size: 0.6em; }
+
+  /* Scripture rows — stack vertically */
+  .scripture-row { grid-template-columns: 1fr; }
+  .scripture-cell { padding: 18px 18px; }
+  .scripture-cell:first-child { border-right: none; border-bottom: 1px solid var(--line-gray); }
+  .scripture-ref { font-size: 0.63em; }
+
+  /* Contrast cards — single column */
+  .contrast-cards { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Verdict box */
+  .verdict-box { padding: 28px 20px; }
+  .verdict-box h3 { font-size: 1.15em; }
+  .verdict-box p { font-size: 0.92em; }
+
+  /* Footnote */
+  .footnote-box { padding: 16px 16px; font-size: 0.82em; }
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 700px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  /* Prevent horizontal overflow globally */
+  body { overflow-x: hidden; }
+
+  /* Nav — show hamburger, hide desktop links */
+  .site-nav { padding: 0.55rem 1rem !important; }
+  .site-nav .nav-links { display: none !important; }
+  .site-nav .nav-back { display: none !important; }
+  .nav-hamburger {
+    display: flex !important;
+    margin-left: auto !important;
+    order: 99 !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Page header */
+  .page-header { padding: 40px 16px 28px !important; }
+  .page-header h1 { font-size: clamp(1.35rem, 6vw, 1.9rem) !important; }
+  .page-header .subtitle { font-size: 0.88rem !important; }
+  .back-link { margin-bottom: 1.2rem; font-size: 0.65em; }
+  .ornament { letter-spacing: 8px; margin-bottom: 1rem; }
+
+  /* Tag line badges wrap gracefully */
+  .page-header .tag-line { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 16px; }
+  .page-header .tag-line span { margin: 0; }
+
+  /* Sidebar — use transform instead of right offset (avoids display:none bug) */
+  .sidebar {
+    display: block !important;
+    transform: translateX(100%) !important;
+    right: 0 !important;
+    position: fixed !important;
+    transition: transform 0.3s ease !important;
+  }
+  .sidebar.open { transform: translateX(0) !important; }
+  .sidebar-inner { padding: 4rem 1.5rem 2rem !important; }
+  .sidebar-overlay.visible { display: block !important; }
+
+  /* Main */
+  main { padding: 24px 14px 56px !important; }
+
+  /* Intro box */
+  .intro-box { padding: 16px 14px !important; margin-bottom: 24px !important; }
+  .intro-box p { font-size: 0.92rem !important; line-height: 1.75 !important; }
+
+  /* Doctrine header topic label — allow wrapping */
+  .doctrine-header { flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+  .doctrine-topic { white-space: normal; line-height: 1.4; }
+  .doctrine-col { padding: 16px 14px !important; }
+  .doctrine-text { font-size: 0.88em !important; }
+  .doctrine-text .citation { font-size: 0.6em !important; }
+  .doctrine-source { padding: 8px 14px !important; }
+  .doctrine-source p { font-size: 0.58em !important; line-height: 1.6 !important; }
+
+  /* Scripture cells */
+  .scripture-cell { padding: 16px 14px !important; }
+  .scripture-text { font-size: 0.88em !important; }
+  .scripture-ref { font-size: 0.6em !important; line-height: 1.55 !important; }
+
+  /* History bar — single column on very small screens */
+  .history-bar { grid-template-columns: 1fr 1fr !important; }
+  .history-cell { padding: 12px 10px !important; border-right: none; border-bottom: 1px solid var(--line-gray); }
+  .history-cell:nth-child(odd) { border-right: 1px solid var(--line-gray) !important; }
+  .history-cell:last-child { border-bottom: none; }
+  .history-cell:nth-last-child(2) { border-bottom: none; }
+
+  /* Contrast cards */
+  .contrast-cards { gap: 10px !important; }
+  .contrast-card { padding: 18px 16px !important; }
+  .contrast-card-title { font-size: 1em !important; }
+  .contrast-card-text { font-size: 0.86em !important; }
+
+  /* Verdict */
+  .verdict-box { padding: 24px 16px !important; margin-top: 32px !important; }
+  .verdict-box h3 { font-size: 1.05em !important; }
+  .verdict-box p { font-size: 0.88em !important; line-height: 1.75 !important; }
+
+  /* Footnote */
+  .footnote-box { padding: 14px 14px !important; font-size: 0.8em !important; }
+
+  /* Section divider labels — prevent overflow */
+  .section-divider-label { font-size: 0.6em !important; letter-spacing: 0.1em !important; }
+
+  /* Footer */
+  footer { font-size: 0.6em !important; padding: 20px 16px !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ READING PROGRESS BAR ═══ -->
+<div id="reading-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+<!-- ═══ SITE NAV ═══ -->
+<nav class="site-nav">
+  <a href="../index.html" class="nav-home">One Faith Delivered</a>
+  <ul class="nav-links">
+    <li><a href="../articles.html">Articles</a></li>
+    <li><a href="../charts.html">Charts</a></li>
+    <li><a href="../topics.html">Topics</a></li>
+    <li><a href="../resources.html">Resources</a></li>
+  </ul>
+  <a href="../articles.html" class="nav-back">&#8592; Articles</a>
+  <button class="nav-print-btn" onclick="window.print()" aria-label="Print this article">&#128438; Print</button>
+  <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ PAGE HEADER ═══ -->
+<header class="page-header">
+  <a href="../articles.html" class="back-link">&#8592; All Articles</a>
+  <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
+  <h1>A <span>Different</span> Jesus</h1>
+  <p class="subtitle">Why the Christ of Latter-day Saint theology is not the Christ of Scripture, the Creeds, or the historic Catholic Faith</p>
+  <div class="tag-line">
+    <span>Christology</span>
+    <span>Comparative Theology</span>
+    <span>Latter-day Saints</span>
+  </div>
+</header>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+  <!-- INTRO -->
+  <div class="intro-box">
+    <p>When a Latter-day Saint missionary or neighbor speaks of Jesus Christ, the name is familiar — even the devotion seems genuine. But names can travel across wide theological distances and arrive meaning something entirely different. <strong>The Jesus of Latter-day Saint theology is not the Jesus of the New Testament, the ancient Creeds, or the Catholic tradition.</strong> He is a distinct being, with a different nature, a different origin, a different relationship to the Father, and a different cosmological status.</p>
+    <p>This is not a matter of peripheral disagreement over secondary doctrines. These differences touch the very identity of the person being worshipped. The Second Council of Constantinople (553 A.D.) declared that one cannot separate the <em>person</em> of Christ from his <em>nature</em> — to change one is to change the other. By that standard — and by the standard of Scripture itself — the LDS Jesus and the Catholic Jesus are not the same person, however familiar the name. What follows is a systematic examination of where and why they diverge.</p>
+  </div>
+
+  <!-- TIMELINE BAR -->
+  <div class="history-bar">
+    <div class="history-cell">
+      <div class="history-year">325</div>
+      <div class="history-desc">Council of Nicaea defines Christ as <em>homoousios</em> — one in being with the Father, fully divine</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">381</div>
+      <div class="history-desc">Council of Constantinople affirms Christ's full divinity against Arian subordinationism</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">451</div>
+      <div class="history-desc">Council of Chalcedon: Christ is one Person with two complete natures — divine and human</div>
+    </div>
+    <div class="history-cell">
+      <div class="history-year">1843</div>
+      <div class="history-desc">Joseph Smith's King Follett Discourse introduces the LDS doctrine of a finite, embodied, progressing God</div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1 — NATURE OF GOD ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 1 — The Nature of God & the Trinity</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">I</span>
+      <span class="doctrine-topic">One Being vs. Three Separate Gods</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          In LDS theology, the Father (Elohim), the Son (Jehovah), and the Holy Ghost are <strong>three entirely separate and distinct beings</strong> — not one God in three Persons, but effectively a divine council of three. Joseph Smith declared in the King Follett Discourse (1844): "I will preach on the plurality of Gods. I have selected this text for that express purpose. I wish to declare I have always and in all congregations when I have preached on the subject of the Deity, it has been the plurality of Gods."
+          <br><br>
+          The Father has a glorified body of flesh and bones (D&amp;C 130:22). The Son, having been resurrected, likewise has a physical, tangible body. These are not three modes of one being — they are three distinct, spatially separate individuals who are unified only in <em>purpose and will</em>, not in substance or essence.
+          <span class="citation">Sources: King Follett Discourse (1844) · D&amp;C 130:22 · Articles of Faith, Art. 1</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          Catholic teaching, rooted in Scripture and defined by the Ecumenical Councils, holds that there is <strong>one God subsisting in three divine Persons</strong> — Father, Son, and Holy Spirit — who share one divine nature, one divine will, and one divine essence. The Son is not a second God beside the Father; he is the eternal Word proceeding from the Father, <em>homoousios</em> — one in being with the Father.
+          <br><br>
+          The Athanasian Creed, received across East and West, states plainly: "We worship one God in Trinity, and Trinity in Unity; neither confounding the Persons, nor dividing the Substance." Any account of Jesus that makes him a separate divine being is, by this standard, not monotheism but tri-theism — a form of polytheism condemned by Scripture from Deuteronomy onward.
+          <span class="citation">Sources: Nicene Creed (325) · Athanasian Creed · CCC §§253–256</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "I and the Father are one" (Jn 10:30) · "No one has seen God; the only Son, who is in the bosom of the Father, he has made him known" (Jn 1:18) · "Hear, O Israel: the Lord our God, the Lord is one" (Deut 6:4)</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 — PRE-EXISTENCE ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 2 — The Pre-Mortal Life of Christ</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">II</span>
+      <span class="doctrine-topic">Spirit Child vs. Eternal Son</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          In LDS theology, Jesus Christ existed before his earthly life as a pre-mortal spirit being — the "firstborn" spirit child of Heavenly Father and a Heavenly Mother. He is, in this sense, the elder brother of all human spirits. He achieved divine status through his pre-mortal obedience and righteousness, being chosen over Lucifer to serve as the Savior. The LDS Jesus is therefore not co-eternal with the Father in any classical sense — he was <em>born</em> as a spirit, then progressed to become Jehovah of the Old Testament, then further progressed through his earthly life and resurrection.
+          <span class="citation">Sources: Gospel Principles (LDS, 2011) · Teachings of the Prophet Joseph Smith, p. 342–362 · LDS Gospel Topics: "Becoming Like God"</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          Catholic teaching holds that the Son of God is <strong>eternally begotten of the Father</strong> — not born in time, not born as a spirit-child of a heavenly couple, but eternally proceeding from the Father's own being as the Second Person of the Trinity. The eternal generation of the Son is not a temporal event that can be placed before other events. He is not a created being, however exalted.
+          <br><br>
+          The Gospel of John is decisive: "In the beginning was the Word, and the Word was with God, and the Word was God" (Jn 1:1). Not <em>In the beginning the Word was created</em> or <em>was born</em> — but <em>was</em>, indicating timeless existence as God. The Council of Nicaea expressly condemned the Arian position that "there was a time when the Son was not."
+          <span class="citation">Sources: Jn 1:1–3 · Nicene Creed (325) · CCC §§246, 254, 258 · Council of Nicaea, Anathemas</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "Before Abraham was, I AM" (Jn 8:58) · "He is the image of the invisible God, the firstborn of all creation... all things were created through him and for him" (Col 1:15–16) · "Begotten, not made, one in being with the Father" (Nicene Creed)</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 — DIVINE NATURE ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 3 — The Divine Nature of Christ</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">III</span>
+      <span class="doctrine-topic">An Embodied, Finite God vs. The Incarnate Infinite</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          The LDS God — including the resurrected Christ — is not omnipresent, not immaterial, and not infinite in the classical philosophical sense. Joseph Smith taught that God the Father was once a man, progressed to godhood, and has a physical body. The resurrected Christ, permanently embodied, is likewise a finite being located in space. This god is not the unmoved mover of classical theology but a being who inhabits a specific location (near Kolob, according to the Book of Abraham) and relates to humans as a supremely advanced elder sibling — of the same species, in the same cosmic order.
+          <br><br>
+          Lorenzo Snow's famous couplet captures this: <em>"As man now is, God once was; as God now is, man may be."</em>
+          <span class="citation">Sources: King Follett Discourse · Lorenzo Snow couplet (1840) · D&amp;C 130:22 · Book of Abraham 3:2–3</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          Catholic theology insists on the full classical divine attributes of God — <strong>omnipotence, omniscience, omnipresence, immutability, impassibility, and aseity</strong> (existence entirely from oneself). God does not exist on a continuum with creatures; he is not a more-advanced version of what we are. He is Being Itself — <em>ipsum esse subsistens</em>, as Aquinas says.
+          <br><br>
+          The Incarnation does not mean God became finite; it means the infinite Second Person assumed a human nature while remaining fully divine. Christ's resurrection glorified his human nature but did not diminish or alter his divine nature. The Chalcedonian definition (451) is precise: two natures, unmixed and unconfused, in one Person. The LDS account dissolves this distinction entirely.
+          <span class="citation">Sources: Council of Chalcedon (451) · CCC §§202, 212, 285 · St. Thomas Aquinas, <em>Summa Theologiae</em> I, Q.3</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "God is spirit" (Jn 4:24) · "I am who I am" (Ex 3:14) · "Jesus Christ is the same yesterday, today, and forever" (Heb 13:8) · "For I the Lord do not change" (Mal 3:6)</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 — ATONEMENT ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 4 — The Atonement</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">IV</span>
+      <span class="doctrine-topic">What the Atonement Accomplishes & How</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          In LDS theology, Christ's atoning work is necessary but <strong>not sufficient</strong> for exaltation. The atonement removes the effects of the Fall and provides general resurrection for all humans — but exaltation (the highest LDS heaven, where one lives with God and continues to progress toward godhood) requires full obedience to LDS law, ordinances, and covenants. Baptism, the endowment, celestial marriage, and faithfulness to LDS commandments are all necessary components of the salvation that Catholics would locate solely in grace.
+          <br><br>
+          Furthermore, in LDS thought, Christ's suffering occurred primarily in Gethsemane, not on the Cross. The Cross is de-emphasized; some LDS leaders have explicitly rejected the cross as a Christian symbol on the grounds that a good Latter-day Saint would not dwell on the instrument of death.
+          <span class="citation">Sources: D&amp;C 76 · LDS Gospel Principles, ch. 12 · President Gordon B. Hinckley on the cross, <em>General Conference</em>, April 1975</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          Catholic theology holds that Christ's sacrifice on the Cross is the <strong>once-for-all, infinite, and fully sufficient</strong> atoning act through which humanity is redeemed. It is infinite because the Person offering the sacrifice is infinite — the eternal Son of God. A finite being could not offer an infinite atonement; only because Christ is truly God can his death satisfy the demands of justice for all human sin.
+          <br><br>
+          Salvation is a gift of grace received through faith and the sacraments — not earned through progressive compliance with temple ordinances. While the Catholic tradition affirms that faith must issue in works and that human cooperation with grace is real, salvation itself is not a reward for performance but the sheer gift of a God who is infinite Love — the same God who took flesh in the Virgin's womb, not a god who was once mortal and graduated to divinity.
+          <span class="citation">Sources: CCC §§1987–1995, 620 · Council of Trent, Decree on Justification · Heb 9:12, 10:10–14</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "By grace you have been saved through faith; and this is not your own doing, it is the gift of God — not because of works" (Eph 2:8–9) · "It is finished" (Jn 19:30) · "He entered once for all into the Holy Place, taking... his own blood, thus securing an eternal redemption" (Heb 9:12)</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5 — INCARNATION ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 5 — The Virgin Birth & the Incarnation</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">V</span>
+      <span class="doctrine-topic">How the Son Became Flesh</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          Several influential LDS leaders — including Brigham Young, Heber C. Kimball, and Orson Pratt — taught that Jesus was literally, physically conceived by God the Father (who has a physical body) and the Virgin Mary, making the Incarnation a biological fathering event rather than a purely miraculous act of the Holy Spirit. Brigham Young stated plainly that the Savior was begotten "in the same way that we were begotten" (Journal of Discourses, vol. 11, p. 268).
+          <br><br>
+          This teaching is not universally held by all LDS today, and the institutional Church has at times distanced itself from Young's statement — but it follows logically from the premise that Heavenly Father has a physical body and that Jesus inherited mortality from Mary and divinity from his Father.
+          <span class="citation">Sources: Journal of Discourses 11:268 (Brigham Young) · Orson Pratt, <em>The Seer</em>, 1853 · LDS Doctrines of Salvation 1:18</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          The Catholic Church teaches the <strong>virginal conception of Christ by the Holy Spirit</strong> as a dogma of faith — not a metaphor and not a biological fathering by an embodied divine being. The angel Gabriel says: "The Holy Spirit will come upon you, and the power of the Most High will overshadow you" (Lk 1:35). This is a creative act of infinite divine power, not sexual generation.
+          <br><br>
+          The theological weight of the virginal conception is precisely this: Christ's humanity is genuinely ours (from Mary) while his personhood is entirely divine (the eternal Son). The two natures meet in the one Person. Any account that makes the Incarnation a physical act of a physically embodied Father fundamentally misunderstands the nature of both God and the Incarnation.
+          <span class="citation">Sources: Lk 1:35 · Mt 1:18–20 · CCC §§484–511 · Lateran Council I (649) on the Theotokos</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "That which is conceived in her is of the Holy Spirit" (Mt 1:20) · "The Holy Spirit will come upon you" (Lk 1:35) · "The Word became flesh" (Jn 1:14) — not: the Father begat flesh upon Mary</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 6 — SALVATION ══ -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Difference No. 6 — Salvation and Deification</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-header">
+      <span class="doctrine-num">VI</span>
+      <span class="doctrine-topic">What We Are Saved For — Exaltation vs. Theosis</span>
+    </div>
+    <div class="doctrine-compare">
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-lds">LDS Teaching</div>
+        <div class="doctrine-text">
+          The highest LDS goal — "exaltation" in the Celestial Kingdom — means becoming a god oneself: a separate, embodied divine being who rules over one's own world and spirit children for eternity. This is not a metaphor. Apostle Bruce R. McConkie wrote: "Those who gain exaltation in the highest heaven of the celestial world will live in the family unit and have spirit children." The LDS Jesus is the pioneer of this process — a being who attained full divinity through a process we are invited to replicate.
+          <span class="citation">Sources: D&amp;C 132:19–20 · Bruce R. McConkie, <em>Mormon Doctrine</em>, "Exaltation" · King Follett Discourse</span>
+        </div>
+      </div>
+      <div class="doctrine-col">
+        <div class="doctrine-col-label label-catholic">Catholic Teaching</div>
+        <div class="doctrine-text">
+          Catholic theology does teach <em>theosis</em> — deification — as the goal of Christian life. But it is deification by <em>participation</em>, not by nature. The creature does not become God or a god; the creature is elevated to share in the divine life by grace — like iron placed in fire glows with fire's heat while remaining iron. As St. Athanasius says: "He was made man that we might be made God."
+          <br><br>
+          The distinction is absolute: <strong>God remains God; we are transformed by union with him.</strong> We do not become independent divine beings ruling our own creations. The infinite gap between Creator and creature is not abolished — it is bridged from the infinite side by Love itself. This is an entirely different vision of salvation than LDS exaltation.
+          <span class="citation">Sources: St. Athanasius, <em>On the Incarnation</em>, §54 · 2 Peter 1:4 · CCC §§460, 1988, 1999–2000</span>
+        </div>
+      </div>
+    </div>
+    <div class="doctrine-source">
+      <p>Scriptural anchor: "God has given us his very great and precious promises, so that through them you may participate in the divine nature" (2 Pet 1:4) · "The glory which thou hast given me I have given them, that they may be one even as we are one" (Jn 17:22) — unity by grace, not independent godhood</p>
+    </div>
+  </div>
+
+  <!-- SCRIPTURE SIDE-BY-SIDES -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Scripture Read Differently — The Same Texts, Two Worlds Apart</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="scripture-row">
+    <div class="scripture-cell">
+      <div class="scripture-label lds">LDS Reading — John 10:30</div>
+      <div class="scripture-text">"I and the Father are one."</div>
+      <p class="scripture-ref">LDS interpretation: Jesus and the Father are one <em>in purpose and will</em>, not in substance. This verse proves they are cooperative partners, not a single being — just as a husband and wife may be "one" while remaining two people.</p>
+    </div>
+    <div class="scripture-cell">
+      <div class="scripture-label catholic">Catholic Reading — John 10:30</div>
+      <div class="scripture-text">"I and the Father are one."</div>
+      <p class="scripture-ref">Catholic interpretation: The Greek <em>hen</em> (neuter "one thing") denotes unity of essence. The Jewish listeners understood this as a claim to divine identity — they immediately picked up stones to stone him for blasphemy (Jn 10:31), not for claiming to share purposes with God.</p>
+    </div>
+  </div>
+
+  <div class="scripture-row">
+    <div class="scripture-cell">
+      <div class="scripture-label lds">LDS Reading — John 17:21</div>
+      <div class="scripture-text">"That they may all be one; even as thou, Father, art in me, and I in thee, that they also may be in us."</div>
+      <p class="scripture-ref">LDS interpretation: Since Jesus prays that believers will be "one" with the Father as he is, and believers clearly remain separate individuals, "oneness" here must mean unity of purpose — confirming the LDS tri-theist reading of the Trinity.</p>
+    </div>
+    <div class="scripture-cell">
+      <div class="scripture-label catholic">Catholic Reading — John 17:21</div>
+      <div class="scripture-text">"That they may all be one; even as thou, Father, art in me, and I in thee."</div>
+      <p class="scripture-ref">Catholic interpretation: The Trinitarian oneness of Father and Son is the <em>model</em> and <em>source</em> of our unity with God — not a mere analogy for it. We are unified by participating in the life of a God who is already a communion of Persons. The text presupposes, not dissolves, the Trinitarian unity.</p>
+    </div>
+  </div>
+
+  <div class="scripture-row">
+    <div class="scripture-cell">
+      <div class="scripture-label lds">LDS Reading — Colossians 1:15</div>
+      <div class="scripture-text">"He is the image of the invisible God, the firstborn of all creation."</div>
+      <p class="scripture-ref">LDS interpretation: "Firstborn" means Christ was the first spirit child born to Heavenly Father — eldest among all of God's spirit offspring, including humanity. He is "firstborn" in a literal, chronological sense.</p>
+    </div>
+    <div class="scripture-cell">
+      <div class="scripture-label catholic">Catholic Reading — Colossians 1:15</div>
+      <div class="scripture-text">"He is the image of the invisible God, the firstborn of all creation."</div>
+      <p class="scripture-ref">Catholic interpretation: "Firstborn" (<em>prōtotokos</em>) is a Hebraic title of supremacy and preeminence, not biological sequence. Paul immediately explains: "for in him all things were created" (v. 16). The one through whom all creation was made cannot himself be a created being — he precedes and grounds all creation.</p>
+    </div>
+  </div>
+
+  <!-- CORE CONTRASTS -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <span class="section-divider-label">Three Root Differences That Produce All the Others</span>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <div class="contrast-cards">
+    <div class="contrast-card">
+      <div class="contrast-card-icon">⚖️</div>
+      <div class="contrast-card-title">Creator vs. Creature</div>
+      <div class="contrast-card-text">The Catholic Christ is the eternal, uncreated Creator of all that exists — including space, time, and matter. The LDS Christ was born into an already-existing universe, progressed through a pre-mortal existence, and was chosen for his role. One is the Author of existence; the other is its creature. These are not the same being.</div>
+    </div>
+    <div class="contrast-card">
+      <div class="contrast-card-icon">🔥</div>
+      <div class="contrast-card-title">Infinite vs. Finite Atonement</div>
+      <div class="contrast-card-text">If Christ is a finite, once-mortal being who progressed to divinity, his atonement is the act of a finite person — however heroic. The Catholic tradition insists the atonement has infinite value precisely because the Person suffering is the infinite God. A finite Savior offers a finite atonement. The stakes of this difference could not be higher.</div>
+    </div>
+    <div class="contrast-card">
+      <div class="contrast-card-icon">✝️</div>
+      <div class="contrast-card-title">Monotheism vs. Tri-theism</div>
+      <div class="contrast-card-text">Christianity inherited Israel's absolute monotheism: there is one God, and there are no others. The LDS system, with its separate, embodied Father, Son, and Holy Ghost — and its vision of humans becoming additional gods — is structurally polytheistic, however carefully LDS theology hedges the language. The Old Testament's polemic against the gods of the nations is directly applicable.</div>
+    </div>
+  </div>
+
+  <!-- VERDICT BOX -->
+  <div class="verdict-box">
+    <h3>✦ &nbsp; Why This Is Not a Minor Family Dispute &nbsp; ✦</h3>
+    <p>The differences surveyed here are not variations within a shared faith, as Catholics and Lutherans differ on justification while agreeing on the Nicene Creed. They are differences about the most fundamental questions: Is God one or many? Is the Son created or eternal? Is the Incarnation the infinite God entering time, or an advanced being taking on mortality? Is salvation participation in God's own infinite life, or progressive attainment of independent divinity?</p>
+    <p>St. Paul warned the Galatians that if anyone preaches "a gospel contrary to what we preached to you, let him be accursed" — and he had just defined that gospel as one of pure grace, not human achievement. When the nature of the Savior is altered, the nature of salvation inevitably follows. The LDS Jesus — a separate being, finite, once a spirit-child, offering an atonement to be supplemented by temple ordinances — cannot save in the way that the Catholic Church has always proclaimed, because he is not who the Catholic Church has always proclaimed him to be.</p>
+    <p>This is said not with contempt for Latter-day Saint believers, many of whom exhibit genuine devotion and moral seriousness. It is said because truth matters — and because the person of Jesus Christ is the center on which everything else turns. To get him wrong is to get everything wrong.</p>
+  </div>
+
+  <!-- FOOTNOTE -->
+  <div class="footnote-box">
+    <strong>A note on tone:</strong> The argument above engages LDS theology at the level of its own primary sources — scripture, prophetic teaching, and official Church documents. It does not question the sincerity of LDS believers, nor does it reduce their tradition to its most extreme statements. Where LDS institutional teaching is contested within Mormonism itself (e.g., the physical conception of Christ), this is noted. The goal is clarity about genuine, irreducible differences — not caricature.
+  </div>
+
+</main>
+
+<div class="print-colophon">One Faith Delivered &nbsp;&middot;&nbsp; <span id="print-url-text">onefaithdelivered.org</span></div>
+
+<footer>&copy; One Faith Delivered &nbsp;&#8901;&nbsp; All Rights Reserved</footer>
+
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-brand">One Faith Delivered</div>
+    <a href="../index.html">Home</a>
+    <a href="../articles.html">Articles</a>
+    <a href="../charts.html">Charts</a>
+    <a href="../topics.html">Topics</a>
+    <a href="../resources.html">Resources</a>
+    <a href="../articles.html" class="sidebar-back">&#8592; All Articles</a>
+    <div class="sidebar-ornament">✦ ✦ ✦</div>
+  </div>
+</aside>
+
+<script>
+function toggleSidebar() {
+  var btn = document.querySelector('.nav-hamburger'),
+      sidebar = document.querySelector('.sidebar'),
+      overlay = document.querySelector('.sidebar-overlay');
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open');
+    btn.classList.remove('open');
+    overlay.classList.remove('visible');
+    document.body.style.overflow = '';
+  } else {
+    sidebar.classList.add('open');
+    btn.classList.add('open');
+    overlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.querySelector('.sidebar.open')) toggleSidebar();
+});
+// Close sidebar on overlay tap (touch-friendly)
+document.querySelector('.sidebar-overlay').addEventListener('touchstart', function() { toggleSidebar(); }, { passive: true });
+
+/* ── Reading Progress Bar ── */
+(function () {
+  var bar = document.getElementById('reading-progress-bar');
+  function updateProgress() {
+    if (!bar) return;
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    bar.style.width = pct + '%';
+    bar.setAttribute('aria-valuenow', Math.round(pct));
+  }
+  if (bar) { window.addEventListener('scroll', updateProgress, { passive: true }); updateProgress(); }
+  var urlEl = document.getElementById('print-url-text');
+  if (urlEl) {
+    var href = window.location.href;
+    urlEl.textContent = href && href !== 'about:blank' ? href : 'onefaithdelivered.org';
+  }
+})();
+</script>
+
+</body>
+</html>
