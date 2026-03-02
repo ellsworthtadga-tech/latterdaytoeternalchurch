@@ -770,6 +770,17 @@ function srClass(word){return["sr-new","sr-learning","sr-familiar","sr-known","s
 function srLabel(word){return["New","Learning","Familiar","Known","Mastered"][srLevel(word)];}
 
 loadState();
+
+// ═══════════════════════════════════════════════════════════════════
+// SOUND & HAPTICS
+// ═══════════════════════════════════════════════════════════════════
+let audioCtx=null;
+function ensureAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+function playCorrect(){try{const ctx=ensureAudio();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime(880,ctx.currentTime);o.frequency.setValueAtTime(1174.66,ctx.currentTime+0.08);g.gain.setValueAtTime(0.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.25);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.25);}catch(e){}}
+function playWrong(){try{const ctx=ensureAudio();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime(330,ctx.currentTime);o.frequency.setValueAtTime(277,ctx.currentTime+0.12);g.gain.setValueAtTime(0.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.3);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.3);}catch(e){}}
+function playAchievement(){try{const ctx=ensureAudio();[0,0.12,0.24].forEach((t,i)=>{const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime([523.25,659.25,783.99][i],ctx.currentTime+t);g.gain.setValueAtTime(0.25,ctx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+t+0.2);o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.2);});}catch(e){}}
+function haptic(style){try{if(navigator.vibrate)navigator.vibrate(style==='success'?[10]:style==='error'?[30,20,30]:[10]);}catch(e){}}
+
 if(S.darkMode)document.documentElement.setAttribute("data-theme","dark");
 
 // ═══════════════════════════════════════════════════════════════════
@@ -902,11 +913,11 @@ ${lesson.content.map(s=>`<div class="grammar-section"><h4 class="grammar-heading
 ${drillHtml}
 <div class="lesson-complete-row"><button class="complete-lesson-btn ${S.completedLessons.includes(S.activeLesson)?'completed':''}" id="complete-lesson-btn">${S.completedLessons.includes(S.activeLesson)?'✓ Lesson Mastered':'Mark Lesson as Mastered'}</button></div><div style="display:flex;justify-content:space-between;margin-top:20px">${S.activeLesson>0?`<button class="next-btn" id="prev-lesson">← Previous</button>`:'<div></div>'}${S.activeLesson<GRAMMAR_LESSONS.length-1?`<button class="next-btn" id="next-lesson">Next →</button>`:'<div></div>'}</div></div>`;
   document.querySelectorAll('.grammar-nav-btn').forEach(b=>b.addEventListener('click',()=>{S.activeLesson=parseInt(b.dataset.lesson);saveState();renderGrammar();window.scrollTo({top:0,behavior:'smooth'});}));
-  const clb=$('complete-lesson-btn');if(clb)clb.addEventListener('click',()=>{const i=S.activeLesson;if(S.completedLessons.includes(i))S.completedLessons=S.completedLessons.filter(x=>x!==i);else S.completedLessons.push(i);saveState();renderGrammar();});const pb=$('prev-lesson'),nb=$('next-lesson');
+  const clb=$('complete-lesson-btn');if(clb)clb.addEventListener('click',()=>{const i=S.activeLesson;if(S.completedLessons.includes(i))S.completedLessons=S.completedLessons.filter(x=>x!==i);else{S.completedLessons.push(i);playAchievement();haptic('success');}saveState();renderGrammar();});const pb=$('prev-lesson'),nb=$('next-lesson');
   if(pb)pb.addEventListener('click',()=>{S.activeLesson--;saveState();renderGrammar();window.scrollTo({top:0,behavior:'smooth'});});
   if(nb)nb.addEventListener('click',()=>{S.activeLesson++;saveState();renderGrammar();window.scrollTo({top:0,behavior:'smooth'});});
   if(lesson.drills&&lesson.drills.length>0){
-    $('drill-check').addEventListener('click',()=>{document.querySelectorAll('.drill-input').forEach(inp=>{const di=parseInt(inp.dataset.drill),t=inp.dataset.type,idx=parseInt(inp.dataset.idx);const d=lesson.drills[di];const ans=t==='sg'?d.sg[idx]:d.pl[idx];const normalize=s=>s.trim().toLowerCase().replace(/[āēīōū]/g,m=>({'ā':'a','ē':'e','ī':'i','ō':'o','ū':'u'}[m]||m));inp.classList.remove('correct','wrong');inp.classList.add(normalize(inp.value)===normalize(ans)?'correct':'wrong');});recordStudyDay();});
+    $('drill-check').addEventListener('click',()=>{document.querySelectorAll('.drill-input').forEach(inp=>{const di=parseInt(inp.dataset.drill),t=inp.dataset.type,idx=parseInt(inp.dataset.idx);const d=lesson.drills[di];const ans=t==='sg'?d.sg[idx]:d.pl[idx];const normalize=s=>s.trim().toLowerCase().replace(/[āēīōū]/g,m=>({'ā':'a','ē':'e','ī':'i','ō':'o','ū':'u'}[m]||m));inp.classList.remove('correct','wrong');inp.classList.add(normalize(inp.value)===normalize(ans)?'correct':'wrong');});recordStudyDay();const allCorrect=document.querySelectorAll('.drill-input.wrong').length===0&&document.querySelectorAll('.drill-input.correct').length>0;if(allCorrect){playAchievement();haptic('success');}else{haptic('error');}});
     $('drill-show').addEventListener('click',()=>{document.querySelectorAll('.drill-input').forEach(inp=>{const di=parseInt(inp.dataset.drill),t=inp.dataset.type,idx=parseInt(inp.dataset.idx);const d=lesson.drills[di];inp.value=t==='sg'?d.sg[idx]:d.pl[idx];inp.classList.remove('wrong');inp.classList.add('correct');});});
   }
 }
@@ -952,8 +963,8 @@ ${cur?`<div class="quiz-card"><div class="quiz-prompt-label">${isL?"What does th
     const o=S.quizOptions[parseInt(b.dataset.idx)];S.quizSelected=o;
     const ok=isL?o.english===cur.english:o.latin===cur.latin;
     S.score.total++;recordStudyDay();
-    if(ok){S.score.correct++;S.streak++;if(S.streak>S.bestStreak)S.bestStreak=S.streak;srUp(cur.latin);}
-    else{S.streak=0;srDown(cur.latin);}
+    if(ok){S.score.correct++;S.streak++;if(S.streak>S.bestStreak)S.bestStreak=S.streak;srUp(cur.latin);playCorrect();haptic('success');}
+    else{S.streak=0;srDown(cur.latin);playWrong();haptic('error');}
     saveState();renderQuiz();
   }));
   const nq=$("next-q");if(nq)nq.addEventListener("click",()=>{generateQuestion();renderQuiz();});
@@ -978,7 +989,7 @@ ${S.sbChecked?`<div class="quiz-feedback">${isCorrect?'<div class="correct-msg">
     if(S.sbChecked)return;S.sbPlaced.push(parseInt(b.dataset.idx));renderSentenceBuilder();}));
   document.querySelectorAll("#sb-answer .sb-word").forEach(b=>b.addEventListener("click",()=>{
     if(S.sbChecked)return;S.sbPlaced.splice(parseInt(b.dataset.remove),1);renderSentenceBuilder();}));
-  const checkBtn=$("sb-check");if(checkBtn)checkBtn.addEventListener("click",()=>{S.sbChecked=true;recordStudyDay();saveState();renderSentenceBuilder();});
+  const checkBtn=$("sb-check");if(checkBtn)checkBtn.addEventListener("click",()=>{S.sbChecked=true;recordStudyDay();saveState();const sbWords=SENTENCES[S.sbIndex];const sbShuffled=[...sbWords.words].sort(()=>Math.random()-0.5);if(S.sbPlaced.map(i=>sbWords.words[i]).join(' ')===sbWords.correct.join(' ')){playCorrect();haptic('success');}else{playWrong();haptic('error');}renderSentenceBuilder();});
   const clearBtn=$("sb-clear");if(clearBtn)clearBtn.addEventListener("click",()=>{S.sbPlaced=[];renderSentenceBuilder();});
   const nextBtn=$("sb-next");if(nextBtn)nextBtn.addEventListener("click",()=>{S.sbIndex=(S.sbIndex+1)%SENTENCES.length;S.sbPlaced=[];S.sbChecked=false;renderSentenceBuilder();});
 }
