@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Learn Thai">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1040">
+<title>Learn Thai — เรียนภาษาไทย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a845;
+    --gold-light: #f0d078;
+    --gold-glow: rgba(212,168,69,0.3);
+    --deep-blue: #1a1040;
+    --royal-blue: #2d1b69;
+    --temple-red: #c0392b;
+    --temple-red-light: #e74c3c;
+    --white: #f8f4ec;
+    --cream: #faf6ee;
+    --text-light: #e8e0d0;
+    --text-dim: #a89880;
+    --success: #27ae60;
+    --fail: #c0392b;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(212,168,69,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    font-family:'Outfit','Noto Sans Thai',sans-serif;
+    background: var(--deep-blue);
+    color: var(--text-light);
+    min-height:100vh;
+    min-height:100dvh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(45,27,105,0.8) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(192,57,43,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(212,168,69,0.05) 0%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .thai-border { position:relative; }
+  .thai-border::after {
+    content:'';
+    position:absolute;
+    bottom:0; left:10%; right:10%;
+    height:2px;
+    background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 8px, transparent 8px, transparent 16px);
+    opacity:0.4;
+  }
+
+  .nav {
+    position:fixed;
+    bottom:0; left:0; right:0;
+    background: rgba(26,16,64,0.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-top:1px solid var(--card-border);
+    display:flex;
+    z-index:100;
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+  }
+  .nav-btn {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    padding:10px 4px 8px;
+    background:none;
+    border:none;
+    color:var(--text-dim);
+    font-family:inherit;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    transition:all 0.3s;
+    position:relative;
+  }
+  .nav-btn.active { color:var(--gold); }
+  .nav-btn.active::before {
+    content:'';
+    position:absolute;
+    top:0; left:20%; right:20%;
+    height:2px;
+    background:var(--gold);
+    border-radius:0 0 2px 2px;
+  }
+  .nav-btn svg { width:22px; height:22px; }
+
+  .header {
+    padding: 50px 24px 20px;
+    text-align:center;
+    position:relative;
+    z-index:1;
+  }
+  .header h1 {
+    font-size:14px;
+    font-weight:300;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:4px;
+  }
+  .header .thai-title {
+    font-family:'Noto Sans Thai','Outfit',sans-serif;
+    font-size:28px;
+    font-weight:700;
+    color:var(--white);
+    text-shadow: 0 0 30px var(--gold-glow);
+  }
+
+  .content {
+    position:relative;
+    z-index:1;
+    padding: 0 16px 100px;
+    max-width:480px;
+    margin:0 auto;
+  }
+
+  .page { display:none; }
+  .page.active { display:block; animation: fadeUp 0.35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(12px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  .section-title {
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:24px 0 12px;
+    padding-left:4px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:12px;
+    cursor:pointer;
+    transition: all 0.3s;
+    position:relative;
+    overflow:hidden;
+  }
+  .card:hover, .card:active {
+    background:rgba(255,255,255,0.1);
+    border-color:var(--gold);
+    transform:translateY(-1px);
+  }
+  .card-row {
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .card-icon {
+    width:48px; height:48px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    flex-shrink:0;
+  }
+  .card-icon.gold { background: rgba(212,168,69,0.15); }
+  .card-icon.red { background: rgba(192,57,43,0.15); }
+  .card-icon.blue { background: rgba(45,27,105,0.4); }
+  .card-label {
+    font-size:16px;
+    font-weight:600;
+    color:var(--white);
+  }
+  .card-sub {
+    font-size:12px;
+    color:var(--text-dim);
+    margin-top:2px;
+  }
+
+  .lesson-header {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 0 20px;
+  }
+  .back-btn {
+    width:36px; height:36px;
+    border-radius:10px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:18px;
+    transition:all 0.2s;
+  }
+  .back-btn:active { background:rgba(212,168,69,0.2); }
+  .lesson-title {
+    font-size:18px;
+    font-weight:700;
+    color:var(--white);
+  }
+
+  .flashcard-container {
+    perspective:800px;
+    margin:0 auto 20px;
+  }
+  .flashcard {
+    width:100%;
+    min-height:220px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 0.5s ease;
+    cursor:pointer;
+    border-radius:20px;
+  }
+  .flashcard.flipped { transform:rotateY(180deg); }
+  .flashcard-face {
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:30px 24px;
+    border:1px solid var(--card-border);
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, rgba(45,27,105,0.6), rgba(26,16,64,0.8));
+    border-color:var(--gold);
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, rgba(212,168,69,0.15), rgba(45,27,105,0.4));
+    transform:rotateY(180deg);
+    border-color:var(--gold);
+  }
+  .fc-thai {
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:52px;
+    font-weight:700;
+    color:var(--gold-light);
+    line-height:1.3;
+    text-align:center;
+  }
+  .fc-romanized {
+    font-size:16px;
+    color:var(--text-dim);
+    margin-top:8px;
+    font-style:italic;
+  }
+  .fc-english {
+    font-size:22px;
+    font-weight:600;
+    color:var(--white);
+    text-align:center;
+  }
+  .fc-hint {
+    font-size:11px;
+    color:var(--text-dim);
+    margin-top:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .fc-example {
+    font-size:14px;
+    color:var(--text-dim);
+    margin-top:12px;
+    text-align:center;
+    line-height:1.5;
+  }
+
+  .card-nav {
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:16px;
+  }
+  .card-nav button {
+    padding:10px 28px;
+    border-radius:12px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    color:var(--gold);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .card-nav button:active { background:rgba(212,168,69,0.2); }
+  .card-nav .counter {
+    display:flex;
+    align-items:center;
+    color:var(--text-dim);
+    font-size:13px;
+    min-width:60px;
+    justify-content:center;
+  }
+
+  .quiz-progress {
+    height:4px;
+    background:rgba(255,255,255,0.08);
+    border-radius:2px;
+    margin-bottom:24px;
+    overflow:hidden;
+  }
+  .quiz-progress-bar {
+    height:100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius:2px;
+    transition:width 0.4s ease;
+  }
+  .quiz-question { text-align:center; margin-bottom:24px; }
+  .quiz-prompt {
+    font-size:13px;
+    color:var(--text-dim);
+    margin-bottom:8px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .quiz-thai {
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:44px;
+    font-weight:700;
+    color:var(--gold-light);
+  }
+  .quiz-romanized {
+    font-size:15px;
+    color:var(--text-dim);
+    font-style:italic;
+    margin-top:4px;
+  }
+  .quiz-options {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .quiz-option {
+    padding:16px 20px;
+    border-radius:14px;
+    background:var(--card-bg);
+    border:1.5px solid var(--card-border);
+    color:var(--text-light);
+    font-family:inherit;
+    font-size:16px;
+    font-weight:500;
+    cursor:pointer;
+    transition:all 0.25s;
+    text-align:left;
+  }
+  .quiz-option:active { transform:scale(0.98); }
+  .quiz-option.correct {
+    background:rgba(39,174,96,0.2);
+    border-color:var(--success);
+    color:var(--success);
+  }
+  .quiz-option.wrong {
+    background:rgba(192,57,43,0.2);
+    border-color:var(--fail);
+    color:var(--fail);
+  }
+  .quiz-option.disabled { pointer-events:none; }
+
+  .quiz-score { text-align:center; padding:40px 20px; }
+  .score-number {
+    font-size:64px;
+    font-weight:700;
+    color:var(--gold-light);
+    line-height:1;
+  }
+  .score-label { font-size:14px; color:var(--text-dim); margin-top:8px; }
+  .score-msg { font-size:18px; color:var(--white); margin-top:16px; font-weight:600; }
+  .restart-btn {
+    margin-top:24px;
+    padding:14px 40px;
+    border-radius:14px;
+    background:linear-gradient(135deg, var(--gold), var(--gold-light));
+    border:none;
+    color:var(--deep-blue);
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .restart-btn:active { transform:scale(0.96); }
+
+  .phrase-item {
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:10px;
+    transition:all 0.2s;
+  }
+  .phrase-thai {
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:22px;
+    font-weight:600;
+    color:var(--gold-light);
+  }
+  .phrase-roman {
+    font-size:13px;
+    color:var(--text-dim);
+    font-style:italic;
+    margin-top:2px;
+  }
+  .phrase-eng {
+    font-size:14px;
+    color:var(--text-light);
+    margin-top:6px;
+  }
+  .phrase-note {
+    font-size:11px;
+    color:var(--text-dim);
+    margin-top:4px;
+    font-style:italic;
+  }
+
+  .speak-btn {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 14px;
+    border-radius:20px;
+    background:rgba(212,168,69,0.15);
+    border:1px solid rgba(212,168,69,0.3);
+    color:var(--gold);
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+    transition:all 0.2s;
+  }
+  .speak-btn:active { background:rgba(212,168,69,0.3); }
+  .speak-btn svg { width:14px; height:14px; }
+
+  .pills {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .pill {
+    padding:8px 16px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    color:var(--text-dim);
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .pill.active {
+    background:rgba(212,168,69,0.2);
+    border-color:var(--gold);
+    color:var(--gold);
+  }
+
+  .lotus { text-align:center; font-size:32px; opacity:0.3; margin:30px 0 10px; }
+
+  .tone-row {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .tone-row:last-child { border-bottom:none; }
+  .tone-mark {
+    width:40px; height:40px;
+    border-radius:10px;
+    background:rgba(212,168,69,0.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:22px;
+    color:var(--gold-light);
+    flex-shrink:0;
+  }
+  .tone-info { flex:1; }
+  .tone-name { font-size:14px; font-weight:600; color:var(--white); }
+  .tone-desc { font-size:12px; color:var(--text-dim); margin-top:2px; }
+</style>
+</head>
+<body>
+
+<div class="header thai-border">
+  <h1>Learn Thai</h1>
+  <div class="thai-title">เรียนภาษาไทย</div>
+</div>
+
+<div class="content">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="section-title">Lessons</div>
+    <div class="card" onclick="openLesson('greetings')">
+      <div class="card-row">
+        <div class="card-icon gold">🙏</div>
+        <div><div class="card-label">Greetings & Basics</div><div class="card-sub">สวัสดี — Essential first words</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="openLesson('numbers')">
+      <div class="card-row">
+        <div class="card-icon red">🔢</div>
+        <div><div class="card-label">Numbers 0–10</div><div class="card-sub">ศูนย์ ถึง สิบ — Count in Thai</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="openLesson('food')">
+      <div class="card-row">
+        <div class="card-icon gold">🍜</div>
+        <div><div class="card-label">Food & Ordering</div><div class="card-sub">อาหาร — Eat like a local</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="openLesson('family')">
+      <div class="card-row">
+        <div class="card-icon blue">👨‍👩‍👧</div>
+        <div><div class="card-label">Family & People</div><div class="card-sub">ครอบครัว — Talk about loved ones</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="openLesson('travel')">
+      <div class="card-row">
+        <div class="card-icon red">🗺️</div>
+        <div><div class="card-label">Travel & Directions</div><div class="card-sub">เดินทาง — Get around</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Reference</div>
+    <div class="card" onclick="showPage('page-tones')">
+      <div class="card-row">
+        <div class="card-icon blue">🎵</div>
+        <div><div class="card-label">Thai Tones Guide</div><div class="card-sub">The 5 tones that change meaning</div></div>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('page-tips')">
+      <div class="card-row">
+        <div class="card-icon gold">💡</div>
+        <div><div class="card-label">Survival Tips</div><div class="card-sub">Polite particles, culture notes</div></div>
+      </div>
+    </div>
+    <div class="lotus">🪷</div>
+  </div>
+
+  <!-- FLASHCARD LESSON -->
+  <div class="page" id="page-lesson">
+    <div class="lesson-header">
+      <button class="back-btn" onclick="showPage('page-home')">←</button>
+      <div class="lesson-title" id="lesson-title"></div>
+    </div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="flashcard-face flashcard-front">
+          <div class="fc-thai" id="fc-thai"></div>
+          <div class="fc-romanized" id="fc-roman"></div>
+          <div class="fc-hint">Tap to reveal</div>
+        </div>
+        <div class="flashcard-face flashcard-back">
+          <div class="fc-english" id="fc-eng"></div>
+          <div class="fc-example" id="fc-example"></div>
+          <button class="speak-btn" id="fc-speak" onclick="event.stopPropagation(); speakCurrent()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/></svg>
+            Listen
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-nav">
+      <button onclick="prevCard()">← Prev</button>
+      <div class="counter"><span id="card-counter">1 / 10</span></div>
+      <button onclick="nextCard()">Next →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="page" id="page-quiz">
+    <div class="lesson-header">
+      <button class="back-btn" onclick="showPage('page-home')">←</button>
+      <div class="lesson-title">Quiz</div>
+    </div>
+    <div id="quiz-area">
+      <div class="pills" id="quiz-pills"></div>
+      <div class="quiz-progress"><div class="quiz-progress-bar" id="quiz-bar"></div></div>
+      <div class="quiz-question">
+        <div class="quiz-prompt" id="quiz-prompt">What does this mean?</div>
+        <div class="quiz-thai" id="quiz-thai"></div>
+        <div class="quiz-romanized" id="quiz-roman"></div>
+      </div>
+      <div class="quiz-options" id="quiz-options"></div>
+    </div>
+    <div class="quiz-score" id="quiz-score" style="display:none">
+      <div class="score-number" id="score-num"></div>
+      <div class="score-label">correct answers</div>
+      <div class="score-msg" id="score-msg"></div>
+      <button class="restart-btn" onclick="startQuiz(currentQuizCategory)">Try Again</button>
+      <br>
+      <button class="restart-btn" style="background:var(--card-bg);color:var(--gold);border:1px solid var(--card-border);margin-top:10px" onclick="showPage('page-home')">Back Home</button>
+    </div>
+  </div>
+
+  <!-- PHRASES -->
+  <div class="page" id="page-phrases">
+    <div class="lesson-header">
+      <button class="back-btn" onclick="showPage('page-home')">←</button>
+      <div class="lesson-title">Phrase Book</div>
+    </div>
+    <div class="pills" id="phrase-pills"></div>
+    <div id="phrase-list"></div>
+  </div>
+
+  <!-- TONES -->
+  <div class="page" id="page-tones">
+    <div class="lesson-header">
+      <button class="back-btn" onclick="showPage('page-home')">←</button>
+      <div class="lesson-title">Thai Tones</div>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
+      Thai has <strong style="color:var(--white)">5 tones</strong>. The same syllable said with a different tone can mean something completely different. This is the key to being understood!
+    </p>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:16px;">
+      <div class="tone-row">
+        <div class="tone-mark">กา</div>
+        <div class="tone-info">
+          <div class="tone-name">Mid Tone (สามัญ)</div>
+          <div class="tone-desc">Flat, neutral pitch — like stating a fact calmly. กา (gaa) = crow</div>
+        </div>
+      </div>
+      <div class="tone-row">
+        <div class="tone-mark">ก่า</div>
+        <div class="tone-info">
+          <div class="tone-name">Low Tone (เอก)</div>
+          <div class="tone-desc">Pitch drops low and stays — like a disappointed "oh."</div>
+        </div>
+      </div>
+      <div class="tone-row">
+        <div class="tone-mark">ก้า</div>
+        <div class="tone-info">
+          <div class="tone-name">Falling Tone (โท)</div>
+          <div class="tone-desc">Starts high, drops sharply — like an emphatic "No!"</div>
+        </div>
+      </div>
+      <div class="tone-row">
+        <div class="tone-mark">ก๊า</div>
+        <div class="tone-info">
+          <div class="tone-name">High Tone (ตรี)</div>
+          <div class="tone-desc">Pitch rises high — like an excited question.</div>
+        </div>
+      </div>
+      <div class="tone-row">
+        <div class="tone-mark">ก๋า</div>
+        <div class="tone-info">
+          <div class="tone-name">Rising Tone (จัตวา)</div>
+          <div class="tone-desc">Dips low then rises — like a surprised "Really?"</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text-dim);margin-top:16px;line-height:1.6;">
+      <strong style="color:var(--gold)">Classic example:</strong> "ไหม" — <em>mái</em> (rising) = new, <em>mâi</em> (falling) = not, <em>máai</em> (high) = silk, <em>mǎai</em> (rising) = wood. Your wife can help you hear the differences!
+    </p>
+    <div class="lotus">🪷</div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="page" id="page-tips">
+    <div class="lesson-header">
+      <button class="back-btn" onclick="showPage('page-home')">←</button>
+      <div class="lesson-title">Survival Tips</div>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">🙏 ครับ / ค่ะ — The Polite Particles</div>
+      <p style="font-size:14px;color:var(--text-light);line-height:1.6;">
+        As a <strong>male</strong>, add <strong style="color:var(--gold)">ครับ (kráp)</strong> to the end of sentences to be polite. Your wife uses <strong style="color:var(--gold)">ค่ะ (kâ)</strong>. This is the single easiest way to sound polite and respectful.
+      </p>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">😊 Smile — It Goes Far</div>
+      <p style="font-size:14px;color:var(--text-light);line-height:1.6;">
+        Thailand is called the "Land of Smiles." Even if your Thai is rough, a smile + attempt goes a very long way. Thai people genuinely appreciate any effort to speak their language.
+      </p>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">🌶️ Ordering Food Hack</div>
+      <p style="font-size:14px;color:var(--text-light);line-height:1.6;">
+        Say <strong style="color:var(--gold)">ไม่เผ็ด (mâi pèt)</strong> for "not spicy" or <strong style="color:var(--gold)">เผ็ดนิดหน่อย (pèt nít nòi)</strong> for "a little spicy." Thai spicy is no joke!
+      </p>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">🗣️ No Verb Conjugation!</div>
+      <p style="font-size:14px;color:var(--text-light);line-height:1.6;">
+        Thai verbs don't change for tense, person, or number. "Go" is always <strong style="color:var(--gold)">ไป (bpai)</strong> whether it's I go, he went, or we will go. Context does the heavy lifting.
+      </p>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:20px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">👑 Pronouns Are Flexible</div>
+      <p style="font-size:14px;color:var(--text-light);line-height:1.6;">
+        Use <strong style="color:var(--gold)">ผม (pǒm)</strong> for "I/me" as a male. With your wife you can use <strong style="color:var(--gold)">เธอ (ter)</strong> for "you" in a familiar way. In casual speech, pronouns are often dropped entirely.
+      </p>
+    </div>
+    <div class="lotus">🪷</div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" id="nav-home" onclick="showPage('page-home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    HOME
+  </button>
+  <button class="nav-btn" id="nav-phrases" onclick="openPhrases()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    PHRASES
+  </button>
+  <button class="nav-btn" id="nav-quiz" onclick="openQuiz()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    QUIZ
+  </button>
+</nav>
+
+<script>
+const lessons = {
+  greetings: {
+    title: 'Greetings & Basics',
+    cards: [
+      { thai:'สวัสดี', roman:'sà-wàt-dee', eng:'Hello / Goodbye', example:'สวัสดีครับ (sà-wàt-dee kráp) — Hello! (polite, male)' },
+      { thai:'ครับ', roman:'kráp', eng:'Polite particle (male)', example:'Added to end of sentences for politeness' },
+      { thai:'ขอบคุณ', roman:'kòp-kun', eng:'Thank you', example:'ขอบคุณครับ (kòp-kun kráp) — Thank you!' },
+      { thai:'ใช่', roman:'châi', eng:'Yes / Correct', example:'ใช่ครับ (châi kráp) — Yes!' },
+      { thai:'ไม่', roman:'mâi', eng:'No / Not', example:'ไม่ครับ (mâi kráp) — No.' },
+      { thai:'ขอโทษ', roman:'kǒr-tôht', eng:'Sorry / Excuse me', example:'ขอโทษครับ (kǒr-tôht kráp) — Sorry!' },
+      { thai:'ไม่เป็นไร', roman:'mâi bpen rai', eng:"It's okay / No problem", example:'Thai philosophy in 3 words — "never mind"' },
+      { thai:'ผม', roman:'pǒm', eng:'I / Me (male)', example:'ผมชื่อ... (pǒm chêu...) — My name is...' },
+      { thai:'คุณ', roman:'kun', eng:'You (polite)', example:'คุณชื่ออะไร (kun chêu à-rai) — What is your name?' },
+      { thai:'สบายดี', roman:'sà-baai dee', eng:'I\'m fine / How are you?', example:'สบายดีไหม? (sà-baai dee mǎi?) — How are you?' },
+    ]
+  },
+  numbers: {
+    title: 'Numbers 0–10',
+    cards: [
+      { thai:'ศูนย์', roman:'sǔun', eng:'0 — Zero', example:'Used in phone numbers and prices' },
+      { thai:'หนึ่ง', roman:'nèung', eng:'1 — One', example:'หนึ่งชิ้น (nèung chín) — one piece' },
+      { thai:'สอง', roman:'sǒng', eng:'2 — Two', example:'สองคน (sǒng kon) — two people' },
+      { thai:'สาม', roman:'sǎam', eng:'3 — Three', example:'สามวัน (sǎam wan) — three days' },
+      { thai:'สี่', roman:'sìi', eng:'4 — Four', example:'' },
+      { thai:'ห้า', roman:'hâa', eng:'5 — Five', example:'555 = "hahaha" in Thai internet slang!' },
+      { thai:'หก', roman:'hòk', eng:'6 — Six', example:'' },
+      { thai:'เจ็ด', roman:'jèt', eng:'7 — Seven', example:'' },
+      { thai:'แปด', roman:'bpàet', eng:'8 — Eight', example:'' },
+      { thai:'เก้า', roman:'gâo', eng:'9 — Nine', example:'' },
+      { thai:'สิบ', roman:'sìp', eng:'10 — Ten', example:'สิบบาท (sìp bàat) — ten baht' },
+    ]
+  },
+  food: {
+    title: 'Food & Ordering',
+    cards: [
+      { thai:'อร่อย', roman:'à-ròi', eng:'Delicious!', example:'อร่อยมาก! (à-ròi mâak!) — Very delicious!' },
+      { thai:'ข้าว', roman:'kâao', eng:'Rice', example:'The foundation of every Thai meal' },
+      { thai:'น้ำ', roman:'nám', eng:'Water', example:'ขอน้ำครับ (kǒr nám kráp) — Water please' },
+      { thai:'เผ็ด', roman:'pèt', eng:'Spicy', example:'เผ็ดไหม? (pèt mǎi?) — Is it spicy?' },
+      { thai:'ไม่เผ็ด', roman:'mâi pèt', eng:'Not spicy', example:'ขอไม่เผ็ดครับ — Not spicy please' },
+      { thai:'อาหาร', roman:'aa-hǎan', eng:'Food', example:'อาหารไทย (aa-hǎan tai) — Thai food' },
+      { thai:'เช็คบิล', roman:'chék bin', eng:'Check please', example:'เช็คบิลครับ! — Check please!' },
+      { thai:'ผัดไทย', roman:'pàt tai', eng:'Pad Thai', example:'Thailand\'s most famous dish' },
+      { thai:'แกง', roman:'gaeng', eng:'Curry', example:'แกงเขียวหวาน — Green curry' },
+      { thai:'เบียร์', roman:'bia', eng:'Beer', example:'ขอเบียร์ครับ (kǒr bia kráp) — Beer please!' },
+    ]
+  },
+  family: {
+    title: 'Family & People',
+    cards: [
+      { thai:'ครอบครัว', roman:'krôp-krua', eng:'Family', example:'' },
+      { thai:'ภรรยา', roman:'pan-rá-yaa', eng:'Wife', example:'ภรรยาผม (pan-rá-yaa pǒm) — my wife' },
+      { thai:'สามี', roman:'sǎa-mee', eng:'Husband', example:'' },
+      { thai:'แม่', roman:'mâe', eng:'Mother / Mom', example:'' },
+      { thai:'พ่อ', roman:'pôr', eng:'Father / Dad', example:'' },
+      { thai:'ลูก', roman:'lûuk', eng:'Child', example:'ลูกชาย (lûuk chaai) — son / ลูกสาว (lûuk sǎao) — daughter' },
+      { thai:'พี่', roman:'pêe', eng:'Older sibling', example:'Also used for anyone slightly older — very common' },
+      { thai:'น้อง', roman:'nóng', eng:'Younger sibling', example:'Also used affectionately for someone younger' },
+      { thai:'เพื่อน', roman:'pêuan', eng:'Friend', example:'เพื่อนผม (pêuan pǒm) — my friend' },
+      { thai:'รัก', roman:'rák', eng:'Love', example:'ผมรักคุณ (pǒm rák kun) — I love you' },
+    ]
+  },
+  travel: {
+    title: 'Travel & Directions',
+    cards: [
+      { thai:'ไป', roman:'bpai', eng:'Go', example:'ไปไหน? (bpai nǎi?) — Where are you going?' },
+      { thai:'มา', roman:'maa', eng:'Come', example:'มาที่นี่ (maa têe nêe) — Come here' },
+      { thai:'ที่ไหน', roman:'têe-nǎi', eng:'Where?', example:'ห้องน้ำอยู่ที่ไหน? — Where is the bathroom?' },
+      { thai:'เท่าไหร่', roman:'tâo-rài', eng:'How much?', example:'นี่เท่าไหร่? (nêe tâo-rài?) — How much is this?' },
+      { thai:'ซ้าย', roman:'sáai', eng:'Left', example:'' },
+      { thai:'ขวา', roman:'kwǎa', eng:'Right', example:'' },
+      { thai:'ตรงไป', roman:'dtrong bpai', eng:'Go straight', example:'' },
+      { thai:'ใกล้', roman:'glâi', eng:'Near', example:'ใกล้ไหม? (glâi mǎi?) — Is it near?' },
+      { thai:'ไกล', roman:'glai', eng:'Far', example:'Same consonants as "near" but different tone!' },
+      { thai:'โรงแรม', roman:'rohng raem', eng:'Hotel', example:'' },
+    ]
+  }
+};
+
+const phrases = {
+  essential: [
+    { thai:'สวัสดีครับ', roman:'sà-wàt-dee kráp', eng:'Hello (male speaker)', note:'The most important phrase' },
+    { thai:'ขอบคุณครับ', roman:'kòp-kun kráp', eng:'Thank you', note:'' },
+    { thai:'ไม่เป็นไร', roman:'mâi bpen rai', eng:'No problem / Never mind', note:'Core Thai philosophy' },
+    { thai:'ผมไม่เข้าใจ', roman:'pǒm mâi kâo jai', eng:'I don\'t understand', note:'' },
+    { thai:'พูดช้าๆ ได้ไหม', roman:'pûut cháa cháa dâi mǎi', eng:'Can you speak slowly?', note:'Very useful when learning!' },
+    { thai:'ภาษาไทยนิดหน่อย', roman:'paa-sǎa tai nít nòi', eng:'I speak a little Thai', note:'People will love hearing this' },
+  ],
+  romantic: [
+    { thai:'ผมรักคุณ', roman:'pǒm rák kun', eng:'I love you (male speaker)', note:'รัก (rák) = love' },
+    { thai:'คิดถึง', roman:'kít tǔeng', eng:'I miss you', note:'Very commonly used' },
+    { thai:'ที่รัก', roman:'têe rák', eng:'Darling / Sweetheart', note:'Term of endearment' },
+    { thai:'สวยมาก', roman:'sǔay mâak', eng:'Very beautiful', note:'Great compliment for your wife' },
+    { thai:'หิวไหม', roman:'hǐu mǎi', eng:'Are you hungry?', note:'Showing you care, Thai-style' },
+    { thai:'ไปเที่ยวกัน', roman:'bpai tîao gan', eng:'Let\'s go out together', note:'' },
+  ],
+  emergency: [
+    { thai:'ช่วยด้วย', roman:'chûay dûay', eng:'Help!', note:'' },
+    { thai:'อันตราย', roman:'an-dtà-raai', eng:'Danger!', note:'' },
+    { thai:'ไม่สบาย', roman:'mâi sà-baai', eng:'I\'m not feeling well', note:'Literally "not comfortable"' },
+    { thai:'โรงพยาบาล', roman:'rohng pá-yaa-baan', eng:'Hospital', note:'' },
+    { thai:'ตำรวจ', roman:'dtam-rùat', eng:'Police', note:'' },
+    { thai:'แพ้อาหาร', roman:'páe aa-hǎan', eng:'Food allergy', note:'' },
+  ]
+};
+
+let currentCards=[], cardIndex=0, quizQuestions=[], quizIndex=0, quizScore=0, currentQuizCategory='all', currentPhraseCategory='essential';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(['page-home','page-lesson','page-tones','page-tips'].includes(id)) document.getElementById('nav-home').classList.add('active');
+  else if(id==='page-phrases') document.getElementById('nav-phrases').classList.add('active');
+  else if(id==='page-quiz') document.getElementById('nav-quiz').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function openLesson(key) {
+  currentCards=lessons[key].cards; cardIndex=0;
+  document.getElementById('lesson-title').textContent=lessons[key].title;
+  renderCard(); showPage('page-lesson');
+}
+
+function renderCard() {
+  const c=currentCards[cardIndex];
+  document.getElementById('fc-thai').textContent=c.thai;
+  document.getElementById('fc-roman').textContent=c.roman;
+  document.getElementById('fc-eng').textContent=c.eng;
+  document.getElementById('fc-example').textContent=c.example||'';
+  document.getElementById('card-counter').textContent=`${cardIndex+1} / ${currentCards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped')}
+function nextCard(){if(cardIndex<currentCards.length-1){cardIndex++;renderCard()}}
+function prevCard(){if(cardIndex>0){cardIndex--;renderCard()}}
+function speakCurrent(){speakThai(currentCards[cardIndex].thai)}
+
+function speakThai(text) {
+  if('speechSynthesis' in window){
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='th-TH'; u.rate=0.8;
+    speechSynthesis.speak(u);
+  }
+}
+
+function openPhrases(){renderPhrases();showPage('page-phrases')}
+
+function renderPhrases() {
+  const pe=document.getElementById('phrase-pills'); pe.innerHTML='';
+  const cats={essential:'Essential',romantic:'Romantic 💕',emergency:'Emergency'};
+  Object.entries(cats).forEach(([k,l])=>{
+    const b=document.createElement('button');
+    b.className='pill'+(currentPhraseCategory===k?' active':'');
+    b.textContent=l; b.onclick=()=>{currentPhraseCategory=k;renderPhrases()};
+    pe.appendChild(b);
+  });
+  const le=document.getElementById('phrase-list'); le.innerHTML='';
+  phrases[currentPhraseCategory].forEach(p=>{
+    const d=document.createElement('div'); d.className='phrase-item';
+    d.innerHTML=`<div class="phrase-thai">${p.thai}</div><div class="phrase-roman">${p.roman}</div><div class="phrase-eng">${p.eng}</div>${p.note?`<div class="phrase-note">${p.note}</div>`:''}<button class="speak-btn" onclick="speakThai('${p.thai.replace(/'/g,"\\'")}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/></svg>Listen</button>`;
+    le.appendChild(d);
+  });
+}
+
+function openQuiz(){startQuiz('all');showPage('page-quiz')}
+
+function startQuiz(cat) {
+  currentQuizCategory=cat; quizIndex=0; quizScore=0;
+  const pe=document.getElementById('quiz-pills'); pe.innerHTML='';
+  const cats={all:'All Topics',greetings:'Greetings',numbers:'Numbers',food:'Food',family:'Family',travel:'Travel'};
+  Object.entries(cats).forEach(([k,l])=>{
+    const b=document.createElement('button');
+    b.className='pill'+(currentQuizCategory===k?' active':'');
+    b.textContent=l; b.onclick=()=>startQuiz(k); pe.appendChild(b);
+  });
+  let pool=[];
+  if(cat==='all') Object.values(lessons).forEach(l=>pool.push(...l.cards));
+  else pool=[...lessons[cat].cards];
+  pool=shuffle(pool); quizQuestions=pool.slice(0,Math.min(10,pool.length));
+  document.getElementById('quiz-area').style.display='block';
+  document.getElementById('quiz-score').style.display='none';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if(quizIndex>=quizQuestions.length){showScore();return}
+  const q=quizQuestions[quizIndex], t=quizQuestions.length;
+  document.getElementById('quiz-bar').style.width=`${(quizIndex/t)*100}%`;
+  document.getElementById('quiz-thai').textContent=q.thai;
+  document.getElementById('quiz-roman').textContent=q.roman;
+  let all=[]; Object.values(lessons).forEach(l=>all.push(...l.cards));
+  let w=all.filter(c=>c.eng!==q.eng);
+  w=shuffle(w).slice(0,3).map(c=>c.eng);
+  let opts=shuffle([q.eng,...w]);
+  const oe=document.getElementById('quiz-options'); oe.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='quiz-option';
+    b.textContent=o; b.onclick=()=>answer(b,o,q.eng); oe.appendChild(b);
+  });
+}
+
+function answer(btn,chosen,correct) {
+  document.querySelectorAll('.quiz-option').forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent===correct) b.classList.add('correct');
+  });
+  if(chosen!==correct) btn.classList.add('wrong'); else quizScore++;
+  setTimeout(()=>{quizIndex++;renderQuiz()},1200);
+}
+
+function showScore() {
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-score').style.display='block';
+  const t=quizQuestions.length;
+  document.getElementById('score-num').textContent=`${quizScore}/${t}`;
+  const p=quizScore/t;
+  let m='';
+  if(p===1) m='เก่งมาก! — Perfect!';
+  else if(p>=0.8) m='ดีมาก! — Great job!';
+  else if(p>=0.6) m='ดี! — Keep practicing!';
+  else m='ไม่เป็นไร — Try again!';
+  document.getElementById('score-msg').textContent=m;
+}
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+let tx=0;
+document.getElementById('flashcard').addEventListener('touchstart',e=>{tx=e.changedTouches[0].screenX},{passive:true});
+document.getElementById('flashcard').addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-tx;if(Math.abs(d)>50){d<0?nextCard():prevCard()}});
+</script>
+</body>
+</html>
