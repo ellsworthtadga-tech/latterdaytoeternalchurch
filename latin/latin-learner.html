@@ -6,957 +6,607 @@
 <title>Lingua Latina Ecclesiastica</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --parchment: #f4e8d1;
-  --gold: #b8860b;
-  --gold-light: #d4a846;
-  --brown-dark: #3b2f20;
-  --brown-mid: #5a3e1b;
-  --brown-soft: #5c4a37;
-  --brown-muted: #8b7355;
-  --brown-faint: #b8a080;
-  --green: #2d5a27;
-  --red: #5a2727;
-  --amber: #5a4a27;
-  --white-50: rgba(255,255,255,0.5);
-  --white-60: rgba(255,255,255,0.6);
-  --gold-12: rgba(184,134,11,0.12);
-  --gold-08: rgba(184,134,11,0.08);
-  --gold-border: rgba(184,134,11,0.2);
-  --gold-border-strong: rgba(184,134,11,0.3);
-  --gold-border-bright: rgba(184,134,11,0.4);
-}
-
-body {
-  font-family: 'Crimson Text', Georgia, Palatino, serif;
-  background: var(--parchment);
-  color: var(--brown-dark);
-  min-height: 100vh;
-}
-
-body::before {
-  content: '';
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(139,69,19,0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(184,134,11,0.04) 0%, transparent 50%);
-  pointer-events: none; z-index: 0;
-}
-
-.app {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 16px;
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── Header ─────────────────────────────── */
-header {
-  text-align: center;
-  padding: 48px 20px 24px;
-}
-.header-ornament { font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
-h1.title {
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
-  font-weight: 700; color: var(--brown-mid);
-  letter-spacing: 0.06em;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
-}
-.subtitle {
-  font-size: clamp(1rem, 3vw, 1.4rem);
-  font-weight: 400; color: var(--brown-muted);
-  letter-spacing: 0.25em; text-transform: uppercase;
-  margin: 4px 0 16px;
-}
-.header-rule {
-  width: 120px; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 0 auto 12px;
-}
-.tagline { font-size: 0.95rem; color: var(--brown-muted); font-style: italic; }
-
-/* ─── Nav ────────────────────────────────── */
-nav {
-  display: flex; justify-content: center; flex-wrap: wrap; gap: 4px;
-  padding: 8px 0 24px;
-  border-bottom: 1px solid var(--gold-border);
-  margin-bottom: 24px;
-}
-.nav-btn {
-  background: transparent; border: 1px solid transparent;
-  padding: 10px 16px; border-radius: 6;
-  cursor: pointer; text-align: center;
-  font-family: inherit; transition: all 0.2s;
-  border-radius: 6px;
-}
-.nav-btn:hover { background: var(--gold-08); }
-.nav-btn.active {
-  background: var(--gold-12);
-  border-color: var(--gold-border-strong);
-}
-.nav-latin { display: block; font-size: 0.95rem; font-weight: 600; color: var(--brown-mid); }
-.nav-english {
-  display: block; font-size: 0.7rem; color: var(--brown-muted);
-  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px;
-}
-
-/* ─── Content Area ───────────────────────── */
-main {
-  padding-bottom: 40px;
-  transition: opacity 0.25s ease;
-}
-.view { display: none; }
-.view.active { display: block; }
-
-/* ─── Shared Elements ────────────────────── */
-.section-title {
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; font-weight: 600; color: var(--brown-mid);
-  letter-spacing: 0.05em; margin: 32px 0 12px;
-  gap: 12px;
-}
-.cross-icon { font-size: 0.9rem; color: var(--brown-mid); }
-.instructions {
-  text-align: center; font-size: 0.9rem; color: var(--brown-muted);
-  font-style: italic; margin-bottom: 20px;
-}
-.ornament {
-  text-align: center; color: var(--gold);
-  font-size: 1.2rem; letter-spacing: 0.5em; user-select: none;
-}
-.toggle-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 24px; }
-.toggle-btn {
-  padding: 8px 24px; border-radius: 20;
-  border: 1px solid var(--gold-border-strong);
-  background: transparent; font-family: inherit; font-size: 0.9rem;
-  color: var(--brown-soft); cursor: pointer; transition: all 0.2s;
-  border-radius: 20px;
-}
-.toggle-btn.active {
-  background: var(--brown-mid); color: var(--parchment);
-  border-color: var(--brown-mid);
-}
-.filter-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.filter-btn {
-  padding: 6px 16px; border-radius: 20px;
-  border: 1px solid var(--gold-border-strong);
-  background: transparent; font-family: inherit; font-size: 0.85rem;
-  color: var(--brown-soft); cursor: pointer; transition: all 0.2s;
-}
-.filter-btn.active {
-  background: var(--brown-mid); color: var(--parchment);
-  border-color: var(--brown-mid);
-}
-
-/* ─── Home ───────────────────────────────── */
-.home-hero { text-align: center; padding: 20px 20px 32px; }
-.hero-cross { font-size: 3rem; color: var(--gold); margin-bottom: 8px; }
-.home-title { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; color: var(--brown-mid); margin-bottom: 4px; }
-.home-subtitle { font-size: 1rem; font-style: italic; color: var(--brown-muted); margin-bottom: 16px; }
-.home-desc { font-size: 1rem; line-height: 1.7; color: var(--brown-soft); max-width: 600px; margin: 0 auto; }
-
-.stats-row {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px; margin: 24px 0;
-}
-.stat-card {
-  background: var(--white-50); border-radius: 10px; padding: 20px;
-  border: 1px solid var(--gold-border); text-align: center;
-}
-.stat-number { font-size: 2rem; font-weight: 700; color: var(--brown-mid); }
-.stat-label { font-size: 0.9rem; font-weight: 600; color: var(--brown-soft); margin-top: 4px; }
-.stat-sub { font-size: 0.75rem; color: var(--brown-muted); margin-top: 2px; margin-bottom: 10px; }
-.progress-bar-bg { height: 6px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; }
-.progress-bar-fill {
-  height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 3px; transition: width 0.5s;
-}
-
-.quick-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px; margin: 20px 0;
-}
-.quick-card {
-  background: var(--white-50); border: 1px solid var(--gold-border);
-  border-radius: 10px; padding: 20px; text-align: center;
-  cursor: pointer; font-family: inherit; transition: all 0.2s;
-  width: 100%;
-}
-.quick-card:hover { background: var(--white-60); border-color: var(--gold-border-strong); }
-.quick-icon { font-size: 2rem; margin-bottom: 8px; }
-.quick-title { font-size: 1.1rem; font-weight: 700; color: var(--brown-mid); margin-bottom: 6px; }
-.quick-desc { font-size: 0.85rem; color: var(--brown-soft); line-height: 1.5; }
-
-.tip-box {
-  background: var(--gold-08); border: 1px solid var(--gold-border);
-  border-radius: 10px; padding: 20px; margin: 24px 0;
-}
-.tip-header { font-size: 0.95rem; font-weight: 700; color: var(--brown-mid); margin-bottom: 8px; }
-.tip-text { font-size: 0.9rem; color: var(--brown-soft); line-height: 1.6; }
-
-/* ─── Vocabulary ─────────────────────────── */
-.vocab-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
-}
-.vocab-card {
-  perspective: 800px; cursor: pointer; height: 200px;
-}
-.vocab-inner {
-  position: relative; width: 100%; height: 100%;
-  transition: transform 0.5s; transform-style: preserve-3d;
-}
-.vocab-card.flipped .vocab-inner { transform: rotateY(180deg); }
-.vocab-front, .vocab-back {
-  position: absolute; width: 100%; height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; padding: 16px;
-}
-.vocab-front {
-  background: var(--white-60); border: 1px solid rgba(184,134,11,0.25);
-}
-.vocab-back {
-  transform: rotateY(180deg);
-  background: rgba(90,62,27,0.9); border: 1px solid var(--gold-border-bright);
-  color: var(--parchment);
-}
-.vocab-category {
-  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em;
-  color: var(--gold); margin-bottom: 8px; font-weight: 600;
-}
-.vocab-latin { font-size: 1.5rem; font-weight: 700; color: var(--brown-mid); }
-.vocab-back .vocab-latin { font-size: 1rem; margin-top: 8px; color: var(--brown-muted); }
-.vocab-english { font-size: 1.4rem; font-weight: 700; color: var(--parchment); }
-.vocab-pronunciation { font-size: 0.8rem; color: var(--brown-muted); font-style: italic; margin-top: 4px; }
-.vocab-back .vocab-pronunciation { color: var(--brown-faint); }
-.vocab-hint {
-  font-size: 0.7rem; color: var(--brown-faint); margin-top: 10px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-}
-.learned-btn {
-  margin-top: 8px; padding: 4px 14px; border-radius: 14px;
-  border: 1px solid var(--gold-border-strong); background: transparent;
-  font-family: inherit; font-size: 0.72rem; color: var(--brown-muted);
-  cursor: pointer; transition: all 0.2s;
-}
-.learned-btn.active {
-  background: var(--green); color: var(--parchment); border-color: var(--green);
-}
-
-/* ─── Prayers ────────────────────────────── */
-.prayers-list { display: flex; flex-direction: column; gap: 12px; }
-.prayer-card {
-  background: var(--white-50); border: 1px solid var(--gold-border);
-  border-radius: 10px; overflow: hidden;
-}
-.prayer-header {
-  width: 100%; padding: 16px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-  background: transparent; border: none; cursor: pointer;
-  font-family: inherit; text-align: left;
-}
-.prayer-title { font-size: 1.1rem; font-weight: 700; color: var(--brown-mid); }
-.prayer-english-title { font-size: 0.8rem; color: var(--brown-muted); font-style: italic; }
-.prayer-meta { display: flex; align-items: center; gap: 10px; }
-.difficulty-badge {
-  font-size: 0.65rem; padding: 3px 10px; border-radius: 10px;
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-  color: var(--parchment);
-}
-.difficulty-badge.beginner { background: var(--green); }
-.difficulty-badge.intermediate { background: var(--amber); }
-.difficulty-badge.advanced { background: var(--red); }
-.prayer-arrow {
-  font-size: 1.2rem; color: var(--brown-muted);
-  transition: transform 0.3s; display: inline-block;
-}
-.prayer-card.expanded .prayer-arrow { transform: rotate(180deg); }
-.prayer-body {
-  display: none; padding: 0 20px 20px;
-}
-.prayer-card.expanded .prayer-body { display: block; }
-.prayer-text {
-  font-size: 1.05rem; line-height: 1.8; color: var(--brown-dark); font-weight: 500;
-  padding: 16px; background: rgba(184,134,11,0.06); border-radius: 8px;
-  border-left: 3px solid var(--gold);
-}
-.prayer-translation {
-  margin-top: 12px; font-size: 0.9rem; line-height: 1.7;
-  color: var(--brown-soft); font-style: italic; padding: 0 16px;
-}
-.prayer-trans-label {
-  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--brown-muted); font-weight: 600; font-style: normal; margin-bottom: 4px;
-}
-
-/* ─── Grammar ────────────────────────────── */
-.grammar-nav { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
-.grammar-nav-btn {
-  padding: 12px 16px; text-align: left;
-  background: rgba(255,255,255,0.3); border: 1px solid rgba(184,134,11,0.15);
-  border-radius: 8px; font-family: inherit; font-size: 0.95rem;
-  color: var(--brown-soft); cursor: pointer; transition: all 0.2s;
-  display: flex; align-items: center; gap: 12px;
-  width: 100%;
-}
-.grammar-nav-btn.active {
-  background: var(--gold-12); border-color: var(--gold-border-bright);
-  color: var(--brown-mid); font-weight: 600;
-}
-.grammar-num {
-  font-size: 0.75rem; color: var(--gold); font-weight: 700;
-  width: 28px; text-align: center; flex-shrink: 0;
-}
-.grammar-content {
-  background: var(--white-50); border: 1px solid var(--gold-border);
-  border-radius: 10px; padding: 28px;
-}
-.grammar-title {
-  font-size: 1.4rem; font-weight: 700; color: var(--brown-mid);
-  text-align: center; margin-bottom: 4px;
-}
-.grammar-section { margin-bottom: 20px; }
-.grammar-heading {
-  font-size: 1rem; font-weight: 700; color: var(--brown-mid);
-  margin-bottom: 6px; border-bottom: 1px solid rgba(184,134,11,0.15); padding-bottom: 4px;
-}
-.grammar-text { font-size: 0.93rem; line-height: 1.75; color: var(--brown-dark); }
-
-/* ─── Quiz ───────────────────────────────── */
-.quiz-score-bar {
-  display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
-  font-size: 0.9rem; color: var(--brown-soft); font-weight: 600; margin-bottom: 20px;
-}
-.quiz-card {
-  background: var(--white-50); border: 1px solid var(--gold-border);
-  border-radius: 12px; padding: 32px; text-align: center;
-  max-width: 560px; margin: 0 auto;
-}
-.quiz-prompt-label {
-  font-size: 0.85rem; color: var(--brown-muted);
-  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;
-}
-.quiz-word { font-size: 2.2rem; font-weight: 700; color: var(--brown-mid); margin-bottom: 4px; }
-.quiz-pronunciation { font-size: 0.9rem; color: var(--brown-muted); font-style: italic; margin-bottom: 24px; }
-.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.quiz-option {
-  padding: 14px 16px; border-radius: 8px;
-  font-family: inherit; font-size: 1rem;
-  color: var(--brown-dark); cursor: pointer; transition: all 0.2s;
-  background: transparent; border: 1px solid rgba(184,134,11,0.4);
-}
-.quiz-option:hover:not(.disabled) { background: var(--gold-08); }
-.quiz-option.correct { background: rgba(45,90,39,0.2); border: 2px solid var(--green); }
-.quiz-option.wrong { background: rgba(90,39,39,0.2); border: 2px solid var(--red); }
-.quiz-option.disabled { cursor: default; }
-.quiz-feedback { margin-top: 20px; padding: 16px; font-size: 1rem; }
-.quiz-feedback .correct-msg { color: var(--green); }
-.quiz-feedback .wrong-msg { color: var(--red); }
-.next-btn {
-  margin-top: 12px; padding: 10px 28px; border-radius: 8px;
-  background: var(--brown-mid); color: var(--parchment);
-  border: none; font-family: inherit; font-size: 0.95rem;
-  cursor: pointer; font-weight: 600; transition: background 0.2s;
-}
-.next-btn:hover { background: var(--brown-dark); }
-
-/* ─── Footer ─────────────────────────────── */
-footer {
-  text-align: center; padding: 32px 0 48px;
-}
-footer .footer-text { margin-top: 12px; font-size: 0.8rem; color: var(--brown-muted); }
-
-/* ─── Mobile ─────────────────────────────── */
-@media (max-width: 500px) {
-  .quiz-options { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: 1fr; }
-  .quick-grid { grid-template-columns: 1fr; }
-  .vocab-grid { grid-template-columns: 1fr 1fr; }
-  nav { gap: 2px; }
-  .nav-btn { padding: 8px 10px; }
-  .quiz-word { font-size: 1.7rem; }
-}
-@media (max-width: 360px) {
-  .vocab-grid { grid-template-columns: 1fr; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--parchment:#f4e8d1;--gold:#b8860b;--gold-light:#d4a846;--brown-dark:#3b2f20;--brown-mid:#5a3e1b;--brown-soft:#5c4a37;--brown-muted:#8b7355;--brown-faint:#b8a080;--green:#2d5a27;--red:#5a2727;--amber:#5a4a27;--white-50:rgba(255,255,255,0.5);--white-60:rgba(255,255,255,0.6);--gold-12:rgba(184,134,11,0.12);--gold-08:rgba(184,134,11,0.08);--gold-border:rgba(184,134,11,0.2);--gold-border-strong:rgba(184,134,11,0.3);--gold-border-bright:rgba(184,134,11,0.4)}
+body{font-family:'Crimson Text',Georgia,Palatino,serif;background:var(--parchment);color:var(--brown-dark);min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 50%,rgba(184,134,11,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(139,69,19,0.05) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(184,134,11,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+.app{max-width:960px;margin:0 auto;padding:0 16px;position:relative;z-index:1}
+header{text-align:center;padding:48px 20px 24px}
+.header-ornament{font-size:2rem;color:var(--gold);margin-bottom:8px}
+h1.title{font-size:clamp(2.2rem,6vw,3.5rem);font-weight:700;color:var(--brown-mid);letter-spacing:0.06em;text-shadow:1px 1px 2px rgba(0,0,0,0.08)}
+.subtitle{font-size:clamp(1rem,3vw,1.4rem);font-weight:400;color:var(--brown-muted);letter-spacing:0.25em;text-transform:uppercase;margin:4px 0 16px}
+.header-rule{width:120px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 12px}
+.tagline{font-size:0.95rem;color:var(--brown-muted);font-style:italic}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;padding:8px 0 24px;border-bottom:1px solid var(--gold-border);margin-bottom:24px}
+.nav-btn{background:transparent;border:1px solid transparent;padding:10px 16px;border-radius:6px;cursor:pointer;text-align:center;font-family:inherit;transition:all 0.2s}
+.nav-btn:hover{background:var(--gold-08)}
+.nav-btn.active{background:var(--gold-12);border-color:var(--gold-border-strong)}
+.nav-latin{display:block;font-size:0.95rem;font-weight:600;color:var(--brown-mid)}
+.nav-english{display:block;font-size:0.7rem;color:var(--brown-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
+main{padding-bottom:40px;transition:opacity 0.25s ease}
+.view{display:none}.view.active{display:block}
+.section-title{display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:600;color:var(--brown-mid);letter-spacing:0.05em;margin:32px 0 12px;gap:12px}
+.instructions{text-align:center;font-size:0.9rem;color:var(--brown-muted);font-style:italic;margin-bottom:20px}
+.ornament{text-align:center;color:var(--gold);font-size:1.2rem;letter-spacing:0.5em;user-select:none}
+.toggle-row{display:flex;justify-content:center;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+.toggle-btn{padding:8px 24px;border-radius:20px;border:1px solid var(--gold-border-strong);background:transparent;font-family:inherit;font-size:0.9rem;color:var(--brown-soft);cursor:pointer;transition:all 0.2s}
+.toggle-btn.active{background:var(--brown-mid);color:var(--parchment);border-color:var(--brown-mid)}
+.filter-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.filter-btn{padding:6px 16px;border-radius:20px;border:1px solid var(--gold-border-strong);background:transparent;font-family:inherit;font-size:0.85rem;color:var(--brown-soft);cursor:pointer;transition:all 0.2s}
+.filter-btn.active{background:var(--brown-mid);color:var(--parchment);border-color:var(--brown-mid)}
+.home-hero{text-align:center;padding:20px 20px 32px}
+.hero-cross{font-size:3rem;color:var(--gold);margin-bottom:8px}
+.home-title{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:var(--brown-mid);margin-bottom:4px}
+.home-subtitle{font-size:1rem;font-style:italic;color:var(--brown-muted);margin-bottom:16px}
+.home-desc{font-size:1rem;line-height:1.7;color:var(--brown-soft);max-width:600px;margin:0 auto}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:24px 0}
+.stat-card{background:var(--white-50);border-radius:10px;padding:20px;border:1px solid var(--gold-border);text-align:center}
+.stat-number{font-size:2rem;font-weight:700;color:var(--brown-mid)}
+.stat-label{font-size:0.9rem;font-weight:600;color:var(--brown-soft);margin-top:4px}
+.stat-sub{font-size:0.75rem;color:var(--brown-muted);margin-top:2px;margin-bottom:10px}
+.progress-bar-bg{height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px;transition:width 0.5s}
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.quick-card{background:var(--white-50);border:1px solid var(--gold-border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;font-family:inherit;transition:all 0.2s;width:100%}
+.quick-card:hover{background:var(--white-60);border-color:var(--gold-border-strong)}
+.quick-icon{font-size:2rem;margin-bottom:8px}
+.quick-title{font-size:1.1rem;font-weight:700;color:var(--brown-mid);margin-bottom:6px}
+.quick-desc{font-size:0.85rem;color:var(--brown-soft);line-height:1.5}
+.tip-box{background:var(--gold-08);border:1px solid var(--gold-border);border-radius:10px;padding:20px;margin:24px 0}
+.tip-header{font-size:0.95rem;font-weight:700;color:var(--brown-mid);margin-bottom:8px}
+.tip-text{font-size:0.9rem;color:var(--brown-soft);line-height:1.6}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.vocab-card{perspective:800px;cursor:pointer;height:200px}
+.vocab-inner{position:relative;width:100%;height:100%;transition:transform 0.5s;transform-style:preserve-3d}
+.vocab-card.flipped .vocab-inner{transform:rotateY(180deg)}
+.vocab-front,.vocab-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.vocab-front{background:var(--white-60);border:1px solid rgba(184,134,11,0.25)}
+.vocab-back{transform:rotateY(180deg);background:rgba(90,62,27,0.9);border:1px solid var(--gold-border-bright);color:var(--parchment)}
+.vocab-category{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);margin-bottom:8px;font-weight:600}
+.vocab-latin{font-size:1.5rem;font-weight:700;color:var(--brown-mid)}
+.vocab-back .vocab-latin{font-size:1rem;margin-top:8px;color:var(--brown-muted)}
+.vocab-english{font-size:1.4rem;font-weight:700;color:var(--parchment)}
+.vocab-pronunciation{font-size:0.8rem;color:var(--brown-muted);font-style:italic;margin-top:4px}
+.vocab-back .vocab-pronunciation{color:var(--brown-faint)}
+.vocab-hint{font-size:0.7rem;color:var(--brown-faint);margin-top:10px;text-transform:uppercase;letter-spacing:0.1em}
+.learned-btn{margin-top:8px;padding:4px 14px;border-radius:14px;border:1px solid var(--gold-border-strong);background:transparent;font-family:inherit;font-size:0.72rem;color:var(--brown-muted);cursor:pointer;transition:all 0.2s}
+.learned-btn.active{background:var(--green);color:var(--parchment);border-color:var(--green)}
+.vocab-count{text-align:center;font-size:0.85rem;color:var(--brown-muted);margin-bottom:16px}
+.prayers-list{display:flex;flex-direction:column;gap:12px}
+.prayer-card{background:var(--white-50);border:1px solid var(--gold-border);border-radius:10px;overflow:hidden}
+.prayer-header{width:100%;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;background:transparent;border:none;cursor:pointer;font-family:inherit;text-align:left}
+.prayer-title{font-size:1.1rem;font-weight:700;color:var(--brown-mid)}
+.prayer-english-title{font-size:0.8rem;color:var(--brown-muted);font-style:italic}
+.prayer-meta{display:flex;align-items:center;gap:10px}
+.difficulty-badge{font-size:0.65rem;padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;color:var(--parchment)}
+.difficulty-badge.beginner{background:var(--green)}.difficulty-badge.intermediate{background:var(--amber)}.difficulty-badge.advanced{background:var(--red)}
+.prayer-arrow{font-size:1.2rem;color:var(--brown-muted);transition:transform 0.3s;display:inline-block}
+.prayer-card.expanded .prayer-arrow{transform:rotate(180deg)}
+.prayer-body{display:none;padding:0 20px 20px}
+.prayer-card.expanded .prayer-body{display:block}
+.prayer-text{font-size:1.05rem;line-height:1.8;color:var(--brown-dark);font-weight:500;padding:16px;background:rgba(184,134,11,0.06);border-radius:8px;border-left:3px solid var(--gold)}
+.prayer-translation{margin-top:12px;font-size:0.9rem;line-height:1.7;color:var(--brown-soft);font-style:italic;padding:0 16px}
+.prayer-trans-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--brown-muted);font-weight:600;font-style:normal;margin-bottom:4px}
+.grammar-nav{display:flex;flex-direction:column;gap:6px;margin-bottom:24px}
+.grammar-nav-btn{padding:12px 16px;text-align:left;background:rgba(255,255,255,0.3);border:1px solid rgba(184,134,11,0.15);border-radius:8px;font-family:inherit;font-size:0.95rem;color:var(--brown-soft);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px;width:100%}
+.grammar-nav-btn.active{background:var(--gold-12);border-color:var(--gold-border-bright);color:var(--brown-mid);font-weight:600}
+.grammar-num{font-size:0.75rem;color:var(--gold);font-weight:700;width:28px;text-align:center;flex-shrink:0}
+.grammar-content{background:var(--white-50);border:1px solid var(--gold-border);border-radius:10px;padding:28px}
+.grammar-title{font-size:1.4rem;font-weight:700;color:var(--brown-mid);text-align:center;margin-bottom:4px}
+.grammar-section{margin-bottom:20px}
+.grammar-heading{font-size:1rem;font-weight:700;color:var(--brown-mid);margin-bottom:6px;border-bottom:1px solid rgba(184,134,11,0.15);padding-bottom:4px}
+.grammar-text{font-size:0.93rem;line-height:1.75;color:var(--brown-dark)}
+.grammar-table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:0.88rem}
+.grammar-table th{background:rgba(90,62,27,0.08);color:var(--brown-mid);padding:8px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--gold-border-strong)}
+.grammar-table td{padding:7px 12px;border-bottom:1px solid rgba(184,134,11,0.12);color:var(--brown-dark)}
+.grammar-table tr:hover td{background:rgba(184,134,11,0.04)}
+.grammar-note{background:var(--gold-08);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:0.88rem;line-height:1.6;color:var(--brown-soft)}
+.grammar-note strong{color:var(--brown-mid)}
+.quiz-score-bar{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;font-size:0.9rem;color:var(--brown-soft);font-weight:600;margin-bottom:20px}
+.quiz-card{background:var(--white-50);border:1px solid var(--gold-border);border-radius:12px;padding:32px;text-align:center;max-width:560px;margin:0 auto}
+.quiz-prompt-label{font-size:0.85rem;color:var(--brown-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+.quiz-word{font-size:2.2rem;font-weight:700;color:var(--brown-mid);margin-bottom:4px}
+.quiz-pronunciation{font-size:0.9rem;color:var(--brown-muted);font-style:italic;margin-bottom:24px}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quiz-option{padding:14px 16px;border-radius:8px;font-family:inherit;font-size:1rem;color:var(--brown-dark);cursor:pointer;transition:all 0.2s;background:transparent;border:1px solid rgba(184,134,11,0.4)}
+.quiz-option:hover:not(.disabled){background:var(--gold-08)}
+.quiz-option.correct{background:rgba(45,90,39,0.2);border:2px solid var(--green)}
+.quiz-option.wrong{background:rgba(90,39,39,0.2);border:2px solid var(--red)}
+.quiz-option.disabled{cursor:default}
+.quiz-feedback{margin-top:20px;padding:16px;font-size:1rem}
+.quiz-feedback .correct-msg{color:var(--green)}
+.quiz-feedback .wrong-msg{color:var(--red)}
+.next-btn{margin-top:12px;padding:10px 28px;border-radius:8px;background:var(--brown-mid);color:var(--parchment);border:none;font-family:inherit;font-size:0.95rem;cursor:pointer;font-weight:600;transition:background 0.2s}
+.next-btn:hover{background:var(--brown-dark)}
+.quiz-filter-label{font-size:0.85rem;color:var(--brown-muted);text-align:center;margin-bottom:8px}
+footer{text-align:center;padding:32px 0 48px}
+footer .footer-text{margin-top:12px;font-size:0.8rem;color:var(--brown-muted)}
+@media(max-width:500px){.quiz-options{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.vocab-grid{grid-template-columns:1fr 1fr}nav{gap:2px}.nav-btn{padding:8px 10px}.quiz-word{font-size:1.7rem}.grammar-table{font-size:0.78rem}.grammar-table th,.grammar-table td{padding:5px 6px}.grammar-content{padding:16px}}
+@media(max-width:360px){.vocab-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <div class="app">
-
-  <!-- Header -->
-  <header>
-    <div class="header-ornament">❧</div>
-    <h1 class="title">Lingua Latina</h1>
-    <p class="subtitle">Ecclesiastica</p>
-    <div class="header-rule"></div>
-    <p class="tagline">A study of the sacred tongue of the Church</p>
-  </header>
-
-  <!-- Navigation -->
-  <nav id="main-nav"></nav>
-
-  <!-- Content Views -->
-  <main>
-    <div id="view-home" class="view active"></div>
-    <div id="view-vocabulary" class="view"></div>
-    <div id="view-prayers" class="view"></div>
-    <div id="view-grammar" class="view"></div>
-    <div id="view-quiz" class="view"></div>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="ornament">✦ ✦ ✦</div>
-    <p class="footer-text">Ad Maiorem Dei Gloriam</p>
-  </footer>
-
+<header><div class="header-ornament">❧</div><h1 class="title">Lingua Latina</h1><p class="subtitle">Ecclesiastica</p><div class="header-rule"></div><p class="tagline">A study of the sacred tongue of the Church</p></header>
+<nav id="main-nav"></nav>
+<main><div id="view-home" class="view active"></div><div id="view-vocabulary" class="view"></div><div id="view-prayers" class="view"></div><div id="view-grammar" class="view"></div><div id="view-quiz" class="view"></div></main>
+<footer><div class="ornament">✦ ✦ ✦</div><p class="footer-text">Ad Maiorem Dei Gloriam</p></footer>
 </div>
-
 <script>
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════════
 
 const VOCABULARY = [
-  { category: "Liturgical", latin: "Dominus", english: "Lord", pronunciation: "DOH-mee-noos" },
-  { category: "Liturgical", latin: "Deus", english: "God", pronunciation: "DEH-oos" },
-  { category: "Liturgical", latin: "Sanctus", english: "Holy", pronunciation: "SAHNK-toos" },
-  { category: "Liturgical", latin: "Gloria", english: "Glory", pronunciation: "GLOH-ree-ah" },
-  { category: "Liturgical", latin: "Pax", english: "Peace", pronunciation: "PAHKS" },
-  { category: "Liturgical", latin: "Agnus", english: "Lamb", pronunciation: "AHG-noos" },
-  { category: "Liturgical", latin: "Credo", english: "I believe", pronunciation: "KREH-doh" },
-  { category: "Liturgical", latin: "Misericordia", english: "Mercy", pronunciation: "mee-seh-ree-KOR-dee-ah" },
-  { category: "Liturgical", latin: "Resurrectio", english: "Resurrection", pronunciation: "reh-soo-REK-tsee-oh" },
-  { category: "Liturgical", latin: "Eucharistia", english: "Eucharist / Thanksgiving", pronunciation: "eh-oo-kah-REES-tee-ah" },
-  { category: "Common", latin: "Et", english: "And", pronunciation: "EHT" },
-  { category: "Common", latin: "In", english: "In", pronunciation: "EEN" },
-  { category: "Common", latin: "Non", english: "Not", pronunciation: "NOHN" },
-  { category: "Common", latin: "Est", english: "Is", pronunciation: "EHST" },
-  { category: "Common", latin: "Cum", english: "With", pronunciation: "KOOM" },
-  { category: "Common", latin: "Qui", english: "Who / Which", pronunciation: "KWEE" },
-  { category: "Common", latin: "Ad", english: "To / Toward", pronunciation: "AHD" },
-  { category: "Common", latin: "Per", english: "Through", pronunciation: "PEHR" },
-  { category: "Common", latin: "Sicut", english: "Just as", pronunciation: "SEE-koot" },
-  { category: "Common", latin: "Semper", english: "Always", pronunciation: "SEHM-pehr" },
-  { category: "People", latin: "Pater", english: "Father", pronunciation: "PAH-tehr" },
-  { category: "People", latin: "Filius", english: "Son", pronunciation: "FEE-lee-oos" },
-  { category: "People", latin: "Spiritus", english: "Spirit", pronunciation: "SPEE-ree-toos" },
-  { category: "People", latin: "Maria", english: "Mary", pronunciation: "mah-REE-ah" },
-  { category: "People", latin: "Mater", english: "Mother", pronunciation: "MAH-tehr" },
-  { category: "People", latin: "Rex", english: "King", pronunciation: "REHKS" },
-  { category: "People", latin: "Populus", english: "People", pronunciation: "POH-poo-loos" },
-  { category: "People", latin: "Sacerdos", english: "Priest", pronunciation: "sah-CHEHR-dohs" },
-  { category: "Actions", latin: "Oremus", english: "Let us pray", pronunciation: "oh-REH-moos" },
-  { category: "Actions", latin: "Laudate", english: "Praise (ye)", pronunciation: "lau-DAH-teh" },
-  { category: "Actions", latin: "Benedicite", english: "Bless (ye)", pronunciation: "beh-neh-DEE-chee-teh" },
-  { category: "Actions", latin: "Venite", english: "Come (ye)", pronunciation: "veh-NEE-teh" },
-  { category: "Actions", latin: "Sursum", english: "Upward / Lift up", pronunciation: "SOOR-soom" },
-  { category: "Actions", latin: "Confiteor", english: "I confess", pronunciation: "kohn-FEE-teh-or" },
-  { category: "Actions", latin: "Adoremus", english: "Let us adore", pronunciation: "ah-doh-REH-moos" },
-  { category: "Actions", latin: "Domine, exaudi", english: "Lord, hear", pronunciation: "DOH-mee-neh ehk-SAU-dee" }
-];
+  // ── Liturgical Terms (23) ─────────────────────────────────────
+  {c:"Liturgical",l:"Dominus",e:"Lord",p:"DOH-mee-noos"},
+  {c:"Liturgical",l:"Deus",e:"God",p:"DEH-oos"},
+  {c:"Liturgical",l:"Sanctus",e:"Holy",p:"SAHNK-toos"},
+  {c:"Liturgical",l:"Gloria",e:"Glory",p:"GLOH-ree-ah"},
+  {c:"Liturgical",l:"Pax",e:"Peace",p:"PAHKS"},
+  {c:"Liturgical",l:"Agnus",e:"Lamb",p:"AHG-noos"},
+  {c:"Liturgical",l:"Credo",e:"I believe",p:"KREH-doh"},
+  {c:"Liturgical",l:"Misericordia",e:"Mercy",p:"mee-seh-ree-KOR-dee-ah"},
+  {c:"Liturgical",l:"Resurrectio",e:"Resurrection",p:"reh-soo-REK-tsee-oh"},
+  {c:"Liturgical",l:"Eucharistia",e:"Eucharist / Thanksgiving",p:"eh-oo-kah-REES-tee-ah"},
+  {c:"Liturgical",l:"Missa",e:"Mass",p:"MEES-sah"},
+  {c:"Liturgical",l:"Evangelium",e:"Gospel",p:"eh-vahn-JEH-lee-oom"},
+  {c:"Liturgical",l:"Alleluia",e:"Praise the Lord",p:"ah-leh-LOO-yah"},
+  {c:"Liturgical",l:"Amen",e:"So be it / Truly",p:"AH-mehn"},
+  {c:"Liturgical",l:"Hosanna",e:"Save us / Praise",p:"oh-ZAHN-nah"},
+  {c:"Liturgical",l:"Communio",e:"Communion",p:"kohm-MOO-nee-oh"},
+  {c:"Liturgical",l:"Offertorium",e:"Offertory",p:"ohf-fehr-TOH-ree-oom"},
+  {c:"Liturgical",l:"Introitus",e:"Introit / Entrance",p:"een-TROH-ee-toos"},
+  {c:"Liturgical",l:"Benedictio",e:"Blessing",p:"beh-neh-DEEK-tsee-oh"},
+  {c:"Liturgical",l:"Lectio",e:"Reading / Lesson",p:"LEK-tsee-oh"},
+  {c:"Liturgical",l:"Homilia",e:"Homily",p:"hoh-MEE-lee-ah"},
+  {c:"Liturgical",l:"Psalmus",e:"Psalm",p:"PSAHL-moos"},
+  {c:"Liturgical",l:"Hymnus",e:"Hymn",p:"HEEM-noos"},
+
+  // ── Sacraments & Rites (10) ───────────────────────────────────
+  {c:"Sacraments",l:"Baptisma",e:"Baptism",p:"bahp-TEES-mah"},
+  {c:"Sacraments",l:"Confirmatio",e:"Confirmation",p:"kohn-feer-MAH-tsee-oh"},
+  {c:"Sacraments",l:"Paenitentia",e:"Penance / Confession",p:"peh-nee-TEHN-tsee-ah"},
+  {c:"Sacraments",l:"Matrimonium",e:"Marriage",p:"mah-tree-MOH-nee-oom"},
+  {c:"Sacraments",l:"Ordo",e:"Holy Orders",p:"OR-doh"},
+  {c:"Sacraments",l:"Unctio",e:"Anointing",p:"OOHNK-tsee-oh"},
+  {c:"Sacraments",l:"Absolutio",e:"Absolution",p:"ahb-soh-LOO-tsee-oh"},
+  {c:"Sacraments",l:"Gratia",e:"Grace",p:"GRAH-tsee-ah"},
+  {c:"Sacraments",l:"Peccatum",e:"Sin",p:"pehk-KAH-toom"},
+  {c:"Sacraments",l:"Indulgentia",e:"Indulgence",p:"een-dool-JEHN-tsee-ah"},
+
+  // ── People & Roles (22) ───────────────────────────────────────
+  {c:"People",l:"Pater",e:"Father",p:"PAH-tehr"},
+  {c:"People",l:"Filius",e:"Son",p:"FEE-lee-oos"},
+  {c:"People",l:"Spiritus",e:"Spirit",p:"SPEE-ree-toos"},
+  {c:"People",l:"Maria",e:"Mary",p:"mah-REE-ah"},
+  {c:"People",l:"Mater",e:"Mother",p:"MAH-tehr"},
+  {c:"People",l:"Rex",e:"King",p:"REHKS"},
+  {c:"People",l:"Regina",e:"Queen",p:"reh-JEE-nah"},
+  {c:"People",l:"Populus",e:"People",p:"POH-poo-loos"},
+  {c:"People",l:"Sacerdos",e:"Priest",p:"sah-CHEHR-dohs"},
+  {c:"People",l:"Episcopus",e:"Bishop",p:"eh-PEES-koh-poos"},
+  {c:"People",l:"Papa",e:"Pope",p:"PAH-pah"},
+  {c:"People",l:"Diaconus",e:"Deacon",p:"dee-AH-koh-noos"},
+  {c:"People",l:"Apostolus",e:"Apostle",p:"ah-POHS-toh-loos"},
+  {c:"People",l:"Propheta",e:"Prophet",p:"proh-FEH-tah"},
+  {c:"People",l:"Martyr",e:"Martyr / Witness",p:"MAHR-teer"},
+  {c:"People",l:"Virgo",e:"Virgin",p:"VEER-goh"},
+  {c:"People",l:"Angelus",e:"Angel",p:"AHN-jeh-loos"},
+  {c:"People",l:"Frater",e:"Brother",p:"FRAH-tehr"},
+  {c:"People",l:"Soror",e:"Sister",p:"SOH-rohr"},
+  {c:"People",l:"Servus",e:"Servant",p:"SEHR-voos"},
+  {c:"People",l:"Pastor",e:"Shepherd / Pastor",p:"PAHS-tohr"},
+  {c:"People",l:"Homo",e:"Man / Human",p:"OH-moh"},
+
+  // ── Verbs (28) ────────────────────────────────────────────────
+  {c:"Verbs",l:"Oremus",e:"Let us pray",p:"oh-REH-moos"},
+  {c:"Verbs",l:"Laudate",e:"Praise (ye)",p:"lau-DAH-teh"},
+  {c:"Verbs",l:"Benedicite",e:"Bless (ye)",p:"beh-neh-DEE-chee-teh"},
+  {c:"Verbs",l:"Venite",e:"Come (ye)",p:"veh-NEE-teh"},
+  {c:"Verbs",l:"Confiteor",e:"I confess",p:"kohn-FEE-teh-or"},
+  {c:"Verbs",l:"Adoremus",e:"Let us adore",p:"ah-doh-REH-moos"},
+  {c:"Verbs",l:"Amare",e:"To love",p:"ah-MAH-reh"},
+  {c:"Verbs",l:"Credere",e:"To believe",p:"KREH-deh-reh"},
+  {c:"Verbs",l:"Orare",e:"To pray",p:"oh-RAH-reh"},
+  {c:"Verbs",l:"Cantare",e:"To sing",p:"kahn-TAH-reh"},
+  {c:"Verbs",l:"Dare",e:"To give",p:"DAH-reh"},
+  {c:"Verbs",l:"Videre",e:"To see",p:"vee-DEH-reh"},
+  {c:"Verbs",l:"Audire",e:"To hear",p:"au-DEE-reh"},
+  {c:"Verbs",l:"Scire",e:"To know",p:"SHEE-reh"},
+  {c:"Verbs",l:"Facere",e:"To do / To make",p:"FAH-cheh-reh"},
+  {c:"Verbs",l:"Dicere",e:"To say / To speak",p:"DEE-cheh-reh"},
+  {c:"Verbs",l:"Venire",e:"To come",p:"veh-NEE-reh"},
+  {c:"Verbs",l:"Ire",e:"To go",p:"EE-reh"},
+  {c:"Verbs",l:"Esse",e:"To be",p:"EHS-seh"},
+  {c:"Verbs",l:"Habere",e:"To have",p:"ah-BEH-reh"},
+  {c:"Verbs",l:"Mittere",e:"To send",p:"MEET-teh-reh"},
+  {c:"Verbs",l:"Docere",e:"To teach",p:"doh-CHEH-reh"},
+  {c:"Verbs",l:"Legere",e:"To read",p:"LEH-jeh-reh"},
+  {c:"Verbs",l:"Scribere",e:"To write",p:"SKREE-beh-reh"},
+  {c:"Verbs",l:"Vivere",e:"To live",p:"VEE-veh-reh"},
+  {c:"Verbs",l:"Mori",e:"To die",p:"MOH-ree"},
+  {c:"Verbs",l:"Servire",e:"To serve",p:"sehr-VEE-reh"},
+  {c:"Verbs",l:"Salvare",e:"To save",p:"sahl-VAH-reh"},
+
+  // ── Common Words / Prepositions (30) ──────────────────────────
+  {c:"Common",l:"Et",e:"And",p:"EHT"},
+  {c:"Common",l:"In",e:"In / Into",p:"EEN"},
+  {c:"Common",l:"Non",e:"Not",p:"NOHN"},
+  {c:"Common",l:"Est",e:"Is",p:"EHST"},
+  {c:"Common",l:"Cum",e:"With",p:"KOOM"},
+  {c:"Common",l:"Qui",e:"Who / Which",p:"KWEE"},
+  {c:"Common",l:"Ad",e:"To / Toward",p:"AHD"},
+  {c:"Common",l:"Per",e:"Through",p:"PEHR"},
+  {c:"Common",l:"Sicut",e:"Just as",p:"SEE-koot"},
+  {c:"Common",l:"Semper",e:"Always",p:"SEHM-pehr"},
+  {c:"Common",l:"De",e:"About / From / Of",p:"DEH"},
+  {c:"Common",l:"Ex",e:"Out of / From",p:"EHKS"},
+  {c:"Common",l:"Pro",e:"For / On behalf of",p:"PROH"},
+  {c:"Common",l:"Sine",e:"Without",p:"SEE-neh"},
+  {c:"Common",l:"Super",e:"Above / Over",p:"SOO-pehr"},
+  {c:"Common",l:"Sub",e:"Under / Below",p:"SOOB"},
+  {c:"Common",l:"Inter",e:"Between / Among",p:"EEN-tehr"},
+  {c:"Common",l:"Post",e:"After",p:"POHST"},
+  {c:"Common",l:"Ante",e:"Before",p:"AHN-teh"},
+  {c:"Common",l:"Quia",e:"Because",p:"KWEE-ah"},
+  {c:"Common",l:"Sed",e:"But",p:"SEHD"},
+  {c:"Common",l:"Aut",e:"Or",p:"AUT"},
+  {c:"Common",l:"Si",e:"If",p:"SEE"},
+  {c:"Common",l:"Nunc",e:"Now",p:"NOONK"},
+  {c:"Common",l:"Omnis",e:"All / Every",p:"OHM-nees"},
+  {c:"Common",l:"Unus",e:"One",p:"OO-noos"},
+  {c:"Common",l:"Magnus",e:"Great / Large",p:"MAHG-noos"},
+  {c:"Common",l:"Hic",e:"This / Here",p:"HEEK"},
+  {c:"Common",l:"Ille",e:"That / He",p:"EEL-leh"},
+  {c:"Common",l:"Ecce",e:"Behold",p:"EH-cheh"},
+
+  // ── Adjectives (20) ───────────────────────────────────────────
+  {c:"Adjectives",l:"Bonus",e:"Good",p:"BOH-noos"},
+  {c:"Adjectives",l:"Malus",e:"Bad / Evil",p:"MAH-loos"},
+  {c:"Adjectives",l:"Verus",e:"True",p:"VEH-roos"},
+  {c:"Adjectives",l:"Novus",e:"New",p:"NOH-voos"},
+  {c:"Adjectives",l:"Aeternus",e:"Eternal",p:"eh-TEHR-noos"},
+  {c:"Adjectives",l:"Beatus",e:"Blessed / Happy",p:"beh-AH-toos"},
+  {c:"Adjectives",l:"Caelestis",e:"Heavenly",p:"cheh-LEHS-tees"},
+  {c:"Adjectives",l:"Divinus",e:"Divine",p:"dee-VEE-noos"},
+  {c:"Adjectives",l:"Fidelis",e:"Faithful",p:"fee-DEH-lees"},
+  {c:"Adjectives",l:"Humilis",e:"Humble",p:"HOO-mee-lees"},
+  {c:"Adjectives",l:"Iustus",e:"Just / Righteous",p:"YOOS-toos"},
+  {c:"Adjectives",l:"Misericors",e:"Merciful",p:"mee-seh-REE-kohrs"},
+  {c:"Adjectives",l:"Omnipotens",e:"Almighty",p:"ohm-NEE-poh-tehns"},
+  {c:"Adjectives",l:"Pius",e:"Pious / Devout",p:"PEE-oos"},
+  {c:"Adjectives",l:"Vivus",e:"Living / Alive",p:"VEE-voos"},
+  {c:"Adjectives",l:"Mortuus",e:"Dead",p:"MOHR-too-oos"},
+  {c:"Adjectives",l:"Altus",e:"High / Deep",p:"AHL-toos"},
+  {c:"Adjectives",l:"Dulcis",e:"Sweet",p:"DOOL-chees"},
+  {c:"Adjectives",l:"Plenus",e:"Full",p:"PLEH-noos"},
+  {c:"Adjectives",l:"Dignus",e:"Worthy",p:"DEEG-noos"},
+
+  // ── Places & Objects (20) ─────────────────────────────────────
+  {c:"Places",l:"Ecclesia",e:"Church",p:"ehk-KLEH-see-ah"},
+  {c:"Places",l:"Altare",e:"Altar",p:"ahl-TAH-reh"},
+  {c:"Places",l:"Caelum",e:"Heaven / Sky",p:"CHEH-loom"},
+  {c:"Places",l:"Terra",e:"Earth / Land",p:"TEHR-rah"},
+  {c:"Places",l:"Mundus",e:"World",p:"MOON-doos"},
+  {c:"Places",l:"Regnum",e:"Kingdom",p:"REHG-noom"},
+  {c:"Places",l:"Templum",e:"Temple",p:"TEHM-ploom"},
+  {c:"Places",l:"Crux",e:"Cross",p:"KROOKS"},
+  {c:"Places",l:"Aqua",e:"Water",p:"AH-kwah"},
+  {c:"Places",l:"Ignis",e:"Fire",p:"EEG-nees"},
+  {c:"Places",l:"Lux",e:"Light",p:"LOOKS"},
+  {c:"Places",l:"Tenebrae",e:"Darkness",p:"TEH-neh-breh"},
+  {c:"Places",l:"Panis",e:"Bread",p:"PAH-nees"},
+  {c:"Places",l:"Vinum",e:"Wine",p:"VEE-noom"},
+  {c:"Places",l:"Calix",e:"Chalice / Cup",p:"KAH-leeks"},
+  {c:"Places",l:"Liber",e:"Book",p:"LEE-behr"},
+  {c:"Places",l:"Domus",e:"House / Home",p:"DOH-moos"},
+  {c:"Places",l:"Via",e:"Way / Road",p:"VEE-ah"},
+  {c:"Places",l:"Porta",e:"Gate / Door",p:"POHR-tah"},
+  {c:"Places",l:"Cathedra",e:"Chair / Seat (of bishop)",p:"KAH-teh-drah"},
+
+  // ── Virtues & Spiritual Life (21) ─────────────────────────────
+  {c:"Virtues",l:"Fides",e:"Faith",p:"FEE-dehs"},
+  {c:"Virtues",l:"Spes",e:"Hope",p:"SPEHS"},
+  {c:"Virtues",l:"Caritas",e:"Charity / Love",p:"KAH-ree-tahs"},
+  {c:"Virtues",l:"Prudentia",e:"Prudence",p:"proo-DEHN-tsee-ah"},
+  {c:"Virtues",l:"Iustitia",e:"Justice",p:"yoos-TEE-tsee-ah"},
+  {c:"Virtues",l:"Temperantia",e:"Temperance",p:"tehm-peh-RAHN-tsee-ah"},
+  {c:"Virtues",l:"Fortitudo",e:"Fortitude / Courage",p:"fohr-tee-TOO-doh"},
+  {c:"Virtues",l:"Patientia",e:"Patience",p:"pah-tsee-EHN-tsee-ah"},
+  {c:"Virtues",l:"Humilitas",e:"Humility",p:"hoo-MEE-lee-tahs"},
+  {c:"Virtues",l:"Veritas",e:"Truth",p:"VEH-ree-tahs"},
+  {c:"Virtues",l:"Sapientia",e:"Wisdom",p:"sah-pee-EHN-tsee-ah"},
+  {c:"Virtues",l:"Gaudium",e:"Joy",p:"GAU-dee-oom"},
+  {c:"Virtues",l:"Vita",e:"Life",p:"VEE-tah"},
+  {c:"Virtues",l:"Mors",e:"Death",p:"MOHRS"},
+  {c:"Virtues",l:"Anima",e:"Soul",p:"AH-nee-mah"},
+  {c:"Virtues",l:"Corpus",e:"Body",p:"KOHR-poos"},
+  {c:"Virtues",l:"Verbum",e:"Word",p:"VEHR-boom"},
+  {c:"Virtues",l:"Nomen",e:"Name",p:"NOH-mehn"},
+  {c:"Virtues",l:"Voluntas",e:"Will",p:"voh-LOON-tahs"},
+  {c:"Virtues",l:"Salus",e:"Salvation / Health",p:"SAH-loos"},
+  {c:"Virtues",l:"Redemptio",e:"Redemption",p:"reh-DEHMP-tsee-oh"},
+
+  // ── Numbers (15) ──────────────────────────────────────────────
+  {c:"Numbers",l:"Unus",e:"One (1)",p:"OO-noos"},
+  {c:"Numbers",l:"Duo",e:"Two (2)",p:"DOO-oh"},
+  {c:"Numbers",l:"Tres",e:"Three (3)",p:"TREHS"},
+  {c:"Numbers",l:"Quattuor",e:"Four (4)",p:"KWAHT-too-ohr"},
+  {c:"Numbers",l:"Quinque",e:"Five (5)",p:"KWEEN-kweh"},
+  {c:"Numbers",l:"Sex",e:"Six (6)",p:"SEHKS"},
+  {c:"Numbers",l:"Septem",e:"Seven (7)",p:"SEHP-tehm"},
+  {c:"Numbers",l:"Octo",e:"Eight (8)",p:"OHK-toh"},
+  {c:"Numbers",l:"Novem",e:"Nine (9)",p:"NOH-vehm"},
+  {c:"Numbers",l:"Decem",e:"Ten (10)",p:"DEH-chehm"},
+  {c:"Numbers",l:"Centum",e:"One Hundred (100)",p:"CHEHN-toom"},
+  {c:"Numbers",l:"Mille",e:"One Thousand (1000)",p:"MEEL-leh"},
+  {c:"Numbers",l:"Primus",e:"First",p:"PREE-moos"},
+  {c:"Numbers",l:"Secundus",e:"Second",p:"seh-KOON-doos"},
+  {c:"Numbers",l:"Tertius",e:"Third",p:"TEHR-tsee-oos"},
+
+  // ── Time & Seasons (17) ───────────────────────────────────────
+  {c:"Time",l:"Dies",e:"Day",p:"DEE-ehs"},
+  {c:"Time",l:"Nox",e:"Night",p:"NOHKS"},
+  {c:"Time",l:"Hora",e:"Hour",p:"OH-rah"},
+  {c:"Time",l:"Tempus",e:"Time / Season",p:"TEHM-poos"},
+  {c:"Time",l:"Annus",e:"Year",p:"AHN-noos"},
+  {c:"Time",l:"Saeculum",e:"Age / Century",p:"SEH-koo-loom"},
+  {c:"Time",l:"Adventus",e:"Advent / Coming",p:"ahd-VEHN-toos"},
+  {c:"Time",l:"Nativitas",e:"Nativity / Birth",p:"nah-TEE-vee-tahs"},
+  {c:"Time",l:"Quadragesima",e:"Lent (40 days)",p:"kwah-drah-JEH-see-mah"},
+  {c:"Time",l:"Pascha",e:"Easter / Passover",p:"PAHS-kah"},
+  {c:"Time",l:"Pentecostes",e:"Pentecost",p:"pehn-teh-KOHS-tehs"},
+  {c:"Time",l:"Dominica",e:"Sunday / Lord's Day",p:"doh-MEE-nee-kah"},
+  {c:"Time",l:"Sabbatum",e:"Sabbath / Saturday",p:"SAHB-bah-toom"},
+  {c:"Time",l:"Festum",e:"Feast / Festival",p:"FEHS-toom"},
+  {c:"Time",l:"Vigilia",e:"Vigil / Eve",p:"vee-JEE-lee-ah"},
+  {c:"Time",l:"Initium",e:"Beginning",p:"ee-NEE-tsee-oom"},
+  {c:"Time",l:"Finis",e:"End",p:"FEE-nees"},
+
+  // ── Liturgical Phrases (18) ───────────────────────────────────
+  {c:"Phrases",l:"Dominus vobiscum",e:"The Lord be with you",p:"DOH-mee-noos voh-BEES-koom"},
+  {c:"Phrases",l:"Et cum spiritu tuo",e:"And with your spirit",p:"eht koom SPEE-ree-too TOO-oh"},
+  {c:"Phrases",l:"Kyrie eleison",e:"Lord, have mercy",p:"KEE-ree-eh eh-LEH-ee-sohn"},
+  {c:"Phrases",l:"Christe eleison",e:"Christ, have mercy",p:"KREES-teh eh-LEH-ee-sohn"},
+  {c:"Phrases",l:"Ite, missa est",e:"Go, the Mass is ended",p:"EE-teh MEES-sah ehst"},
+  {c:"Phrases",l:"Deo gratias",e:"Thanks be to God",p:"DEH-oh GRAH-tsee-ahs"},
+  {c:"Phrases",l:"Verbum Domini",e:"The Word of the Lord",p:"VEHR-boom DOH-mee-nee"},
+  {c:"Phrases",l:"Laus tibi, Christe",e:"Praise to you, Christ",p:"LAUS TEE-bee KREES-teh"},
+  {c:"Phrases",l:"Mea culpa",e:"My fault / Through my fault",p:"MEH-ah KOOL-pah"},
+  {c:"Phrases",l:"Ora pro nobis",e:"Pray for us",p:"OH-rah proh NOH-bees"},
+  {c:"Phrases",l:"Requiem aeternam",e:"Eternal rest",p:"REH-kwee-ehm eh-TEHR-nahm"},
+  {c:"Phrases",l:"In nomine Patris",e:"In the name of the Father",p:"een NOH-mee-neh PAH-trees"},
+  {c:"Phrases",l:"Saecula saeculorum",e:"World without end / Forever",p:"SEH-koo-lah seh-koo-LOH-room"},
+  {c:"Phrases",l:"Dona nobis pacem",e:"Grant us peace",p:"DOH-nah NOH-bees PAH-chehm"},
+  {c:"Phrases",l:"Ecce Agnus Dei",e:"Behold the Lamb of God",p:"EH-cheh AHG-noos DEH-ee"},
+  {c:"Phrases",l:"Sursum corda",e:"Lift up your hearts",p:"SOOR-soom KOHR-dah"},
+  {c:"Phrases",l:"Habemus ad Dominum",e:"We lift them up to the Lord",p:"ah-BEH-moos ahd DOH-mee-noom"},
+  {c:"Phrases",l:"Per omnia saecula",e:"Through all ages",p:"pehr OHM-nee-ah SEH-koo-lah"},
+].map(v => ({category:v.c, latin:v.l, english:v.e, pronunciation:v.p}));
 
 const PRAYERS = [
-  {
-    title: "Signum Crucis", english_title: "Sign of the Cross", difficulty: "Beginner",
-    latin: "In nomine Patris, et Filii, et Spiritus Sancti. Amen.",
-    english: "In the name of the Father, and of the Son, and of the Holy Spirit. Amen."
-  },
-  {
-    title: "Gloria Patri", english_title: "Glory Be", difficulty: "Beginner",
-    latin: "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-    english: "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen."
-  },
-  {
-    title: "Pater Noster", english_title: "Our Father", difficulty: "Intermediate",
-    latin: "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-    english: "Our Father, who art in heaven, hallowed be thy name. Thy kingdom come. Thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."
-  },
-  {
-    title: "Ave Maria", english_title: "Hail Mary", difficulty: "Intermediate",
-    latin: "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-    english: "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."
-  },
-  {
-    title: "Sanctus", english_title: "Holy, Holy, Holy", difficulty: "Beginner",
-    latin: "Sanctus, Sanctus, Sanctus Dominus Deus Sabaoth. Pleni sunt caeli et terra gloria tua. Hosanna in excelsis. Benedictus qui venit in nomine Domini. Hosanna in excelsis.",
-    english: "Holy, Holy, Holy Lord God of Hosts. Heaven and earth are full of your glory. Hosanna in the highest. Blessed is he who comes in the name of the Lord. Hosanna in the highest."
-  },
-  {
-    title: "Agnus Dei", english_title: "Lamb of God", difficulty: "Beginner",
-    latin: "Agnus Dei, qui tollis peccata mundi, miserere nobis. Agnus Dei, qui tollis peccata mundi, miserere nobis. Agnus Dei, qui tollis peccata mundi, dona nobis pacem.",
-    english: "Lamb of God, who takes away the sins of the world, have mercy on us. Lamb of God, who takes away the sins of the world, have mercy on us. Lamb of God, who takes away the sins of the world, grant us peace."
-  },
-  {
-    title: "Salve Regina", english_title: "Hail Holy Queen", difficulty: "Advanced",
-    latin: "Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte; et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.",
-    english: "Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary."
-  }
+  {title:"Signum Crucis",english_title:"Sign of the Cross",difficulty:"Beginner",latin:"In nomine Patris, et Filii, et Spiritus Sancti. Amen.",english:"In the name of the Father, and of the Son, and of the Holy Spirit. Amen."},
+  {title:"Gloria Patri",english_title:"Glory Be",difficulty:"Beginner",latin:"Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",english:"Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen."},
+  {title:"Pater Noster",english_title:"Our Father",difficulty:"Intermediate",latin:"Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",english:"Our Father, who art in heaven, hallowed be thy name. Thy kingdom come. Thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."},
+  {title:"Ave Maria",english_title:"Hail Mary",difficulty:"Intermediate",latin:"Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",english:"Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen."},
+  {title:"Sanctus",english_title:"Holy, Holy, Holy",difficulty:"Beginner",latin:"Sanctus, Sanctus, Sanctus Dominus Deus Sabaoth. Pleni sunt caeli et terra gloria tua. Hosanna in excelsis. Benedictus qui venit in nomine Domini. Hosanna in excelsis.",english:"Holy, Holy, Holy Lord God of Hosts. Heaven and earth are full of your glory. Hosanna in the highest. Blessed is he who comes in the name of the Lord. Hosanna in the highest."},
+  {title:"Agnus Dei",english_title:"Lamb of God",difficulty:"Beginner",latin:"Agnus Dei, qui tollis peccata mundi, miserere nobis. Agnus Dei, qui tollis peccata mundi, miserere nobis. Agnus Dei, qui tollis peccata mundi, dona nobis pacem.",english:"Lamb of God, who takes away the sins of the world, have mercy on us. Lamb of God, who takes away the sins of the world, have mercy on us. Lamb of God, who takes away the sins of the world, grant us peace."},
+  {title:"Salve Regina",english_title:"Hail Holy Queen",difficulty:"Advanced",latin:"Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte; et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.",english:"Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary."},
 ];
 
-const GRAMMAR_LESSONS = [
-  {
-    title: "Pronunciation Basics",
-    content: [
-      { heading: "Vowels", text: "In ecclesiastical Latin, vowels are pronounced as in Italian: A = 'ah', E = 'eh', I = 'ee', O = 'oh', U = 'oo'. There are no silent vowels — every vowel is sounded." },
-      { heading: "Consonants", text: "Most consonants sound like English, with key differences: C before 'e' or 'i' = 'ch' (as in 'church'); G before 'e' or 'i' = soft 'j' (as in 'gentle'); SC before 'e' or 'i' = 'sh'; TI before a vowel = 'tsee'; V = 'v' (not 'w' as in classical)." },
-      { heading: "Diphthongs", text: "AE and OE are both pronounced 'eh'. AU is pronounced 'ow' as in 'how'. EI is pronounced 'ay'." }
-    ]
-  },
-  {
-    title: "Noun Declensions",
-    content: [
-      { heading: "What are Declensions?", text: "Latin nouns change their endings based on how they're used in a sentence. This is called 'declension.' There are five declension patterns, identified by the genitive singular ending." },
-      { heading: "First Declension (-a)", text: "Mostly feminine nouns. Example: 'Maria' (Mary). Nominative: Maria, Genitive: Mariae, Dative: Mariae, Accusative: Mariam, Ablative: Maria." },
-      { heading: "Second Declension (-us/-um)", text: "Mostly masculine (-us) or neuter (-um). Example: 'Dominus' (Lord). Nominative: Dominus, Genitive: Domini, Dative: Domino, Accusative: Dominum, Ablative: Domino." },
-      { heading: "In Practice", text: "When you pray 'Agnus Dei' (Lamb of God), 'Agnus' is nominative (subject) and 'Dei' is genitive (possession) — literally 'Lamb of-God.'" }
-    ]
-  },
-  {
-    title: "Verb Conjugations",
-    content: [
-      { heading: "Latin Verb Basics", text: "Latin verbs change endings to show person and number. The infinitive often ends in '-are', '-ēre', '-ere', or '-ire'. These are the four conjugation groups." },
-      { heading: "Present Tense (1st Conj.)", text: "Using 'orare' (to pray): Oro (I pray), Oras (you pray), Orat (he/she prays), Oramus (we pray), Oratis (you all pray), Orant (they pray)." },
-      { heading: "Common Liturgical Forms", text: "'Oremus' = Let us pray (hortatory subjunctive). 'Laudate' = Praise ye (imperative plural). 'Credo' = I believe. 'Confiteor' = I confess. These fixed forms appear constantly in the Mass." }
-    ]
-  },
-  {
-    title: "Cases & Their Uses",
-    content: [
-      { heading: "The Six Cases", text: "Latin has six cases: Nominative (subject), Genitive (possession/of), Dative (indirect object/to/for), Accusative (direct object), Ablative (by/with/from/in), and Vocative (direct address)." },
-      { heading: "Liturgical Examples", text: "Nominative: 'Dominus vobiscum' — The Lord [be] with you. Genitive: 'Agnus Dei' — Lamb of God. Dative: 'Gloria Patri' — Glory to the Father. Accusative: 'Ad Deum' — Toward God. Ablative: 'In nomine' — In the name. Vocative: 'Domine!' — O Lord!" },
-      { heading: "Why It Matters", text: "Understanding cases unlocks the meaning of prayers. When you see 'nobis' (to/for us — dative), you know something is being given or done for us: 'Dona nobis pacem' = Grant to-us peace." }
-    ]
-  }
+const G = [
+// Lesson 1: Pronunciation
+{title:"1. Pronunciation",content:[
+{h:"Why Ecclesiastical?",t:"Ecclesiastical (Church) Latin uses Italian-influenced pronunciation, not reconstructed classical pronunciation. This is the Latin of the Mass, Gregorian chant, and the Vatican."},
+{h:"Vowels",t:"Every vowel is sounded \u2014 no silent vowels. A = \u2018ah\u2019 (father), E = \u2018eh\u2019 (met), I = \u2018ee\u2019 (machine), O = \u2018oh\u2019 (note), U = \u2018oo\u2019 (rude). Y is treated as \u2018ee\u2019."},
+{h:"Key Consonant Differences",html:'<table class="grammar-table"><thead><tr><th>Letter(s)</th><th>Rule</th><th>Example</th></tr></thead><tbody><tr><td><b>C</b> before e, i, ae, oe</td><td>= \u2018ch\u2019 as in church</td><td><i>caelum</i> \u2192 CHEH-loom</td></tr><tr><td><b>C</b> otherwise</td><td>= \u2018k\u2019 as in cat</td><td><i>corpus</i> \u2192 KOHR-poos</td></tr><tr><td><b>G</b> before e, i</td><td>= soft \u2018j\u2019 as in gentle</td><td><i>regina</i> \u2192 reh-JEE-nah</td></tr><tr><td><b>G</b> otherwise</td><td>= hard \u2018g\u2019 as in go</td><td><i>gloria</i> \u2192 GLOH-ree-ah</td></tr><tr><td><b>SC</b> before e, i</td><td>= \u2018sh\u2019</td><td><i>ascendit</i> \u2192 ah-SHEHN-deet</td></tr><tr><td><b>GN</b></td><td>= \u2018ny\u2019 as in canyon</td><td><i>agnus</i> \u2192 AHG-noos</td></tr><tr><td><b>TI</b> + vowel</td><td>= \u2018tsee\u2019</td><td><i>gratia</i> \u2192 GRAH-tsee-ah</td></tr><tr><td><b>V</b></td><td>= \u2018v\u2019 (not \u2018w\u2019)</td><td><i>vita</i> \u2192 VEE-tah</td></tr><tr><td><b>J</b></td><td>= \u2018y\u2019 as in yes</td><td><i>Iesus</i> \u2192 YEH-soos</td></tr></tbody></table>'},
+{h:"Diphthongs",t:"AE and OE are both pronounced \u2018eh\u2019. AU is \u2018ow\u2019 (as in how). EI is \u2018ay\u2019. EU is \u2018eh-oo\u2019 spoken quickly."},
+{h:"Stress Rules",t:"Two-syllable words: stress the first syllable (D\u00d3-mi-nus). Longer words: stress the second-to-last syllable if it is long (contains a diphthong, or vowel followed by two consonants); otherwise stress the third-to-last: mi-se-ri-C\u00d3R-di-a."},
+]},
+// Lesson 2: Nouns & Gender
+{title:"2. Nouns & Gender",content:[
+{h:"Three Genders",t:"Every Latin noun has grammatical gender: masculine (m.), feminine (f.), or neuter (n.). Gender affects adjective endings and pronoun choice. You must memorize each noun\u2019s gender."},
+{h:"Gender Patterns",html:'<div class="grammar-note"><b>Rules of thumb:</b><br>\u2022 Most nouns ending in <b>-us</b> are masculine: <i>Dominus, Filius, annus</i><br>\u2022 Most nouns ending in <b>-a</b> are feminine: <i>Maria, ecclesia, gratia</i><br>\u2022 Most nouns ending in <b>-um</b> are neuter: <i>regnum, verbum, caelum</i><br>\u2022 Nouns for male persons are masculine; for female persons, feminine<br>\u2022 There are many exceptions \u2014 always learn the gender with the noun!</div>'},
+{h:"Why Gender Matters",t:"In \u2018Sancta Maria\u2019 (Holy Mary), \u2018sancta\u2019 takes the feminine -a ending to match \u2018Maria.\u2019 In \u2018Spiritus Sanctus\u2019 (Holy Spirit), \u2018sanctus\u2019 takes the masculine -us ending. Getting gender right is essential for reading Latin correctly."},
+]},
+// Lesson 3: First Declension
+{title:"3. First Declension (-a)",content:[
+{h:"Overview",t:"First declension nouns mostly end in \u2018-a\u2019 and are mostly feminine. Common examples: Maria, ecclesia (church), gratia (grace), vita (life), terra (earth)."},
+{h:"Singular Forms",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Ending</th><th>vita (life)</th><th>Use</th></tr></thead><tbody><tr><td>Nominative</td><td>-a</td><td>vita</td><td>Subject: <i>Vita est bona</i></td></tr><tr><td>Genitive</td><td>-ae</td><td>vitae</td><td>Of: <i>aqua vitae</i></td></tr><tr><td>Dative</td><td>-ae</td><td>vitae</td><td>To/For</td></tr><tr><td>Accusative</td><td>-am</td><td>vitam</td><td>Object: <i>vitam aeternam</i></td></tr><tr><td>Ablative</td><td>-\u0101</td><td>vit\u0101</td><td>By/With/In: <i>in vita</i></td></tr><tr><td>Vocative</td><td>-a</td><td>vita</td><td>Address: <i>O vita!</i></td></tr></tbody></table>'},
+{h:"Plural Forms",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Ending</th><th>vita</th></tr></thead><tbody><tr><td>Nominative</td><td>-ae</td><td>vitae</td></tr><tr><td>Genitive</td><td>-\u0101rum</td><td>vit\u0101rum</td></tr><tr><td>Dative</td><td>-\u012bs</td><td>vit\u012bs</td></tr><tr><td>Accusative</td><td>-\u0101s</td><td>vit\u0101s</td></tr><tr><td>Ablative</td><td>-\u012bs</td><td>vit\u012bs</td></tr></tbody></table>'},
+{h:"In the Liturgy",html:'<div class="grammar-note"><b>Spot it in prayer:</b><br>\u2022 <i>gratia plena</i> \u2014 full of grace (nom.)<br>\u2022 <i>in hora mortis <b>nostrae</b></i> \u2014 at the hour of our death (gen.)<br>\u2022 <i>in hac lacrimarum <b>valle</b></i> \u2014 in this valley of tears (abl.)</div>'},
+]},
+// Lesson 4: Second Declension
+{title:"4. Second Declension (-us/-um)",content:[
+{h:"Overview",t:"Two main types: masculine nouns ending in \u2018-us\u2019 (Dominus, Filius, Christus) and neuter nouns ending in \u2018-um\u2019 (regnum, verbum, caelum)."},
+{h:"Masculine (-us) Singular",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Ending</th><th>Dominus (Lord)</th><th>Use</th></tr></thead><tbody><tr><td>Nominative</td><td>-us</td><td>Dominus</td><td><i>Dominus vobiscum</i></td></tr><tr><td>Genitive</td><td>-i</td><td>Domini</td><td><i>Verbum Domini</i></td></tr><tr><td>Dative</td><td>-o</td><td>Domino</td><td>to the Lord</td></tr><tr><td>Accusative</td><td>-um</td><td>Dominum</td><td><i>ad Dominum</i></td></tr><tr><td>Ablative</td><td>-o</td><td>Domino</td><td><i>cum Domino</i></td></tr><tr><td>Vocative</td><td>-e</td><td>Domine</td><td><i>Domine!</i> (O Lord!)</td></tr></tbody></table>'},
+{h:"Neuter (-um) Singular",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Ending</th><th>verbum (word)</th></tr></thead><tbody><tr><td>Nominative</td><td>-um</td><td>verbum</td></tr><tr><td>Genitive</td><td>-i</td><td>verbi</td></tr><tr><td>Dative</td><td>-o</td><td>verbo</td></tr><tr><td>Accusative</td><td>-um</td><td>verbum</td></tr><tr><td>Ablative</td><td>-o</td><td>verbo</td></tr></tbody></table><div class="grammar-note"><b>Key neuter rule:</b> Nominative and accusative are <i>always</i> identical. Neuter plurals: nom. & acc. end in <b>-a</b>: <i>verba</i> (words), <i>regna</i> (kingdoms).</div>'},
+{h:"The Vocative",t:"Second declension \u2018-us\u2019 nouns have a special vocative in \u2018-e\u2019: Dominus \u2192 Domine! Exception: \u2018Deus\u2019 keeps \u2018Deus\u2019 in the vocative."},
+]},
+// Lesson 5: Third Declension
+{title:"5. Third Declension",content:[
+{h:"Overview",t:"The third declension is the largest and most varied. You cannot predict the nominative from the stem. Learn both the nominative AND genitive. The genitive singular always ends in \u2018-is\u2019."},
+{h:"Common 3rd Declension Nouns",html:'<table class="grammar-table"><thead><tr><th>Nominative</th><th>Genitive</th><th>Gender</th><th>Meaning</th></tr></thead><tbody><tr><td>rex</td><td>reg-is</td><td>m.</td><td>king</td></tr><tr><td>pax</td><td>pac-is</td><td>f.</td><td>peace</td></tr><tr><td>lux</td><td>luc-is</td><td>f.</td><td>light</td></tr><tr><td>mors</td><td>mort-is</td><td>f.</td><td>death</td></tr><tr><td>nomen</td><td>nomin-is</td><td>n.</td><td>name</td></tr><tr><td>corpus</td><td>corpor-is</td><td>n.</td><td>body</td></tr><tr><td>pater</td><td>patr-is</td><td>m.</td><td>father</td></tr><tr><td>mater</td><td>matr-is</td><td>f.</td><td>mother</td></tr><tr><td>homo</td><td>homin-is</td><td>m.</td><td>man</td></tr></tbody></table>'},
+{h:"Endings",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Singular</th><th>Plural</th></tr></thead><tbody><tr><td>Nominative</td><td>(varies)</td><td>-es (m./f.) / -a (n.)</td></tr><tr><td>Genitive</td><td>-is</td><td>-um</td></tr><tr><td>Dative</td><td>-i</td><td>-ibus</td></tr><tr><td>Accusative</td><td>-em (m./f.) / = nom. (n.)</td><td>-es (m./f.) / -a (n.)</td></tr><tr><td>Ablative</td><td>-e</td><td>-ibus</td></tr></tbody></table>'},
+{h:"In Prayer",html:'<div class="grammar-note"><b>You encounter this constantly:</b><br>\u2022 <i>dona nobis <b>pacem</b></i> \u2014 grant us peace (<i>pax \u2192 pacem</i>, acc.)<br>\u2022 <i>in <b>nomine</b> Patris</i> \u2014 in the name (<i>nomen \u2192 nomine</i>, abl.)<br>\u2022 <i><b>Lux</b> aeterna</i> \u2014 Eternal light (nom.)<br>\u2022 <i><b>Corpus</b> Christi</i> \u2014 Body of Christ (nom.)</div>'},
+]},
+// Lesson 6: Cases Explained
+{title:"6. Cases Explained",content:[
+{h:"The Six Cases",t:"Latin uses six cases to show each noun\u2019s role. English uses word order; Latin uses endings. This makes Latin word order very flexible."},
+{h:"Case Functions",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>Question</th><th>Example</th></tr></thead><tbody><tr><td><b>Nominative</b></td><td>Who/What? (subject)</td><td><i><b>Dominus</b> vobiscum</i></td></tr><tr><td><b>Genitive</b></td><td>Whose? Of what?</td><td><i>Agnus <b>Dei</b></i></td></tr><tr><td><b>Dative</b></td><td>To/For whom?</td><td><i>Gloria <b>Patri</b></i></td></tr><tr><td><b>Accusative</b></td><td>Whom/What? (object)</td><td><i>ad <b>Deum</b></i></td></tr><tr><td><b>Ablative</b></td><td>By/With/In what?</td><td><i>in <b>nomine</b></i></td></tr><tr><td><b>Vocative</b></td><td>Direct address</td><td><i><b>Domine</b>!</i></td></tr></tbody></table>'},
+{h:"Prepositions & Cases",html:'<div class="grammar-note"><b>Prepositions with accusative:</b> <i>ad</i> (to), <i>per</i> (through), <i>in</i> (into \u2014 motion), <i>ante</i> (before), <i>post</i> (after), <i>inter</i> (between), <i>super</i> (over)<br><br><b>Prepositions with ablative:</b> <i>in</i> (in \u2014 location), <i>cum</i> (with), <i>de</i> (from/about), <i>ex</i> (out of), <i>pro</i> (for), <i>sine</i> (without), <i>sub</i> (under)<br><br>Note: <i>in</i> takes <b>accusative</b> for motion (\u201cinto\u201d) and <b>ablative</b> for location (\u201cin/within\u201d).</div>'},
+{h:"Parsing Practice",t:"Try: \u2018Credo in unum Deum, Patrem omnipotentem.\u2019 \u2014 \u2018I believe in one God, the Father almighty.\u2019 \u2018Deum\u2019 = accusative (object of belief). \u2018Patrem\u2019 = accusative (in apposition). \u2018Omnipotentem\u2019 = accusative adjective agreeing with Patrem."},
+]},
+// Lesson 7: Adjective Agreement
+{title:"7. Adjective Agreement",content:[
+{h:"The Golden Rule",t:"Adjectives must agree with the noun they modify in gender, number, and case. This does NOT mean they have the same ending \u2014 just that they use the correct ending for the matching gender, number, and case from their own declension."},
+{h:"1st/2nd Declension Adjectives",html:'<table class="grammar-table"><thead><tr><th></th><th>Masculine</th><th>Feminine</th><th>Neuter</th></tr></thead><tbody><tr><td><b>Nom. Sg.</b></td><td>bonus</td><td>bona</td><td>bonum</td></tr><tr><td><b>Gen. Sg.</b></td><td>boni</td><td>bonae</td><td>boni</td></tr><tr><td><b>Dat. Sg.</b></td><td>bono</td><td>bonae</td><td>bono</td></tr><tr><td><b>Acc. Sg.</b></td><td>bonum</td><td>bonam</td><td>bonum</td></tr><tr><td><b>Abl. Sg.</b></td><td>bono</td><td>bon\u0101</td><td>bono</td></tr></tbody></table>'},
+{h:"Examples in Prayer",html:'<div class="grammar-note"><b>See it in action:</b><br>\u2022 <i>Spiritus <b>Sanctus</b></i> \u2014 Holy Spirit (masc. nom.)<br>\u2022 <i>vitam <b>aeternam</b></i> \u2014 eternal life (fem. acc.)<br>\u2022 <i>gratia <b>plena</b></i> \u2014 full of grace (fem. nom.)<br>\u2022 <i>lucem <b>aeternam</b></i> \u2014 eternal light (fem. acc.)</div>'},
+{h:"3rd Declension Adjectives",t:"Some adjectives follow the 3rd declension: \u2018fidelis\u2019 (faithful), \u2018omnis\u2019 (all/every), \u2018dulcis\u2019 (sweet). They use 3rd declension endings but still must agree in gender, number, and case with their noun."},
+]},
+// Lesson 8: Verb Basics \u2014 Esse
+{title:"8. Verb Basics \u2014 Esse",content:[
+{h:"The Most Important Verb",t:"\u2018Esse\u2019 (to be) is the most common and most irregular Latin verb. Like English \u2018am/is/are/was/were,\u2019 its forms look nothing like the infinitive."},
+{h:"Present Tense",html:'<table class="grammar-table"><thead><tr><th>Person</th><th>Latin</th><th>English</th></tr></thead><tbody><tr><td>1st sg.</td><td><b>sum</b></td><td>I am</td></tr><tr><td>2nd sg.</td><td><b>es</b></td><td>you are</td></tr><tr><td>3rd sg.</td><td><b>est</b></td><td>he/she/it is</td></tr><tr><td>1st pl.</td><td><b>sumus</b></td><td>we are</td></tr><tr><td>2nd pl.</td><td><b>estis</b></td><td>you all are</td></tr><tr><td>3rd pl.</td><td><b>sunt</b></td><td>they are</td></tr></tbody></table>'},
+{h:"Imperfect & Future",html:'<table class="grammar-table"><thead><tr><th>Person</th><th>Imperfect (was)</th><th>Future (will be)</th></tr></thead><tbody><tr><td>1st sg.</td><td>eram</td><td>ero</td></tr><tr><td>2nd sg.</td><td>eras</td><td>eris</td></tr><tr><td>3rd sg.</td><td>erat</td><td>erit</td></tr><tr><td>1st pl.</td><td>eramus</td><td>erimus</td></tr><tr><td>3rd pl.</td><td>erant</td><td>erunt</td></tr></tbody></table>'},
+{h:"In Prayer",html:'<div class="grammar-note"><b>You already know these:</b><br>\u2022 <i>qui <b>es</b> in caelis</i> \u2014 who <b>art</b> in heaven<br>\u2022 <i>sicut <b>erat</b> in principio</i> \u2014 as it <b>was</b> in the beginning<br>\u2022 <i>pleni <b>sunt</b> caeli et terra</i> \u2014 heaven and earth <b>are</b> full</div>'},
+]},
+// Lesson 9: Regular Conjugation
+{title:"9. Regular Verb Conjugation",content:[
+{h:"The Four Conjugations",t:"Regular verbs belong to one of four groups: 1st = -\u0101re (laud\u0101re, to praise), 2nd = -\u0113re (vid\u0113re, to see), 3rd = -ere (credere, to believe), 4th = -\u012bre (aud\u012bre, to hear)."},
+{h:"Present Tense",html:'<table class="grammar-table"><thead><tr><th>Person</th><th>1st: laud\u0101re</th><th>2nd: vid\u0113re</th><th>3rd: credere</th><th>4th: aud\u012bre</th></tr></thead><tbody><tr><td>I</td><td>laudo</td><td>video</td><td>credo</td><td>audio</td></tr><tr><td>you</td><td>laudas</td><td>vides</td><td>credis</td><td>audis</td></tr><tr><td>he/she</td><td>laudat</td><td>videt</td><td>credit</td><td>audit</td></tr><tr><td>we</td><td>laudamus</td><td>videmus</td><td>credimus</td><td>audimus</td></tr><tr><td>you all</td><td>laudatis</td><td>videtis</td><td>creditis</td><td>auditis</td></tr><tr><td>they</td><td>laudant</td><td>vident</td><td>credunt</td><td>audiunt</td></tr></tbody></table>'},
+{h:"Personal Endings",t:"The endings are consistent across all conjugations: -o (I), -s (you), -t (he/she), -mus (we), -tis (you all), -nt (they). What changes is the theme vowel before the ending."},
+{h:"Imperatives (Commands)",html:'<div class="grammar-note"><b>You hear these constantly:</b><br>\u2022 Singular imperative = stem: <i>lauda!</i> (praise!), <i>audi!</i> (hear!)<br>\u2022 Plural imperative = stem + <i>-te</i>: <i>laudate!</i> <i>audite!</i> <i>venite!</i> <i>benedicite!</i><br><br>This is why so many liturgical words end in <i>-te</i> \u2014 they are commands to the congregation.</div>'},
+]},
+// Lesson 10: Past & Future
+{title:"10. Past & Future Tenses",content:[
+{h:"Perfect Tense",t:"Describes completed action: \u2018he praised\u2019 or \u2018he has praised.\u2019 Uses a special perfect stem plus endings: -i, -isti, -it, -imus, -istis, -erunt."},
+{h:"Perfect Tense Examples",html:'<table class="grammar-table"><thead><tr><th>Person</th><th>laud\u0101re</th><th>vid\u0113re</th><th>credere</th></tr></thead><tbody><tr><td>I</td><td>laudavi</td><td>vidi</td><td>credidi</td></tr><tr><td>you</td><td>laudavisti</td><td>vidisti</td><td>credidisti</td></tr><tr><td>he/she</td><td>laudavit</td><td>vidit</td><td>credidit</td></tr><tr><td>we</td><td>laudavimus</td><td>vidimus</td><td>credidimus</td></tr><tr><td>they</td><td>laudaverunt</td><td>viderunt</td><td>crediderunt</td></tr></tbody></table>'},
+{h:"Imperfect Tense",t:"Describes ongoing/repeated past action. Formed by adding -ba- then personal endings: laudabam, laudabas, laudabat, laudabamus, laudabatis, laudabant."},
+{h:"In the Liturgy",html:'<div class="grammar-note"><b>Tenses in prayer:</b><br>\u2022 <i>sicut <b>erat</b></i> \u2014 as it <b>was</b> (imperfect of esse)<br>\u2022 <i><b>dixit</b> Dominus</i> \u2014 the Lord <b>said</b> (perfect of dicere)<br>\u2022 <i><b>venit</b> in nomine Domini</i> \u2014 he <b>came</b> (perfect of venire)<br>\u2022 <i><b>fecit</b> mihi magna</i> \u2014 he <b>has done</b> great things for me</div>'},
+]},
+// Lesson 11: Pronouns
+{title:"11. Pronouns",content:[
+{h:"Personal Pronouns",html:'<table class="grammar-table"><thead><tr><th>Case</th><th>I/Me</th><th>You (sg.)</th><th>We/Us</th><th>You (pl.)</th></tr></thead><tbody><tr><td>Nominative</td><td>ego</td><td>tu</td><td>nos</td><td>vos</td></tr><tr><td>Genitive</td><td>mei</td><td>tui</td><td>nostri</td><td>vestri</td></tr><tr><td>Dative</td><td>mihi</td><td>tibi</td><td>nobis</td><td>vobis</td></tr><tr><td>Accusative</td><td>me</td><td>te</td><td>nos</td><td>vos</td></tr><tr><td>Ablative</td><td>me</td><td>te</td><td>nobis</td><td>vobis</td></tr></tbody></table>'},
+{h:"In Prayer",html:'<div class="grammar-note"><b>Now you can decode these:</b><br>\u2022 <i>miserere <b>nobis</b></i> \u2014 have mercy on <b>us</b> (dat.)<br>\u2022 <i>dona <b>nobis</b> pacem</i> \u2014 grant <b>us</b> peace (dat.)<br>\u2022 <i>ora pro <b>nobis</b></i> \u2014 pray for <b>us</b> (abl. with pro)<br>\u2022 <i>Dominus <b>tecum</b></i> \u2014 the Lord with <b>you</b> (cum+te)<br>\u2022 <i>Dominus <b>vobiscum</b></i> \u2014 the Lord with <b>you all</b> (cum+vobis)</div>'},
+{h:"Possessive Adjectives",html:'<table class="grammar-table"><thead><tr><th>Person</th><th>Masc.</th><th>Fem.</th><th>Neut.</th><th>Meaning</th></tr></thead><tbody><tr><td>1st sg.</td><td>meus</td><td>mea</td><td>meum</td><td>my</td></tr><tr><td>2nd sg.</td><td>tuus</td><td>tua</td><td>tuum</td><td>your</td></tr><tr><td>1st pl.</td><td>noster</td><td>nostra</td><td>nostrum</td><td>our</td></tr><tr><td>2nd pl.</td><td>vester</td><td>vestra</td><td>vestrum</td><td>your (pl.)</td></tr></tbody></table><div class="grammar-note"><i>Pater <b>noster</b></i> \u2014 <b>Our</b> Father. <i>Mea <b>culpa</b></i> \u2014 <b>My</b> fault. <i>Nomen <b>tuum</b></i> \u2014 <b>Your</b> name.</div>'},
+]},
+// Lesson 12: Subjunctive & Special Forms
+{title:"12. Subjunctive & Special Forms",content:[
+{h:"What is the Subjunctive?",t:"The subjunctive expresses wishes, commands, possibilities \u2014 not simple facts. English barely uses it, but Latin uses it constantly in prayers."},
+{h:"Hortatory (\u2018Let us...\u2019)",html:'<div class="grammar-note"><b>Very common in the Mass:</b><br>\u2022 <i><b>Oremus</b></i> \u2014 Let us pray<br>\u2022 <i><b>Adoremus</b></i> \u2014 Let us adore<br>\u2022 <i><b>Exsultemus</b></i> \u2014 Let us rejoice<br>\u2022 <i><b>Gaudeamus</b></i> \u2014 Let us rejoice<br><br>These are 1st person plural present subjunctive forms.</div>'},
+{h:"Jussive (\u2018May it...\u2019)",html:'<div class="grammar-note"><b>Expressing wishes:</b><br>\u2022 <i><b>sanctificetur</b> nomen tuum</i> \u2014 <b>hallowed be</b> thy name<br>\u2022 <i><b>adveniat</b> regnum tuum</i> \u2014 thy kingdom <b>come</b><br>\u2022 <i><b>fiat</b> voluntas tua</i> \u2014 thy will <b>be done</b><br>\u2022 <i><b>requiescant</b> in pace</i> \u2014 may they <b>rest</b> in peace<br><br>These are 3rd person subjunctive forms \u2014 prayer-wishes.</div>'},
+{h:"Passive Voice",t:"Many liturgical verbs are passive: \u2018sanctificetur\u2019 (may it be hallowed), \u2018laudetur\u2019 (may he be praised). Passive endings: -r (I), -ris (you), -tur (he/she/it), -mur (we), -mini (you all), -ntur (they). When you see \u2018-tur,\u2019 think \u2018is/may be [verb]-ed.\u2019"},
+{h:"Participles",t:"Verb forms acting as adjectives. Present active: \u2018veniens\u2019 (coming), \u2018sedens\u2019 (sitting). Perfect passive: \u2018benedictus\u2019 (blessed), \u2018mortuus\u2019 (dead). \u2018Benedictus qui venit\u2019 = Blessed [is he] who comes."},
+{h:"Putting It All Together",html:'<div class="grammar-note"><b>Parse the Gloria Patri:</b><br><br><i><b>Gloria</b></i> \u2014 Glory (nom., 1st decl.)<br><i><b>Patri</b></i> \u2014 to the Father (dat., 3rd decl.)<br><i><b>et Filio</b></i> \u2014 and to the Son (dat., 2nd decl.)<br><i><b>et Spiritui Sancto</b></i> \u2014 and to the Holy Spirit (dat.)<br><i><b>Sicut erat</b></i> \u2014 As it was (imperf. of esse)<br><i><b>in principio</b></i> \u2014 in the beginning (abl.)<br><i><b>et nunc</b></i> \u2014 and now<br><i><b>et semper</b></i> \u2014 and always<br><i><b>et in saecula saeculorum</b></i> \u2014 unto the ages of ages (acc. pl. + gen. pl.)<br><br>You can now read every word of this prayer grammatically!</div>'},
+]},
 ];
+const GRAMMAR_LESSONS = G.map(lesson => ({
+  title: lesson.title,
+  content: lesson.content.map(s => ({heading: s.h, text: s.t || null, html: s.html || null}))
+}));
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// STATE & HELPERS
+// ═══════════════════════════════════════════════════════════════════
+const state = {activeTab:"home",learnedWords:new Set(),score:{correct:0,total:0},streak:0,vocabFilter:"All",flippedCards:new Set(),prayerExpanded:null,prayerShowLatin:true,activeLesson:0,quizMode:"latin-to-english",quizCategory:"All",quizCurrent:null,quizOptions:[],quizSelected:null};
+const X = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg>`;
+const ST = (t) => `<div class="section-title"><span class="cross-icon">${X}</span><span>${t}</span><span class="cross-icon">${X}</span></div>`;
 
-const state = {
-  activeTab: "home",
-  learnedWords: new Set(),
-  score: { correct: 0, total: 0 },
-  streak: 0,
-  vocabFilter: "All",
-  flippedCards: new Set(),
-  prayerExpanded: null,
-  prayerShowLatin: true,
-  activeLesson: 0,
-  quizMode: "latin-to-english",
-  quizCurrent: null,
-  quizOptions: [],
-  quizSelected: null,
-};
+// ═══════════════════════════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════════════════════════
+function renderNav(){
+  const tabs=[{id:"home",l:"Domus",e:"Home"},{id:"vocabulary",l:"Vocabula",e:"Vocabulary"},{id:"prayers",l:"Orationes",e:"Prayers"},{id:"grammar",l:"Grammatica",e:"Grammar"},{id:"quiz",l:"Probatio",e:"Quiz"}];
+  document.getElementById("main-nav").innerHTML=tabs.map(t=>`<button class="nav-btn ${state.activeTab===t.id?'active':''}" data-tab="${t.id}"><span class="nav-latin">${t.l}</span><span class="nav-english">${t.e}</span></button>`).join("");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+}
+function switchTab(tab){
+  const m=document.querySelector("main");m.style.opacity="0";
+  setTimeout(()=>{state.activeTab=tab;document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById("view-"+tab).classList.add("active");renderNav();renderView(tab);m.style.opacity="1";window.scrollTo({top:0,behavior:"smooth"});},250);
+}
+function renderView(t){({home:renderHome,vocabulary:renderVocabulary,prayers:renderPrayers,grammar:renderGrammar,quiz:renderQuiz})[t]();}
 
-// ─── CROSS SVG ───────────────────────────────────────────────────────────────
-
-const crossSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg>`;
-
-// ─── NAV ─────────────────────────────────────────────────────────────────────
-
-function renderNav() {
-  const tabs = [
-    { id: "home", label: "Domus", english: "Home" },
-    { id: "vocabulary", label: "Vocabula", english: "Vocabulary" },
-    { id: "prayers", label: "Orationes", english: "Prayers" },
-    { id: "grammar", label: "Grammatica", english: "Grammar" },
-    { id: "quiz", label: "Probatio", english: "Quiz" },
-  ];
-  document.getElementById("main-nav").innerHTML = tabs.map(t =>
-    `<button class="nav-btn ${state.activeTab === t.id ? 'active' : ''}" data-tab="${t.id}">
-      <span class="nav-latin">${t.label}</span>
-      <span class="nav-english">${t.english}</span>
-    </button>`
-  ).join("");
-
-  document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
-  });
+// ═══════════════════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════════════════
+function renderHome(){
+  const p=Math.round((state.learnedWords.size/VOCABULARY.length)*100),a=state.score.total>0?Math.round((state.score.correct/state.score.total)*100):0;
+  const cats=new Set(VOCABULARY.map(v=>v.category));
+  document.getElementById("view-home").innerHTML=`
+<div class="home-hero"><div class="hero-cross">\u2720</div><h2 class="home-title">Salv\u0113, Discipule!</h2><p class="home-subtitle">Greetings, Student!</p><p class="home-desc">This course covers <b>${VOCABULARY.length}</b> vocabulary words across <b>${cats.size}</b> categories, <b>${GRAMMAR_LESSONS.length}</b> grammar lessons, and <b>${PRAYERS.length}</b> prayers to give you a solid foundation in ecclesiastical Latin.</p></div>
+<div class="stats-row"><div class="stat-card"><div class="stat-number">${state.learnedWords.size}</div><div class="stat-label">Words Learned</div><div class="stat-sub">of ${VOCABULARY.length} total</div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${p}%"></div></div></div><div class="stat-card"><div class="stat-number">${state.score.total}</div><div class="stat-label">Quiz Answers</div><div class="stat-sub">${a}% accuracy</div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${a}%"></div></div></div><div class="stat-card"><div class="stat-number">${GRAMMAR_LESSONS.length}</div><div class="stat-label">Grammar Lessons</div><div class="stat-sub">pronunciation to subjunctive</div></div></div>
+${ST("Begin Your Studies")}
+<div class="quick-grid">${[{tab:"vocabulary",icon:"\ud83d\udcd6",title:"Vocabula",desc:VOCABULARY.length+" words: liturgical terms, verbs, adjectives, numbers, phrases, and more."},{tab:"prayers",icon:"\ud83d\udd6f\ufe0f",title:"Orationes",desc:"The great prayers of the Church with parallel Latin and English."},{tab:"grammar",icon:"\ud83d\udcdc",title:"Grammatica",desc:GRAMMAR_LESSONS.length+" lessons from pronunciation through declensions, conjugations, and the subjunctive."},{tab:"quiz",icon:"\u270d\ufe0f",title:"Probatio",desc:"Quiz yourself by category. Track score, accuracy, and streaks."}].map(i=>`<button class="quick-card" data-tab="${i.tab}"><div class="quick-icon">${i.icon}</div><div class="quick-title">${i.title}</div><div class="quick-desc">${i.desc}</div></button>`).join("")}</div>
+<div class="tip-box"><div class="tip-header">\ud83d\udccc Study Path</div><p class="tip-text"><b>Recommended order:</b> Start with <i>Grammar Lesson 1 (Pronunciation)</i> so you can read words correctly. Then work through <i>Vocabulary</i> a category at a time, testing yourself in <i>Quiz</i> mode as you go. Study the <i>Prayers</i> alongside grammar \u2014 by Lesson 12, you\u2019ll be able to parse every word of the Gloria Patri.</p></div>`;
+  document.querySelectorAll(".quick-card").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
 }
 
-function switchTab(tab) {
-  const main = document.querySelector("main");
-  main.style.opacity = "0";
-  setTimeout(() => {
-    state.activeTab = tab;
-    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-    document.getElementById(`view-${tab}`).classList.add("active");
-    renderNav();
-    renderView(tab);
-    main.style.opacity = "1";
-  }, 250);
+// ═══════════════════════════════════════════════════════════════════
+// VOCABULARY
+// ═══════════════════════════════════════════════════════════════════
+function renderVocabulary(){
+  const cats=["All",...new Set(VOCABULARY.map(v=>v.category))];
+  const filtered=state.vocabFilter==="All"?VOCABULARY:VOCABULARY.filter(v=>v.category===state.vocabFilter);
+  const lc=filtered.filter(w=>state.learnedWords.has(w.latin)).length;
+  document.getElementById("view-vocabulary").innerHTML=`
+${ST("Vocabula \u2014 Vocabulary")}
+<p class="instructions">Tap a card to reveal the English meaning. Mark words as learned to track your progress.</p>
+<div class="filter-row">${cats.map(c=>{const n=c==="All"?VOCABULARY.length:VOCABULARY.filter(v=>v.category===c).length;return`<button class="filter-btn ${state.vocabFilter===c?'active':''}" data-cat="${c}">${c} (${n})</button>`;}).join("")}</div>
+<div class="vocab-count">${lc} of ${filtered.length} learned in this category</div>
+<div class="vocab-grid">${filtered.map((w,i)=>{const k=state.vocabFilter+"-"+i,fl=state.flippedCards.has(k),lr=state.learnedWords.has(w.latin);return`<div class="vocab-card ${fl?'flipped':''}" data-key="${k}"><div class="vocab-inner"><div class="vocab-front"><div class="vocab-category">${w.category}</div><div class="vocab-latin">${w.latin}</div><div class="vocab-pronunciation">[${w.pronunciation}]</div><div class="vocab-hint">tap to reveal</div><button class="learned-btn ${lr?'active':''}" data-latin="${w.latin}">${lr?'\u2713 Learned':'Mark Learned'}</button></div><div class="vocab-back"><div class="vocab-category">${w.category}</div><div class="vocab-english">${w.english}</div><div class="vocab-latin">${w.latin}</div><div class="vocab-pronunciation">[${w.pronunciation}]</div></div></div></div>`;}).join("")}</div>`;
+  document.querySelectorAll("#view-vocabulary .filter-btn").forEach(b=>b.addEventListener("click",()=>{state.vocabFilter=b.dataset.cat;state.flippedCards.clear();renderVocabulary();}));
+  document.querySelectorAll(".vocab-card").forEach(c=>c.addEventListener("click",e=>{if(e.target.closest(".learned-btn"))return;const k=c.dataset.key;state.flippedCards.has(k)?state.flippedCards.delete(k):state.flippedCards.add(k);c.classList.toggle("flipped");}));
+  document.querySelectorAll(".learned-btn").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();const l=b.dataset.latin;state.learnedWords.has(l)?state.learnedWords.delete(l):state.learnedWords.add(l);b.classList.toggle("active");b.textContent=state.learnedWords.has(l)?"\u2713 Learned":"Mark Learned";}));
 }
 
-function renderView(tab) {
-  switch (tab) {
-    case "home": renderHome(); break;
-    case "vocabulary": renderVocabulary(); break;
-    case "prayers": renderPrayers(); break;
-    case "grammar": renderGrammar(); break;
-    case "quiz": renderQuiz(); break;
-  }
+// ═══════════════════════════════════════════════════════════════════
+// PRAYERS
+// ═══════════════════════════════════════════════════════════════════
+function renderPrayers(){
+  document.getElementById("view-prayers").innerHTML=`
+${ST("Orationes \u2014 Prayers")}
+<p class="instructions">Study the great prayers of the Church. Toggle between Latin and English to aid memorization.</p>
+<div class="toggle-row"><button class="toggle-btn ${state.prayerShowLatin?'active':''}" data-lang="latin">Latin</button><button class="toggle-btn ${!state.prayerShowLatin?'active':''}" data-lang="english">English</button></div>
+<div class="prayers-list">${PRAYERS.map((p,i)=>{const ex=state.prayerExpanded===i,dc=p.difficulty.toLowerCase();return`<div class="prayer-card ${ex?'expanded':''}" data-idx="${i}"><button class="prayer-header"><div><div class="prayer-title">${p.title}</div><div class="prayer-english-title">${p.english_title}</div></div><div class="prayer-meta"><span class="difficulty-badge ${dc}">${p.difficulty}</span><span class="prayer-arrow">\u25be</span></div></button><div class="prayer-body"><div class="prayer-text">${state.prayerShowLatin?p.latin:p.english}</div><div class="prayer-translation"><div class="prayer-trans-label">${state.prayerShowLatin?"English:":"Latin:"}</div>${state.prayerShowLatin?p.english:p.latin}</div></div></div>`;}).join("")}</div>`;
+  document.querySelectorAll("#view-prayers .toggle-btn").forEach(b=>b.addEventListener("click",()=>{state.prayerShowLatin=b.dataset.lang==="latin";renderPrayers();}));
+  document.querySelectorAll(".prayer-header").forEach(b=>b.addEventListener("click",()=>{const i=parseInt(b.closest(".prayer-card").dataset.idx);state.prayerExpanded=state.prayerExpanded===i?null:i;renderPrayers();}));
 }
 
-// ─── HOME ────────────────────────────────────────────────────────────────────
-
-function renderHome() {
-  const progress = Math.round((state.learnedWords.size / VOCABULARY.length) * 100);
-  const accuracy = state.score.total > 0 ? Math.round((state.score.correct / state.score.total) * 100) : 0;
-
-  document.getElementById("view-home").innerHTML = `
-    <div class="home-hero">
-      <div class="hero-cross">✠</div>
-      <h2 class="home-title">Salvē, Discipule!</h2>
-      <p class="home-subtitle">Greetings, Student!</p>
-      <p class="home-desc">
-        Begin your journey into the beautiful language of the Church. Ecclesiastical Latin —
-        the living language of the Roman liturgy, sacred music, and papal documents —
-        awaits your study.
-      </p>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-number">${state.learnedWords.size}</div>
-        <div class="stat-label">Words Learned</div>
-        <div class="stat-sub">of ${VOCABULARY.length} total</div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${progress}%"></div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${state.score.total}</div>
-        <div class="stat-label">Quiz Answers</div>
-        <div class="stat-sub">${accuracy}% accuracy</div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${accuracy}%"></div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${PRAYERS.length}</div>
-        <div class="stat-label">Prayers</div>
-        <div class="stat-sub">to study & memorize</div>
-      </div>
-    </div>
-
-    <div class="section-title">
-      <span class="cross-icon">${crossSvg}</span>
-      <span>Begin Your Studies</span>
-      <span class="cross-icon">${crossSvg}</span>
-    </div>
-
-    <div class="quick-grid">
-      ${[
-        { tab: "vocabulary", icon: "📖", title: "Vocabula", desc: "Master essential Latin words used in liturgy, scripture, and sacred music." },
-        { tab: "prayers", icon: "🕯️", title: "Orationes", desc: "Learn the great prayers of the Church in their original Latin." },
-        { tab: "grammar", icon: "📜", title: "Grammatica", desc: "Understand pronunciation, declensions, conjugations, and cases." },
-        { tab: "quiz", icon: "✍️", title: "Probatio", desc: "Test your knowledge with vocabulary quizzes and track your progress." },
-      ].map(item => `
-        <button class="quick-card" data-tab="${item.tab}">
-          <div class="quick-icon">${item.icon}</div>
-          <div class="quick-title">${item.title}</div>
-          <div class="quick-desc">${item.desc}</div>
-        </button>
-      `).join("")}
-    </div>
-
-    <div class="tip-box">
-      <div class="tip-header">📌 Pronunciation Tip</div>
-      <p class="tip-text">
-        Ecclesiastical Latin follows <strong>Italian pronunciation rules</strong>, not classical Roman ones.
-        The key difference: <em>C</em> before <em>e</em> or <em>i</em> sounds like <strong>"ch"</strong> (as in "church"),
-        and <em>G</em> before <em>e</em> or <em>i</em> sounds like a soft <strong>"j"</strong> (as in "gentle").
-      </p>
-    </div>
-  `;
-
-  document.querySelectorAll(".quick-card").forEach(btn => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
-  });
+// ═══════════════════════════════════════════════════════════════════
+// GRAMMAR
+// ═══════════════════════════════════════════════════════════════════
+function renderGrammar(){
+  const lesson=GRAMMAR_LESSONS[state.activeLesson];
+  document.getElementById("view-grammar").innerHTML=`
+${ST("Grammatica \u2014 Grammar")}
+<p class="instructions">${GRAMMAR_LESSONS.length} lessons covering pronunciation through the subjunctive mood.</p>
+<div class="grammar-nav">${GRAMMAR_LESSONS.map((l,i)=>`<button class="grammar-nav-btn ${state.activeLesson===i?'active':''}" data-lesson="${i}"><span class="grammar-num">${String(i+1).padStart(2,'0')}</span>${l.title}</button>`).join("")}</div>
+<div class="grammar-content"><h3 class="grammar-title">${lesson.title}</h3><div class="ornament" style="margin:12px 0 24px">\u2726 \u2726 \u2726</div>
+${lesson.content.map(s=>`<div class="grammar-section"><h4 class="grammar-heading">${s.heading}</h4>${s.html?s.html:`<p class="grammar-text">${s.text}</p>`}</div>`).join("")}
+<div style="display:flex;justify-content:space-between;margin-top:24px">${state.activeLesson>0?`<button class="next-btn" id="prev-lesson">\u2190 Previous Lesson</button>`:'<div></div>'}${state.activeLesson<GRAMMAR_LESSONS.length-1?`<button class="next-btn" id="next-lesson">Next Lesson \u2192</button>`:'<div></div>'}</div></div>`;
+  document.querySelectorAll(".grammar-nav-btn").forEach(b=>b.addEventListener("click",()=>{state.activeLesson=parseInt(b.dataset.lesson);renderGrammar();window.scrollTo({top:0,behavior:"smooth"});}));
+  const pb=document.getElementById("prev-lesson"),nb=document.getElementById("next-lesson");
+  if(pb)pb.addEventListener("click",()=>{state.activeLesson--;renderGrammar();window.scrollTo({top:0,behavior:"smooth"});});
+  if(nb)nb.addEventListener("click",()=>{state.activeLesson++;renderGrammar();window.scrollTo({top:0,behavior:"smooth"});});
 }
 
-// ─── VOCABULARY ──────────────────────────────────────────────────────────────
-
-function renderVocabulary() {
-  const categories = ["All", ...new Set(VOCABULARY.map(v => v.category))];
-  const filtered = state.vocabFilter === "All" ? VOCABULARY : VOCABULARY.filter(v => v.category === state.vocabFilter);
-
-  document.getElementById("view-vocabulary").innerHTML = `
-    <div class="section-title">
-      <span class="cross-icon">${crossSvg}</span>
-      <span>Vocabula — Vocabulary</span>
-      <span class="cross-icon">${crossSvg}</span>
-    </div>
-    <p class="instructions">Tap a card to reveal the English meaning. Mark words as learned to track your progress.</p>
-
-    <div class="filter-row">
-      ${categories.map(cat => `
-        <button class="filter-btn ${state.vocabFilter === cat ? 'active' : ''}" data-cat="${cat}">${cat}</button>
-      `).join("")}
-    </div>
-
-    <div class="vocab-grid">
-      ${filtered.map((word, i) => {
-        const key = `${state.vocabFilter}-${i}`;
-        const isFlipped = state.flippedCards.has(key);
-        const isLearned = state.learnedWords.has(word.latin);
-        return `
-          <div class="vocab-card ${isFlipped ? 'flipped' : ''}" data-key="${key}">
-            <div class="vocab-inner">
-              <div class="vocab-front">
-                <div class="vocab-category">${word.category}</div>
-                <div class="vocab-latin">${word.latin}</div>
-                <div class="vocab-pronunciation">[${word.pronunciation}]</div>
-                <div class="vocab-hint">tap to reveal</div>
-                <button class="learned-btn ${isLearned ? 'active' : ''}" data-latin="${word.latin}">
-                  ${isLearned ? '✓ Learned' : 'Mark Learned'}
-                </button>
-              </div>
-              <div class="vocab-back">
-                <div class="vocab-category">${word.category}</div>
-                <div class="vocab-english">${word.english}</div>
-                <div class="vocab-latin">${word.latin}</div>
-                <div class="vocab-pronunciation">[${word.pronunciation}]</div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-
-  document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => { state.vocabFilter = btn.dataset.cat; renderVocabulary(); });
-  });
-  document.querySelectorAll(".vocab-card").forEach(card => {
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".learned-btn")) return;
-      const key = card.dataset.key;
-      state.flippedCards.has(key) ? state.flippedCards.delete(key) : state.flippedCards.add(key);
-      card.classList.toggle("flipped");
-    });
-  });
-  document.querySelectorAll(".learned-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const latin = btn.dataset.latin;
-      state.learnedWords.has(latin) ? state.learnedWords.delete(latin) : state.learnedWords.add(latin);
-      btn.classList.toggle("active");
-      btn.textContent = state.learnedWords.has(latin) ? "✓ Learned" : "Mark Learned";
-    });
-  });
+// ═══════════════════════════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════════════════════════
+function getQuizPool(){return state.quizCategory==="All"?VOCABULARY:VOCABULARY.filter(v=>v.category===state.quizCategory);}
+function generateQuestion(){
+  const pool=getQuizPool();if(pool.length<4){state.quizCurrent=null;return;}
+  const idx=Math.floor(Math.random()*pool.length);state.quizCurrent=pool[idx];
+  const wrong=pool.filter((_,i)=>i!==idx).sort(()=>Math.random()-0.5).slice(0,3);
+  state.quizOptions=[state.quizCurrent,...wrong].sort(()=>Math.random()-0.5);state.quizSelected=null;
+}
+function renderQuiz(){
+  if(!state.quizCurrent)generateQuestion();
+  const cats=["All",...new Set(VOCABULARY.map(v=>v.category))],cur=state.quizCurrent;
+  const acc=state.score.total>0?Math.round((state.score.correct/state.score.total)*100):0;
+  const isL2E=state.quizMode==="latin-to-english";
+  let fb="";
+  if(state.quizSelected!==null){const s=state.quizSelected,ok=isL2E?s.english===cur.english:s.latin===cur.latin;
+    fb=`<div class="quiz-feedback">${ok?`<div class="correct-msg"><b>R\u0113ct\u0113!</b> \u2014 Correct!</div>`:`<div class="wrong-msg"><b>Err\u0101vist\u012b</b> \u2014 The answer was: <i>${isL2E?cur.english:cur.latin}</i></div>`}<button class="next-btn" id="next-question">Next Question \u2192</button></div>`;}
+  document.getElementById("view-quiz").innerHTML=`
+${ST("Probatio \u2014 Quiz")}
+<div class="toggle-row"><button class="toggle-btn ${isL2E?'active':''}" data-mode="latin-to-english">Latin \u2192 English</button><button class="toggle-btn ${!isL2E?'active':''}" data-mode="english-to-latin">English \u2192 Latin</button></div>
+<div class="quiz-filter-label">Quiz Category:</div>
+<div class="filter-row">${cats.map(c=>`<button class="filter-btn ${state.quizCategory===c?'active':''}" data-cat="${c}">${c}</button>`).join("")}</div>
+<div class="quiz-score-bar"><span>Score: ${state.score.correct}/${state.score.total}</span><span>Accuracy: ${acc}%</span><span>Streak: ${state.streak} \ud83d\udd25</span></div>
+${cur?`<div class="quiz-card"><div class="quiz-prompt-label">${isL2E?"What does this Latin word mean?":"Which Latin word means:"}</div><div class="quiz-word">${isL2E?cur.latin:cur.english}</div>${isL2E?`<div class="quiz-pronunciation">[${cur.pronunciation}]</div>`:'<div style="margin-bottom:24px"></div>'}<div class="quiz-options">${state.quizOptions.map((o,i)=>{let cls="";if(state.quizSelected!==null){const ok=isL2E?o.english===cur.english:o.latin===cur.latin;const sel=isL2E?o.english===state.quizSelected.english:o.latin===state.quizSelected.latin;if(ok)cls="correct";else if(sel)cls="wrong";cls+=" disabled";}return`<button class="quiz-option ${cls}" data-idx="${i}">${isL2E?o.english:o.latin}</button>`;}).join("")}</div>${fb}</div>`:`<div class="quiz-card"><p>Not enough words in this category. Choose another.</p></div>`}`;
+  document.querySelectorAll("#view-quiz .toggle-btn").forEach(b=>b.addEventListener("click",()=>{state.quizMode=b.dataset.mode;generateQuestion();renderQuiz();}));
+  document.querySelectorAll("#view-quiz .filter-btn").forEach(b=>b.addEventListener("click",()=>{state.quizCategory=b.dataset.cat;generateQuestion();renderQuiz();}));
+  if(state.quizSelected===null&&cur)document.querySelectorAll(".quiz-option").forEach(b=>b.addEventListener("click",()=>{const o=state.quizOptions[parseInt(b.dataset.idx)];state.quizSelected=o;const ok=isL2E?o.english===cur.english:o.latin===cur.latin;state.score.total++;if(ok){state.score.correct++;state.streak++;}else{state.streak=0;}renderQuiz();}));
+  const nq=document.getElementById("next-question");if(nq)nq.addEventListener("click",()=>{generateQuestion();renderQuiz();});
 }
 
-// ─── PRAYERS ─────────────────────────────────────────────────────────────────
-
-function renderPrayers() {
-  document.getElementById("view-prayers").innerHTML = `
-    <div class="section-title">
-      <span class="cross-icon">${crossSvg}</span>
-      <span>Orationes — Prayers</span>
-      <span class="cross-icon">${crossSvg}</span>
-    </div>
-    <p class="instructions">Study the great prayers of the Church. Toggle between Latin and English to aid memorization.</p>
-
-    <div class="toggle-row">
-      <button class="toggle-btn ${state.prayerShowLatin ? 'active' : ''}" data-lang="latin">Latin</button>
-      <button class="toggle-btn ${!state.prayerShowLatin ? 'active' : ''}" data-lang="english">English</button>
-    </div>
-
-    <div class="prayers-list">
-      ${PRAYERS.map((p, i) => {
-        const expanded = state.prayerExpanded === i;
-        const diffClass = p.difficulty.toLowerCase();
-        return `
-          <div class="prayer-card ${expanded ? 'expanded' : ''}" data-idx="${i}">
-            <button class="prayer-header">
-              <div>
-                <div class="prayer-title">${p.title}</div>
-                <div class="prayer-english-title">${p.english_title}</div>
-              </div>
-              <div class="prayer-meta">
-                <span class="difficulty-badge ${diffClass}">${p.difficulty}</span>
-                <span class="prayer-arrow">▾</span>
-              </div>
-            </button>
-            <div class="prayer-body">
-              <div class="prayer-text">${state.prayerShowLatin ? p.latin : p.english}</div>
-              <div class="prayer-translation">
-                <div class="prayer-trans-label">${state.prayerShowLatin ? 'English:' : 'Latin:'}</div>
-                ${state.prayerShowLatin ? p.english : p.latin}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.prayerShowLatin = btn.dataset.lang === "latin";
-      renderPrayers();
-    });
-  });
-  document.querySelectorAll(".prayer-header").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const card = btn.closest(".prayer-card");
-      const idx = parseInt(card.dataset.idx);
-      state.prayerExpanded = state.prayerExpanded === idx ? null : idx;
-      renderPrayers();
-    });
-  });
-}
-
-// ─── GRAMMAR ─────────────────────────────────────────────────────────────────
-
-function renderGrammar() {
-  const lesson = GRAMMAR_LESSONS[state.activeLesson];
-
-  document.getElementById("view-grammar").innerHTML = `
-    <div class="section-title">
-      <span class="cross-icon">${crossSvg}</span>
-      <span>Grammatica — Grammar</span>
-      <span class="cross-icon">${crossSvg}</span>
-    </div>
-    <p class="instructions">Learn the foundations of ecclesiastical Latin grammar with practical examples from the liturgy.</p>
-
-    <div class="grammar-nav">
-      ${GRAMMAR_LESSONS.map((l, i) => `
-        <button class="grammar-nav-btn ${state.activeLesson === i ? 'active' : ''}" data-lesson="${i}">
-          <span class="grammar-num">${String(i + 1).padStart(2, '0')}</span>
-          ${l.title}
-        </button>
-      `).join("")}
-    </div>
-
-    <div class="grammar-content">
-      <h3 class="grammar-title">${lesson.title}</h3>
-      <div class="ornament" style="margin: 12px 0 24px">✦ ✦ ✦</div>
-      ${lesson.content.map(s => `
-        <div class="grammar-section">
-          <h4 class="grammar-heading">${s.heading}</h4>
-          <p class="grammar-text">${s.text}</p>
-        </div>
-      `).join("")}
-    </div>
-  `;
-
-  document.querySelectorAll(".grammar-nav-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.activeLesson = parseInt(btn.dataset.lesson);
-      renderGrammar();
-    });
-  });
-}
-
-// ─── QUIZ ────────────────────────────────────────────────────────────────────
-
-function generateQuestion() {
-  const idx = Math.floor(Math.random() * VOCABULARY.length);
-  state.quizCurrent = VOCABULARY[idx];
-  const wrong = VOCABULARY.filter((_, i) => i !== idx).sort(() => Math.random() - 0.5).slice(0, 3);
-  state.quizOptions = [state.quizCurrent, ...wrong].sort(() => Math.random() - 0.5);
-  state.quizSelected = null;
-}
-
-function renderQuiz() {
-  if (!state.quizCurrent) generateQuestion();
-
-  const cur = state.quizCurrent;
-  const accuracy = state.score.total > 0 ? Math.round((state.score.correct / state.score.total) * 100) : 0;
-  const isL2E = state.quizMode === "latin-to-english";
-
-  let feedbackHtml = "";
-  if (state.quizSelected !== null) {
-    const sel = state.quizSelected;
-    const isCorrect = isL2E ? sel.english === cur.english : sel.latin === cur.latin;
-    feedbackHtml = `
-      <div class="quiz-feedback">
-        ${isCorrect
-          ? `<div class="correct-msg"><strong>Rēctē!</strong> — Correct!</div>`
-          : `<div class="wrong-msg"><strong>Errāvistī</strong> — The answer was: <em>${isL2E ? cur.english : cur.latin}</em></div>`
-        }
-        <button class="next-btn" id="next-question">Next Question →</button>
-      </div>
-    `;
-  }
-
-  document.getElementById("view-quiz").innerHTML = `
-    <div class="section-title">
-      <span class="cross-icon">${crossSvg}</span>
-      <span>Probatio — Quiz</span>
-      <span class="cross-icon">${crossSvg}</span>
-    </div>
-
-    <div class="toggle-row">
-      <button class="toggle-btn ${isL2E ? 'active' : ''}" data-mode="latin-to-english">Latin → English</button>
-      <button class="toggle-btn ${!isL2E ? 'active' : ''}" data-mode="english-to-latin">English → Latin</button>
-    </div>
-
-    <div class="quiz-score-bar">
-      <span>Score: ${state.score.correct}/${state.score.total}</span>
-      <span>Accuracy: ${accuracy}%</span>
-      <span>Streak: ${state.streak} 🔥</span>
-    </div>
-
-    <div class="quiz-card">
-      <div class="quiz-prompt-label">${isL2E ? 'What does this Latin word mean?' : 'Which Latin word means:'}</div>
-      <div class="quiz-word">${isL2E ? cur.latin : cur.english}</div>
-      ${isL2E ? `<div class="quiz-pronunciation">[${cur.pronunciation}]</div>` : '<div style="margin-bottom:24px"></div>'}
-
-      <div class="quiz-options">
-        ${state.quizOptions.map((opt, i) => {
-          let cls = "";
-          if (state.quizSelected !== null) {
-            const isCorrectAnswer = isL2E ? opt.english === cur.english : opt.latin === cur.latin;
-            const isSelected = isL2E ? opt.english === state.quizSelected.english : opt.latin === state.quizSelected.latin;
-            if (isCorrectAnswer) cls = "correct";
-            else if (isSelected) cls = "wrong";
-            cls += " disabled";
-          }
-          return `<button class="quiz-option ${cls}" data-idx="${i}">${isL2E ? opt.english : opt.latin}</button>`;
-        }).join("")}
-      </div>
-
-      ${feedbackHtml}
-    </div>
-  `;
-
-  // Mode toggles
-  document.querySelectorAll("#view-quiz .toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.quizMode = btn.dataset.mode;
-      generateQuestion();
-      renderQuiz();
-    });
-  });
-
-  // Option clicks
-  if (state.quizSelected === null) {
-    document.querySelectorAll(".quiz-option").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const opt = state.quizOptions[parseInt(btn.dataset.idx)];
-        state.quizSelected = opt;
-        const isCorrect = isL2E ? opt.english === cur.english : opt.latin === cur.latin;
-        state.score.total++;
-        if (isCorrect) { state.score.correct++; state.streak++; } else { state.streak = 0; }
-        renderQuiz();
-      });
-    });
-  }
-
-  // Next question
-  const nextBtn = document.getElementById("next-question");
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => { generateQuestion(); renderQuiz(); });
-  }
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-
-renderNav();
-renderHome();
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+renderNav();renderHome();
 </script>
 </body>
 </html>
