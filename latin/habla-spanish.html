@@ -1083,8 +1083,18 @@ function startMistakeReview(){
 
 // Patch switchTab for games
 const _origSwitchTab=switchTab;
+let _lastTabTap=0,_lastTabScreen='';
 switchTab=function(btn){
   const sc=btn.dataset.screen;
+  const now=Date.now();
+  // Double-tap: same tab within 350ms → scroll to top
+  if(sc===_lastTabScreen&&now-_lastTabTap<350){
+    const scrollEl=document.querySelector('#screen-'+sc+' .scroll-area');
+    if(scrollEl)scrollEl.scrollTo({top:0,behavior:'smooth'});
+    _lastTabTap=0;return;
+  }
+  _lastTabTap=now;_lastTabScreen=sc;
+
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+sc).classList.add('active');
