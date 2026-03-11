@@ -2010,19 +2010,7 @@ renderLearn = function() {
   _prevRenderLearn();
   const el = document.getElementById('learn-scroll');
 
-  // Add jump button at top (insert after streak banner)
-  const banner = el.querySelector('.streak-banner');
-  if (banner) {
-    const jumpBtn = document.createElement('button');
-    jumpBtn.className = 'jump-btn';
-    jumpBtn.innerHTML = '📖 Jump to Grammar Lessons ↓';
-    jumpBtn.onclick = function() {
-      document.getElementById('grammar-section-anchor').scrollIntoView({behavior:'smooth'});
-    };
-    banner.after(jumpBtn);
-  }
-
-  // Add grammar section at bottom
+  // Build grammar section HTML
   let h = '<div id="grammar-section-anchor" style="padding-top:8px"></div>';
   h += '<div class="section-label" style="margin-top:32px;padding-top:16px;border-top:1px solid var(--border)">📖 Grammar Lessons</div>';
 
@@ -2044,7 +2032,22 @@ renderLearn = function() {
   });
   h += '</div>';
 
-  el.innerHTML += h;
+  // Append grammar section using DOM so we don't nuke event listeners
+  const gramDiv = document.createElement('div');
+  gramDiv.innerHTML = h;
+  el.appendChild(gramDiv);
+
+  // Now insert jump button after streak banner (both use DOM methods, no innerHTML clobber)
+  const banner = el.querySelector('.streak-banner');
+  if (banner) {
+    const jumpBtn = document.createElement('button');
+    jumpBtn.className = 'jump-btn';
+    jumpBtn.innerHTML = '📖 Jump to Grammar Lessons ↓';
+    jumpBtn.onclick = function() {
+      document.getElementById('grammar-section-anchor').scrollIntoView({behavior:'smooth'});
+    };
+    banner.after(jumpBtn);
+  }
 };
 
 // Grammar filter
