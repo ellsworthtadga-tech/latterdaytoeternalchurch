@@ -380,6 +380,7 @@ function showComplete(){
   if(acc>=60&&curUnit&&!state.lessonsCompleted.includes(curUnit.id))state.lessonsCompleted.push(curUnit.id);
   if(curUnit)curUnit.dialogue.forEach(l=>{if(!state.learnedVocab.includes(l.es))state.learnedVocab.push(l.es)});
   updateStreak();saveState();
+  if(typeof syncUI!=='undefined'&&syncUI.isConnected())syncUI.save(getAppState());
   document.getElementById('complete-xp').textContent=xp;document.getElementById('complete-acc').textContent=acc+'%';
   const strs=['Keep practicing!','¡Buen trabajo!','¡Muy bien!','¡Perfecto! Flawless!'];
   document.getElementById('complete-subtitle').textContent=acc===100?strs[3]:acc>=80?strs[2]:acc>=60?strs[1]:strs[0];
@@ -454,8 +455,170 @@ function spawnConfetti(){const c=document.getElementById('confetti');const cols=
     d.style.animationDelay=(Math.random()*0.5)+'s';d.style.animationDuration=(1+Math.random())+'s';c.appendChild(d)}
   setTimeout(()=>{c.innerHTML=''},3000)}
 
+// SYNC BRIDGE FUNCTIONS
+function getAppState(){return state}
+function setAppState(s){state=s;state.learnedVocab=state.learnedVocab||[];state.activeDays=state.activeDays||[];saveState();renderLearn();refreshUI()}
+
 // INIT
 renderLearn();refreshUI();
+</script>
+
+<!-- Firebase SDK (Realtime Database only) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<style>
+.sync-fab{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:999;width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-mut);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.sync-fab:active{transform:scale(0.9)}.sync-fab.connected{border-color:var(--green);color:var(--green)}
+.sync-fab.syncing{animation:syncSpin 1s linear infinite}@keyframes syncSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.sync-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px}
+.sync-overlay.open{display:flex}
+.sync-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.5)}
+.sync-modal h3{font-size:18px;font-weight:900;margin-bottom:4px;color:var(--text)}
+.sync-modal .sync-sub{font-size:13px;color:var(--text-sec);margin-bottom:20px;line-height:1.4}
+.sync-modal input{width:100%;padding:14px 16px;border-radius:12px;background:var(--bg);border:2px solid var(--border);color:var(--text);font-size:16px;font-weight:600;font-family:inherit;outline:none;margin-bottom:12px}
+.sync-modal input:focus{border-color:var(--green)}.sync-modal input::placeholder{color:var(--text-mut)}
+.sync-hint{font-size:11px;color:var(--text-mut);margin-bottom:16px;line-height:1.4}
+.sync-btn-row{display:flex;gap:8px;margin-bottom:6px}
+.sync-btn{flex:1;padding:12px;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.sync-btn.primary{background:var(--green);color:#fff}.sync-btn.primary:active{transform:scale(0.97)}
+.sync-btn.secondary{background:rgba(255,255,255,0.06);color:var(--text-sec)}
+.sync-btn.danger{background:rgba(255,75,75,0.1);color:var(--red);font-size:12px;margin-top:8px;width:100%}
+.sync-status{font-size:12px;color:var(--text-mut);text-align:center;margin-top:10px;font-weight:600}
+.sync-status.ok{color:var(--green)}.sync-status.err{color:var(--red)}
+.sync-pin-display{font-size:20px;font-weight:900;color:var(--green);margin:8px 0;text-align:center}
+.sync-last-sync{font-size:11px;color:var(--text-mut);text-align:center}
+</style>
+
+<button class="sync-fab" id="sync-fab" onclick="syncUI.openModal()" title="Cloud Sync">☁</button>
+<div class="sync-overlay" id="sync-overlay" onclick="if(event.target===this)syncUI.closeModal()">
+  <div class="sync-modal" id="sync-modal-content"></div>
+</div>
+
+<script>
+const syncUI=(()=>{
+  const CFG={
+    apiKey:"AIzaSyBYKBKxjiGT5WBULXrGPomS87OqPs41kk4",
+    authDomain:"languageapps-da8a8.firebaseapp.com",
+    databaseURL:"https://languageapps-da8a8-default-rtdb.firebaseio.com",
+    projectId:"languageapps-da8a8",
+    storageBucket:"languageapps-da8a8.firebasestorage.app",
+    messagingSenderId:"870203725921",
+    appId:"1:870203725921:web:04a5ac26b239be5c5e3220"
+  };
+
+  let db=null,appId='',pin='',lastSync=null,ready=false;
+
+  function init(id){
+    appId=id;
+    pin=localStorage.getItem('sync_pin_'+appId)||'';
+    lastSync=localStorage.getItem('sync_last_'+appId)||null;
+    if(!firebase.apps.length)firebase.initializeApp(CFG);
+    db=firebase.database();ready=true;updateFab();
+  }
+
+  function updateFab(){
+    const f=document.getElementById('sync-fab');
+    if(pin){f.classList.add('connected');f.title='Synced: '+pin}
+    else{f.classList.remove('connected');f.title='Set up Cloud Sync'}
+  }
+
+  function isConnected(){return ready&&pin!==''}
+
+  async function save(obj){
+    if(!isConnected())return false;
+    try{
+      const f=document.getElementById('sync-fab');f.classList.add('syncing');
+      await db.ref('users/'+pin+'/'+appId).set({data:obj,updatedAt:new Date().toISOString(),app:appId});
+      lastSync=new Date().toISOString();localStorage.setItem('sync_last_'+appId,lastSync);
+      f.classList.remove('syncing');return true;
+    }catch(e){console.error('Sync save:',e);document.getElementById('sync-fab').classList.remove('syncing');return false}
+  }
+
+  async function load(){
+    if(!isConnected())return null;
+    try{
+      const f=document.getElementById('sync-fab');f.classList.add('syncing');
+      const snap=await db.ref('users/'+pin+'/'+appId).once('value');
+      const val=snap.val();f.classList.remove('syncing');
+      if(val&&val.data){lastSync=val.updatedAt||null;localStorage.setItem('sync_last_'+appId,lastSync||'');return val.data}
+      return null;
+    }catch(e){console.error('Sync load:',e);document.getElementById('sync-fab').classList.remove('syncing');return null}
+  }
+
+  function openModal(){document.getElementById('sync-overlay').classList.add('open');renderModal()}
+  function closeModal(){document.getElementById('sync-overlay').classList.remove('open')}
+
+  function renderModal(){
+    const el=document.getElementById('sync-modal-content');
+    if(pin){
+      const ls=lastSync?new Date(lastSync).toLocaleString():'Never';
+      el.innerHTML=`<h3>☁ Cloud Sync</h3>
+        <div class="sync-sub">Connected as:</div>
+        <div class="sync-pin-display">${pin}</div>
+        <div class="sync-last-sync">Last sync: ${ls}</div>
+        <div style="height:16px"></div>
+        <div class="sync-btn-row"><button class="sync-btn secondary" onclick="syncUI.closeModal()">Close</button><button class="sync-btn primary" onclick="syncUI.doSync()">↻ Sync Now</button></div>
+        <div class="sync-btn-row"><button class="sync-btn primary" style="background:var(--blue)" onclick="syncUI.doPull()">↓ Pull from Cloud</button><button class="sync-btn primary" onclick="syncUI.doPush()">↑ Push to Cloud</button></div>
+        <div class="sync-status" id="sync-status"></div>
+        <button class="sync-btn danger" onclick="syncUI.disconnect()">Disconnect</button>`;
+    } else {
+      el.innerHTML=`<h3>☁ Cloud Sync</h3>
+        <div class="sync-sub">Sync progress across devices. Pick a PIN you'll remember — use the same PIN on other devices to connect.</div>
+        <input type="text" id="sync-pin-input" placeholder="e.g. maria-spanish" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="sync-hint">💡 Use something like your-name (e.g. "maria", "tad"). Same PIN on another device = synced progress.</div>
+        <div class="sync-btn-row"><button class="sync-btn secondary" onclick="syncUI.closeModal()">Cancel</button><button class="sync-btn primary" onclick="syncUI.connect()">Connect</button></div>
+        <div class="sync-status" id="sync-status"></div>`;
+      setTimeout(()=>document.getElementById('sync-pin-input')?.focus(),100);
+    }
+  }
+
+  async function connect(){
+    const inp=document.getElementById('sync-pin-input');
+    const p=(inp?.value||'').trim().toLowerCase().replace(/[^a-z0-9\-_]/g,'');
+    if(p.length<3){showSt('PIN must be at least 3 characters',false);return}
+    pin=p;localStorage.setItem('sync_pin_'+appId,pin);updateFab();
+    showSt('Connecting...',true);
+    const cloud=await load();
+    if(cloud){showSt('Found cloud data! Use Pull to load it.',true)}
+    else if(typeof getAppState==='function'){await save(getAppState());showSt('Connected & backed up!',true)}
+    else showSt('Connected!',true);
+    setTimeout(()=>renderModal(),1200);
+  }
+
+  function disconnect(){
+    if(!confirm('Disconnect sync? Local progress stays.'))return;
+    pin='';localStorage.removeItem('sync_pin_'+appId);localStorage.removeItem('sync_last_'+appId);
+    updateFab();renderModal();
+  }
+
+  async function doPush(){
+    if(typeof getAppState!=='function'){showSt('Not configured',false);return}
+    showSt('Pushing...',true);const ok=await save(getAppState());showSt(ok?'Pushed ✓':'Failed ✗',ok);
+  }
+
+  async function doPull(){
+    showSt('Pulling...',true);const d=await load();
+    if(d&&typeof setAppState==='function'){setAppState(d);showSt('Pulled ✓',true)}
+    else showSt(d?'Not configured':'No cloud data',false);
+  }
+
+  async function doSync(){
+    showSt('Syncing...',true);const cloud=await load();
+    const local=typeof getAppState==='function'?getAppState():null;
+    if(!local){showSt('Not configured',false);return}
+    if(cloud&&(cloud.xp||0)>(local.xp||0)){
+      if(typeof setAppState==='function')setAppState(cloud);showSt('Pulled newer cloud data ✓',true);
+    }else{await save(local);showSt('Pushed local progress ✓',true)}
+  }
+
+  function showSt(m,ok){const e=document.getElementById('sync-status');if(e){e.textContent=m;e.className='sync-status '+(ok?'ok':'err')}}
+
+  return{init,save,load,isConnected,openModal,closeModal,connect,disconnect,doPush,doPull,doSync};
+})();
+
+// Initialize sync
+syncUI.init('habla-spanish');
 </script>
 </body>
 </html>
