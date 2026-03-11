@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="日本語道">
@@ -34,780 +34,277 @@
   --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
   --radius: 12px;
   --radius-sm: 8px;
+  --safe-bottom: env(safe-area-inset-bottom);
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
-  font-family: 'Noto Sans JP', 'Crimson Pro', sans-serif;
+  font-family: 'Noto Sans JP','Crimson Pro',sans-serif;
   background: var(--bg-deep);
   color: var(--text-primary);
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100vh; min-height: 100dvh;
   overflow-x: hidden;
 }
-
-/* Subtle texture overlay */
 body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: 
+  content:''; position:fixed; inset:0;
+  background:
     radial-gradient(ellipse at 20% 0%, rgba(192,57,43,0.08) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 100%, rgba(212,168,67,0.06) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
+  pointer-events:none; z-index:0;
 }
+.screen { display:none; min-height:100vh; min-height:100dvh; position:relative; z-index:1; }
+.screen.active { display:flex; flex-direction:column; }
 
-/* ===== SCREENS ===== */
-.screen { display: none; min-height: 100vh; min-height: 100dvh; position: relative; z-index: 1; }
-.screen.active { display: flex; flex-direction: column; }
-
-/* ===== HOME SCREEN ===== */
-.home-screen {
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
-  text-align: center;
-}
-
+/* HOME */
+.home-screen { align-items:center; justify-content:center; padding:2rem 1.5rem; text-align:center; }
 .home-emblem {
-  width: 100px; height: 100px;
-  border: 2px solid var(--red-primary);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Noto Serif JP', serif;
-  font-size: 2.4rem;
-  color: var(--red-light);
-  margin-bottom: 1.5rem;
-  position: relative;
+  width:100px; height:100px;
+  border:2px solid var(--red-primary); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Noto Serif JP',serif; font-size:2.4rem; color:var(--red-light);
+  margin-bottom:1.5rem; position:relative;
   animation: emblemFade 1.2s ease-out;
 }
-.home-emblem::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border: 1px solid rgba(192,57,43,0.3);
-  border-radius: 50%;
-}
-
-@keyframes emblemFade {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.home-title {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--cream);
-  letter-spacing: 0.08em;
-  margin-bottom: 0.3rem;
-  animation: slideUp 0.8s ease-out 0.2s both;
-}
-
-.home-subtitle {
-  font-family: 'Crimson Pro', serif;
-  font-size: 1.1rem;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-  animation: slideUp 0.8s ease-out 0.35s both;
-}
-
-.home-tagline {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-bottom: 2.5rem;
-  animation: slideUp 0.8s ease-out 0.45s both;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.home-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 100%;
-  max-width: 340px;
-}
-
+.home-emblem::after { content:''; position:absolute; inset:-6px; border:1px solid rgba(192,57,43,0.3); border-radius:50%; }
+@keyframes emblemFade { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
+.home-title { font-family:'Noto Serif JP',serif; font-size:2rem; font-weight:700; color:var(--cream); letter-spacing:0.08em; margin-bottom:0.3rem; animation:slideUp .8s ease-out .2s both; }
+.home-subtitle { font-family:'Crimson Pro',serif; font-size:1.1rem; font-weight:300; font-style:italic; color:var(--text-secondary); margin-bottom:0.5rem; animation:slideUp .8s ease-out .35s both; }
+.home-tagline { font-size:0.82rem; color:var(--text-muted); margin-bottom:2.5rem; animation:slideUp .8s ease-out .45s both; }
+@keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.home-nav { display:flex; flex-direction:column; gap:0.8rem; width:100%; max-width:340px; }
 .home-btn {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid rgba(192,57,43,0.2);
-  border-radius: var(--radius);
-  color: var(--text-primary);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-align: left;
-  animation: slideUp 0.6s ease-out both;
+  display:flex; align-items:center; gap:1rem;
+  padding:1rem 1.2rem; background:var(--bg-card);
+  border:1px solid rgba(192,57,43,0.2); border-radius:var(--radius);
+  color:var(--text-primary); font-family:'Noto Sans JP',sans-serif;
+  font-size:0.95rem; cursor:pointer; transition:all 0.25s; text-align:left;
+  animation:slideUp .6s ease-out both;
 }
-.home-btn:nth-child(1) { animation-delay: 0.5s; }
-.home-btn:nth-child(2) { animation-delay: 0.6s; }
-.home-btn:nth-child(3) { animation-delay: 0.7s; }
-.home-btn:nth-child(4) { animation-delay: 0.8s; }
-.home-btn:nth-child(5) { animation-delay: 0.9s; }
+.home-btn:nth-child(1){animation-delay:.5s} .home-btn:nth-child(2){animation-delay:.6s}
+.home-btn:nth-child(3){animation-delay:.7s} .home-btn:nth-child(4){animation-delay:.8s}
+.home-btn:nth-child(5){animation-delay:.9s} .home-btn:nth-child(6){animation-delay:1s}
+.home-btn:hover,.home-btn:active { background:var(--bg-card-hover); border-color:var(--red-primary); transform:translateX(4px); }
+.btn-icon { font-size:1.5rem; width:40px; text-align:center; flex-shrink:0; }
+.btn-text { display:flex; flex-direction:column; }
+.btn-label { font-weight:500; }
+.btn-desc { font-size:0.75rem; color:var(--text-muted); margin-top:2px; font-family:'Crimson Pro',serif; }
 
-.home-btn:hover, .home-btn:active {
-  background: var(--bg-card-hover);
-  border-color: var(--red-primary);
-  transform: translateX(4px);
-}
-
-.btn-icon {
-  font-size: 1.5rem;
-  width: 40px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.btn-text { display: flex; flex-direction: column; }
-.btn-label { font-weight: 500; }
-.btn-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; font-family: 'Crimson Pro', serif; }
-
-/* ===== TOP BAR ===== */
+/* TOP BAR */
 .top-bar {
-  display: flex;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  background: rgba(26,10,10,0.9);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(192,57,43,0.15);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  display:flex; align-items:center; padding:0.8rem 1rem;
+  background:rgba(26,10,10,0.9); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(192,57,43,0.15);
+  position:sticky; top:0; z-index:100;
+  padding-top: calc(0.8rem + env(safe-area-inset-top));
 }
+.back-btn { background:none; border:none; color:var(--red-light); font-size:1.4rem; cursor:pointer; padding:0.3rem; margin-right:0.8rem; line-height:1; }
+.top-bar-title { font-family:'Noto Serif JP',serif; font-size:1.05rem; color:var(--cream); font-weight:400; }
+.top-bar-right { margin-left:auto; display:flex; align-items:center; gap:0.6rem; }
+.score-badge { background:rgba(192,57,43,0.2); border:1px solid rgba(192,57,43,0.3); border-radius:20px; padding:0.25rem 0.7rem; font-size:0.78rem; color:var(--gold); font-weight:500; }
 
-.back-btn {
-  background: none;
-  border: none;
-  color: var(--red-light);
-  font-size: 1.4rem;
-  cursor: pointer;
-  padding: 0.3rem;
-  margin-right: 0.8rem;
-  line-height: 1;
-}
+/* CONTENT */
+.content-area { flex:1; padding:1.2rem 1rem calc(2rem + var(--safe-bottom)); overflow-y:auto; }
 
-.top-bar-title {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.05rem;
-  color: var(--cream);
-  font-weight: 400;
-}
-
-.top-bar-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.score-badge {
-  background: rgba(192,57,43,0.2);
-  border: 1px solid rgba(192,57,43,0.3);
-  border-radius: 20px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.78rem;
-  color: var(--gold);
-  font-weight: 500;
-}
-
-/* ===== CONTENT AREA ===== */
-.content-area {
-  flex: 1;
-  padding: 1.2rem 1rem 6rem;
-  overflow-y: auto;
-}
-
-/* ===== CATEGORY SELECTOR ===== */
-.category-pills {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
-  scrollbar-width: none;
-}
-.category-pills::-webkit-scrollbar { display: none; }
-
+/* PILLS */
+.category-pills { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:1rem; margin-bottom:1rem; scrollbar-width:none; }
+.category-pills::-webkit-scrollbar { display:none; }
 .cat-pill {
-  flex-shrink: 0;
-  padding: 0.45rem 0.9rem;
-  border-radius: 20px;
-  border: 1px solid rgba(192,57,43,0.25);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.82rem;
-  font-family: 'Noto Sans JP', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
+  flex-shrink:0; padding:0.45rem 0.9rem; border-radius:20px;
+  border:1px solid rgba(192,57,43,0.25); background:transparent;
+  color:var(--text-secondary); font-size:0.82rem; font-family:'Noto Sans JP',sans-serif;
+  cursor:pointer; transition:all .2s; white-space:nowrap;
 }
-.cat-pill.active, .cat-pill:active {
-  background: var(--red-primary);
-  border-color: var(--red-primary);
-  color: white;
-}
+.cat-pill.active,.cat-pill:active { background:var(--red-primary); border-color:var(--red-primary); color:white; }
 
-/* ===== FLASHCARD ===== */
-.flashcard-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  padding-top: 1rem;
+/* FLASHCARD */
+.flashcard-container { display:flex; flex-direction:column; align-items:center; gap:1.5rem; padding-top:1rem; }
+.flashcard { width:100%; max-width:360px; min-height:260px; perspective:1000px; cursor:pointer; }
+.flashcard-inner { position:relative; width:100%; min-height:260px; transition:transform .6s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d; }
+.flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
+.flashcard-front,.flashcard-back {
+  position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:2rem; text-align:center;
 }
-
-.flashcard {
-  width: 100%;
-  max-width: 360px;
-  min-height: 280px;
-  perspective: 1000px;
-  cursor: pointer;
-}
-
-.flashcard-inner {
-  position: relative;
-  width: 100%;
-  min-height: 280px;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-}
-
-.flashcard.flipped .flashcard-inner {
-  transform: rotateY(180deg);
-}
-
-.flashcard-front, .flashcard-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
-}
-
-.flashcard-front {
-  background: linear-gradient(145deg, var(--bg-card) 0%, #2a1510 100%);
-  border: 1px solid rgba(192,57,43,0.25);
-  box-shadow: var(--shadow);
-}
-
-.flashcard-back {
-  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
-  border: 1px solid rgba(100,140,200,0.25);
-  box-shadow: var(--shadow);
-  transform: rotateY(180deg);
-}
-
-.card-kanji {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--cream);
-  line-height: 1.2;
-  margin-bottom: 0.8rem;
-}
-
-.card-reading {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1.3rem;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
-
-.card-hint {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-.card-english {
-  font-family: 'Crimson Pro', serif;
-  font-size: 1.8rem;
-  font-weight: 300;
-  color: #c0d8f0;
-  margin-bottom: 0.5rem;
-}
-
-.card-romaji {
-  font-size: 1rem;
-  color: rgba(180,200,230,0.7);
-  margin-bottom: 0.3rem;
-}
-
-.card-example {
-  font-size: 0.9rem;
-  color: rgba(180,200,230,0.6);
-  margin-top: 0.8rem;
-  font-family: 'Noto Sans JP', sans-serif;
-  line-height: 1.6;
-}
-
-.card-example-en {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 0.82rem;
-  color: rgba(160,180,210,0.5);
-  margin-top: 0.3rem;
-}
-
-.tap-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.5rem;
-}
-
-/* Card navigation */
-.card-nav {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
+.flashcard-front { background:linear-gradient(145deg,var(--bg-card) 0%,#2a1510 100%); border:1px solid rgba(192,57,43,0.25); box-shadow:var(--shadow); }
+.flashcard-back { background:linear-gradient(145deg,#1a1a2e 0%,#16213e 100%); border:1px solid rgba(100,140,200,0.25); box-shadow:var(--shadow); transform:rotateY(180deg); }
+.card-kana { font-family:'Noto Serif JP',serif; font-size:3.5rem; font-weight:700; color:var(--cream); line-height:1.2; margin-bottom:0.6rem; }
+.card-reading { font-family:'Noto Sans JP',sans-serif; font-size:1.2rem; color:var(--gold); margin-bottom:0.3rem; }
+.card-hint { font-family:'Crimson Pro',serif; font-size:0.85rem; color:var(--text-muted); font-style:italic; }
+.card-english { font-family:'Crimson Pro',serif; font-size:1.8rem; font-weight:300; color:#c0d8f0; margin-bottom:0.5rem; }
+.card-romaji { font-size:1rem; color:rgba(180,200,230,0.7); margin-bottom:0.3rem; }
+.card-example { font-size:0.95rem; color:rgba(180,200,230,0.6); margin-top:0.8rem; font-family:'Noto Sans JP',sans-serif; line-height:1.6; }
+.card-example-en { font-family:'Crimson Pro',serif; font-style:italic; font-size:0.82rem; color:rgba(160,180,210,0.5); margin-top:0.3rem; }
+.card-nav { display:flex; gap:1rem; align-items:center; }
 .card-nav-btn {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(192,57,43,0.3);
-  background: var(--bg-card);
-  color: var(--text-primary);
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width:48px; height:48px; border-radius:50%;
+  border:1px solid rgba(192,57,43,0.3); background:var(--bg-card);
+  color:var(--text-primary); font-size:1.2rem; cursor:pointer;
+  transition:all .2s; display:flex; align-items:center; justify-content:center;
 }
-.card-nav-btn:active {
-  background: var(--red-primary);
-  border-color: var(--red-primary);
-}
+.card-nav-btn:active { background:var(--red-primary); border-color:var(--red-primary); }
+.card-counter { font-size:0.85rem; color:var(--text-muted); min-width:60px; text-align:center; }
+.card-progress-bar { width:100%; max-width:360px; height:3px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.card-progress-fill { height:100%; background:var(--red-primary); border-radius:2px; transition:width .4s ease; }
 
-.card-counter {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  min-width: 60px;
-  text-align: center;
-}
-
-.card-progress-bar {
-  width: 100%;
-  max-width: 360px;
-  height: 3px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.card-progress-fill {
-  height: 100%;
-  background: var(--red-primary);
-  border-radius: 2px;
-  transition: width 0.4s ease;
-}
-
-/* ===== QUIZ MODE ===== */
-.quiz-question {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.quiz-prompt {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 0.8rem;
-  font-family: 'Crimson Pro', serif;
-}
-
-.quiz-word {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 3.2rem;
-  font-weight: 700;
-  color: var(--cream);
-  margin-bottom: 0.4rem;
-}
-
-.quiz-reading-hint {
-  font-size: 1.1rem;
-  color: var(--gold);
-  font-family: 'Noto Sans JP', sans-serif;
-}
-
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
+/* QUIZ */
+.quiz-question { text-align:center; margin-bottom:2rem; }
+.quiz-prompt { font-size:0.85rem; color:var(--text-muted); margin-bottom:0.8rem; font-family:'Crimson Pro',serif; }
+.quiz-word { font-family:'Noto Serif JP',serif; font-size:3rem; font-weight:700; color:var(--cream); margin-bottom:0.4rem; }
+.quiz-reading-hint { font-size:1rem; color:var(--gold); font-family:'Noto Sans JP',sans-serif; }
+.quiz-options { display:flex; flex-direction:column; gap:0.7rem; max-width:400px; margin:0 auto; }
 .quiz-option {
-  padding: 1rem 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid rgba(192,57,43,0.2);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-family: 'Noto Sans JP', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
+  padding:1rem 1.2rem; background:var(--bg-card);
+  border:1px solid rgba(192,57,43,0.2); border-radius:var(--radius-sm);
+  color:var(--text-primary); font-size:1rem; font-family:'Noto Sans JP',sans-serif;
+  cursor:pointer; transition:all .2s; text-align:left;
 }
-.quiz-option:active { background: var(--bg-card-hover); }
-
-.quiz-option.correct {
-  background: rgba(74,124,89,0.3);
-  border-color: var(--green-correct);
-  color: var(--green-light);
-}
-.quiz-option.wrong {
-  background: rgba(192,57,43,0.2);
-  border-color: var(--red-primary);
-  color: var(--red-light);
-}
-.quiz-option.disabled { pointer-events: none; }
-
-.quiz-feedback {
-  text-align: center;
-  margin-top: 1.5rem;
-  font-size: 0.95rem;
-  min-height: 2.5rem;
-}
-
+.quiz-option:active { background:var(--bg-card-hover); }
+.quiz-option.correct { background:rgba(74,124,89,0.3); border-color:var(--green-correct); color:var(--green-light); }
+.quiz-option.wrong { background:rgba(192,57,43,0.2); border-color:var(--red-primary); color:var(--red-light); }
+.quiz-option.disabled { pointer-events:none; }
+.quiz-feedback { text-align:center; margin-top:1.5rem; font-size:0.95rem; min-height:2.5rem; }
 .quiz-next-btn {
-  margin-top: 1rem;
-  padding: 0.7rem 2rem;
-  background: var(--red-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  color: white;
-  font-size: 0.9rem;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  display: none;
+  margin-top:1rem; padding:0.7rem 2rem; background:var(--red-primary);
+  border:none; border-radius:var(--radius-sm); color:white; font-size:0.9rem;
+  cursor:pointer; font-family:'Noto Sans JP',sans-serif; display:none;
 }
-.quiz-next-btn.visible { display: inline-block; }
+.quiz-next-btn.visible { display:inline-block; }
+.quiz-score-display { text-align:center; padding:2rem; }
+.quiz-score-big { font-family:'Noto Serif JP',serif; font-size:3.5rem; color:var(--gold); font-weight:700; }
+.quiz-score-label { font-size:0.9rem; color:var(--text-muted); margin-top:0.3rem; }
+.quiz-mode-toggle { display:flex; gap:0; margin-bottom:1.5rem; border-radius:var(--radius-sm); overflow:hidden; border:1px solid rgba(192,57,43,0.3); }
+.quiz-mode-btn {
+  flex:1; padding:0.6rem; background:transparent; border:none;
+  color:var(--text-secondary); font-family:'Noto Sans JP',sans-serif;
+  font-size:0.82rem; cursor:pointer; transition:all .2s;
+}
+.quiz-mode-btn.active { background:var(--red-primary); color:white; }
 
-.quiz-score-display {
-  text-align: center;
-  padding: 2rem;
-}
-.quiz-score-big {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 3.5rem;
-  color: var(--gold);
-  font-weight: 700;
-}
-.quiz-score-label {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-top: 0.3rem;
-}
-
-/* ===== KANA CHART ===== */
-.kana-toggle {
-  display: flex;
-  gap: 0;
-  margin-bottom: 1.5rem;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 1px solid rgba(192,57,43,0.3);
-}
-
+/* KANA */
+.kana-toggle { display:flex; gap:0; margin-bottom:1.5rem; border-radius:var(--radius-sm); overflow:hidden; border:1px solid rgba(192,57,43,0.3); }
 .kana-toggle-btn {
-  flex: 1;
-  padding: 0.6rem;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
+  flex:1; padding:0.6rem; background:transparent; border:none;
+  color:var(--text-secondary); font-family:'Noto Sans JP',sans-serif;
+  font-size:0.9rem; cursor:pointer; transition:all .2s;
 }
-.kana-toggle-btn.active {
-  background: var(--red-primary);
-  color: white;
-}
-
-.kana-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
+.kana-toggle-btn.active { background:var(--red-primary); color:white; }
+.kana-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; max-width:400px; margin:0 auto; }
 .kana-cell {
-  aspect-ratio: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-card);
-  border-radius: 6px;
-  border: 1px solid rgba(192,57,43,0.1);
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 2px;
+  aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:var(--bg-card); border-radius:6px; border:1px solid rgba(192,57,43,0.1);
+  cursor:pointer; transition:all .2s; padding:2px;
 }
-.kana-cell:active {
-  background: var(--red-primary);
-  transform: scale(0.95);
-}
-.kana-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+.kana-cell:active { background:var(--red-primary); transform:scale(0.95); }
+.kana-cell.empty { background:transparent; border-color:transparent; cursor:default; }
+.kana-char { font-family:'Noto Serif JP',serif; font-size:1.4rem; font-weight:700; color:var(--cream); line-height:1.2; }
+.kana-rom { font-size:0.6rem; color:var(--text-muted); margin-top:1px; }
+.kana-popup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
+.kana-popup.active { display:flex; }
+.kana-popup-card { background:var(--bg-card); border:1px solid rgba(192,57,43,0.3); border-radius:var(--radius); padding:2.5rem; text-align:center; min-width:220px; box-shadow:var(--shadow-lg); }
+.kana-popup-char { font-family:'Noto Serif JP',serif; font-size:5rem; color:var(--cream); line-height:1; margin-bottom:0.5rem; }
+.kana-popup-rom { font-size:1.3rem; color:var(--gold); margin-bottom:0.3rem; }
+.kana-popup-pair { font-size:1rem; color:var(--text-muted); }
 
-.kana-char {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--cream);
-  line-height: 1.2;
-}
-.kana-rom {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  margin-top: 1px;
-}
-
-.kana-row-label {
-  grid-column: 1 / -1;
-  padding: 0.5rem 0 0.2rem;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-/* Kana popup */
-.kana-popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(6px);
-}
-.kana-popup.active { display: flex; }
-
-.kana-popup-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(192,57,43,0.3);
-  border-radius: var(--radius);
-  padding: 2.5rem;
-  text-align: center;
-  min-width: 220px;
-  box-shadow: var(--shadow-lg);
-}
-
-.kana-popup-char {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 5rem;
-  color: var(--cream);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-.kana-popup-rom {
-  font-size: 1.3rem;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
-.kana-popup-pair {
-  font-size: 1rem;
-  color: var(--text-muted);
-}
-
-/* ===== GRAMMAR ===== */
+/* GRAMMAR */
 .grammar-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(192,57,43,0.15);
-  border-radius: var(--radius);
-  padding: 1.3rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s;
+  background:var(--bg-card); border:1px solid rgba(192,57,43,0.15);
+  border-radius:var(--radius); padding:1.3rem; margin-bottom:1rem;
 }
+.grammar-pattern { font-family:'Noto Serif JP',serif; font-size:1.3rem; color:var(--cream); margin-bottom:0.3rem; }
+.grammar-meaning { font-family:'Crimson Pro',serif; font-size:0.95rem; color:var(--gold); margin-bottom:0.8rem; }
+.grammar-example-jp { font-family:'Noto Sans JP',sans-serif; font-size:1rem; color:var(--text-primary); margin-bottom:0.2rem; }
+.grammar-example-en { font-family:'Crimson Pro',serif; font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:0.6rem; }
+.grammar-note { font-size:0.8rem; color:var(--text-muted); padding-top:0.6rem; border-top:1px solid rgba(255,255,255,0.05); }
 
-.grammar-pattern {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.3rem;
-  color: var(--cream);
-  margin-bottom: 0.3rem;
-}
-
-.grammar-meaning {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.95rem;
-  color: var(--gold);
-  margin-bottom: 0.8rem;
-}
-
-.grammar-example-jp {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1rem;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-
-.grammar-example-en {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-style: italic;
-  margin-bottom: 0.6rem;
-}
-
-.grammar-note {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  padding-top: 0.6rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-/* ===== PHRASES ===== */
+/* PHRASES */
 .phrase-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(192,57,43,0.15);
-  border-radius: var(--radius);
-  padding: 1.2rem;
-  margin-bottom: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
+  background:var(--bg-card); border:1px solid rgba(192,57,43,0.15);
+  border-radius:var(--radius); padding:1.2rem; margin-bottom:0.8rem;
+  cursor:pointer; transition:all .2s;
 }
-.phrase-card:active { background: var(--bg-card-hover); }
+.phrase-card:active { background:var(--bg-card-hover); }
+.phrase-jp { font-family:'Noto Sans JP',sans-serif; font-size:1.2rem; color:var(--cream); margin-bottom:0.2rem; }
+.phrase-reading { font-size:0.85rem; color:var(--gold); margin-bottom:0.3rem; }
+.phrase-en { font-family:'Crimson Pro',serif; font-size:0.9rem; color:var(--text-secondary); }
+.phrase-context { font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem; display:none; }
+.phrase-card.expanded .phrase-context { display:block; }
 
-.phrase-jp {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1.2rem;
-  color: var(--cream);
-  margin-bottom: 0.2rem;
+/* NUMBERS */
+.number-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.6rem; }
+.number-card {
+  background:var(--bg-card); border:1px solid rgba(192,57,43,0.15);
+  border-radius:var(--radius-sm); padding:1rem; text-align:center;
 }
+.number-big { font-family:'Noto Serif JP',serif; font-size:1.6rem; color:var(--cream); }
+.number-reading { font-size:0.85rem; color:var(--gold); margin-top:0.2rem; }
+.number-val { font-size:0.75rem; color:var(--text-muted); margin-top:0.15rem; }
 
-.phrase-reading {
-  font-size: 0.85rem;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
+/* SECTION HEADER */
+.section-header { font-family:'Noto Serif JP',serif; font-size:1.1rem; color:var(--cream); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(192,57,43,0.15); }
+.decorative-break { text-align:center; color:var(--red-primary); font-size:0.7rem; letter-spacing:1em; margin:1.5rem 0; opacity:0.5; }
 
-.phrase-en {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.phrase-context {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.4rem;
-  display: none;
-}
-.phrase-card.expanded .phrase-context { display: block; }
-
-/* ===== UTILITIES ===== */
-.section-header {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.1rem;
-  color: var(--cream);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(192,57,43,0.15);
-}
-
-.decorative-break {
-  text-align: center;
-  color: var(--red-primary);
-  font-size: 0.7rem;
-  letter-spacing: 1em;
-  margin: 1.5rem 0;
-  opacity: 0.5;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (min-width: 480px) {
-  .content-area { padding: 1.5rem 2rem 4rem; }
-  .kana-grid { gap: 6px; }
-  .kana-char { font-size: 1.6rem; }
-}
-
-@media (min-width: 768px) {
-  .home-title { font-size: 2.6rem; }
-  .home-nav { max-width: 400px; }
-  .content-area { max-width: 600px; margin: 0 auto; }
-}
+@media (min-width:480px) { .content-area{padding:1.5rem 2rem 4rem} .kana-grid{gap:6px} .kana-char{font-size:1.6rem} }
+@media (min-width:768px) { .home-title{font-size:2.6rem} .home-nav{max-width:400px} .content-area{max-width:600px;margin:0 auto} }
 </style>
 </head>
 <body>
 
-<!-- ===== HOME SCREEN ===== -->
+<!-- HOME -->
 <div id="home" class="screen home-screen active">
   <div class="home-emblem">道</div>
   <h1 class="home-title">日本語道</h1>
   <p class="home-subtitle">The Path of Japanese</p>
   <p class="home-tagline">おかえりなさい — Welcome back</p>
-  
   <nav class="home-nav">
+    <button class="home-btn" onclick="showScreen('kana')">
+      <span class="btn-icon">🖋️</span>
+      <span class="btn-text"><span class="btn-label">Kana Charts</span><span class="btn-desc">Hiragana &amp; Katakana reference</span></span>
+    </button>
     <button class="home-btn" onclick="showScreen('flashcards')">
       <span class="btn-icon">🏮</span>
-      <span class="btn-text">
-        <span class="btn-label">Vocabulary Cards</span>
-        <span class="btn-desc">Flip through words &amp; kanji</span>
-      </span>
+      <span class="btn-text"><span class="btn-label">Vocabulary</span><span class="btn-desc">Words in hiragana &amp; katakana</span></span>
+    </button>
+    <button class="home-btn" onclick="showScreen('numbers')">
+      <span class="btn-icon">🎯</span>
+      <span class="btn-text"><span class="btn-label">Numbers &amp; Counting</span><span class="btn-desc">Japanese number system</span></span>
     </button>
     <button class="home-btn" onclick="showScreen('quiz')">
       <span class="btn-icon">⛩️</span>
-      <span class="btn-text">
-        <span class="btn-label">Quiz Challenge</span>
-        <span class="btn-desc">Test your recall</span>
-      </span>
-    </button>
-    <button class="home-btn" onclick="showScreen('kana')">
-      <span class="btn-icon">🖋️</span>
-      <span class="btn-text">
-        <span class="btn-label">Kana Charts</span>
-        <span class="btn-desc">Hiragana &amp; Katakana reference</span>
-      </span>
+      <span class="btn-text"><span class="btn-label">Quiz Challenge</span><span class="btn-desc">Test your recall</span></span>
     </button>
     <button class="home-btn" onclick="showScreen('grammar')">
       <span class="btn-icon">📜</span>
-      <span class="btn-text">
-        <span class="btn-label">Grammar Patterns</span>
-        <span class="btn-desc">Essential structures refresher</span>
-      </span>
+      <span class="btn-text"><span class="btn-label">Grammar Patterns</span><span class="btn-desc">Essential structures</span></span>
     </button>
     <button class="home-btn" onclick="showScreen('phrases')">
       <span class="btn-icon">🗾</span>
-      <span class="btn-text">
-        <span class="btn-label">Useful Phrases</span>
-        <span class="btn-desc">Everyday conversation</span>
-      </span>
+      <span class="btn-text"><span class="btn-label">Useful Phrases</span><span class="btn-desc">Everyday conversation</span></span>
     </button>
   </nav>
 </div>
 
-<!-- ===== FLASHCARDS SCREEN ===== -->
+<!-- KANA -->
+<div id="kana" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="top-bar-title">Kana Charts</span>
+  </div>
+  <div class="content-area">
+    <div class="kana-toggle">
+      <button class="kana-toggle-btn active" onclick="showKana('hiragana',this)">ひらがな</button>
+      <button class="kana-toggle-btn" onclick="showKana('katakana',this)">カタカナ</button>
+      <button class="kana-toggle-btn" onclick="showKana('dakuten',this)">濁点</button>
+    </div>
+    <div class="kana-grid" id="kana-grid"></div>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
 <div id="flashcards" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('home')">←</button>
-    <span class="top-bar-title">Vocabulary Cards</span>
-    <div class="top-bar-right">
-      <span class="score-badge" id="fc-count"></span>
-    </div>
+    <span class="top-bar-title">Vocabulary</span>
+    <div class="top-bar-right"><span class="score-badge" id="fc-count"></span></div>
   </div>
   <div class="content-area">
     <div class="category-pills" id="fc-categories"></div>
@@ -816,7 +313,7 @@ body::before {
       <div class="flashcard" id="flashcard" onclick="flipCard()">
         <div class="flashcard-inner">
           <div class="flashcard-front">
-            <div class="card-kanji" id="fc-kanji"></div>
+            <div class="card-kana" id="fc-kana"></div>
             <div class="card-reading" id="fc-reading"></div>
             <div class="card-hint">tap to reveal</div>
           </div>
@@ -837,26 +334,41 @@ body::before {
   </div>
 </div>
 
-<!-- ===== QUIZ SCREEN ===== -->
+<!-- NUMBERS -->
+<div id="numbers" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <span class="top-bar-title">Numbers &amp; Counting</span>
+  </div>
+  <div class="content-area">
+    <div class="category-pills" id="num-categories"></div>
+    <div class="number-grid" id="number-grid"></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
 <div id="quiz" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('home')">←</button>
     <span class="top-bar-title">Quiz Challenge</span>
-    <div class="top-bar-right">
-      <span class="score-badge" id="quiz-score-badge">0 / 0</span>
-    </div>
+    <div class="top-bar-right"><span class="score-badge" id="quiz-score-badge">0 / 0</span></div>
   </div>
   <div class="content-area">
+    <div class="quiz-mode-toggle">
+      <button class="quiz-mode-btn active" onclick="setQuizMode('en',this)">Kana → English</button>
+      <button class="quiz-mode-btn" onclick="setQuizMode('kana',this)">English → Kana</button>
+      <button class="quiz-mode-btn" onclick="setQuizMode('listen',this)">Romaji → Kana</button>
+    </div>
     <div class="category-pills" id="quiz-categories"></div>
     <div id="quiz-area">
       <div class="quiz-question">
-        <div class="quiz-prompt">What does this mean?</div>
+        <div class="quiz-prompt" id="quiz-prompt">What does this mean?</div>
         <div class="quiz-word" id="quiz-word"></div>
         <div class="quiz-reading-hint" id="quiz-reading"></div>
       </div>
       <div class="quiz-options" id="quiz-options"></div>
       <div class="quiz-feedback" id="quiz-feedback">
-        <button class="quiz-next-btn" id="quiz-next" onclick="nextQuizQuestion()">Next →</button>
+        <button class="quiz-next-btn" id="quiz-next" onclick="nextQuizQ()">Next →</button>
       </div>
     </div>
     <div id="quiz-results" style="display:none">
@@ -870,31 +382,7 @@ body::before {
   </div>
 </div>
 
-<!-- ===== KANA SCREEN ===== -->
-<div id="kana" class="screen">
-  <div class="top-bar">
-    <button class="back-btn" onclick="showScreen('home')">←</button>
-    <span class="top-bar-title">Kana Charts</span>
-  </div>
-  <div class="content-area">
-    <div class="kana-toggle">
-      <button class="kana-toggle-btn active" onclick="showKana('hiragana')">ひらがな</button>
-      <button class="kana-toggle-btn" onclick="showKana('katakana')">カタカナ</button>
-    </div>
-    <div class="kana-grid" id="kana-grid"></div>
-  </div>
-</div>
-
-<!-- ===== KANA POPUP ===== -->
-<div class="kana-popup" id="kana-popup" onclick="closeKanaPopup()">
-  <div class="kana-popup-card" onclick="event.stopPropagation()">
-    <div class="kana-popup-char" id="popup-char"></div>
-    <div class="kana-popup-rom" id="popup-rom"></div>
-    <div class="kana-popup-pair" id="popup-pair"></div>
-  </div>
-</div>
-
-<!-- ===== GRAMMAR SCREEN ===== -->
+<!-- GRAMMAR -->
 <div id="grammar" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('home')">←</button>
@@ -906,7 +394,7 @@ body::before {
   </div>
 </div>
 
-<!-- ===== PHRASES SCREEN ===== -->
+<!-- PHRASES -->
 <div id="phrases" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('home')">←</button>
@@ -918,134 +406,217 @@ body::before {
   </div>
 </div>
 
+<!-- KANA POPUP -->
+<div class="kana-popup" id="kana-popup" onclick="closeKanaPopup()">
+  <div class="kana-popup-card" onclick="event.stopPropagation()">
+    <div class="kana-popup-char" id="popup-char"></div>
+    <div class="kana-popup-rom" id="popup-rom"></div>
+    <div class="kana-popup-pair" id="popup-pair"></div>
+  </div>
+</div>
+
 <script>
-// ===========================
-// DATA
-// ===========================
+// ===== DATA =====
 
 const vocabulary = {
-  "Daily Life": [
-    { kanji: "食べる", reading: "たべる", romaji: "taberu", english: "to eat", example: "朝ごはんを食べる", exampleEn: "To eat breakfast" },
-    { kanji: "飲む", reading: "のむ", romaji: "nomu", english: "to drink", example: "お茶を飲む", exampleEn: "To drink tea" },
-    { kanji: "行く", reading: "いく", romaji: "iku", english: "to go", example: "学校に行く", exampleEn: "To go to school" },
-    { kanji: "来る", reading: "くる", romaji: "kuru", english: "to come", example: "友達が来る", exampleEn: "A friend is coming" },
-    { kanji: "見る", reading: "みる", romaji: "miru", english: "to see / watch", example: "映画を見る", exampleEn: "To watch a movie" },
-    { kanji: "聞く", reading: "きく", romaji: "kiku", english: "to listen / ask", example: "音楽を聞く", exampleEn: "To listen to music" },
-    { kanji: "話す", reading: "はなす", romaji: "hanasu", english: "to speak", example: "日本語を話す", exampleEn: "To speak Japanese" },
-    { kanji: "読む", reading: "よむ", romaji: "yomu", english: "to read", example: "本を読む", exampleEn: "To read a book" },
-    { kanji: "書く", reading: "かく", romaji: "kaku", english: "to write", example: "手紙を書く", exampleEn: "To write a letter" },
-    { kanji: "買う", reading: "かう", romaji: "kau", english: "to buy", example: "野菜を買う", exampleEn: "To buy vegetables" },
-    { kanji: "寝る", reading: "ねる", romaji: "neru", english: "to sleep", example: "早く寝る", exampleEn: "To sleep early" },
-    { kanji: "起きる", reading: "おきる", romaji: "okiru", english: "to wake up", example: "六時に起きる", exampleEn: "To wake up at six" },
+  "Daily Verbs": [
+    { kana:"たべる", romaji:"taberu", english:"to eat", example:"あさごはんをたべる", exEn:"To eat breakfast" },
+    { kana:"のむ", romaji:"nomu", english:"to drink", example:"おちゃをのむ", exEn:"To drink tea" },
+    { kana:"いく", romaji:"iku", english:"to go", example:"がっこうにいく", exEn:"To go to school" },
+    { kana:"くる", romaji:"kuru", english:"to come", example:"ともだちがくる", exEn:"A friend is coming" },
+    { kana:"みる", romaji:"miru", english:"to see / watch", example:"えいがをみる", exEn:"To watch a movie" },
+    { kana:"きく", romaji:"kiku", english:"to listen / ask", example:"おんがくをきく", exEn:"To listen to music" },
+    { kana:"はなす", romaji:"hanasu", english:"to speak", example:"にほんごをはなす", exEn:"To speak Japanese" },
+    { kana:"よむ", romaji:"yomu", english:"to read", example:"ほんをよむ", exEn:"To read a book" },
+    { kana:"かく", romaji:"kaku", english:"to write", example:"てがみをかく", exEn:"To write a letter" },
+    { kana:"かう", romaji:"kau", english:"to buy", example:"やさいをかう", exEn:"To buy vegetables" },
+    { kana:"ねる", romaji:"neru", english:"to sleep", example:"はやくねる", exEn:"To sleep early" },
+    { kana:"おきる", romaji:"okiru", english:"to wake up", example:"ろくじにおきる", exEn:"To wake up at six" },
+    { kana:"つくる", romaji:"tsukuru", english:"to make", example:"ごはんをつくる", exEn:"To make a meal" },
+    { kana:"あるく", romaji:"aruku", english:"to walk", example:"こうえんをあるく", exEn:"To walk in the park" },
   ],
   "Nature": [
-    { kanji: "山", reading: "やま", romaji: "yama", english: "mountain", example: "富士山は美しい", exampleEn: "Mt. Fuji is beautiful" },
-    { kanji: "川", reading: "かわ", romaji: "kawa", english: "river", example: "川で泳ぐ", exampleEn: "To swim in the river" },
-    { kanji: "海", reading: "うみ", romaji: "umi", english: "sea / ocean", example: "海が見える", exampleEn: "I can see the ocean" },
-    { kanji: "空", reading: "そら", romaji: "sora", english: "sky", example: "空がきれいだ", exampleEn: "The sky is beautiful" },
-    { kanji: "花", reading: "はな", romaji: "hana", english: "flower", example: "桜の花が咲く", exampleEn: "Cherry blossoms bloom" },
-    { kanji: "木", reading: "き", romaji: "ki", english: "tree", example: "大きい木", exampleEn: "A big tree" },
-    { kanji: "雨", reading: "あめ", romaji: "ame", english: "rain", example: "雨が降っている", exampleEn: "It is raining" },
-    { kanji: "風", reading: "かぜ", romaji: "kaze", english: "wind", example: "風が強い", exampleEn: "The wind is strong" },
-    { kanji: "雪", reading: "ゆき", romaji: "yuki", english: "snow", example: "雪が降る", exampleEn: "It snows" },
-    { kanji: "月", reading: "つき", romaji: "tsuki", english: "moon", example: "月が出ている", exampleEn: "The moon is out" },
+    { kana:"やま", romaji:"yama", english:"mountain", example:"ふじさんはうつくしい", exEn:"Mt. Fuji is beautiful" },
+    { kana:"かわ", romaji:"kawa", english:"river", example:"かわでおよぐ", exEn:"To swim in the river" },
+    { kana:"うみ", romaji:"umi", english:"sea / ocean", example:"うみがみえる", exEn:"I can see the ocean" },
+    { kana:"そら", romaji:"sora", english:"sky", example:"そらがきれいだ", exEn:"The sky is beautiful" },
+    { kana:"はな", romaji:"hana", english:"flower", example:"さくらのはながさく", exEn:"Cherry blossoms bloom" },
+    { kana:"き", romaji:"ki", english:"tree", example:"おおきいき", exEn:"A big tree" },
+    { kana:"あめ", romaji:"ame", english:"rain", example:"あめがふっている", exEn:"It is raining" },
+    { kana:"かぜ", romaji:"kaze", english:"wind", example:"かぜがつよい", exEn:"The wind is strong" },
+    { kana:"ゆき", romaji:"yuki", english:"snow", example:"ゆきがふる", exEn:"It snows" },
+    { kana:"つき", romaji:"tsuki", english:"moon", example:"つきがでている", exEn:"The moon is out" },
   ],
-  "People": [
-    { kanji: "人", reading: "ひと", romaji: "hito", english: "person", example: "あの人は誰？", exampleEn: "Who is that person?" },
-    { kanji: "友達", reading: "ともだち", romaji: "tomodachi", english: "friend", example: "友達と会う", exampleEn: "To meet with a friend" },
-    { kanji: "家族", reading: "かぞく", romaji: "kazoku", english: "family", example: "家族は大切だ", exampleEn: "Family is important" },
-    { kanji: "子供", reading: "こども", romaji: "kodomo", english: "child", example: "子供が遊んでいる", exampleEn: "Children are playing" },
-    { kanji: "男", reading: "おとこ", romaji: "otoko", english: "man", example: "あの男の人", exampleEn: "That man" },
-    { kanji: "女", reading: "おんな", romaji: "onna", english: "woman", example: "あの女の人", exampleEn: "That woman" },
-    { kanji: "先生", reading: "せんせい", romaji: "sensei", english: "teacher", example: "先生に聞く", exampleEn: "To ask the teacher" },
-    { kanji: "学生", reading: "がくせい", romaji: "gakusei", english: "student", example: "大学生です", exampleEn: "I am a university student" },
-  ],
-  "Time": [
-    { kanji: "今日", reading: "きょう", romaji: "kyou", english: "today", example: "今日は暑い", exampleEn: "Today is hot" },
-    { kanji: "明日", reading: "あした", romaji: "ashita", english: "tomorrow", example: "明日行きます", exampleEn: "I will go tomorrow" },
-    { kanji: "昨日", reading: "きのう", romaji: "kinou", english: "yesterday", example: "昨日は楽しかった", exampleEn: "Yesterday was fun" },
-    { kanji: "朝", reading: "あさ", romaji: "asa", english: "morning", example: "朝早く起きる", exampleEn: "To wake up early in the morning" },
-    { kanji: "夜", reading: "よる", romaji: "yoru", english: "night", example: "夜は静かだ", exampleEn: "The night is quiet" },
-    { kanji: "今", reading: "いま", romaji: "ima", english: "now", example: "今何時？", exampleEn: "What time is it now?" },
-    { kanji: "時間", reading: "じかん", romaji: "jikan", english: "time / hour", example: "時間がない", exampleEn: "There is no time" },
-    { kanji: "毎日", reading: "まいにち", romaji: "mainichi", english: "every day", example: "毎日勉強する", exampleEn: "To study every day" },
+  "People & Family": [
+    { kana:"ひと", romaji:"hito", english:"person", example:"あのひとはだれ？", exEn:"Who is that person?" },
+    { kana:"ともだち", romaji:"tomodachi", english:"friend", example:"ともだちとあう", exEn:"To meet a friend" },
+    { kana:"かぞく", romaji:"kazoku", english:"family", example:"かぞくはたいせつだ", exEn:"Family is important" },
+    { kana:"こども", romaji:"kodomo", english:"child", example:"こどもがあそんでいる", exEn:"Children are playing" },
+    { kana:"おとうさん", romaji:"otousan", english:"father", example:"おとうさんはげんきです", exEn:"Father is well" },
+    { kana:"おかあさん", romaji:"okaasan", english:"mother", example:"おかあさんにあう", exEn:"To meet mother" },
+    { kana:"おにいさん", romaji:"oniisan", english:"older brother", example:"おにいさんはたかい", exEn:"Older brother is tall" },
+    { kana:"おねえさん", romaji:"oneesan", english:"older sister", example:"おねえさんはやさしい", exEn:"Older sister is kind" },
+    { kana:"せんせい", romaji:"sensei", english:"teacher", example:"せんせいにきく", exEn:"To ask the teacher" },
   ],
   "Adjectives": [
-    { kanji: "大きい", reading: "おおきい", romaji: "ookii", english: "big", example: "大きい家", exampleEn: "A big house" },
-    { kanji: "小さい", reading: "ちいさい", romaji: "chiisai", english: "small", example: "小さい猫", exampleEn: "A small cat" },
-    { kanji: "新しい", reading: "あたらしい", romaji: "atarashii", english: "new", example: "新しい車", exampleEn: "A new car" },
-    { kanji: "古い", reading: "ふるい", romaji: "furui", english: "old (things)", example: "古い寺", exampleEn: "An old temple" },
-    { kanji: "美しい", reading: "うつくしい", romaji: "utsukushii", english: "beautiful", example: "美しい景色", exampleEn: "A beautiful view" },
-    { kanji: "難しい", reading: "むずかしい", romaji: "muzukashii", english: "difficult", example: "漢字は難しい", exampleEn: "Kanji is difficult" },
-    { kanji: "楽しい", reading: "たのしい", romaji: "tanoshii", english: "fun / enjoyable", example: "旅行は楽しい", exampleEn: "Travel is fun" },
-    { kanji: "静か", reading: "しずか", romaji: "shizuka", english: "quiet", example: "静かな部屋", exampleEn: "A quiet room" },
-    { kanji: "元気", reading: "げんき", romaji: "genki", english: "energetic / well", example: "お元気ですか", exampleEn: "How are you?" },
-    { kanji: "忙しい", reading: "いそがしい", romaji: "isogashii", english: "busy", example: "最近忙しい", exampleEn: "I've been busy lately" },
-  ]
+    { kana:"おおきい", romaji:"ookii", english:"big", example:"おおきいいえ", exEn:"A big house" },
+    { kana:"ちいさい", romaji:"chiisai", english:"small", example:"ちいさいねこ", exEn:"A small cat" },
+    { kana:"あたらしい", romaji:"atarashii", english:"new", example:"あたらしいくるま", exEn:"A new car" },
+    { kana:"ふるい", romaji:"furui", english:"old (things)", example:"ふるいてら", exEn:"An old temple" },
+    { kana:"うつくしい", romaji:"utsukushii", english:"beautiful", example:"うつくしいけしき", exEn:"A beautiful view" },
+    { kana:"むずかしい", romaji:"muzukashii", english:"difficult", example:"にほんごはむずかしい", exEn:"Japanese is difficult" },
+    { kana:"たのしい", romaji:"tanoshii", english:"fun / enjoyable", example:"りょこうはたのしい", exEn:"Travel is fun" },
+    { kana:"しずか", romaji:"shizuka", english:"quiet", example:"しずかなへや", exEn:"A quiet room" },
+    { kana:"げんき", romaji:"genki", english:"energetic / well", example:"おげんきですか", exEn:"How are you?" },
+    { kana:"いそがしい", romaji:"isogashii", english:"busy", example:"さいきんいそがしい", exEn:"Been busy lately" },
+    { kana:"あつい", romaji:"atsui", english:"hot", example:"きょうはあつい", exEn:"Today is hot" },
+    { kana:"さむい", romaji:"samui", english:"cold", example:"ふゆはさむい", exEn:"Winter is cold" },
+    { kana:"おいしい", romaji:"oishii", english:"delicious", example:"このすしはおいしい", exEn:"This sushi is delicious" },
+  ],
+  "Katakana Words": [
+    { kana:"コーヒー", romaji:"koohii", english:"coffee", example:"コーヒーをのむ", exEn:"To drink coffee" },
+    { kana:"ビール", romaji:"biiru", english:"beer", example:"ビールをください", exEn:"A beer, please" },
+    { kana:"レストラン", romaji:"resutoran", english:"restaurant", example:"レストランにいく", exEn:"To go to a restaurant" },
+    { kana:"ホテル", romaji:"hoteru", english:"hotel", example:"ホテルをよやくする", exEn:"To book a hotel" },
+    { kana:"タクシー", romaji:"takushii", english:"taxi", example:"タクシーにのる", exEn:"To ride a taxi" },
+    { kana:"スーパー", romaji:"suupaa", english:"supermarket", example:"スーパーでかう", exEn:"To buy at the supermarket" },
+    { kana:"テレビ", romaji:"terebi", english:"television", example:"テレビをみる", exEn:"To watch TV" },
+    { kana:"コンピューター", romaji:"konpyuutaa", english:"computer", example:"コンピューターをつかう", exEn:"To use a computer" },
+    { kana:"エアコン", romaji:"eakon", english:"air conditioner", example:"エアコンをつける", exEn:"To turn on the AC" },
+    { kana:"トイレ", romaji:"toire", english:"toilet / bathroom", example:"トイレはどこですか", exEn:"Where is the bathroom?" },
+    { kana:"パン", romaji:"pan", english:"bread", example:"パンをかう", exEn:"To buy bread" },
+    { kana:"シャワー", romaji:"shawaa", english:"shower", example:"シャワーをあびる", exEn:"To take a shower" },
+  ],
+  "Time & Days": [
+    { kana:"きょう", romaji:"kyou", english:"today", example:"きょうはあつい", exEn:"Today is hot" },
+    { kana:"あした", romaji:"ashita", english:"tomorrow", example:"あしたいきます", exEn:"I will go tomorrow" },
+    { kana:"きのう", romaji:"kinou", english:"yesterday", example:"きのうはたのしかった", exEn:"Yesterday was fun" },
+    { kana:"あさ", romaji:"asa", english:"morning", example:"あさはやくおきる", exEn:"To wake up early in the morning" },
+    { kana:"よる", romaji:"yoru", english:"night", example:"よるはしずかだ", exEn:"The night is quiet" },
+    { kana:"いま", romaji:"ima", english:"now", example:"いまなんじ？", exEn:"What time is it now?" },
+    { kana:"げつようび", romaji:"getsuyoubi", english:"Monday", example:"げつようびからしごと", exEn:"Work starts Monday" },
+    { kana:"かようび", romaji:"kayoubi", english:"Tuesday", example:"", exEn:"" },
+    { kana:"すいようび", romaji:"suiyoubi", english:"Wednesday", example:"", exEn:"" },
+    { kana:"もくようび", romaji:"mokuyoubi", english:"Thursday", example:"", exEn:"" },
+    { kana:"きんようび", romaji:"kinyoubi", english:"Friday", example:"", exEn:"" },
+    { kana:"どようび", romaji:"doyoubi", english:"Saturday", example:"", exEn:"" },
+    { kana:"にちようび", romaji:"nichiyoubi", english:"Sunday", example:"", exEn:"" },
+    { kana:"まいにち", romaji:"mainichi", english:"every day", example:"まいにちべんきょうする", exEn:"To study every day" },
+  ],
+};
+
+const numbersData = {
+  "1 – 10": [
+    { kana:"いち", romaji:"ichi", value:"1" },
+    { kana:"に", romaji:"ni", value:"2" },
+    { kana:"さん", romaji:"san", value:"3" },
+    { kana:"し / よん", romaji:"shi / yon", value:"4" },
+    { kana:"ご", romaji:"go", value:"5" },
+    { kana:"ろく", romaji:"roku", value:"6" },
+    { kana:"しち / なな", romaji:"shichi / nana", value:"7" },
+    { kana:"はち", romaji:"hachi", value:"8" },
+    { kana:"きゅう / く", romaji:"kyuu / ku", value:"9" },
+    { kana:"じゅう", romaji:"juu", value:"10" },
+  ],
+  "11 – 100": [
+    { kana:"じゅういち", romaji:"juu-ichi", value:"11" },
+    { kana:"じゅうに", romaji:"juu-ni", value:"12" },
+    { kana:"にじゅう", romaji:"ni-juu", value:"20" },
+    { kana:"にじゅういち", romaji:"ni-juu-ichi", value:"21" },
+    { kana:"さんじゅう", romaji:"san-juu", value:"30" },
+    { kana:"よんじゅう", romaji:"yon-juu", value:"40" },
+    { kana:"ごじゅう", romaji:"go-juu", value:"50" },
+    { kana:"ひゃく", romaji:"hyaku", value:"100" },
+  ],
+  "Big Numbers": [
+    { kana:"にひゃく", romaji:"ni-hyaku", value:"200" },
+    { kana:"さんびゃく", romaji:"san-byaku", value:"300" },
+    { kana:"せん", romaji:"sen", value:"1,000" },
+    { kana:"にせん", romaji:"ni-sen", value:"2,000" },
+    { kana:"いちまん", romaji:"ichi-man", value:"10,000" },
+    { kana:"じゅうまん", romaji:"juu-man", value:"100,000" },
+    { kana:"ひゃくまん", romaji:"hyaku-man", value:"1,000,000" },
+  ],
+  "Counters": [
+    { kana:"ひとつ", romaji:"hitotsu", value:"1 thing" },
+    { kana:"ふたつ", romaji:"futatsu", value:"2 things" },
+    { kana:"みっつ", romaji:"mittsu", value:"3 things" },
+    { kana:"よっつ", romaji:"yottsu", value:"4 things" },
+    { kana:"いつつ", romaji:"itsutsu", value:"5 things" },
+    { kana:"むっつ", romaji:"muttsu", value:"6 things" },
+    { kana:"ななつ", romaji:"nanatsu", value:"7 things" },
+    { kana:"やっつ", romaji:"yattsu", value:"8 things" },
+    { kana:"ここのつ", romaji:"kokonotsu", value:"9 things" },
+    { kana:"とお", romaji:"too", value:"10 things" },
+  ],
 };
 
 const grammarData = {
   "Basic": [
-    { pattern: "〜は〜です", meaning: "A is B (polite)", exJp: "これは本です。", exEn: "This is a book.", note: "The most fundamental sentence pattern. は (wa) marks the topic, です (desu) is the polite copula." },
-    { pattern: "〜を〜ます", meaning: "Object + Verb (polite)", exJp: "水を飲みます。", exEn: "I drink water.", note: "を (wo/o) marks the direct object. ます (masu) ending makes it polite." },
-    { pattern: "〜に行く", meaning: "Go to (place)", exJp: "東京に行く。", exEn: "I go to Tokyo.", note: "に (ni) indicates direction/destination with movement verbs." },
-    { pattern: "〜がある / いる", meaning: "There is / exists", exJp: "猫がいる。本がある。", exEn: "There is a cat. There is a book.", note: "いる (iru) for animate, ある (aru) for inanimate things." },
-    { pattern: "〜たい", meaning: "Want to (verb)", exJp: "寿司を食べたい。", exEn: "I want to eat sushi.", note: "Attach たい to the stem of a verb. Only for your own desires." },
-    { pattern: "〜てください", meaning: "Please do (verb)", exJp: "ちょっと待ってください。", exEn: "Please wait a moment.", note: "て-form + ください for polite requests." },
+    { pattern:"〜は〜です", meaning:"A is B (polite)", exJp:"これはほんです。", exEn:"This is a book.", note:"は (wa) marks the topic, です (desu) is the polite copula." },
+    { pattern:"〜を〜ます", meaning:"Object + Verb (polite)", exJp:"みずをのみます。", exEn:"I drink water.", note:"を (wo/o) marks the direct object. ます ending makes it polite." },
+    { pattern:"〜にいく", meaning:"Go to (place)", exJp:"とうきょうにいく。", exEn:"I go to Tokyo.", note:"に (ni) indicates direction or destination with movement verbs." },
+    { pattern:"〜がある / いる", meaning:"There is / exists", exJp:"ねこがいる。ほんがある。", exEn:"There is a cat. There is a book.", note:"いる (iru) for living things, ある (aru) for objects." },
+    { pattern:"〜たい", meaning:"Want to (verb)", exJp:"すしをたべたい。", exEn:"I want to eat sushi.", note:"Attach たい to the verb stem. Only for your own desires." },
+    { pattern:"〜てください", meaning:"Please do (verb)", exJp:"ちょっとまってください。", exEn:"Please wait a moment.", note:"て-form + ください for polite requests." },
   ],
   "Intermediate": [
-    { pattern: "〜ている", meaning: "Ongoing action / state", exJp: "雨が降っている。", exEn: "It is raining.", note: "て-form + いる indicates continuous or resultant state." },
-    { pattern: "〜たことがある", meaning: "Have experienced", exJp: "日本に行ったことがある。", exEn: "I have been to Japan.", note: "Past tense + ことがある expresses life experience." },
-    { pattern: "〜なければならない", meaning: "Must do", exJp: "薬を飲まなければならない。", exEn: "I must take medicine.", note: "Negative stem + ければならない. Spoken form: 〜なきゃ" },
-    { pattern: "〜てもいい", meaning: "May / Is it OK to…", exJp: "写真を撮ってもいいですか。", exEn: "May I take a photo?", note: "て-form + もいい for permission." },
-    { pattern: "〜と思う", meaning: "I think that…", exJp: "明日は晴れると思う。", exEn: "I think it will be sunny tomorrow.", note: "Quote + と思う. Use plain form before と." },
-    { pattern: "〜ので", meaning: "Because (soft reason)", exJp: "疲れたので、休みます。", exEn: "Because I'm tired, I'll rest.", note: "Softer/more polite than から for giving reasons." },
+    { pattern:"〜ている", meaning:"Ongoing action / state", exJp:"あめがふっている。", exEn:"It is raining.", note:"て-form + いる indicates continuous or resultant state." },
+    { pattern:"〜たことがある", meaning:"Have experienced", exJp:"にほんにいったことがある。", exEn:"I have been to Japan.", note:"Past tense + ことがある expresses life experience." },
+    { pattern:"〜なければならない", meaning:"Must do", exJp:"くすりをのまなければならない。", exEn:"I must take medicine.", note:"Negative stem + ければならない. Casual form: 〜なきゃ" },
+    { pattern:"〜てもいい", meaning:"May / Is it OK to…", exJp:"しゃしんをとってもいいですか。", exEn:"May I take a photo?", note:"て-form + もいい for permission." },
+    { pattern:"〜とおもう", meaning:"I think that…", exJp:"あしたははれるとおもう。", exEn:"I think it will be sunny tomorrow.", note:"Use plain form before と. Shows personal opinion." },
+    { pattern:"〜ので", meaning:"Because (soft reason)", exJp:"つかれたので、やすみます。", exEn:"Because I\u2019m tired, I\u2019ll rest.", note:"Softer and more polite than から for giving reasons." },
   ],
   "Advanced": [
-    { pattern: "〜ようにする", meaning: "Make an effort to…", exJp: "毎日運動するようにしている。", exEn: "I make an effort to exercise daily.", note: "Expresses habitual effort or conscious attempt." },
-    { pattern: "〜わけではない", meaning: "It's not that…", exJp: "嫌いなわけではない。", exEn: "It's not that I dislike it.", note: "Softens negation; denies assumption without being absolute." },
-    { pattern: "〜ばよかった", meaning: "I wish I had…", exJp: "もっと勉強すればよかった。", exEn: "I wish I had studied more.", note: "ば conditional + よかった expresses regret." },
-    { pattern: "〜ざるを得ない", meaning: "Cannot help but…", exJp: "認めざるを得ない。", exEn: "I cannot help but admit it.", note: "Literary/formal compulsion. ず stem + ざるを得ない." },
-    { pattern: "〜に違いない", meaning: "Must be / no doubt", exJp: "彼は知っているに違いない。", exEn: "He must know about it.", note: "Strong conjecture. Plain form + に違いない." },
-    { pattern: "〜っぽい", meaning: "Seems like / -ish", exJp: "子供っぽい", exEn: "Childish / child-like", note: "Casual suffix suggesting resemblance or tendency." },
+    { pattern:"〜ようにする", meaning:"Make an effort to…", exJp:"まいにちうんどうするようにしている。", exEn:"I try to exercise daily.", note:"Expresses habitual effort or conscious attempt." },
+    { pattern:"〜わけではない", meaning:"It\u2019s not that…", exJp:"きらいなわけではない。", exEn:"It\u2019s not that I dislike it.", note:"Softens negation; denies an assumption without being absolute." },
+    { pattern:"〜ばよかった", meaning:"I wish I had…", exJp:"もっとべんきょうすればよかった。", exEn:"I wish I had studied more.", note:"ば conditional + よかった expresses regret about the past." },
+    { pattern:"〜にちがいない", meaning:"Must be / no doubt", exJp:"かれはしっているにちがいない。", exEn:"He must know about it.", note:"Strong conjecture. Plain form + にちがいない." },
+    { pattern:"〜っぽい", meaning:"Seems like / -ish", exJp:"こどもっぽい", exEn:"Childish / child-like", note:"Casual suffix suggesting resemblance or tendency." },
+    { pattern:"〜かもしれない", meaning:"Might / perhaps", exJp:"あめがふるかもしれない。", exEn:"It might rain.", note:"Expresses uncertain possibility. Very common in daily speech." },
   ]
 };
 
 const phrasesData = {
   "Greetings": [
-    { jp: "おはようございます", reading: "ohayou gozaimasu", en: "Good morning (polite)", context: "Used until around 10-11am. おはよう is casual." },
-    { jp: "こんにちは", reading: "konnichiwa", en: "Hello / Good afternoon", context: "General daytime greeting, roughly 11am to evening." },
-    { jp: "こんばんは", reading: "konbanwa", en: "Good evening", context: "Used from around sunset onward." },
-    { jp: "お元気ですか", reading: "o-genki desu ka", en: "How are you?", context: "More commonly used after not seeing someone for a while." },
-    { jp: "お久しぶりです", reading: "o-hisashiburi desu", en: "Long time no see", context: "Used when reuniting after a period apart." },
-    { jp: "よろしくお願いします", reading: "yoroshiku onegaishimasu", en: "Please take care of things / Nice to meet you", context: "Extremely versatile. Used in introductions, requests, and closing emails." },
+    { jp:"おはようございます", reading:"ohayou gozaimasu", en:"Good morning (polite)", context:"Used until around 10-11am. おはよう is casual." },
+    { jp:"こんにちは", reading:"konnichiwa", en:"Hello / Good afternoon", context:"General daytime greeting, roughly 11am to evening." },
+    { jp:"こんばんは", reading:"konbanwa", en:"Good evening", context:"Used from around sunset onward." },
+    { jp:"おげんきですか", reading:"o-genki desu ka", en:"How are you?", context:"More commonly used after not seeing someone for a while." },
+    { jp:"おひさしぶりです", reading:"o-hisashiburi desu", en:"Long time no see", context:"Used when reuniting after a period apart." },
+    { jp:"よろしくおねがいします", reading:"yoroshiku onegaishimasu", en:"Pleased to meet you / Please take care of things", context:"Extremely versatile. Introductions, requests, and closing emails." },
+    { jp:"さようなら", reading:"sayounara", en:"Goodbye", context:"Formal. じゃあね (jaa ne) or またね (mata ne) are casual." },
+    { jp:"おやすみなさい", reading:"oyasumi nasai", en:"Good night", context:"Said when going to bed. おやすみ is casual." },
   ],
   "Daily Use": [
-    { jp: "ありがとうございます", reading: "arigatou gozaimasu", en: "Thank you (polite)", context: "ありがとう is casual. Add ございます for politeness." },
-    { jp: "すみません", reading: "sumimasen", en: "Excuse me / Sorry", context: "Used for apology, getting attention, or expressing gratitude." },
-    { jp: "お願いします", reading: "onegaishimasu", en: "Please (when requesting)", context: "Used when ordering, asking for something, or making requests." },
-    { jp: "大丈夫です", reading: "daijoubu desu", en: "It's okay / I'm fine", context: "Can mean 'no thank you' when declining, or 'I'm alright'." },
-    { jp: "分かりました", reading: "wakarimashita", en: "I understood", context: "Polite confirmation. 分かった (wakatta) is casual." },
-    { jp: "ちょっと待ってください", reading: "chotto matte kudasai", en: "Please wait a moment", context: "ちょっと softens the request. Very common in daily life." },
-    { jp: "いただきます", reading: "itadakimasu", en: "I humbly receive (before eating)", context: "Said before every meal. Essential Japanese cultural practice." },
-    { jp: "ごちそうさまでした", reading: "gochisousama deshita", en: "Thank you for the meal", context: "Said after finishing a meal. Shows appreciation." },
+    { jp:"ありがとうございます", reading:"arigatou gozaimasu", en:"Thank you (polite)", context:"ありがとう is casual. Add ございます for politeness." },
+    { jp:"すみません", reading:"sumimasen", en:"Excuse me / Sorry", context:"Used for apology, getting attention, or even expressing gratitude." },
+    { jp:"おねがいします", reading:"onegaishimasu", en:"Please (when requesting)", context:"Used when ordering, asking for something, or making requests." },
+    { jp:"だいじょうぶです", reading:"daijoubu desu", en:"It\u2019s okay / I\u2019m fine", context:"Can mean \u2018no thank you\u2019 when declining, or \u2018I\u2019m alright.\u2019" },
+    { jp:"わかりました", reading:"wakarimashita", en:"I understood", context:"Polite confirmation. わかった (wakatta) is casual." },
+    { jp:"ちょっとまってください", reading:"chotto matte kudasai", en:"Please wait a moment", context:"ちょっと softens the request. Very common in daily life." },
+    { jp:"いただきます", reading:"itadakimasu", en:"I humbly receive (before eating)", context:"Said before every meal. Essential Japanese cultural practice." },
+    { jp:"ごちそうさまでした", reading:"gochisousama deshita", en:"Thank you for the meal", context:"Said after finishing a meal. Shows deep appreciation." },
   ],
   "Travel": [
-    { jp: "〜はどこですか", reading: "~ wa doko desu ka", en: "Where is ~?", context: "Essential for asking directions. e.g., 駅はどこですか (Where is the station?)" },
-    { jp: "いくらですか", reading: "ikura desu ka", en: "How much is it?", context: "Used when shopping or at restaurants." },
-    { jp: "これをください", reading: "kore o kudasai", en: "I'll have this, please", context: "Point at what you want and say this. Works everywhere." },
-    { jp: "英語を話せますか", reading: "eigo o hanasemasu ka", en: "Can you speak English?", context: "Useful when you need help and Japanese isn't working." },
-    { jp: "トイレはどこですか", reading: "toire wa doko desu ka", en: "Where is the bathroom?", context: "One of the most practical phrases for travel." },
-    { jp: "予約しています", reading: "yoyaku shite imasu", en: "I have a reservation", context: "Used at hotels and restaurants." },
+    { jp:"〜はどこですか", reading:"~ wa doko desu ka", en:"Where is ~?", context:"Essential for directions. e.g., えきはどこですか (Where is the station?)" },
+    { jp:"いくらですか", reading:"ikura desu ka", en:"How much is it?", context:"Used when shopping or at restaurants." },
+    { jp:"これをください", reading:"kore o kudasai", en:"I\u2019ll have this, please", context:"Point at what you want and say this. Works everywhere." },
+    { jp:"えいごをはなせますか", reading:"eigo o hanasemasu ka", en:"Can you speak English?", context:"Useful when you need help and Japanese isn\u2019t working." },
+    { jp:"トイレはどこですか", reading:"toire wa doko desu ka", en:"Where is the bathroom?", context:"One of the most practical phrases for travel." },
+    { jp:"よやくしています", reading:"yoyaku shite imasu", en:"I have a reservation", context:"Used at hotels and restaurants." },
+    { jp:"みぎにまがってください", reading:"migi ni magatte kudasai", en:"Please turn right", context:"ひだり (hidari) = left. Useful with taxi drivers." },
   ],
   "Conversation": [
-    { jp: "そうですね", reading: "sou desu ne", en: "That's right / I see", context: "Aizuchi (back-channel). Shows you're listening and agreeing." },
-    { jp: "なるほど", reading: "naruhodo", en: "I see / Makes sense", context: "Shows understanding. Very natural in conversation." },
-    { jp: "本当ですか", reading: "hontou desu ka", en: "Really? / Is that true?", context: "Expresses surprise or seeks confirmation." },
-    { jp: "それはいいですね", reading: "sore wa ii desu ne", en: "That's nice / That sounds good", context: "Positive response to someone's news or suggestion." },
-    { jp: "残念ですね", reading: "zannen desu ne", en: "That's a shame / Too bad", context: "Expresses sympathy or disappointment." },
-    { jp: "頑張ってください", reading: "ganbatte kudasai", en: "Do your best / Good luck", context: "Encouragement. 頑張って is casual." },
-    { jp: "お疲れ様です", reading: "otsukaresama desu", en: "Good work / Thanks for your effort", context: "Said to colleagues, friends after work or shared effort." },
+    { jp:"そうですね", reading:"sou desu ne", en:"That\u2019s right / I see", context:"Aizuchi (back-channel). Shows you\u2019re listening and agreeing." },
+    { jp:"なるほど", reading:"naruhodo", en:"I see / Makes sense", context:"Shows understanding. Very natural in conversation." },
+    { jp:"ほんとうですか", reading:"hontou desu ka", en:"Really? / Is that true?", context:"Expresses surprise or seeks confirmation." },
+    { jp:"それはいいですね", reading:"sore wa ii desu ne", en:"That\u2019s nice / Sounds good", context:"Positive response to someone\u2019s news or suggestion." },
+    { jp:"ざんねんですね", reading:"zannen desu ne", en:"That\u2019s a shame / Too bad", context:"Expresses sympathy or disappointment." },
+    { jp:"がんばってください", reading:"ganbatte kudasai", en:"Do your best / Good luck", context:"Encouragement. がんばって is casual." },
+    { jp:"おつかれさまです", reading:"otsukaresama desu", en:"Good work / Thanks for your effort", context:"Said to colleagues after work or shared effort. Very common." },
+    { jp:"しょうがない", reading:"shouganai", en:"It can\u2019t be helped", context:"Accepting what you can\u2019t change. Deeply cultural expression." },
   ]
 };
 
@@ -1077,15 +648,20 @@ const katakana = [
   ["ン","n"],["",""],["",""],["",""],["",""],
 ];
 
-// Hiragana-katakana pairs for popup
+const dakuten = [
+  ["が","ga"],["ぎ","gi"],["ぐ","gu"],["げ","ge"],["ご","go"],
+  ["ざ","za"],["じ","ji"],["ず","zu"],["ぜ","ze"],["ぞ","zo"],
+  ["だ","da"],["ぢ","ji"],["づ","zu"],["で","de"],["ど","do"],
+  ["ば","ba"],["び","bi"],["ぶ","bu"],["べ","be"],["ぼ","bo"],
+  ["ぱ","pa"],["ぴ","pi"],["ぷ","pu"],["ぺ","pe"],["ぽ","po"],
+];
+
+// Build kana pair map
 const kanaPairs = {};
-hiragana.forEach((h, i) => { if (h[0]) kanaPairs[h[0]] = katakana[i] ? katakana[i][0] : ''; });
-katakana.forEach((k, i) => { if (k[0]) kanaPairs[k[0]] = hiragana[i] ? hiragana[i][0] : ''; });
+hiragana.forEach((h,i) => { if(h[0]) kanaPairs[h[0]] = katakana[i] ? katakana[i][0] : ''; });
+katakana.forEach((k,i) => { if(k[0]) kanaPairs[k[0]] = hiragana[i] ? hiragana[i][0] : ''; });
 
-
-// ===========================
-// STATE
-// ===========================
+// ===== STATE =====
 let currentCategory = '';
 let currentCardIndex = 0;
 let currentCards = [];
@@ -1093,301 +669,218 @@ let quizQuestions = [];
 let quizIndex = 0;
 let quizCorrect = 0;
 let quizTotal = 10;
+let quizMode = 'en';
 let currentKanaType = 'hiragana';
 let currentGrammarLevel = 'Basic';
 let currentPhraseCategory = 'Greetings';
+let currentNumCategory = '1 \u2013 10';
 
-// ===========================
-// NAVIGATION
-// ===========================
+// ===== NAVIGATION =====
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  
-  if (id === 'flashcards') initFlashcards();
-  if (id === 'quiz') initQuiz();
-  if (id === 'kana') renderKana();
-  if (id === 'grammar') initGrammar();
-  if (id === 'phrases') initPhrases();
+  if(id==='flashcards') initFlashcards();
+  if(id==='quiz') initQuiz();
+  if(id==='kana') renderKana();
+  if(id==='grammar') initGrammar();
+  if(id==='phrases') initPhrases();
+  if(id==='numbers') initNumbers();
 }
 
-// ===========================
-// FLASHCARDS
-// ===========================
+// ===== FLASHCARDS =====
 function initFlashcards() {
   const cats = Object.keys(vocabulary);
-  if (!currentCategory || !vocabulary[currentCategory]) currentCategory = cats[0];
-  
-  const container = document.getElementById('fc-categories');
-  container.innerHTML = cats.map(c => 
-    `<button class="cat-pill ${c === currentCategory ? 'active' : ''}" onclick="selectFCCategory('${c}')">${c}</button>`
+  if(!currentCategory || !vocabulary[currentCategory]) currentCategory = cats[0];
+  document.getElementById('fc-categories').innerHTML = cats.map(c =>
+    '<button class="cat-pill '+(c===currentCategory?'active':'')+'" onclick="selectFCCat(\x27'+c.replace(/'/g,"\\\x27")+'\x27)">'+c+'</button>'
   ).join('');
-  
   loadCards();
 }
-
-function selectFCCategory(cat) {
-  currentCategory = cat;
-  currentCardIndex = 0;
-  initFlashcards();
-}
-
+function selectFCCat(c) { currentCategory=c; currentCardIndex=0; initFlashcards(); }
 function loadCards() {
   currentCards = [...vocabulary[currentCategory]];
-  // Shuffle
-  for (let i = currentCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [currentCards[i], currentCards[j]] = [currentCards[j], currentCards[i]];
-  }
-  currentCardIndex = 0;
-  renderCard();
+  for(let i=currentCards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[currentCards[i],currentCards[j]]=[currentCards[j],currentCards[i]];}
+  currentCardIndex=0; renderCard();
 }
-
 function renderCard() {
-  const card = currentCards[currentCardIndex];
-  if (!card) return;
-  
+  const c=currentCards[currentCardIndex]; if(!c) return;
   document.getElementById('flashcard').classList.remove('flipped');
-  document.getElementById('fc-kanji').textContent = card.kanji;
-  document.getElementById('fc-reading').textContent = card.reading;
-  document.getElementById('fc-english').textContent = card.english;
-  document.getElementById('fc-romaji').textContent = card.romaji;
-  document.getElementById('fc-example').textContent = card.example;
-  document.getElementById('fc-example-en').textContent = card.exampleEn;
-  document.getElementById('fc-counter').textContent = `${currentCardIndex + 1} / ${currentCards.length}`;
-  document.getElementById('fc-count').textContent = `${currentCardIndex + 1}/${currentCards.length}`;
-  
-  const pct = ((currentCardIndex + 1) / currentCards.length) * 100;
-  document.getElementById('fc-progress').style.width = pct + '%';
+  document.getElementById('fc-kana').textContent=c.kana;
+  document.getElementById('fc-reading').textContent=c.romaji;
+  document.getElementById('fc-english').textContent=c.english;
+  document.getElementById('fc-romaji').textContent=c.romaji;
+  document.getElementById('fc-example').textContent=c.example||'';
+  document.getElementById('fc-example-en').textContent=c.exEn||'';
+  document.getElementById('fc-counter').textContent=(currentCardIndex+1)+' / '+currentCards.length;
+  document.getElementById('fc-count').textContent=(currentCardIndex+1)+'/'+currentCards.length;
+  document.getElementById('fc-progress').style.width=((currentCardIndex+1)/currentCards.length*100)+'%';
 }
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+function nextCard(){if(currentCardIndex<currentCards.length-1){currentCardIndex++;renderCard();}}
+function prevCard(){if(currentCardIndex>0){currentCardIndex--;renderCard();}}
 
-function flipCard() {
-  document.getElementById('flashcard').classList.toggle('flipped');
-}
-
-function nextCard() {
-  if (currentCardIndex < currentCards.length - 1) {
-    currentCardIndex++;
-    renderCard();
-  }
-}
-
-function prevCard() {
-  if (currentCardIndex > 0) {
-    currentCardIndex--;
-    renderCard();
-  }
-}
-
-// ===========================
-// QUIZ
-// ===========================
-function initQuiz() {
-  const cats = Object.keys(vocabulary);
-  if (!currentCategory || !vocabulary[currentCategory]) currentCategory = cats[0];
-  
-  const container = document.getElementById('quiz-categories');
-  container.innerHTML = cats.map(c => 
-    `<button class="cat-pill ${c === currentCategory ? 'active' : ''}" onclick="selectQuizCategory('${c}')">${c}</button>`
+// ===== NUMBERS =====
+function initNumbers() {
+  const cats = Object.keys(numbersData);
+  if(!numbersData[currentNumCategory]) currentNumCategory = cats[0];
+  document.getElementById('num-categories').innerHTML = cats.map(c =>
+    '<button class="cat-pill '+(c===currentNumCategory?'active':'')+'" onclick="selectNumCat(\x27'+c.replace(/'/g,"\\\x27")+'\x27)">'+c+'</button>'
   ).join('');
-  
+  renderNumbers();
+}
+function selectNumCat(c) { currentNumCategory=c; initNumbers(); }
+function renderNumbers() {
+  const items = numbersData[currentNumCategory];
+  document.getElementById('number-grid').innerHTML = items.map(n =>
+    '<div class="number-card"><div class="number-big">'+n.kana+'</div><div class="number-reading">'+n.romaji+'</div><div class="number-val">'+n.value+'</div></div>'
+  ).join('');
+}
+
+// ===== QUIZ =====
+function setQuizMode(mode, btn) {
+  quizMode=mode;
+  document.querySelectorAll('.quiz-mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   startQuiz();
 }
-
-function selectQuizCategory(cat) {
-  currentCategory = cat;
-  initQuiz();
-}
-
-function startQuiz() {
-  document.getElementById('quiz-area').style.display = 'block';
-  document.getElementById('quiz-results').style.display = 'none';
-  
-  // Get all vocab from category, shuffle, pick up to quizTotal
-  const allWords = [...vocabulary[currentCategory]];
-  for (let i = allWords.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
-  }
-  quizQuestions = allWords.slice(0, Math.min(quizTotal, allWords.length));
-  quizIndex = 0;
-  quizCorrect = 0;
-  updateQuizScore();
-  renderQuizQuestion();
-}
-
-function renderQuizQuestion() {
-  if (quizIndex >= quizQuestions.length) {
-    showQuizResults();
-    return;
-  }
-  
-  const q = quizQuestions[quizIndex];
-  document.getElementById('quiz-word').textContent = q.kanji;
-  document.getElementById('quiz-reading').textContent = q.reading;
-  document.getElementById('quiz-feedback').innerHTML = '<button class="quiz-next-btn" id="quiz-next" onclick="nextQuizQuestion()">Next →</button>';
-  
-  // Generate 4 options (1 correct + 3 wrong)
-  const allVocab = Object.values(vocabulary).flat();
-  const wrongOptions = allVocab
-    .filter(w => w.english !== q.english)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3)
-    .map(w => w.english);
-  
-  const options = [...wrongOptions, q.english].sort(() => Math.random() - 0.5);
-  
-  document.getElementById('quiz-options').innerHTML = options.map(opt => 
-    `<button class="quiz-option" onclick="checkQuizAnswer(this, '${opt.replace(/'/g, "\\'")}', '${q.english.replace(/'/g, "\\'")}')">${opt}</button>`
+function initQuiz() {
+  const cats = Object.keys(vocabulary);
+  if(!currentCategory || !vocabulary[currentCategory]) currentCategory = cats[0];
+  document.getElementById('quiz-categories').innerHTML = cats.map(c =>
+    '<button class="cat-pill '+(c===currentCategory?'active':'')+'" onclick="selectQuizCat(\x27'+c.replace(/'/g,"\\\x27")+'\x27)">'+c+'</button>'
   ).join('');
+  startQuiz();
 }
+function selectQuizCat(c) { currentCategory=c; initQuiz(); }
+function startQuiz() {
+  document.getElementById('quiz-area').style.display='block';
+  document.getElementById('quiz-results').style.display='none';
+  const all=[...vocabulary[currentCategory]];
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  quizQuestions=all.slice(0,Math.min(quizTotal,all.length));
+  quizIndex=0; quizCorrect=0; updateQuizScore(); renderQuizQ();
+}
+function renderQuizQ() {
+  if(quizIndex>=quizQuestions.length){showQuizResults();return;}
+  const q=quizQuestions[quizIndex];
+  const allVocab=Object.values(vocabulary).flat();
+  let prompt,display,hint='',options;
 
-function checkQuizAnswer(btn, selected, correct) {
-  const options = document.querySelectorAll('.quiz-option');
-  options.forEach(o => {
-    o.classList.add('disabled');
-    if (o.textContent === correct) o.classList.add('correct');
-  });
-  
-  if (selected === correct) {
-    quizCorrect++;
-    btn.classList.add('correct');
-    document.getElementById('quiz-feedback').innerHTML = 
-      '<div style="color:var(--green-light)">正解！ Correct!</div>' +
-      '<button class="quiz-next-btn visible" onclick="nextQuizQuestion()">Next →</button>';
+  if(quizMode==='en') {
+    prompt='What does this mean?';
+    display=q.kana; hint=q.romaji;
+    const wrong=allVocab.filter(w=>w.english!==q.english).sort(()=>Math.random()-0.5).slice(0,3).map(w=>w.english);
+    options=[...wrong,q.english].sort(()=>Math.random()-0.5);
+  } else if(quizMode==='kana') {
+    prompt='Which is the correct kana?';
+    display=q.english; hint='';
+    const wrong=allVocab.filter(w=>w.kana!==q.kana).sort(()=>Math.random()-0.5).slice(0,3).map(w=>w.kana);
+    options=[...wrong,q.kana].sort(()=>Math.random()-0.5);
   } else {
-    btn.classList.add('wrong');
-    document.getElementById('quiz-feedback').innerHTML = 
-      '<div style="color:var(--red-light)">残念… The answer was: ' + correct + '</div>' +
-      '<button class="quiz-next-btn visible" onclick="nextQuizQuestion()">Next →</button>';
+    prompt='Match the romaji to kana:';
+    display=q.romaji; hint='';
+    const wrong=allVocab.filter(w=>w.kana!==q.kana).sort(()=>Math.random()-0.5).slice(0,3).map(w=>w.kana);
+    options=[...wrong,q.kana].sort(()=>Math.random()-0.5);
   }
-  updateQuizScore();
-}
 
-function nextQuizQuestion() {
-  quizIndex++;
-  renderQuizQuestion();
-}
+  document.getElementById('quiz-prompt').textContent=prompt;
+  document.getElementById('quiz-word').textContent=display;
+  document.getElementById('quiz-reading').textContent=hint;
+  document.getElementById('quiz-feedback').innerHTML='<button class="quiz-next-btn" onclick="nextQuizQ()">Next \u2192</button>';
 
-function updateQuizScore() {
-  document.getElementById('quiz-score-badge').textContent = `${quizCorrect} / ${quizIndex}`;
-}
-
-function showQuizResults() {
-  document.getElementById('quiz-area').style.display = 'none';
-  document.getElementById('quiz-results').style.display = 'block';
-  document.getElementById('quiz-final-score').textContent = `${quizCorrect} / ${quizQuestions.length}`;
-}
-
-// ===========================
-// KANA CHART
-// ===========================
-function showKana(type) {
-  currentKanaType = type;
-  document.querySelectorAll('.kana-toggle-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  renderKana();
-}
-
-function renderKana() {
-  const data = currentKanaType === 'hiragana' ? hiragana : katakana;
-  const grid = document.getElementById('kana-grid');
-  
-  grid.innerHTML = data.map(([char, rom]) => {
-    if (!char) return '<div class="kana-cell empty"></div>';
-    return `<div class="kana-cell" onclick="showKanaPopup('${char}','${rom}')">
-      <span class="kana-char">${char}</span>
-      <span class="kana-rom">${rom}</span>
-    </div>`;
+  const correctAnswer = quizMode==='en' ? q.english : q.kana;
+  document.getElementById('quiz-options').innerHTML=options.map(opt => {
+    const escaped = opt.replace(/'/g,"\\\x27");
+    const correctEscaped = correctAnswer.replace(/'/g,"\\\x27");
+    return '<button class="quiz-option" onclick="checkQuiz(this,\x27'+escaped+'\x27,\x27'+correctEscaped+'\x27)">'+opt+'</button>';
   }).join('');
 }
+function checkQuiz(btn,selected,correct) {
+  document.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');if(o.textContent===correct)o.classList.add('correct');});
+  if(selected===correct){
+    quizCorrect++; btn.classList.add('correct');
+    document.getElementById('quiz-feedback').innerHTML='<div style="color:var(--green-light)">正解！ Correct!</div><button class="quiz-next-btn visible" onclick="nextQuizQ()">Next \u2192</button>';
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('quiz-feedback').innerHTML='<div style="color:var(--red-light)">残念\u2026 Answer: '+correct+'</div><button class="quiz-next-btn visible" onclick="nextQuizQ()">Next \u2192</button>';
+  }
+  updateQuizScore();
+}
+function nextQuizQ(){quizIndex++;renderQuizQ();}
+function updateQuizScore(){document.getElementById('quiz-score-badge').textContent=quizCorrect+' / '+quizIndex;}
+function showQuizResults(){
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-results').style.display='block';
+  document.getElementById('quiz-final-score').textContent=quizCorrect+' / '+quizQuestions.length;
+}
 
-function showKanaPopup(char, rom) {
-  document.getElementById('popup-char').textContent = char;
-  document.getElementById('popup-rom').textContent = rom;
-  const pair = kanaPairs[char];
-  const pairLabel = currentKanaType === 'hiragana' ? 'Katakana' : 'Hiragana';
-  document.getElementById('popup-pair').textContent = pair ? `${pairLabel}: ${pair}` : '';
+// ===== KANA =====
+function showKana(type,btn) {
+  currentKanaType=type;
+  document.querySelectorAll('.kana-toggle-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderKana();
+}
+function renderKana() {
+  let data;
+  if(currentKanaType==='hiragana') data=hiragana;
+  else if(currentKanaType==='katakana') data=katakana;
+  else data=dakuten;
+  document.getElementById('kana-grid').innerHTML=data.map(([ch,rom])=>{
+    if(!ch) return '<div class="kana-cell empty"></div>';
+    return '<div class="kana-cell" onclick="showKanaPopup(\x27'+ch+'\x27,\x27'+rom+'\x27)"><span class="kana-char">'+ch+'</span><span class="kana-rom">'+rom+'</span></div>';
+  }).join('');
+}
+function showKanaPopup(ch,rom) {
+  document.getElementById('popup-char').textContent=ch;
+  document.getElementById('popup-rom').textContent=rom;
+  const pair=kanaPairs[ch];
+  const label=currentKanaType==='hiragana'?'Katakana':'Hiragana';
+  document.getElementById('popup-pair').textContent=pair?label+': '+pair:'';
   document.getElementById('kana-popup').classList.add('active');
 }
+function closeKanaPopup(){document.getElementById('kana-popup').classList.remove('active');}
 
-function closeKanaPopup() {
-  document.getElementById('kana-popup').classList.remove('active');
-}
-
-// ===========================
-// GRAMMAR
-// ===========================
+// ===== GRAMMAR =====
 function initGrammar() {
-  const levels = Object.keys(grammarData);
-  const container = document.getElementById('grammar-levels');
-  container.innerHTML = levels.map(l => 
-    `<button class="cat-pill ${l === currentGrammarLevel ? 'active' : ''}" onclick="selectGrammarLevel('${l}')">${l}</button>`
+  const lvls=Object.keys(grammarData);
+  document.getElementById('grammar-levels').innerHTML=lvls.map(l=>
+    '<button class="cat-pill '+(l===currentGrammarLevel?'active':'')+'" onclick="selectGramLvl(\x27'+l+'\x27)">'+l+'</button>'
   ).join('');
   renderGrammar();
 }
-
-function selectGrammarLevel(level) {
-  currentGrammarLevel = level;
-  initGrammar();
+function selectGramLvl(l){currentGrammarLevel=l;initGrammar();}
+function renderGrammar(){
+  document.getElementById('grammar-list').innerHTML=grammarData[currentGrammarLevel].map(g=>
+    '<div class="grammar-card"><div class="grammar-pattern">'+g.pattern+'</div><div class="grammar-meaning">'+g.meaning+'</div><div class="grammar-example-jp">'+g.exJp+'</div><div class="grammar-example-en">'+g.exEn+'</div><div class="grammar-note">'+g.note+'</div></div>'
+  ).join('');
 }
 
-function renderGrammar() {
-  const items = grammarData[currentGrammarLevel];
-  document.getElementById('grammar-list').innerHTML = items.map(g => `
-    <div class="grammar-card">
-      <div class="grammar-pattern">${g.pattern}</div>
-      <div class="grammar-meaning">${g.meaning}</div>
-      <div class="grammar-example-jp">${g.exJp}</div>
-      <div class="grammar-example-en">${g.exEn}</div>
-      <div class="grammar-note">${g.note}</div>
-    </div>
-  `).join('');
-}
-
-// ===========================
-// PHRASES
-// ===========================
-function initPhrases() {
-  const cats = Object.keys(phrasesData);
-  const container = document.getElementById('phrase-categories');
-  container.innerHTML = cats.map(c => 
-    `<button class="cat-pill ${c === currentPhraseCategory ? 'active' : ''}" onclick="selectPhraseCategory('${c}')">${c}</button>`
+// ===== PHRASES =====
+function initPhrases(){
+  const cats=Object.keys(phrasesData);
+  document.getElementById('phrase-categories').innerHTML=cats.map(c=>
+    '<button class="cat-pill '+(c===currentPhraseCategory?'active':'')+'" onclick="selectPhraseCat(\x27'+c+'\x27)">'+c+'</button>'
   ).join('');
   renderPhrases();
 }
-
-function selectPhraseCategory(cat) {
-  currentPhraseCategory = cat;
-  initPhrases();
+function selectPhraseCat(c){currentPhraseCategory=c;initPhrases();}
+function renderPhrases(){
+  document.getElementById('phrase-list').innerHTML=phrasesData[currentPhraseCategory].map(p=>
+    '<div class="phrase-card" onclick="this.classList.toggle(\x27expanded\x27)"><div class="phrase-jp">'+p.jp+'</div><div class="phrase-reading">'+p.reading+'</div><div class="phrase-en">'+p.en+'</div><div class="phrase-context">\ud83d\udca1 '+p.context+'</div></div>'
+  ).join('');
 }
 
-function renderPhrases() {
-  const items = phrasesData[currentPhraseCategory];
-  document.getElementById('phrase-list').innerHTML = items.map(p => `
-    <div class="phrase-card" onclick="this.classList.toggle('expanded')">
-      <div class="phrase-jp">${p.jp}</div>
-      <div class="phrase-reading">${p.reading}</div>
-      <div class="phrase-en">${p.en}</div>
-      <div class="phrase-context">💡 ${p.context}</div>
-    </div>
-  `).join('');
-}
-
-// ===========================
-// SWIPE SUPPORT FOR FLASHCARDS
-// ===========================
-let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-document.addEventListener('touchend', e => {
-  const diff = e.changedTouches[0].clientX - touchStartX;
-  if (document.getElementById('flashcards').classList.contains('active')) {
-    if (diff > 60) prevCard();
-    else if (diff < -60) nextCard();
+// ===== SWIPE =====
+let touchStartX=0;
+document.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;});
+document.addEventListener('touchend',e=>{
+  const diff=e.changedTouches[0].clientX-touchStartX;
+  if(document.getElementById('flashcards').classList.contains('active')){
+    if(diff>60)prevCard(); else if(diff<-60)nextCard();
   }
 });
 
-// Init
 showScreen('home');
 </script>
 </body>
