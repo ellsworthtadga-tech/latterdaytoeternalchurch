@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peter Through the New Testament — One Faith Delivered</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --crimson: #8B0000;
@@ -293,6 +293,7 @@
             margin-bottom: 30px;
             padding-bottom: 12px;
             border-bottom: 2px solid var(--crimson);
+            scroll-margin-top: 24px;
         }
         .section-header h2 {
             font-family: 'Playfair Display', Georgia, serif;
@@ -391,6 +392,54 @@
             font-style: italic;
         }
 
+        /* ── Pinnacle Verse — Mt 16:18-19 ── */
+        .pinnacle-verse {
+            display: block;
+            font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.25em;
+            line-height: 2;
+            color: var(--crimson);
+            text-align: center;
+            margin: 28px 0;
+            padding: 32px 28px;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+        .pinnacle-verse::before,
+        .pinnacle-verse::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+        .pinnacle-verse::before { margin-bottom: 24px; }
+        .pinnacle-verse::after { margin-top: 24px; }
+        .pinnacle-verse .pinnacle-ornament {
+            display: block;
+            text-align: center;
+            font-style: normal;
+            font-size: 0.55em;
+            letter-spacing: 10px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .pinnacle-verse .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55em;
+            color: var(--gold);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+            font-style: normal;
+        }
+        [data-theme="dark"] .pinnacle-verse {
+            color: #e8a0a0;
+        }
+
         /* Separator */
         .section-divider {
             text-align: center;
@@ -400,9 +449,135 @@
             font-size: 0.8em;
         }
 
+        /* ── Floating Section Navigator ── */
+        .section-nav-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 998;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--crimson);
+            border: 2px solid rgba(197, 165, 90, 0.4);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .section-nav-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+            border-color: var(--gold);
+        }
+        .section-nav-btn.open {
+            background: var(--ink);
+        }
+        [data-theme="dark"] .section-nav-btn {
+            background: #4a1515;
+            border-color: rgba(197, 165, 90, 0.35);
+        }
+        [data-theme="dark"] .section-nav-btn.open {
+            background: #2a2420;
+        }
+
+        .section-nav-panel {
+            position: fixed;
+            bottom: 84px;
+            right: 24px;
+            z-index: 997;
+            width: 300px;
+            max-height: 70vh;
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-radius: 8px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .section-nav-panel.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        [data-theme="dark"] .section-nav-panel {
+            background: #221e1a;
+            border-color: #3a332a;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.45);
+        }
+
+        .section-nav-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-faint);
+            padding: 14px 18px 10px;
+            border-bottom: 1px solid var(--parchment-dark);
+        }
+        [data-theme="dark"] .section-nav-header {
+            border-bottom-color: #3a332a;
+        }
+
+        .section-nav-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: calc(70vh - 44px);
+            padding: 6px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--parchment-dark) transparent;
+        }
+        .section-nav-list::-webkit-scrollbar { width: 5px; }
+        .section-nav-list::-webkit-scrollbar-track { background: transparent; }
+        .section-nav-list::-webkit-scrollbar-thumb { background: var(--parchment-dark); border-radius: 3px; }
+
+        .section-nav-list li { margin: 0; }
+        .section-nav-list a {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 18px;
+            text-decoration: none;
+            color: var(--ink);
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.88em;
+            line-height: 1.35;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .section-nav-list a:hover {
+            background: var(--parchment);
+            border-left-color: var(--gold);
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .section-nav-list a:hover {
+            background: rgba(197, 165, 90, 0.06);
+        }
+        .section-nav-list a.active {
+            background: rgba(197, 165, 90, 0.08);
+            border-left-color: var(--crimson);
+            font-weight: 600;
+        }
+        .section-nav-list .nav-numeral {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            color: var(--crimson);
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 24px;
+        }
+
         /* Print Styles */
         @media print {
-            .reading-progress, .toc-wrapper { display: none; }
+            .reading-progress, .toc-wrapper, .section-nav-btn, .section-nav-panel, .back-btn, .dark-toggle { display: none; }
             .page-header { padding: 40px 20px 30px; }
             .content { padding: 10px 20px; }
             .passage { page-break-inside: avoid; }
@@ -419,6 +594,8 @@
             .dark-toggle .toggle-label { display: none; }
             .back-btn { top: 10px; left: 12px; padding: 5px 10px 5px 9px; }
             .back-btn .back-label { display: none; }
+            .section-nav-btn { bottom: 18px; right: 16px; width: 44px; height: 44px; }
+            .section-nav-panel { right: 16px; bottom: 74px; width: calc(100vw - 32px); max-height: 60vh; }
         }
     </style>
 </head>
@@ -583,7 +760,12 @@
         <div class="passage-ref">Matthew 16:13–23</div>
         <p class="passage-context">Caesarea Philippi. The foundational text for the Petrine office. Note that Jesus does not merely accept Peter's confession but responds with a threefold conferral: a new name, a foundation, and the keys.</p>
         <div class="passage-text">
-            <p><span class="verse-num">13</span>And Jesus came into the quarters of Caesarea Philippi: and he asked his disciples, saying: Whom do men say that the Son of man is? <span class="verse-num">14</span>But they said: Some John the Baptist, and other some Elias, and others Jeremias, or one of the prophets. <span class="verse-num">15</span>Jesus saith to them: But whom do you say that I am? <span class="verse-num">16</span>Simon Peter answered and said: Thou art Christ, the Son of the living God. <span class="verse-num">17</span>And Jesus answering, said to him: Blessed art thou, Simon Bar-Jona: because flesh and blood hath not revealed it to thee, but my Father who is in heaven. <span class="verse-num">18</span>And I say to thee: That thou art Peter; and upon this rock I will build my church, and the gates of hell shall not prevail against it. <span class="verse-num">19</span>And I will give to thee the keys of the kingdom of heaven. And whatsoever thou shalt bind upon earth, it shall be bound also in heaven: and whatsoever thou shalt loose upon earth, it shall be loosed also in heaven. <span class="verse-num">20</span>Then he commanded his disciples, that they should tell no one that he was Jesus the Christ.</p>
+            <p><span class="verse-num">13</span>And Jesus came into the quarters of Caesarea Philippi: and he asked his disciples, saying: Whom do men say that the Son of man is? <span class="verse-num">14</span>But they said: Some John the Baptist, and other some Elias, and others Jeremias, or one of the prophets. <span class="verse-num">15</span>Jesus saith to them: But whom do you say that I am? <span class="verse-num">16</span>Simon Peter answered and said: Thou art Christ, the Son of the living God. <span class="verse-num">17</span>And Jesus answering, said to him: Blessed art thou, Simon Bar-Jona: because flesh and blood hath not revealed it to thee, but my Father who is in heaven.</p>
+            <div class="pinnacle-verse">
+                <span class="pinnacle-ornament">✦ ✦ ✦</span>
+                <span class="verse-num">18</span>And I say to thee: That thou art Peter; and upon this rock I will build my church, and the gates of hell shall not prevail against it. <span class="verse-num">19</span>And I will give to thee the keys of the kingdom of heaven. And whatsoever thou shalt bind upon earth, it shall be bound also in heaven: and whatsoever thou shalt loose upon earth, it shall be loosed also in heaven.
+            </div>
+            <p><span class="verse-num">20</span>Then he commanded his disciples, that they should tell no one that he was Jesus the Christ.</p>
             <p><span class="verse-num">21</span>From that time Jesus began to shew to his disciples, that he must go to Jerusalem, and suffer many things from the ancients and scribes and chief priests, and be put to death, and the third day rise again. <span class="verse-num">22</span>And Peter taking him, began to rebuke him, saying: Lord, be it far from thee, this shall not be unto thee. <span class="verse-num">23</span>Who turning, said to Peter: Go behind me, Satan, thou art a scandal unto me: because thou savourest not the things that are of God, but the things that are of men.</p>
         </div>
     </div>
@@ -1067,11 +1249,38 @@
 
 </main>
 
+<!-- Floating Section Navigator -->
+<button class="section-nav-btn" id="sectionNavBtn" aria-label="Jump to section" title="Jump to section">
+    ☰
+</button>
+<div class="section-nav-panel" id="sectionNavPanel">
+    <div class="section-nav-header">Jump to Section</div>
+    <ul class="section-nav-list" id="sectionNavList">
+        <li><a href="#sec-1"><span class="nav-numeral">I</span> The Call of Simon Peter</a></li>
+        <li><a href="#sec-2"><span class="nav-numeral">II</span> Early Ministry &amp; Miracles</a></li>
+        <li><a href="#sec-3"><span class="nav-numeral">III</span> Among the Twelve</a></li>
+        <li><a href="#sec-4"><span class="nav-numeral">IV</span> The Great Confession &amp; The Keys</a></li>
+        <li><a href="#sec-5"><span class="nav-numeral">V</span> The Transfiguration</a></li>
+        <li><a href="#sec-6"><span class="nav-numeral">VI</span> Teaching, Questions &amp; Authority</a></li>
+        <li><a href="#sec-7"><span class="nav-numeral">VII</span> The Last Supper &amp; Gethsemane</a></li>
+        <li><a href="#sec-8"><span class="nav-numeral">VIII</span> The Denial</a></li>
+        <li><a href="#sec-9"><span class="nav-numeral">IX</span> Resurrection &amp; Restoration</a></li>
+        <li><a href="#sec-10"><span class="nav-numeral">X</span> Pentecost &amp; the Birth of the Church</a></li>
+        <li><a href="#sec-11"><span class="nav-numeral">XI</span> Signs, Wonders &amp; Authority</a></li>
+        <li><a href="#sec-12"><span class="nav-numeral">XII</span> The Cornelius Episode</a></li>
+        <li><a href="#sec-13"><span class="nav-numeral">XIII</span> Persecution &amp; Deliverance</a></li>
+        <li><a href="#sec-14"><span class="nav-numeral">XIV</span> The Council of Jerusalem</a></li>
+        <li><a href="#sec-15"><span class="nav-numeral">XV</span> Peter in the Pauline Letters</a></li>
+        <li><a href="#sec-16"><span class="nav-numeral">XVI</span> First Epistle of St. Peter</a></li>
+        <li><a href="#sec-17"><span class="nav-numeral">XVII</span> Second Epistle of St. Peter</a></li>
+    </ul>
+</div>
+
 <script>
     // Reading progress bar
     window.addEventListener('scroll', function() {
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (window.scrollY / docHeight) * 100;
+        var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (window.scrollY / docHeight) * 100;
         document.getElementById('readingProgress').style.width = scrolled + '%';
     });
 
@@ -1105,6 +1314,89 @@
         });
 
         updateUI();
+    })();
+
+    // Section navigator
+    (function() {
+        var btn = document.getElementById('sectionNavBtn');
+        var panel = document.getElementById('sectionNavPanel');
+        var navLinks = document.querySelectorAll('#sectionNavList a');
+        var sectionIds = [];
+        var isOpen = false;
+
+        // Collect section IDs
+        navLinks.forEach(function(link) {
+            sectionIds.push(link.getAttribute('href').substring(1));
+        });
+
+        function togglePanel() {
+            isOpen = !isOpen;
+            btn.classList.toggle('open', isOpen);
+            panel.classList.toggle('open', isOpen);
+            btn.textContent = isOpen ? '✕' : '☰';
+            if (isOpen) highlightCurrent();
+        }
+
+        btn.addEventListener('click', togglePanel);
+
+        // Close on link click (after navigating)
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(function() {
+                    isOpen = false;
+                    btn.classList.remove('open');
+                    panel.classList.remove('open');
+                    btn.textContent = '☰';
+                }, 150);
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function(e) {
+            if (isOpen && !panel.contains(e.target) && e.target !== btn) {
+                isOpen = false;
+                btn.classList.remove('open');
+                panel.classList.remove('open');
+                btn.textContent = '☰';
+            }
+        });
+
+        // Highlight current section on scroll
+        function highlightCurrent() {
+            var scrollPos = window.scrollY + 120;
+            var currentId = sectionIds[0];
+
+            for (var i = 0; i < sectionIds.length; i++) {
+                var el = document.getElementById(sectionIds[i]);
+                if (el && el.offsetTop <= scrollPos) {
+                    currentId = sectionIds[i];
+                }
+            }
+
+            navLinks.forEach(function(link) {
+                var href = link.getAttribute('href').substring(1);
+                link.classList.toggle('active', href === currentId);
+            });
+
+            // Scroll active item into view within the panel
+            var activeLink = panel.querySelector('a.active');
+            if (activeLink) {
+                var list = document.getElementById('sectionNavList');
+                var linkTop = activeLink.offsetTop - list.offsetTop;
+                var listHeight = list.clientHeight;
+                if (linkTop < list.scrollTop || linkTop > list.scrollTop + listHeight - 40) {
+                    list.scrollTop = linkTop - listHeight / 3;
+                }
+            }
+        }
+
+        var scrollTimer;
+        window.addEventListener('scroll', function() {
+            if (isOpen) {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(highlightCurrent, 80);
+            }
+        });
     })();
 </script>
 
