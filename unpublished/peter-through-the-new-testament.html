@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peter Through the New Testament — One Faith Delivered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #8B0000;
+            --crimson-light: #a01010;
+            --gold: #C5A55A;
+            --gold-light: #d4ba7a;
+            --parchment: #F5F0E8;
+            --parchment-dark: #e8e0d0;
+            --ink: #2c2420;
+            --ink-light: #5a4e44;
+            --ink-faint: #8a7e74;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--crimson), var(--gold));
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--parchment);
+            color: var(--ink);
+            line-height: 1.75;
+            font-size: 17px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a0a0a 0%, #2c1010 40%, #3a1818 100%);
+            color: #fff;
+            padding: 80px 40px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C5A55A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 12px;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+        .page-header .subtitle {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 1.15em;
+            font-weight: 300;
+            color: var(--gold-light);
+            font-style: italic;
+            position: relative;
+        }
+        .page-header .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* Navigation / Table of Contents */
+        .toc-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px 20px;
+        }
+        .toc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--ink-faint);
+            margin-bottom: 16px;
+        }
+        .toc {
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 24px 28px;
+        }
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+        .toc ol li {
+            counter-increment: toc-counter;
+            margin-bottom: 8px;
+        }
+        .toc ol li::before {
+            content: counter(toc-counter, upper-roman) ".";
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .toc a {
+            color: var(--ink);
+            text-decoration: none;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.95em;
+            border-bottom: 1px dotted var(--gold);
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .toc a:hover {
+            color: var(--crimson);
+            border-bottom-color: var(--crimson);
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--crimson);
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 4px;
+        }
+        .section-header .section-desc {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.95em;
+        }
+
+        /* Passage Blocks */
+        .passage {
+            margin-bottom: 36px;
+            padding: 0;
+        }
+        .passage-ref {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .passage-ref::before {
+            content: '✦';
+            color: var(--crimson);
+            font-size: 0.8em;
+        }
+        .passage-context {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            padding-left: 16px;
+            border-left: 2px solid var(--gold-light);
+        }
+        .passage-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            line-height: 1.85;
+            color: var(--ink);
+        }
+        .passage-text .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            color: var(--crimson);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+        }
+        .passage-text p {
+            margin-bottom: 8px;
+            text-indent: 0;
+        }
+
+        /* Key Petrine passages — gold highlight */
+        .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.08), rgba(197, 165, 90, 0.04));
+            border-left: 4px solid var(--gold);
+            padding: 20px 24px;
+            border-radius: 0 4px 4px 0;
+            margin: 20px 0 36px;
+        }
+
+        /* Patristic / editorial comment blocks */
+        .editorial-note {
+            background: #fff;
+            border-left: 4px solid var(--crimson);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .editorial-note .note-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .editorial-note p {
+            font-size: 0.92em;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+
+        /* Separator */
+        .section-divider {
+            text-align: center;
+            margin: 50px 0 10px;
+            color: var(--gold);
+            letter-spacing: 12px;
+            font-size: 0.8em;
+        }
+
+        /* Print Styles */
+        @media print {
+            .reading-progress, .toc-wrapper { display: none; }
+            .page-header { padding: 40px 20px 30px; }
+            .content { padding: 10px 20px; }
+            .passage { page-break-inside: avoid; }
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            .page-header { padding: 50px 20px 40px; }
+            .page-header h1 { font-size: 1.9em; }
+            .content { padding: 16px 16px 60px; }
+            .section-header h2 { font-size: 1.5em; }
+            .key-passage { padding: 16px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- ========== PAGE HEADER ========== -->
+<header class="page-header">
+    <div class="tagline">One Faith Delivered</div>
+    <h1>Peter Through the New Testament</h1>
+    <p class="subtitle">A Chronological Compilation from the Douay-Rheims Bible</p>
+</header>
+
+<!-- ========== TABLE OF CONTENTS ========== -->
+<nav class="toc-wrapper">
+    <div class="toc-label">Contents</div>
+    <div class="toc">
+        <ol>
+            <li><a href="#sec-1">The Call of Simon Peter</a></li>
+            <li><a href="#sec-2">Early Ministry &amp; Miracles</a></li>
+            <li><a href="#sec-3">Among the Twelve — Peter Named First</a></li>
+            <li><a href="#sec-4">The Great Confession &amp; The Keys</a></li>
+            <li><a href="#sec-5">The Transfiguration</a></li>
+            <li><a href="#sec-6">Teaching, Questions &amp; Authority</a></li>
+            <li><a href="#sec-7">The Last Supper &amp; Gethsemane</a></li>
+            <li><a href="#sec-8">The Denial</a></li>
+            <li><a href="#sec-9">Resurrection &amp; Restoration</a></li>
+            <li><a href="#sec-10">Pentecost &amp; the Birth of the Church</a></li>
+            <li><a href="#sec-11">Signs, Wonders &amp; Apostolic Authority</a></li>
+            <li><a href="#sec-12">The Cornelius Episode — Peter Opens the Door to the Gentiles</a></li>
+            <li><a href="#sec-13">Persecution, Imprisonment &amp; Deliverance</a></li>
+            <li><a href="#sec-14">The Council of Jerusalem</a></li>
+            <li><a href="#sec-15">Peter in the Pauline Letters</a></li>
+            <li><a href="#sec-16">The First Epistle of St. Peter</a></li>
+            <li><a href="#sec-17">The Second Epistle of St. Peter</a></li>
+        </ol>
+    </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="content">
+
+    <div class="editorial-note">
+        <div class="note-label">About This Compilation</div>
+        <p>This document gathers every significant passage in the New Testament featuring Simon Peter — arranged in the approximate chronological order of his life — from his first encounter with Christ through his final epistle. The text is the Douay-Rheims translation. Contextual notes are provided in italics to orient the reader within the narrative. Passages of particular ecclesiological or apologetic significance are highlighted.</p>
+    </div>
+
+    <!-- ===== I. THE CALL ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-1">
+        <h2>I. The Call of Simon Peter</h2>
+        <p class="section-desc">From fisherman to follower — the beginning of everything.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 1:40–42</div>
+        <p class="passage-context">Andrew, a disciple of the Baptist, brings his brother Simon to Jesus. Christ renames him at their very first meeting — an act of sovereign authority.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">40</span>And one of the two who had heard of John, and followed him, was Andrew, the brother of Simon Peter. <span class="verse-num">41</span>He findeth first his brother Simon, and saith to him: We have found the Messias, which is, being interpreted, the Christ. <span class="verse-num">42</span>And he brought him to Jesus. And Jesus looking upon him, said: Thou art Simon the son of Jona: thou shalt be called Cephas, which is interpreted Peter.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 5:1–11</div>
+        <p class="passage-context">The miraculous catch of fish. Jesus teaches from Peter's boat — a detail no evangelist records accidentally — and Peter's response is the first recorded act of worship directed at Christ by an apostle.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And it came to pass, that when the multitudes pressed upon him to hear the word of God, he stood by the lake of Genesareth. <span class="verse-num">2</span>And he saw two ships standing by the lake: but the fishermen were gone out of them, and were washing their nets. <span class="verse-num">3</span>And going into one of the ships that was Simon's, he desired him to draw back a little from the land. And sitting, he taught the multitudes out of the ship.</p>
+            <p><span class="verse-num">4</span>Now when he had ceased to speak, he said to Simon: Launch out into the deep, and let down your nets for a draught. <span class="verse-num">5</span>And Simon answering said to him: Master, we have laboured all the night, and have taken nothing: but at thy word I will let down the net. <span class="verse-num">6</span>And when they had done this, they enclosed a very great multitude of fishes, and their net broke. <span class="verse-num">7</span>And they beckoned to their partners that were in the other ship, that they should come and help them. And they came, and filled both the ships, so that they were almost sinking.</p>
+            <p><span class="verse-num">8</span>Which when Simon Peter saw, he fell down at Jesus' knees, saying: Depart from me, for I am a sinful man, O Lord. <span class="verse-num">9</span>For he was wholly astonished, and all that were with him, at the draught of the fishes which they had taken. <span class="verse-num">10</span>And so were also James and John, the sons of Zebedee, who were Simon's partners. And Jesus saith to Simon: Fear not: from henceforth thou shalt catch men. <span class="verse-num">11</span>And having brought their ships to land, leaving all things, they followed him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 4:18–20</div>
+        <p class="passage-context">Matthew's parallel account of the calling — stark, immediate, absolute.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>And Jesus walking by the sea of Galilee, saw two brethren, Simon who is called Peter, and Andrew his brother, casting a net into the sea (for they were fishers). <span class="verse-num">19</span>And he saith to them: Come ye after me, and I will make you to be fishers of men. <span class="verse-num">20</span>And they immediately leaving their nets, followed him.</p>
+        </div>
+    </div>
+
+    <!-- ===== II. EARLY MINISTRY ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-2">
+        <h2>II. Early Ministry &amp; Miracles</h2>
+        <p class="section-desc">Peter's household becomes the first site of domestic miracle, and his home in Capernaum serves as Christ's base of operations.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 1:29–34</div>
+        <p class="passage-context">Jesus heals Peter's mother-in-law — the first healing performed in an apostle's home. Note: that Peter had a mother-in-law implies a wife; that she is never mentioned again while Peter follows Christ is itself significant for the celibacy question.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">29</span>And immediately going out of the synagogue they came into the house of Simon and Andrew, with James and John. <span class="verse-num">30</span>And Simon's wife's mother lay in a fit of a fever: and forthwith they tell him of her. <span class="verse-num">31</span>And coming to her, he lifted her up, taking her by the hand; and immediately the fever left her, and she ministered unto them. <span class="verse-num">32</span>And when it was evening, after sunset, they brought to him all that were ill and that were possessed with devils. <span class="verse-num">33</span>And all the city was gathered together at the door. <span class="verse-num">34</span>And he healed many that were troubled with divers diseases; and he cast out many devils, and he suffered them not to speak, because they knew him.</p>
+        </div>
+    </div>
+
+    <!-- ===== III. NAMED FIRST ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-3">
+        <h2>III. Among the Twelve — Peter Named First</h2>
+        <p class="section-desc">Every New Testament list of the apostles places Peter first. Matthew alone adds the word "first" — πρῶτος — which is not ordinal but positional.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Matthew 10:1–4</div>
+        <p class="passage-context">The commissioning of the Twelve. Peter is listed first with the explicit designation "first."</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And having called his twelve disciples together, he gave them power over unclean spirits, to cast them out, and to heal all manner of diseases, and all manner of infirmities. <span class="verse-num">2</span>And the names of the twelve apostles are these: The <em>first</em>, Simon who is called Peter, and Andrew his brother, <span class="verse-num">3</span>James the son of Zebedee, and John his brother, Philip and Bartholomew, Thomas and Matthew the publican, and James the son of Alpheus, and Thaddeus, <span class="verse-num">4</span>Simon the Cananean, and Judas Iscariot, who also betrayed him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 3:16–19</div>
+        <div class="passage-text">
+            <p><span class="verse-num">16</span>And to Simon he gave the name Peter: <span class="verse-num">17</span>And James the son of Zebedee, and John the brother of James; and he named them Boanerges, which is, The sons of thunder: <span class="verse-num">18</span>And Andrew and Philip, and Bartholomew and Matthew, and Thomas and James of Alpheus, and Thaddeus, and Simon the Cananean, <span class="verse-num">19</span>And Judas Iscariot, who also betrayed him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 6:13–16</div>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>And when day was come, he called unto him his disciples; and he chose twelve of them (whom also he named apostles): <span class="verse-num">14</span>Simon, whom he surnamed Peter, and Andrew his brother, James and John, Philip and Bartholomew, <span class="verse-num">15</span>Matthew and Thomas, James the son of Alpheus, and Simon who is called Zelotes, <span class="verse-num">16</span>And Jude, the brother of James, and Judas Iscariot, who was the traitor.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 14:28–33</div>
+        <p class="passage-context">Peter walks on water — and sinks. The pattern emerges early: bold faith, human weakness, Christ's rescue.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">28</span>And Peter making answer, said: Lord, if it be thou, bid me come to thee upon the waters. <span class="verse-num">29</span>And he said: Come. And Peter going down out of the boat, walked upon the water to come to Jesus. <span class="verse-num">30</span>But seeing the wind strong, he was afraid: and when he began to sink, he cried out, saying: Lord, save me. <span class="verse-num">31</span>And immediately Jesus stretching forth his hand took hold of him, and said to him: O thou of little faith, why didst thou doubt? <span class="verse-num">32</span>And when they were come up into the boat, the wind ceased. <span class="verse-num">33</span>And they that were in the boat came and adored him, saying: Indeed thou art the Son of God.</p>
+        </div>
+    </div>
+
+    <!-- ===== IV. THE GREAT CONFESSION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-4">
+        <h2>IV. The Great Confession &amp; The Keys</h2>
+        <p class="section-desc">The hinge of the Gospels. Peter confesses Christ's identity — and receives in return the most extraordinary commission ever given to a human being.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Matthew 16:13–23</div>
+        <p class="passage-context">Caesarea Philippi. The foundational text for the Petrine office. Note that Jesus does not merely accept Peter's confession but responds with a threefold conferral: a new name, a foundation, and the keys.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>And Jesus came into the quarters of Caesarea Philippi: and he asked his disciples, saying: Whom do men say that the Son of man is? <span class="verse-num">14</span>But they said: Some John the Baptist, and other some Elias, and others Jeremias, or one of the prophets. <span class="verse-num">15</span>Jesus saith to them: But whom do you say that I am? <span class="verse-num">16</span>Simon Peter answered and said: Thou art Christ, the Son of the living God. <span class="verse-num">17</span>And Jesus answering, said to him: Blessed art thou, Simon Bar-Jona: because flesh and blood hath not revealed it to thee, but my Father who is in heaven. <span class="verse-num">18</span>And I say to thee: That thou art Peter; and upon this rock I will build my church, and the gates of hell shall not prevail against it. <span class="verse-num">19</span>And I will give to thee the keys of the kingdom of heaven. And whatsoever thou shalt bind upon earth, it shall be bound also in heaven: and whatsoever thou shalt loose upon earth, it shall be loosed also in heaven. <span class="verse-num">20</span>Then he commanded his disciples, that they should tell no one that he was Jesus the Christ.</p>
+            <p><span class="verse-num">21</span>From that time Jesus began to shew to his disciples, that he must go to Jerusalem, and suffer many things from the ancients and scribes and chief priests, and be put to death, and the third day rise again. <span class="verse-num">22</span>And Peter taking him, began to rebuke him, saying: Lord, be it far from thee, this shall not be unto thee. <span class="verse-num">23</span>Who turning, said to Peter: Go behind me, Satan, thou art a scandal unto me: because thou savourest not the things that are of God, but the things that are of men.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Apologetic Note</div>
+        <p>The juxtaposition is deliberate and devastating to the Protestant objection that "Peter" and "rock" refer to different things. Christ bestows supreme authority on Peter in vv. 17–19 and rebukes him in vv. 22–23 — within the same conversation. If the commission were merely personal praise, the rebuke would nullify it. But the office is not nullified by the man's failure. This is precisely the Catholic point: the charism attaches to the chair, not the occupant.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 8:27–33</div>
+        <p class="passage-context">Mark's parallel — written under Peter's own influence according to Papias — preserves the confession and the rebuke, but omits the keys. Humility of the source, or Markan brevity? Both are possible; neither undermines Matthew's account.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">27</span>And Jesus went out, and his disciples, into the towns of Caesarea Philippi. And in the way, he asked his disciples, saying to them: Whom do men say that I am? <span class="verse-num">28</span>Who answered him, saying: John the Baptist; but some Elias, and others as one of the prophets. <span class="verse-num">29</span>Then he saith to them: But whom do you say that I am? Peter answering said to him: Thou art the Christ. <span class="verse-num">30</span>And he strictly charged them that they should not tell any man of him.</p>
+            <p><span class="verse-num">31</span>And he began to teach them, that the Son of man must suffer many things, and be rejected by the ancients and by the high priests, and the scribes, and be killed: and after three days rise again. <span class="verse-num">32</span>And he spoke the word openly. And Peter taking him, began to rebuke him. <span class="verse-num">33</span>Who turning about and seeing his disciples, threatened Peter, saying: Go behind me, Satan, because thou savourest not the things that are of God, but that are of men.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 6:67–71</div>
+        <p class="passage-context">After the Bread of Life discourse. Many disciples leave. Peter speaks for the Twelve — again — with a confession that echoes his role throughout.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">67</span>Then Jesus said to the twelve: Will you also go away? <span class="verse-num">68</span>And Simon Peter answered him: Lord, to whom shall we go? thou hast the words of eternal life. <span class="verse-num">69</span>And we have believed and have known, that thou art the Christ, the Son of God. <span class="verse-num">70</span>Jesus answered them: Have not I chosen you twelve; and one of you is a devil? <span class="verse-num">71</span>Now he meant Judas Iscariot, the son of Simon: for this same was about to betray him, whereas he was one of the twelve.</p>
+        </div>
+    </div>
+
+    <!-- ===== V. TRANSFIGURATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-5">
+        <h2>V. The Transfiguration</h2>
+        <p class="section-desc">Peter, James, and John witness the unveiled glory of Christ on the mountain. Peter speaks — characteristically — without fully grasping what he has seen.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 17:1–8</div>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And after six days Jesus taketh unto him Peter and James, and John his brother, and bringeth them up into a high mountain apart: <span class="verse-num">2</span>And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow. <span class="verse-num">3</span>And behold there appeared to them Moses and Elias talking with him. <span class="verse-num">4</span>And Peter answering, said to Jesus: Lord, it is good for us to be here: if thou wilt, let us make here three tabernacles, one for thee, and one for Moses, and one for Elias. <span class="verse-num">5</span>And as he was yet speaking, behold a bright cloud overshadowed them. And lo, a voice out of the cloud, saying: This is my beloved Son, in whom I am well pleased: hear ye him. <span class="verse-num">6</span>And the disciples hearing, fell upon their face, and were very much afraid. <span class="verse-num">7</span>And Jesus came and touched them: and said to them, Arise, and fear not. <span class="verse-num">8</span>And they lifting up their eyes saw no one but only Jesus.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 17:24–27</div>
+        <p class="passage-context">The temple tax episode — easily overlooked, but significant. Only Peter and Jesus pay the tax from the same coin. The two are paired by Christ himself.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">24</span>And when they were come to Capharnaum, they that received the didrachmas, came to Peter and said to him: Doth not your master pay the didrachmas? <span class="verse-num">25</span>He saith: Yes. And when he was come into the house, Jesus prevented him, saying: What is thy opinion, Simon? The kings of the earth, of whom do they receive tribute or custom? of their own children, or of strangers? <span class="verse-num">26</span>And he said: Of strangers. Jesus said to him: Then the children are free. <span class="verse-num">27</span>But that we may not scandalize them, go to the sea, and cast in a hook: and that fish which shall first come up, take: and when thou hast opened its mouth, thou shalt find a stater: take that, and give it to them for me and thee.</p>
+        </div>
+    </div>
+
+    <!-- ===== VI. TEACHING & AUTHORITY ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-6">
+        <h2>VI. Teaching, Questions &amp; Authority</h2>
+        <p class="section-desc">Throughout the ministry, Peter is the one who asks, the one who speaks, the one who is addressed. The pattern is unmistakable.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 15:15</div>
+        <p class="passage-context">Peter asks for an explanation of the parable of defilement.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>And Peter answering, said to him: Expound to us this parable.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 18:21–22</div>
+        <p class="passage-context">Peter's question occasions one of Christ's most famous teachings.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">21</span>Then came Peter unto him and said: Lord, how often shall my brother offend against me, and I forgive him? till seven times? <span class="verse-num">22</span>Jesus saith to him: I say not to thee, till seven times; but till seventy times seven times.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 19:27–29</div>
+        <p class="passage-context">Peter speaks for all the apostles — again.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">27</span>Then Peter answering, said to him: Behold we have left all things, and have followed thee: what therefore shall we have? <span class="verse-num">28</span>And Jesus said to them: Amen, I say to you, that you, who have followed me, in the regeneration, when the Son of man shall sit on the seat of his majesty, you also shall sit on twelve seats judging the twelve tribes of Israel. <span class="verse-num">29</span>And every one that hath left house, or brethren, or sisters, or father, or mother, or wife, or children, or lands for my name's sake, shall receive an hundredfold, and shall possess life everlasting.</p>
+        </div>
+    </div>
+
+    <!-- ===== VII. LAST SUPPER & GETHSEMANE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-7">
+        <h2>VII. The Last Supper &amp; Gethsemane</h2>
+        <p class="section-desc">The night of the Passion. Jesus washes Peter's feet, predicts his denial, prays specifically for his faith — and brings him to the garden.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 22:31–34</div>
+        <p class="passage-context">This passage is uniquely Lukan and uniquely important. Christ addresses Simon by name, reveals Satan's desire to sift all the apostles (plural "you"), but prays specifically for Peter (singular "thee") — and commands him to strengthen the others. The ecclesiological implications are immense.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">31</span>And the Lord said: Simon, Simon, behold Satan hath desired to have you, that he may sift you as wheat: <span class="verse-num">32</span>But I have prayed for thee, that thy faith fail not: and thou, being once converted, confirm thy brethren. <span class="verse-num">33</span>Who said to him: Lord, I am ready to go with thee, both into prison, and to death. <span class="verse-num">34</span>And he said: I say to thee, Peter, the cock shall not crow this day, till thou thrice deniest that thou knowest me.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 13:6–10</div>
+        <p class="passage-context">The washing of feet. Peter resists, then overcorrects, then submits — a pattern.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">6</span>He cometh therefore to Simon Peter. And Peter saith to him: Lord, dost thou wash my feet? <span class="verse-num">7</span>Jesus answered, and said to him: What I do thou knowest not now; but thou shalt know hereafter. <span class="verse-num">8</span>Peter saith to him: Thou shalt never wash my feet. Jesus answered him: If I wash thee not, thou shalt have no part with me. <span class="verse-num">9</span>Simon Peter saith to him: Lord, not only my feet, but also my hands and my head. <span class="verse-num">10</span>Jesus saith to him: He that is washed, needeth not but to wash his feet, but is clean wholly. And you are clean, but not all.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 26:36–41</div>
+        <p class="passage-context">Gethsemane. Peter is among the three brought closest — and cannot stay awake.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">36</span>Then Jesus came with them into a country place which is called Gethsemani; and he said to his disciples: Sit you here, till I go yonder and pray. <span class="verse-num">37</span>And taking with him Peter and the two sons of Zebedee, he began to grow sorrowful and to be sad. <span class="verse-num">38</span>Then he saith to them: My soul is sorrowful even unto death: stay you here, and watch with me. <span class="verse-num">39</span>And going a little further, he fell upon his face, praying, and saying: My Father, if it be possible, let this chalice pass from me. Nevertheless not as I will, but as thou wilt. <span class="verse-num">40</span>And he cometh to his disciples, and findeth them asleep, and he saith to Peter: What? Could you not watch one hour with me? <span class="verse-num">41</span>Watch ye, and pray that ye enter not into temptation. The spirit indeed is willing, but the flesh weak.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 18:10–11</div>
+        <p class="passage-context">Peter draws the sword. John alone names him.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">10</span>Then Simon Peter, having a sword, drew it, and struck the servant of the high priest, and cut off his right ear. And the name of the servant was Malchus. <span class="verse-num">11</span>Jesus therefore said to Peter: Put up thy sword into the scabbard. The chalice which my Father hath given me, shall I not drink it?</p>
+        </div>
+    </div>
+
+    <!-- ===== VIII. THE DENIAL ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-8">
+        <h2>VIII. The Denial</h2>
+        <p class="section-desc">The lowest point — and the one that makes the restoration meaningful.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 22:54–62</div>
+        <p class="passage-context">Luke's account includes the devastating detail: "the Lord turning looked on Peter." No other evangelist records this glance.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">54</span>And apprehending him, they led him to the high priest's house. But Peter followed afar off. <span class="verse-num">55</span>And when they had kindled a fire in the midst of the hall, and were sitting about it, Peter was in the midst of them. <span class="verse-num">56</span>Whom when a certain servant maid had seen sitting at the light, and had earnestly beheld him, she said: This man also was with him. <span class="verse-num">57</span>But he denied him, saying: Woman, I know him not. <span class="verse-num">58</span>And after a little while, another seeing him, said: Thou also art one of them. But Peter said: O man, I am not. <span class="verse-num">59</span>And after the space, as it were of one hour, another certain man affirmed, saying: Of a truth, this man was also with him; for he is also a Galilean. <span class="verse-num">60</span>And Peter said: Man, I know not what thou sayest. And immediately, as he was yet speaking, the cock crew. <span class="verse-num">61</span>And the Lord turning looked on Peter. And Peter remembered the word of the Lord, as he had said: Before the cock crow, thou shalt deny me thrice. <span class="verse-num">62</span>And Peter going out, wept bitterly.</p>
+        </div>
+    </div>
+
+    <!-- ===== IX. RESURRECTION & RESTORATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-9">
+        <h2>IX. Resurrection &amp; Restoration</h2>
+        <p class="section-desc">Peter runs to the empty tomb, receives a private appearance from the risen Lord, and is formally restored with a threefold commission that mirrors the threefold denial.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 24:12</div>
+        <div class="passage-text">
+            <p><span class="verse-num">12</span>But Peter rising up, ran to the sepulchre, and stooping down, he saw the linen cloths laid by themselves; and went away wondering in himself at that which was come to pass.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 20:1–10</div>
+        <p class="passage-context">The race to the tomb. John arrives first but waits — Peter enters first. The symbolism has not been lost on twenty centuries of commentators.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And on the first day of the week, Mary Magdalen cometh early, when it was yet dark, unto the sepulchre; and she saw the stone taken away from the sepulchre. <span class="verse-num">2</span>She ran, therefore, and cometh to Simon Peter, and to the other disciple whom Jesus loved, and saith to them: They have taken away the Lord out of the sepulchre, and we know not where they have laid him. <span class="verse-num">3</span>Peter therefore went out, and that other disciple, and they came to the sepulchre. <span class="verse-num">4</span>And they both ran together, and that other disciple did outrun Peter, and came first to the sepulchre. <span class="verse-num">5</span>And when he stooped down, he saw the linen cloths lying; but yet he went not in. <span class="verse-num">6</span>Then cometh Simon Peter, following him, and went into the sepulchre, and saw the linen cloths lying, <span class="verse-num">7</span>And the napkin that had been about his head, not lying with the linen cloths, but apart, wrapped up into one place. <span class="verse-num">8</span>Then that other disciple also went in, who came first to the sepulchre: and he saw, and believed. <span class="verse-num">9</span>For as yet they knew not the scripture, that he must rise again from the dead. <span class="verse-num">10</span>The disciples therefore departed again to their home.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 24:34</div>
+        <p class="passage-context">The earliest recorded witness to the Resurrection — a private appearance to Peter alone, mentioned almost in passing.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">34</span>Saying: The Lord is risen indeed, and hath appeared to Simon.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 21:1–19</div>
+        <p class="passage-context">The restoration on the shore of Tiberias. Three denials; three questions; three commissions. "Feed my lambs… Feed my lambs… Feed my sheep." The Douay-Rheims preserves the Latin Vulgate's rendering, which follows the Greek distinction between ἀρνία (lambs) and πρόβατα (sheep) — the entire flock, young and old, is committed to Peter's care.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>After this, Jesus shewed himself again to the disciples at the sea of Tiberias. And he shewed himself after this manner. <span class="verse-num">2</span>There were together Simon Peter, and Thomas, who is called Didymus, and Nathanael, who was of Cana of Galilee, and the sons of Zebedee, and two others of his disciples. <span class="verse-num">3</span>Simon Peter saith to them: I go a fishing. They say to him: We also come with thee. And they went forth, and entered into the ship: and that night they caught nothing. <span class="verse-num">4</span>But when the morning was come, Jesus stood on the shore: yet the disciples knew not that it was Jesus. <span class="verse-num">5</span>Jesus therefore said to them: Children, have you any meat? They answered him: No. <span class="verse-num">6</span>He saith to them: Cast the net on the right side of the ship, and you shall find. They cast therefore; and now they were not able to draw it, for the multitude of fishes.</p>
+            <p><span class="verse-num">7</span>That disciple therefore whom Jesus loved, said to Peter: It is the Lord. Simon Peter, when he heard that it was the Lord, girt his coat about him, (for he was naked,) and cast himself into the sea. <span class="verse-num">8</span>But the other disciples came in the ship, (for they were not far from the land, but as it were two hundred cubits,) dragging the net with fishes.</p>
+            <p><span class="verse-num">9</span>As soon then as they came to land, they saw hot coals lying, and a fish laid thereon, and bread. <span class="verse-num">10</span>Jesus saith to them: Bring hither of the fishes which you have now caught. <span class="verse-num">11</span>Simon Peter went up, and drew the net to land, full of great fishes, one hundred and fifty-three. And although there were so many, the net was not broken. <span class="verse-num">12</span>Jesus saith to them: Come, and dine. And none of them who were at meat, durst ask him: Who art thou? knowing that it was the Lord. <span class="verse-num">13</span>And Jesus cometh and taketh bread, and giveth them, and fish in like manner. <span class="verse-num">14</span>This is now the third time that Jesus was manifested to his disciples, after he was risen from the dead.</p>
+            <p><span class="verse-num">15</span>When therefore they had dined, Jesus saith to Simon Peter: Simon son of John, lovest thou me more than these? He saith to him: Yea, Lord, thou knowest that I love thee. He saith to him: Feed my lambs. <span class="verse-num">16</span>He saith to him again: Simon, son of John, lovest thou me? He saith to him: Yea, Lord, thou knowest that I love thee. He saith to him: Feed my lambs. <span class="verse-num">17</span>He said to him the third time: Simon, son of John, lovest thou me? Peter was grieved, because he had said to him the third time: Lovest thou me? And he said to him: Lord, thou knowest all things: thou knowest that I love thee. He said to him: Feed my sheep. <span class="verse-num">18</span>Amen, amen I say to thee, when thou wast younger, thou didst gird thyself, and didst walk where thou wouldest. But when thou shalt be old, thou shalt stretch forth thy hands, and another shall gird thee, and lead thee whither thou wouldest not. <span class="verse-num">19</span>And this he said, signifying by what death he should glorify God. And when he had said this, he saith to him: Follow me.</p>
+        </div>
+    </div>
+
+    <!-- ===== X. PENTECOST ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-10">
+        <h2>X. Pentecost &amp; the Birth of the Church</h2>
+        <p class="section-desc">Peter presides over the selection of Matthias, stands to preach the first Christian sermon, and brings three thousand into the Church in a single day.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 1:15–26</div>
+        <p class="passage-context">Before the Spirit descends, Peter exercises his authority: he interprets Scripture, identifies the need to fill Judas's place, and presides over the selection process. He is acting as head of the apostolic college.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>In those days Peter rising up in the midst of the brethren, said (now the number of persons together was about an hundred and twenty): <span class="verse-num">16</span>Men, brethren, the scripture must needs be fulfilled, which the Holy Ghost spoke before by the mouth of David concerning Judas, who was the leader of them that apprehended Jesus: <span class="verse-num">17</span>Who was numbered with us, and had obtained part of this ministry. <span class="verse-num">18</span>And he indeed hath possessed a field of the reward of iniquity, and being hanged, burst asunder in the midst: and all his bowels gushed out. <span class="verse-num">19</span>And it became known to all the inhabitants of Jerusalem: so that the same field was called in their tongue, Haceldama, that is to say, The field of blood. <span class="verse-num">20</span>For it is written in the book of Psalms: Let their habitation become desolate, and let there be none to dwell therein. And his bishopric let another take.</p>
+            <p><span class="verse-num">21</span>Wherefore of these men who have companied with us all the time that the Lord Jesus came in and went out among us, <span class="verse-num">22</span>Beginning from the baptism of John, until the day wherein he was taken up from us, one of these must be made a witness with us of his resurrection. <span class="verse-num">23</span>And they appointed two, Joseph, called Barsabas, who was surnamed Justus, and Matthias. <span class="verse-num">24</span>And praying, they said: Thou, Lord, who knowest the hearts of all men, shew whether of these two thou hast chosen, <span class="verse-num">25</span>To take the place of this ministry and apostleship, from which Judas hath by transgression fallen, that he might go to his own place. <span class="verse-num">26</span>And they gave them lots, and the lot fell upon Matthias, and he was numbered with the eleven apostles.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 2:14–41</div>
+        <p class="passage-context">The Pentecost sermon. Peter stands "with the eleven" — at their head — and delivers the first public proclamation of the Gospel. The result: three thousand baptisms.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">14</span>But Peter standing up with the eleven, lifted up his voice, and spoke to them: Ye men of Judea, and all you that dwell in Jerusalem, be this known to you, and with your ears receive my words. <span class="verse-num">15</span>For these are not drunk, as you suppose, seeing it is but the third hour of the day: <span class="verse-num">16</span>But this is that which was spoken of by the prophet Joel: <span class="verse-num">17</span>And it shall come to pass, in the last days, (saith the Lord,) I will pour out of my Spirit upon all flesh: and your sons and your daughters shall prophesy, and your young men shall see visions, and your old men shall dream dreams. <span class="verse-num">18</span>And upon my servants indeed, and upon my handmaids will I pour out in those days of my spirit, and they shall prophesy. <span class="verse-num">19</span>And I will shew wonders in the heaven above, and signs on the earth beneath: blood and fire, and vapour of smoke. <span class="verse-num">20</span>The sun shall be turned into darkness, and the moon into blood, before the great and manifest day of the Lord come. <span class="verse-num">21</span>And it shall come to pass, that whosoever shall call upon the name of the Lord, shall be saved.</p>
+            <p><span class="verse-num">22</span>Ye men of Israel, hear these words: Jesus of Nazareth, a man approved of God among you, by miracles, and wonders, and signs, which God did by him, in the midst of you, as you also know: <span class="verse-num">23</span>This same being delivered up, by the determinate counsel and foreknowledge of God, you by the hands of wicked men have crucified and slain. <span class="verse-num">24</span>Whom God hath raised up, having loosed the sorrows of hell, as it was impossible that he should be holden by it. <span class="verse-num">25</span>For David saith concerning him: I foresaw the Lord before my face: because he is at my right hand, that I may not be moved. <span class="verse-num">26</span>For this my heart hath been glad, and my tongue hath rejoiced: moreover my flesh also shall rest in hope. <span class="verse-num">27</span>Because thou wilt not leave my soul in hell, nor suffer thy Holy One to see corruption. <span class="verse-num">28</span>Thou hast made known to me the ways of life: thou shalt make me full of joy with thy countenance.</p>
+            <p><span class="verse-num">29</span>Ye men, brethren, let me freely speak to you of the patriarch David; that he died, and was buried; and his sepulchre is with us to this present day. <span class="verse-num">30</span>Whereas therefore he was a prophet, and knew that God hath sworn to him with an oath, that of the fruit of his loins one should sit upon his throne. <span class="verse-num">31</span>Foreseeing this, he spoke of the resurrection of Christ. For neither was he left in hell, neither did his flesh see corruption.</p>
+            <p><span class="verse-num">32</span>This Jesus hath God raised again, whereof all we are witnesses. <span class="verse-num">33</span>Being exalted therefore by the right hand of God, and having received of the Father the promise of the Holy Ghost, he hath poured forth this which you see and hear. <span class="verse-num">34</span>For David ascended not into heaven; but he himself said: The Lord said to my Lord, sit thou on my right hand, <span class="verse-num">35</span>Until I make thy enemies thy footstool. <span class="verse-num">36</span>Therefore let all the house of Israel know most certainly, that God hath made both Lord and Christ, this same Jesus, whom you have crucified.</p>
+            <p><span class="verse-num">37</span>Now when they had heard these things, they had compunction in their heart, and said to Peter, and to the rest of the apostles: What shall we do, men and brethren? <span class="verse-num">38</span>But Peter said to them: Do penance, and be baptized every one of you in the name of Jesus Christ, for the remission of your sins: and you shall receive the gift of the Holy Ghost. <span class="verse-num">39</span>For the promise is to you, and to your children, and to all that are far off, whomsoever the Lord our God shall call. <span class="verse-num">40</span>And with very many other words did he testify and exhort them, saying: Save yourselves from this perverse generation. <span class="verse-num">41</span>They therefore that received his word, were baptized; and there were added in that day about three thousand souls.</p>
+        </div>
+    </div>
+
+    <!-- ===== XI. SIGNS & WONDERS ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-11">
+        <h2>XI. Signs, Wonders &amp; Apostolic Authority</h2>
+        <p class="section-desc">Peter heals, judges, teaches, and stands before the Sanhedrin — exercising the authority Christ conferred.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 3:1–10</div>
+        <p class="passage-context">The healing at the Beautiful Gate — the first apostolic miracle after Pentecost, performed by Peter.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>Now Peter and John went up into the temple at the ninth hour of prayer. <span class="verse-num">2</span>And a certain man who was lame from his mother's womb, was carried: whom they laid every day at the gate of the temple, which is called Beautiful, that he might ask alms of them that went into the temple. <span class="verse-num">3</span>He, when he had seen Peter and John about to go into the temple, asked to receive an alms. <span class="verse-num">4</span>But Peter with John fastening his eyes upon him, said: Look upon us. <span class="verse-num">5</span>But he looked earnestly upon them, hoping that he should receive something of them. <span class="verse-num">6</span>But Peter said: Silver and gold I have none; but what I have, I give thee: In the name of Jesus Christ of Nazareth, arise, and walk. <span class="verse-num">7</span>And taking him by the right hand, he lifted him up, and forthwith his feet and soles received strength. <span class="verse-num">8</span>And he leaping up, stood, and walked, and went in with them into the temple, walking, and leaping, and praising God. <span class="verse-num">9</span>And all the people saw him walking and praising God. <span class="verse-num">10</span>And they knew him, that it was he who sat begging alms at the Beautiful gate of the temple: and they were filled with wonder and amazement at that which had happened to him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 4:8–12</div>
+        <p class="passage-context">Peter before the Sanhedrin — the same Peter who denied Christ before a servant girl now stands before the supreme council and preaches without flinching.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">8</span>Then Peter, filled with the Holy Ghost, said to them: Ye princes of the people, and ancients, hear: <span class="verse-num">9</span>If we this day are examined concerning the good deed done to the infirm man, by what means he hath been made whole: <span class="verse-num">10</span>Be it known to you all, and to all the people of Israel, that by the name of our Lord Jesus Christ of Nazareth, whom you crucified, whom God hath raised from the dead, even by him this man standeth here before you whole. <span class="verse-num">11</span>This is the stone which was rejected by you the builders, which is become the head of the corner. <span class="verse-num">12</span>Neither is there salvation in any other. For there is no other name under heaven given to men, whereby we must be saved.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 5:1–11</div>
+        <p class="passage-context">Ananias and Sapphira. Peter exercises judicial authority — discerning hidden sin and pronouncing sentence. This is not merely pastoral leadership; it is the exercise of binding and loosing.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>But a certain man named Ananias, with Saphira his wife, sold a piece of land, <span class="verse-num">2</span>And by fraud kept back part of the price of the land, his wife being privy thereunto: and bringing a certain part of it, laid it at the feet of the apostles. <span class="verse-num">3</span>But Peter said: Ananias, why hath Satan tempted thy heart, that thou shouldst lie to the Holy Ghost, and by fraud keep part of the price of the land? <span class="verse-num">4</span>Whilst it remained, did it not remain to thee? and after it was sold, was it not in thy power? Why hast thou conceived this thing in thy heart? Thou hast not lied to men, but to God. <span class="verse-num">5</span>And Ananias hearing these words, fell down, and gave up the ghost. And there came great fear upon all that heard it. <span class="verse-num">6</span>And the young men rising up, removed him, and carrying him out, buried him.</p>
+            <p><span class="verse-num">7</span>And it was about the space of three hours after, when his wife, not knowing what had happened, came in. <span class="verse-num">8</span>And Peter said to her: Tell me, woman, whether you sold the land for so much? And she said: Yea, for so much. <span class="verse-num">9</span>And Peter said unto her: Why have you agreed together to tempt the Spirit of the Lord? Behold the feet of them who have buried thy husband are at the door, and they shall carry thee out. <span class="verse-num">10</span>Immediately she fell down before his feet, and gave up the ghost. And the young men coming in, found her dead: and carried her out, and buried her by her husband. <span class="verse-num">11</span>And there came great fear upon the whole church, and upon all that heard these things.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 5:15–16</div>
+        <p class="passage-context">Peter's shadow heals — an extraordinary detail that Luke records without apology.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>Insomuch that they brought forth the sick into the streets, and laid them on beds and couches, that when Peter came, his shadow at the least, might overshadow any of them, and they might be delivered from their infirmities. <span class="verse-num">16</span>And there came also together to Jerusalem a multitude out of the neighbouring cities, bringing sick persons, and such as were troubled with unclean spirits; who were all healed.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 8:18–24</div>
+        <p class="passage-context">Simon Magus attempts to purchase apostolic power. Peter judges and condemns — confirming that this authority is not transferable by money but conferred by the laying on of hands.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>And when Simon saw, that by the imposition of the hands of the apostles, the Holy Ghost was given, he offered them money, <span class="verse-num">19</span>Saying: Give me also this power, that on whomsoever I shall lay my hands, he may receive the Holy Ghost. <span class="verse-num">20</span>But Peter said to him: Keep thy money to thyself, to perish with thee, because thou hast thought that the gift of God may be purchased with money. <span class="verse-num">21</span>Thou hast no part nor lot in this matter. For thy heart is not right in the sight of God. <span class="verse-num">22</span>Do penance therefore for this thy wickedness; and pray to God, that perhaps this thought of thy heart may be forgiven thee. <span class="verse-num">23</span>For I see thou art in the gall of bitterness, and in the bonds of iniquity. <span class="verse-num">24</span>Then Simon answering, said: Pray you for me to the Lord, that none of these things which you have spoken may come upon me.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 9:32–42</div>
+        <p class="passage-context">Peter heals Aeneas and raises Tabitha (Dorcas) from the dead — exercising the same power Christ exercised.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">32</span>And it came to pass that Peter, as he passed through, visiting all, came to the saints who dwelt at Lydda. <span class="verse-num">33</span>And he found there a certain man named Eneas, who had kept his bed for eight years, who was ill of the palsy. <span class="verse-num">34</span>And Peter said to him: Eneas, the Lord Jesus Christ healeth thee: arise, and make thy bed. And immediately he arose. <span class="verse-num">35</span>And all that dwelt at Lydda and Saron, saw him: who were converted to the Lord.</p>
+            <p><span class="verse-num">36</span>And in Joppe there was a certain disciple named Tabitha, which by interpretation is called Dorcas. This woman was full of good works and almsdeeds which she did. <span class="verse-num">37</span>And it came to pass in those days that she was sick, and died. Whom when they had washed, they laid her in an upper chamber. <span class="verse-num">38</span>And forasmuch as Lydda was nigh to Joppe, the disciples hearing that Peter was there, sent unto him two men, desiring him that he would not be slack to come unto them. <span class="verse-num">39</span>And Peter rising up, went with them. And when he was come, they brought him into the upper chamber. And all the widows stood about him weeping, and shewing him the coats and garments which Dorcas made them. <span class="verse-num">40</span>And they all being put forth, Peter kneeling down prayed, and turning to the body, he said: Tabitha, arise. And she opened her eyes; and seeing Peter, she sat up. <span class="verse-num">41</span>And giving her his hand, he lifted her up. And when he had called the saints and the widows, he presented her alive. <span class="verse-num">42</span>And it was made known throughout all Joppe; and many believed in the Lord.</p>
+        </div>
+    </div>
+
+    <!-- ===== XII. CORNELIUS ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-12">
+        <h2>XII. The Cornelius Episode — Peter Opens the Door to the Gentiles</h2>
+        <p class="section-desc">The pivotal moment in salvation history after the Ascension: the chief apostle, by divine vision, opens the Church to all nations. Peter — not Paul — makes the first Gentile converts.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 10:1–48</div>
+        <p class="passage-context">The full Cornelius narrative. God prepares both parties — the Gentile centurion and the Jewish apostle — and brings them together. Peter uses the keys: what he looses on earth is loosed in heaven.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And there was a certain man in Caesarea, named Cornelius, a centurion of that which is called the Italian band; <span class="verse-num">2</span>A religious man, and fearing God with all his house, giving much alms to the people, and always praying to God. <span class="verse-num">3</span>This man saw in a vision manifestly, about the ninth hour of the day, an angel of God coming in unto him, and saying to him: Cornelius. <span class="verse-num">4</span>And he, beholding him, being seized with fear, said: What is it, Lord? And he said to him: Thy prayers and thy alms are ascended for a memorial in the sight of God. <span class="verse-num">5</span>And now send men to Joppe, and call hither one Simon, who is surnamed Peter. <span class="verse-num">6</span>He lodgeth with one Simon a tanner, whose house is by the sea side. He will tell thee what thou must do.</p>
+            <p><span class="verse-num">9</span>And on the next day, whilst they were going on their journey, and drawing nigh to the city, Peter went up to the higher parts of the house to pray, about the sixth hour. <span class="verse-num">10</span>And being hungry, he was desirous to taste somewhat. And as they were preparing, there came upon him an ecstasy of mind. <span class="verse-num">11</span>And he saw the heaven opened, and a certain vessel descending, as it were a great linen sheet let down by the four corners from heaven to the earth: <span class="verse-num">12</span>Wherein were all manner of fourfooted beasts, and creeping things of the earth, and fowls of the air. <span class="verse-num">13</span>And there came a voice to him: Arise, Peter; kill and eat. <span class="verse-num">14</span>But Peter said: Far be it from me; for I never did eat any thing that is common and unclean. <span class="verse-num">15</span>And the voice spoke to him again the second time: That which God hath cleansed, do not thou call common. <span class="verse-num">16</span>And this was done thrice; and presently the vessel was taken up into heaven.</p>
+            <p><span class="verse-num">25</span>And it came to pass, that when Peter was come in, Cornelius came to meet him, and falling at his feet, adored. <span class="verse-num">26</span>But Peter lifted him up, saying: Arise, I myself also am a man.</p>
+            <p><span class="verse-num">34</span>And Peter opening his mouth, said: In very deed I perceive, that God is not a respecter of persons. <span class="verse-num">35</span>But in every nation, he that feareth him, and worketh justice, is acceptable to him. <span class="verse-num">36</span>God sent the word to the children of Israel, preaching peace by Jesus Christ: (he is Lord of all.) <span class="verse-num">37</span>You know the word which hath been published through all Judea: for it began from Galilee, after the baptism which John preached, <span class="verse-num">38</span>Jesus of Nazareth: how God anointed him with the Holy Ghost, and with power, who went about doing good, and healing all that were oppressed by the devil, for God was with him. <span class="verse-num">39</span>And we are witnesses of all things that he did in the land of the Jews and in Jerusalem, whom they killed, hanging him upon a tree. <span class="verse-num">40</span>Him God raised up the third day, and gave him to be made manifest, <span class="verse-num">41</span>Not to all the people, but to witnesses preordained by God, even to us, who did eat and drink with him after he arose again from the dead. <span class="verse-num">42</span>And he commanded us to preach to the people, and to testify that it is he who was appointed by God, to be judge of the living and of the dead. <span class="verse-num">43</span>To him all the prophets give testimony, that by his name all receive remission of sins, who believe in him.</p>
+            <p><span class="verse-num">44</span>While Peter was yet speaking these words, the Holy Ghost fell on all them that heard the word. <span class="verse-num">45</span>And the faithful of the circumcision, who came with Peter, were astonished, for that the grace of the Holy Ghost was poured out upon the Gentiles also. <span class="verse-num">46</span>For they heard them speaking with tongues, and magnifying God. <span class="verse-num">47</span>Then Peter answered: Can any man forbid water, that these should not be baptized, who have received the Holy Ghost, as well as we? <span class="verse-num">48</span>And he commanded them to be baptized in the name of the Lord Jesus Christ. Then they desired him to tarry with them some days.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 11:1–18</div>
+        <p class="passage-context">Peter defends his decision before the Jerusalem church. He gives account — but notice that his account settles the matter. No vote is taken. No appeal is filed.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And the apostles and brethren, who were in Judea, heard that the Gentiles also had received the word of God. <span class="verse-num">2</span>And when Peter was come up to Jerusalem, they that were of the circumcision contended with him, <span class="verse-num">3</span>Saying: Why didst thou go in to men uncircumcised, and didst eat with them? <span class="verse-num">4</span>But Peter began and declared to them the matter in order, saying: <span class="verse-num">5</span>I was in the city of Joppe praying, and I saw in an ecstasy of mind a vision…</p>
+            <p><span class="verse-num">15</span>And when I had begun to speak, the Holy Ghost fell upon them, as upon us also in the beginning. <span class="verse-num">16</span>And I remembered the word of the Lord, how that he said: John indeed baptized with water, but you shall be baptized with the Holy Ghost. <span class="verse-num">17</span>If then God gave them the same grace, as to us also who believed in the Lord Jesus Christ; who was I, that could withstand God? <span class="verse-num">18</span>Having heard these things, they held their peace, and glorified God, saying: God then hath also to the Gentiles given repentance unto life.</p>
+        </div>
+    </div>
+
+    <!-- ===== XIII. PERSECUTION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-13">
+        <h2>XIII. Persecution, Imprisonment &amp; Deliverance</h2>
+        <p class="section-desc">Herod targets Peter specifically — because Peter is the leader. God intervenes directly.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 12:1–17</div>
+        <p class="passage-context">James is killed; Peter is imprisoned and miraculously freed. Note the Church's response: they pray specifically for Peter. His deliverance is treated as a matter of supreme importance for the whole community.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And at the same time, Herod the king stretched forth his hands, to afflict some of the church. <span class="verse-num">2</span>And he killed James, the brother of John, with the sword. <span class="verse-num">3</span>And seeing that it pleased the Jews, he proceeded to take up Peter also. Now it was in the days of the Azymes. <span class="verse-num">4</span>And when he had apprehended him, he cast him into prison, delivering him to four files of soldiers to be kept, intending, after the pasch, to bring him forth to the people. <span class="verse-num">5</span>Peter therefore was kept in prison. But prayer was made without ceasing by the church unto God for him.</p>
+            <p><span class="verse-num">6</span>And when Herod would have brought him forth, the same night Peter was sleeping between two soldiers, bound with two chains: and the keepers before the door kept the prison. <span class="verse-num">7</span>And behold an angel of the Lord stood by him: and a light shined in the room: and he striking Peter on the side, raised him up, saying: Arise quickly. And the chains fell off from his hands. <span class="verse-num">8</span>And the angel said to him: Gird thyself, and put on thy sandals. And he did so. And he said to him: Cast thy garment about thee, and follow me. <span class="verse-num">9</span>And going out, he followed him, and he knew not that it was true which was done by the angel: but thought he saw a vision. <span class="verse-num">10</span>And passing through the first and the second ward, they came to the iron gate that leadeth to the city: which of itself opened to them. And going out, they passed on through one street: and immediately the angel departed from him. <span class="verse-num">11</span>And Peter coming to himself, said: Now I know in very deed, that the Lord hath sent his angel, and hath delivered me out of the hand of Herod, and from all the expectation of the people of the Jews.</p>
+            <p><span class="verse-num">12</span>And considering, he came to the house of Mary the mother of John, who was surnamed Mark, where many were gathered together and praying. <span class="verse-num">13</span>And when he knocked at the door of the gate, a damsel came to hearken, whose name was Rhode. <span class="verse-num">14</span>And as soon as she knew Peter's voice, she opened not the gate for joy, but running in she told that Peter stood before the gate. <span class="verse-num">15</span>But they said to her: Thou art mad. But she affirmed that it was so. Then said they: It is his angel. <span class="verse-num">16</span>But Peter continued knocking. And when they had opened, they saw him, and were astonished. <span class="verse-num">17</span>But he beckoning to them with his hand to hold their peace, told how the Lord had brought him out of prison, and he said: Tell these things to James, and to the brethren. And going out, he went into another place.</p>
+        </div>
+    </div>
+
+    <!-- ===== XIV. JERUSALEM COUNCIL ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-14">
+        <h2>XIV. The Council of Jerusalem</h2>
+        <p class="section-desc">Peter's final appearance in Acts — and his most conciliar. He rises, speaks, and after his speech the "multitude held their peace." James speaks after Peter; the decree follows Peter's doctrine.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 15:6–11</div>
+        <p class="passage-context">The first council of the Church. After much disputing, Peter rises and settles the theological question. The pattern: debate, then Peter speaks, then silence, then James proposes the practical application of Peter's ruling.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">6</span>And the apostles and ancients assembled to consider of this matter. <span class="verse-num">7</span>And when there had been much disputing, Peter rising up, said to them: Men, brethren, you know, that in former days God made choice among us, that by my mouth the Gentiles should hear the word of the gospel, and believe. <span class="verse-num">8</span>And God, who knoweth the hearts, gave testimony, giving unto them the Holy Ghost, as well as to us; <span class="verse-num">9</span>And put no difference between us and them, purifying their hearts by faith. <span class="verse-num">10</span>Now therefore, why tempt you God to put a yoke upon the necks of the disciples, which neither our fathers nor we have been able to bear? <span class="verse-num">11</span>But by the grace of the Lord Jesus Christ, we believe to be saved, in like manner as they also.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 15:12</div>
+        <p class="passage-context">The response to Peter's speech.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">12</span>And all the multitude held their peace.</p>
+        </div>
+    </div>
+
+    <!-- ===== XV. PAULINE REFERENCES ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-15">
+        <h2>XV. Peter in the Pauline Letters</h2>
+        <p class="section-desc">Paul's references to Cephas confirm Peter's unique status — even when Paul opposes him, he does so precisely because Peter's behavior matters to the whole Church in a way that no other apostle's does.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Corinthians 15:5</div>
+        <p class="passage-context">The earliest written testimony to the Resurrection appearances — Peter is listed first.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">5</span>And that he was seen by Cephas; and after that by the eleven.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Corinthians 1:12; 3:22; 9:5</div>
+        <p class="passage-context">Paul references Cephas as a name that carries unique weight in the churches. In 9:5, Peter's wife is mentioned — and her accompaniment of Peter implies apostolic support, not the absence of celibacy as an ideal.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1:12</span>Now this I say, that every one of you saith: I indeed am of Paul; and I am of Apollo; and I am of Cephas; and I of Christ.</p>
+            <p><span class="verse-num">3:22</span>For all things are yours, whether it be Paul, or Apollo, or Cephas, or the world, or life, or death, or things present, or things to come; for all are yours.</p>
+            <p><span class="verse-num">9:5</span>Have we not power to carry about a woman, a sister, as well as the rest of the apostles, and the brethren of the Lord, and Cephas?</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Galatians 1:18–19</div>
+        <p class="passage-context">After his conversion, Paul goes to Jerusalem specifically to see Cephas — the Greek is ἱστορῆσαι, meaning to visit, to consult, to make inquiry of. Paul treats Peter as the authoritative source.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>Then, after three years, I went to Jerusalem, to see Peter, and I tarried with him fifteen days. <span class="verse-num">19</span>But other of the apostles I saw none, saving James the brother of the Lord.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Galatians 2:1–14</div>
+        <p class="passage-context">The Antioch incident. Paul opposes Peter "to his face" — not because Peter taught error, but because his behavior ("he withdrew and separated himself") contradicted the truth he himself had established in Acts 10–11. Paul's rebuke confirms Peter's influence: if Peter withdrew from Gentile table fellowship, "the rest of the Jews" followed him. His behavior had magisterial weight whether he intended it or not.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>Then, after fourteen years, I went up again to Jerusalem with Barnabas, taking Titus also with me. <span class="verse-num">2</span>And I went up according to revelation; and communicated to them the gospel, which I preach among the Gentiles, but apart to them who seemed to be some thing: lest perhaps I should run, or had run in vain. <span class="verse-num">7</span>But contrariwise, when they had seen that to me was committed the gospel of the uncircumcision, as to Peter was that of the circumcision. <span class="verse-num">8</span>For he who wrought in Peter to the apostleship of the circumcision, wrought in me also among the Gentiles. <span class="verse-num">9</span>And when they had known the grace that was given to me, James and Cephas and John, who seemed to be pillars, gave to me and Barnabas the right hands of fellowship: that we should go unto the Gentiles, and they unto the circumcision.</p>
+            <p><span class="verse-num">11</span>But when Cephas was come to Antioch, I withstood him to the face, because he was to be blamed. <span class="verse-num">12</span>For before that some came from James, he did eat with the Gentiles: but when they were come, he withdrew and separated himself, fearing them who were of the circumcision. <span class="verse-num">13</span>And to his dissimulation the rest of the Jews consented, so that Barnabas also was led by them into that dissimulation. <span class="verse-num">14</span>But when I saw that they walked not uprightly unto the truth of the gospel, I said to Cephas before them all: If thou, being a Jew, livest after the manner of the Gentiles, and not as the Jews do, how dost thou compel the Gentiles to live as do the Jews?</p>
+        </div>
+    </div>
+
+    <!-- ===== XVI. FIRST EPISTLE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-16">
+        <h2>XVI. The First Epistle of St. Peter</h2>
+        <p class="section-desc">Written from "Babylon" — universally understood by the Fathers as Rome. Peter writes as a shepherd to the churches of Asia Minor: exhorting, comforting, and exercising pastoral authority over communities he did not personally found.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Peter 1:1–2</div>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>Peter, an apostle of Jesus Christ, to the strangers dispersed through Pontus, Galatia, Cappadocia, Asia, and Bithynia, elect, <span class="verse-num">2</span>According to the foreknowledge of God the Father, unto the sanctification of the Spirit, unto obedience and sprinkling of the blood of Jesus Christ: Grace unto you and peace be multiplied.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Peter 1:3–9</div>
+        <div class="passage-text">
+            <p><span class="verse-num">3</span>Blessed be the God and Father of our Lord Jesus Christ, who according to his great mercy hath regenerated us unto a lively hope, by the resurrection of Jesus Christ from the dead, <span class="verse-num">4</span>Unto an inheritance incorruptible, and undefiled, and that can not fade, reserved in heaven for you, <span class="verse-num">5</span>Who, by the power of God, are kept by faith unto salvation, ready to be revealed in the last time. <span class="verse-num">6</span>Wherein you shall greatly rejoice, if now you must be for a little time made sorrowful in divers temptations: <span class="verse-num">7</span>That the trial of your faith (much more precious than gold which is tried by the fire) may be found unto praise and glory and honour at the appearing of Jesus Christ: <span class="verse-num">8</span>Whom having not seen, you love: in whom also now, though you see him not, you believe: and believing shall rejoice with joy unspeakable and glorified; <span class="verse-num">9</span>Receiving the end of your faith, even the salvation of your souls.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">1 Peter 2:4–10</div>
+        <p class="passage-context">Peter — the Rock — writes about Christ as the living stone and the faithful as living stones built upon him. The man who was renamed "Rock" understands his own role as derivative of the true cornerstone.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">4</span>Unto whom coming, as to a living stone, rejected indeed by men, but chosen and made honourable by God: <span class="verse-num">5</span>Be you also as living stones built up, a spiritual house, a holy priesthood, to offer up spiritual sacrifices, acceptable to God by Jesus Christ. <span class="verse-num">6</span>Wherefore it is said in the scripture: Behold, I lay in Sion a chief corner stone, elect, precious. And he that shall believe in him, shall not be confounded. <span class="verse-num">7</span>To you therefore that believe, he is honour: but to them that believe not, the stone which the builders rejected, the same is made the head of the corner: <span class="verse-num">8</span>And a stone of stumbling, and a rock of scandal, to them who stumble at the word, neither do believe, whereunto also they are set. <span class="verse-num">9</span>But you are a chosen generation, a kingly priesthood, a holy nation, a purchased people: that you may declare his virtues, who hath called you out of darkness into his marvellous light: <span class="verse-num">10</span>Who in time past were not a people: but are now the people of God. Who had not obtained mercy; but now have obtained mercy.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Peter 2:13–17</div>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>Be ye subject therefore to every human creature for God's sake: whether it be to the king as excelling; <span class="verse-num">14</span>Or to governors as sent by him for the punishment of evildoers, and for the praise of the good: <span class="verse-num">15</span>For so is the will of God, that by doing well you may put to silence the ignorance of foolish men: <span class="verse-num">16</span>As free, and not as making liberty a cloak for malice, but as the servants of God. <span class="verse-num">17</span>Honour all men. Love the brotherhood. Fear God. Honour the king.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Peter 3:15–16</div>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>But sanctify the Lord Christ in your hearts, being ready always to satisfy every one that asketh you a reason of that hope which is in you. <span class="verse-num">16</span>But with modesty and fear, having a good conscience: that whereas they speak evil of you, they may be ashamed who falsely accuse your good conversation in Christ.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">1 Peter 5:1–4</div>
+        <p class="passage-context">Peter addresses the presbyters — calling himself a "fellow-elder" (co-presbyter) and "witness of the sufferings of Christ." He commands them to feed the flock and promises the crown of glory from the "prince of pastors." The echo of John 21:15–17 is unmistakable.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>The ancients therefore that are among you, I beseech, who am myself also an ancient, and a witness of the sufferings of Christ: as also a partaker of that glory which is to be revealed in time to come: <span class="verse-num">2</span>Feed the flock of God which is among you, taking care of it, not by constraint, but willingly, according to God: not for filthy lucre's sake, but voluntarily: <span class="verse-num">3</span>Neither as lording it over the clergy, but being made a pattern of the flock from the heart. <span class="verse-num">4</span>And when the prince of pastors shall appear, you shall receive a never fading crown of glory.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">1 Peter 5:13</div>
+        <p class="passage-context">"Babylon" — the code name for Rome, as virtually every ancient commentator affirms. Peter writes from the seat of empire, the city that would become the seat of the Church.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>The church that is in Babylon, elected together with you, saluteth you: and so doth my son Mark.</p>
+        </div>
+    </div>
+
+    <!-- ===== XVII. SECOND EPISTLE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-17">
+        <h2>XVII. The Second Epistle of St. Peter</h2>
+        <p class="section-desc">Peter's farewell letter — written with the knowledge that his death is near (1:14). He defends the faith against false teachers, affirms the Transfiguration as historical event, and — remarkably — acknowledges Paul's letters as Scripture.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">2 Peter 1:1–4</div>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>Simon Peter, servant and apostle of Jesus Christ, to them that have obtained equal faith with us in the justice of our God and Saviour Jesus Christ. <span class="verse-num">2</span>Grace to you and peace be accomplished in the knowledge of God and of Christ Jesus our Lord: <span class="verse-num">3</span>As all things of his divine power which appertain to life and godliness, are given us, through the knowledge of him who hath called us by his own proper glory and virtue. <span class="verse-num">4</span>By whom he hath given us most great and precious promises: that by these you may be made partakers of the divine nature: flying the corruption of that concupiscence which is in the world.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">2 Peter 1:12–18</div>
+        <p class="passage-context">Peter the eyewitness recalls the Transfiguration — "we were eyewitnesses of his majesty" — and grounds the apostolic testimony in historical experience, not "cunningly devised fables." This is Peter's final, definitive claim to authority: he was there.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">12</span>For which cause I will begin to put you always in remembrance of these things: though indeed you know them, and are confirmed in the present truth. <span class="verse-num">13</span>But I think it meet as long as I am in this tabernacle, to stir you up by putting you in remembrance. <span class="verse-num">14</span>Being assured that the laying away of this my tabernacle is at hand, according as our Lord Jesus Christ also hath signified to me. <span class="verse-num">15</span>And I will endeavour, that after my decease also, you may often have whereby to keep a memory of these things. <span class="verse-num">16</span>For we have not by following artificial fables, made known to you the power, and presence of our Lord Jesus Christ; but we were eyewitnesses of his majesty. <span class="verse-num">17</span>For he received from God the Father, honour and glory: this voice coming down to him from the excellent glory: This is my beloved Son, in whom I am well pleased; hear ye him. <span class="verse-num">18</span>And this voice we heard brought from heaven, when we were with him in the holy mount.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">2 Peter 1:19–21</div>
+        <p class="passage-context">The interpretive authority of the Church — "no prophecy of scripture is made by private interpretation."</p>
+        <div class="passage-text">
+            <p><span class="verse-num">19</span>And we have the more firm prophetical word: whereunto you do well to attend, as to a light that shineth in a dark place, until the day dawn, and the day star arise in your hearts: <span class="verse-num">20</span>Understanding this first, that no prophecy of scripture is made by private interpretation. <span class="verse-num">21</span>For prophecy came not by the will of man at any time: but the holy men of God spoke, inspired by the Holy Ghost.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">2 Peter 3:15–16</div>
+        <p class="passage-context">Peter's acknowledgment of Paul's letters as Scripture — an act of canonical recognition by the chief apostle. He also notes that Paul's writings are subject to misinterpretation by "the unlearned and unstable" — a warning against private interpretation that echoes 1:20.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>And account the longsuffering of our Lord, salvation; as also our most dear brother Paul, according to the wisdom given him, hath written to you: <span class="verse-num">16</span>As also in all his epistles, speaking in them of these things; in which are certain things hard to be understood, which the unlearned and unstable wrest, as they do also the other scriptures, to their own destruction.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">2 Peter 3:17–18</div>
+        <p class="passage-context">Peter's final words.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">17</span>You therefore, brethren, knowing these things before, take heed, lest being led aside by the error of the unwise, you fall from your own steadfastness. <span class="verse-num">18</span>But grow in grace, and in the knowledge of our Lord and Saviour Jesus Christ. To him be glory both now and unto the day of eternity. Amen.</p>
+        </div>
+    </div>
+
+    <!-- COLOPHON -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="editorial-note" style="margin-top: 40px;">
+        <div class="note-label">Colophon</div>
+        <p>Text: Douay-Rheims Bible (Challoner Revision). Passages selected and arranged chronologically according to the life of Simon Peter. Contextual notes and apologetic commentary by the editors of One Faith Delivered. This compilation is intended for private study and is not a replacement for reading each book of the New Testament in its full canonical context.</p>
+    </div>
+
+</main>
+
+<script>
+    // Reading progress bar
+    window.addEventListener('scroll', function() {
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / docHeight) * 100;
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+    });
+</script>
+
+</body>
+</html>
