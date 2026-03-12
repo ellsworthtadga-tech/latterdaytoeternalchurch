@@ -18,6 +18,94 @@
             --ink-faint: #8a7e74;
         }
 
+        [data-theme="dark"] {
+            --crimson: #c44040;
+            --crimson-light: #d45555;
+            --gold: #d4b96a;
+            --gold-light: #c5a55a;
+            --parchment: #1a1714;
+            --parchment-dark: #141210;
+            --ink: #d8d0c4;
+            --ink-light: #b0a898;
+            --ink-faint: #8a7e74;
+        }
+        [data-theme="dark"] .page-header {
+            background: linear-gradient(135deg, #0d0606 0%, #1a0c0c 40%, #221212 100%);
+        }
+        [data-theme="dark"] .toc {
+            background: #221e1a;
+            border-color: #3a332a;
+        }
+        [data-theme="dark"] .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.06), rgba(197, 165, 90, 0.02));
+        }
+        [data-theme="dark"] .editorial-note {
+            background: #221e1a;
+        }
+        [data-theme="dark"] .section-header {
+            border-bottom-color: var(--crimson);
+        }
+        [data-theme="dark"] .passage-text .verse-num {
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .toc a {
+            color: var(--ink);
+        }
+        [data-theme="dark"] .toc a:hover {
+            color: var(--crimson);
+        }
+
+        /* ── Dark Mode Toggle ── */
+        .dark-toggle {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .dark-toggle:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .dark-toggle {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .dark-toggle:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .dark-toggle .toggle-icon {
+            font-size: 14px;
+            line-height: 1;
+            transition: transform 0.4s ease;
+        }
+        .dark-toggle:hover .toggle-icon {
+            transform: rotate(20deg);
+        }
+        .dark-toggle .toggle-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.8);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-label {
+            color: rgba(212, 185, 106, 0.8);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         /* Reading Progress Bar */
@@ -38,6 +126,7 @@
             color: var(--ink);
             line-height: 1.75;
             font-size: 17px;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         /* Page Header */
@@ -102,6 +191,7 @@
             border-left: 4px solid var(--gold);
             border-radius: 4px;
             padding: 24px 28px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
         .toc ol {
             list-style: none;
@@ -216,6 +306,7 @@
             padding: 20px 24px;
             border-radius: 0 4px 4px 0;
             margin: 20px 0 36px;
+            transition: background 0.4s ease;
         }
 
         /* Patristic / editorial comment blocks */
@@ -225,6 +316,7 @@
             padding: 16px 20px;
             margin: 20px 0;
             border-radius: 0 4px 4px 0;
+            transition: background-color 0.4s ease;
         }
         .editorial-note .note-label {
             font-family: 'JetBrains Mono', monospace;
@@ -265,10 +357,27 @@
             .content { padding: 16px 16px 60px; }
             .section-header h2 { font-size: 1.5em; }
             .key-passage { padding: 16px 18px; }
+            .dark-toggle { top: 10px; right: 12px; padding: 5px 10px 5px 9px; }
+            .dark-toggle .toggle-label { display: none; }
         }
     </style>
 </head>
 <body>
+
+<script>
+    // Apply saved theme immediately to prevent flash
+    (function() {
+        var saved = localStorage.getItem('ofd-peter-theme');
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    })();
+</script>
+
+<div class="dark-toggle" id="darkToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+    <span class="toggle-icon" id="toggleIcon">☽</span>
+    <span class="toggle-label" id="toggleLabel">Night</span>
+</div>
 
 <div class="reading-progress" id="readingProgress"></div>
 
@@ -900,6 +1009,38 @@
         const scrolled = (window.scrollY / docHeight) * 100;
         document.getElementById('readingProgress').style.width = scrolled + '%';
     });
+
+    // Dark mode toggle
+    (function() {
+        var toggle = document.getElementById('darkToggle');
+        var icon = document.getElementById('toggleIcon');
+        var label = document.getElementById('toggleLabel');
+
+        function updateUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            icon.textContent = isDark ? '☀' : '☽';
+            label.textContent = isDark ? 'Day' : 'Night';
+        }
+
+        function flipTheme() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('ofd-peter-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('ofd-peter-theme', 'dark');
+            }
+            updateUI();
+        }
+
+        toggle.addEventListener('click', flipTheme);
+        toggle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipTheme(); }
+        });
+
+        updateUI();
+    })();
 </script>
 
 </body>
