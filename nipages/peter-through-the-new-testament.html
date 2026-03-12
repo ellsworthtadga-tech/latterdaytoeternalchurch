@@ -87,9 +87,13 @@
             border-color: rgba(197, 165, 90, 0.5);
         }
         .dark-toggle .toggle-icon {
-            font-size: 14px;
+            font-size: 16px;
             line-height: 1;
-            transition: transform 0.4s ease;
+            color: var(--gold-light);
+            transition: transform 0.4s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-icon {
+            color: #f0d060;
         }
         .dark-toggle:hover .toggle-icon {
             transform: rotate(20deg);
@@ -99,10 +103,64 @@
             font-size: 0.6em;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: rgba(245, 240, 232, 0.8);
+            color: rgba(245, 240, 232, 0.95);
             transition: color 0.3s;
         }
         [data-theme="dark"] .dark-toggle .toggle-label {
+            color: rgba(240, 208, 96, 0.9);
+        }
+
+        /* ── Back Button ── */
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            user-select: none;
+        }
+        .back-btn:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .back-btn {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .back-btn:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .back-btn .back-arrow {
+            font-size: 14px;
+            line-height: 1;
+            color: rgba(245, 240, 232, 0.8);
+            transition: transform 0.3s ease;
+        }
+        .back-btn:hover .back-arrow {
+            transform: translateX(-2px);
+        }
+        .back-btn .back-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.8);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .back-btn .back-arrow,
+        [data-theme="dark"] .back-btn .back-label {
             color: rgba(212, 185, 106, 0.8);
         }
 
@@ -359,6 +417,8 @@
             .key-passage { padding: 16px 18px; }
             .dark-toggle { top: 10px; right: 12px; padding: 5px 10px 5px 9px; }
             .dark-toggle .toggle-label { display: none; }
+            .back-btn { top: 10px; left: 12px; padding: 5px 10px 5px 9px; }
+            .back-btn .back-label { display: none; }
         }
     </style>
 </head>
@@ -373,6 +433,11 @@
         }
     })();
 </script>
+
+<a href="../biblical-reference-charts.html" class="back-btn" aria-label="Back to Biblical Reference Charts">
+    <span class="back-arrow">←</span>
+    <span class="back-label">Charts</span>
+</a>
 
 <div class="dark-toggle" id="darkToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
     <span class="toggle-icon" id="toggleIcon">☽</span>
