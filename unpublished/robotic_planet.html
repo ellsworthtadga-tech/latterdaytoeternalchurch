@@ -1142,7 +1142,7 @@ function findPath(sx, sy, ex, ey) {
     for (let [dx, dy] of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,-1],[1,-1],[-1,1]]) {
       let nx = current.x + dx, ny = current.y + dy;
       if (nx < 0 || nx >= MAP_SIZE || ny < 0 || ny >= MAP_SIZE) continue;
-      if (map[nx][ny].type === 'water') continue;
+      if (!map[nx] || !map[nx][ny] || map[nx][ny].type === 'water') continue;
       if (closed.has(`${nx},${ny}`)) continue;
       if (buildings.some(b => b.x === nx && b.y === ny)) continue;
       
@@ -1170,6 +1170,7 @@ function updateGame(dt) {
   
   // Update fog of war
   for (let i = 0; i < MAP_SIZE; i++) {
+    if (!fogOfWar[i]) continue;
     for (let j = 0; j < MAP_SIZE; j++) {
       if (fogOfWar[i][j] === 2) fogOfWar[i][j] = 1;
     }
@@ -1180,7 +1181,7 @@ function updateGame(dt) {
     for (let dx = -range; dx <= range; dx++) {
       for (let dy = -range; dy <= range; dy++) {
         let nx = Math.floor(x) + dx, ny = Math.floor(y) + dy;
-        if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE) {
+        if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE && fogOfWar[nx]) {
           if (dx*dx + dy*dy <= range*range) {
             fogOfWar[nx][ny] = 2;
           }
@@ -1625,13 +1626,15 @@ function render() {
   }
   
   // Draw map tiles (isometric order)
+  if (map.length > 0) {
   for (let sum = 0; sum < MAP_SIZE * 2; sum++) {
     for (let x = Math.max(0, sum - MAP_SIZE + 1); x <= Math.min(sum, MAP_SIZE - 1); x++) {
       let y = sum - x;
       if (y < 0 || y >= MAP_SIZE) continue;
+      if (!map[x] || !map[x][y]) continue;
       
       let tile = map[x][y];
-      let fog = fogOfWar[x][y];
+      let fog = fogOfWar[x]?.[y] ?? 0;
       
       let { sx, sy } = isoToScreen(x, y);
       
@@ -1666,6 +1669,7 @@ function render() {
       }
     }
   }
+  } // end map.length guard
   
   // Draw resource nodes
   resourceNodes.forEach(n => {
@@ -1748,10 +1752,13 @@ function drawMinimap() {
   minimapCtx.fillStyle = '#0a0e18';
   minimapCtx.fillRect(0, 0, mw, mh);
   
+  if (map.length === 0) return;
+  
   for (let x = 0; x < MAP_SIZE; x++) {
     for (let y = 0; y < MAP_SIZE; y++) {
+      if (!map[x] || !map[x][y]) continue;
       let tile = map[x][y];
-      let fog = fogOfWar[x][y];
+      let fog = fogOfWar[x]?.[y] ?? 0;
       
       if (fog === 0) {
         minimapCtx.fillStyle = '#0a0e18';
@@ -1858,6 +1865,7 @@ canvas.addEventListener('mousedown', e => {
     let def = buildingDefs[buildType];
     
     if (tile.x < 0 || tile.x >= MAP_SIZE || tile.y < 0 || tile.y >= MAP_SIZE) return;
+    if (!map[tile.x] || !map[tile.x][tile.y]) return;
     if (map[tile.x][tile.y].type === 'water') {
       showMessage("Can't build on water!");
       return;
