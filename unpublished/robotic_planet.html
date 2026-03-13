@@ -63,6 +63,9 @@ canvas#gameCanvas{display:block;position:fixed;inset:0;z-index:0}
 #touch-mode-btn{position:fixed;right:10px;bottom:62px;width:46px;height:46px;border-radius:50%;background:rgba(30,60,90,.8);border:2px solid rgba(100,200,255,.3);display:none;align-items:center;justify-content:center;z-index:22;font-size:22px;color:#80b0d0;-webkit-tap-highlight-color:transparent}
 @media(max-width:900px){#touch-mode-btn{display:flex}#minimap-container{bottom:112px}}
 @media(max-width:500px){.res-label{display:none}}
+#tooltip{position:fixed;z-index:50;pointer-events:none;background:rgba(8,16,28,.94);border:1px solid rgba(100,200,255,.3);border-radius:6px;padding:6px 10px;font-size:11px;color:#b0d0e8;max-width:220px;line-height:1.4;display:none;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+#tooltip .tt-title{font-family:'Orbitron',sans-serif;font-size:11px;color:#60c0e8;margin-bottom:3px}
+#tooltip .tt-desc{color:#80a0b8;font-size:10px}
 </style>
 </head>
 <body>
@@ -115,6 +118,7 @@ canvas#gameCanvas{display:block;position:fixed;inset:0;z-index:0}
 <div id="minimap-container" style="display:none"><canvas id="minimap" width="160" height="160"></canvas></div>
 <div id="info-panel"><h3 id="info-title">Selection</h3><div id="info-content"></div></div>
 <div id="message-log"></div>
+<div id="tooltip"><div class="tt-title"></div><div class="tt-desc"></div></div>
 <div id="touch-mode-btn" onclick="toggleTouchMode()">👆</div>
 <div id="bottom-panel" style="display:none"><div id="action-bar">
 <div class="action-btn" onclick="setAction('select')" id="btn-select"><div class="btn-icon">🎯</div>Select</div>
@@ -125,6 +129,7 @@ canvas#gameCanvas{display:block;position:fixed;inset:0;z-index:0}
 <div class="action-btn" onclick="setAction('build-turret')" id="btn-turret"><div class="btn-icon">🔫</div>Turret<div class="btn-cost">35O 25M</div></div>
 <div class="action-btn" onclick="setAction('build-storage')" id="btn-storage"><div class="btn-icon">📦</div>Store<div class="btn-cost">20O 10M</div></div>
 <div class="action-btn" onclick="setAction('build-refinery')" id="btn-refinery"><div class="btn-icon">🔧</div>Refine<div class="btn-cost">45O 20C</div></div>
+<div class="action-btn" onclick="setAction('build-road')" id="btn-road"><div class="btn-icon">🛤️</div>Road<div class="btn-cost">5 Ore</div></div>
 <div class="action-btn" onclick="produceRobot('worker')" id="btn-worker"><div class="btn-icon">🤖</div>Worker<div class="btn-cost">20M 10F</div></div>
 <div class="action-btn" onclick="produceRobot('transport')" id="btn-transport"><div class="btn-icon">🚜</div>Hauler<div class="btn-cost">25M 15F</div></div>
 <div class="action-btn" onclick="produceRobot('battle')" id="btn-battle"><div class="btn-icon">⚔️</div>Battle<div class="btn-cost">35M 25F</div></div>
@@ -141,6 +146,25 @@ const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 const TILE_W=64,TILE_H=32;let MAP_SIZE=40,zoom=isMobile?.7:1,camX=0,camY=0,gameRunning=false,gamePaused=false,currentAction='select',selectedEntity=null,difficulty='medium',gameTime=0,gameMode='campaign',mapType='small',terrainType='continental',touchMode='select';
 let player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0},enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};
 let map=[],buildings=[],robots=[],projectiles=[],particles=[],resourceNodes=[],fogOfWar=[],hoverTile={x:-1,y:-1},aiTimer=0;
+let roads=new Set();
+
+const tooltips={
+  hq:{name:'Headquarters',desc:'Command center. Provides wide vision range. Losing this means defeat!'},
+  mine:{name:'Mine',desc:'Extracts ore from nearby resource nodes. Place near ore deposits for best yield.'},
+  power:{name:'Power Plant',desc:'Generates energy passively using solar panels.'},
+  factory:{name:'Factory',desc:'Produces new robots. Select a robot type from the bar to queue production.'},
+  turret:{name:'Turret',desc:'Auto-targets and fires at nearby enemy units. Range: 5 tiles.'},
+  storage:{name:'Storage',desc:'Increases your max resource capacity.'},
+  refinery:{name:'Refinery',desc:'Converts raw materials into metal and fuel over time.'},
+  road:{name:'Road',desc:'Robots travel much faster on roads. Cheap to build — connect your base!'},
+  ore:{name:'Ore Deposit',desc:'Raw ore. Build a Mine nearby or send Workers to gather.'},
+  energy:{name:'Energy Crops',desc:'Glowing plants. Build a Power Plant nearby or send Workers.'},
+  crystal:{name:'Crystal Vein',desc:'Rare crystals. Build a Mine nearby or send Workers to gather.'},
+  worker:{name:'Worker Robot',desc:'Gathers resources from nearby nodes. Auto-works when idle.'},
+  transport:{name:'Transport Robot',desc:'Hauls goods between buildings with large cargo capacity.'},
+  battle:{name:'Battle Robot',desc:'Armed combat unit. Auto-attacks enemies in range.'},
+  scout:{name:'Scout Robot',desc:'Fast with long vision range. Great for exploring the map.'}
+};
 
 function pickOpt(g,el){document.querySelectorAll('#'+g+' .mode-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');if(g==='mode-pick')document.getElementById('map-section').style.display=el.dataset.v==='skirmish'?'':'none';}
 function getOpt(g){let s=document.querySelector('#'+g+' .mode-opt.sel');return s?s.dataset.v:'medium';}
@@ -155,7 +179,8 @@ enemy:{ore:enemy.ore,energy:enemy.energy,crystal:enemy.crystal,metal:enemy.metal
 map:map.map(r=>r.map(t=>({t:t.type[0],h:t.height}))),fogOfWar:fogOfWar.map(r=>r.map(v=>v)),
 resourceNodes:resourceNodes.map(n=>({x:n.x,y:n.y,t:n.type,a:n.amount,m:n.maxAmount})),
 buildings:buildings.map(b=>({t:b.type,x:b.x,y:b.y,tm:b.team,hp:b.hp,mhp:b.maxHp,c:b.constructing,cp:b.constructProgress,ct:b.constructTime,v:b.vision,pr:b.producing,pt:b.productionType,pp:b.productionProgress,ptt:b.productionTime,lp:b.lastProduction,a:b.angle||0})),
-robots:robots.map(r=>({t:r.type,x:r.x,y:r.y,tm:r.team,hp:r.hp,mhp:r.maxHp,sp:r.speed,v:r.vision,st:r.state,a:r.angle||0,w:r.working,cg:r.cargo,ca:r.cargoAmount,cm:r.cargoMax,la:r.lastAttack,dm:r.damage,rn:r.range,fr:r.fireRate}))};}
+robots:robots.map(r=>({t:r.type,x:r.x,y:r.y,tm:r.team,hp:r.hp,mhp:r.maxHp,sp:r.speed,v:r.vision,st:r.state,a:r.angle||0,w:r.working,cg:r.cargo,ca:r.cargoAmount,cm:r.cargoMax,la:r.lastAttack,dm:r.damage,rn:r.range,fr:r.fireRate})),
+roads:[...roads]};}
 
 function deserializeState(s){
   MAP_SIZE=s.MAP_SIZE||40;gameTime=s.gameTime||0;difficulty=s.difficulty||'medium';gameMode=s.gameMode||'campaign';terrainType=s.terrainType||'continental';camX=s.camX||0;camY=s.camY||0;zoom=s.zoom||1;
@@ -167,7 +192,7 @@ function deserializeState(s){
   enemy={ore:s.enemy.ore,energy:s.enemy.energy,crystal:s.enemy.crystal,metal:s.enemy.metal,fuel:s.enemy.fuel,buildings:[],robots:[],team:1};
   s.buildings.forEach(bd=>{let b={type:bd.t,x:bd.x,y:bd.y,team:bd.tm,hp:bd.hp,maxHp:bd.mhp,constructing:bd.c,constructProgress:bd.cp,constructTime:bd.ct,vision:bd.v,producing:!!bd.pr,productionType:bd.pt||'',productionProgress:bd.pp||0,productionTime:bd.ptt||5,lastProduction:bd.lp||0,angle:bd.a||0,firing:0,productionQueue:[]};buildings.push(b);(b.team===0?player:enemy).buildings.push(b);});
   s.robots.forEach(rd=>{let r={type:rd.t,x:rd.x,y:rd.y,team:rd.tm,hp:rd.hp,maxHp:rd.mhp,speed:rd.sp,vision:rd.v,target:null,targetPos:null,state:rd.st||'idle',angle:rd.a||0,working:!!rd.w,cargo:rd.cg||null,cargoAmount:rd.ca||0,cargoMax:rd.cm||0,lastAttack:rd.la||0,damage:rd.dm||0,range:rd.rn||0,fireRate:rd.fr||1,path:null};robots.push(r);(r.team===0?player:enemy).robots.push(r);});
-  projectiles=[];particles=[];selectedEntity=null;}
+  projectiles=[];particles=[];selectedEntity=null;roads=new Set(s.roads||[]);}
 
 function saveGame(){let sv=getSaves(),id='save_'+Date.now(),lb=gameMode+' '+difficulty+' — '+Math.floor(gameTime/60)+'m '+Math.floor(gameTime%60)+'s';sv[id]={label:lb,date:new Date().toLocaleString(),state:serializeState()};let k=Object.keys(sv);while(k.length>8){delete sv[k.shift()];k=Object.keys(sv);}putSaves(sv);showMessage('Game saved!');}
 function loadGame(id){let sv=getSaves();if(!sv[id])return;deserializeState(sv[id].state);document.getElementById('start-screen').style.display='none';showGameUI(true);gameRunning=true;gamePaused=false;document.getElementById('pause-menu').style.display='none';showMessage('Game loaded!');}
@@ -175,7 +200,7 @@ function deleteSave(id,e){e.stopPropagation();let sv=getSaves();delete sv[id];pu
 function refreshSaveSlots(){let c=document.getElementById('save-slots'),sv=getSaves(),k=Object.keys(sv).sort().reverse();if(!k.length){c.innerHTML='<div style="font-size:11px;color:#506070;text-align:center">No saved games</div>';return;}c.innerHTML=k.map(k2=>'<div class="save-slot" onclick="loadGame(\''+k2+'\')"><div><div class="slot-label">'+sv[k2].label+'</div><div class="slot-info">'+sv[k2].date+'</div></div><button class="slot-delete" onclick="deleteSave(\''+k2+'\',event)">✕</button></div>').join('');}
 
 function togglePauseMenu(){if(!gameRunning)return;gamePaused=!gamePaused;document.getElementById('pause-menu').style.display=gamePaused?'flex':'none';}
-function returnToMenu(){gameRunning=false;gamePaused=false;document.getElementById('pause-menu').style.display='none';showGameUI(false);document.getElementById('start-screen').style.display='flex';refreshSaveSlots();map=[];buildings=[];robots=[];projectiles=[];particles=[];resourceNodes=[];fogOfWar=[];player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};selectedEntity=null;gameTime=0;aiTimer=0;drawTitlePlanet();}
+function returnToMenu(){gameRunning=false;gamePaused=false;document.getElementById('pause-menu').style.display='none';showGameUI(false);document.getElementById('start-screen').style.display='flex';refreshSaveSlots();map=[];buildings=[];robots=[];projectiles=[];particles=[];resourceNodes=[];fogOfWar=[];roads=new Set();player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};selectedEntity=null;gameTime=0;aiTimer=0;drawTitlePlanet();}
 function showGameUI(s){['top-bar','bottom-panel','minimap-container'].forEach(id=>{document.getElementById(id).style.display=s?'':'none';});}
 
 // Map Gen
@@ -240,13 +265,13 @@ buildings.forEach(b2=>{if(b2.hp<=0)return;
 if(b2.constructing){b2.constructProgress+=dt/b2.constructTime;if(b2.constructProgress>=1){b2.constructing=false;b2.constructProgress=1;}return;}
 if(b2.producing){b2.productionProgress+=dt/b2.productionTime;if(b2.productionProgress>=1){b2.producing=false;let rx2=b2.x+(Math.random()>.5?1:-1),ry2=b2.y+(Math.random()>.5?1:-1);if(rx2>=0&&rx2<MAP_SIZE&&ry2>=0&&ry2<MAP_SIZE&&map[rx2]&&map[rx2][ry2]&&map[rx2][ry2].type!=='water'){addRobot(b2.productionType,rx2,ry2,b2.team);if(b2.team===0)showMessage(b2.productionType+' robot ready!');}}}
 if(!b2.constructing&&(b2.type==='mine'||b2.type==='power')){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=3){b2.lastProduction=gameTime;if(b2.type==='mine'){let nn=resourceNodes.find(n=>Math.abs(n.x-b2.x)<=2&&Math.abs(n.y-b2.y)<=2&&n.amount>0);if(nn){let a2=Math.min(5,nn.amount);nn.amount-=a2;o[nn.type]+=a2;}else o.ore+=2;}else o.energy+=3;}}
-if(!b2.constructing&&b2.type==='refinery'){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=4){b2.lastProduction=gameTime;if(o.ore>=5&&o.energy>=3){o.ore-=5;o.energy-=3;o.metal+=4;o.fuel+=2;}}}
+if(!b2.constructing&&b2.type==='refinery'){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=4){b2.lastProduction=gameTime;o.metal+=3;o.fuel+=2;}}
 if(b2.type==='turret'&&!b2.constructing){let d=bD.turret,ne=null,nd=d.range+.5;robots.forEach(r2=>{if(r2.team!==b2.team&&r2.hp>0){let d2=Math.sqrt((r2.x-b2.x)**2+(r2.y-b2.y)**2);if(d2<nd){nd=d2;ne=r2;}}});if(ne){b2.angle=Math.atan2(ne.y-b2.y,ne.x-b2.x);if(gameTime-b2.firing>1/d.fr){b2.firing=gameTime;ne.hp-=d.dmg;projectiles.push({x1:b2.x,y1:b2.y-.5,x2:ne.x,y2:ne.y,time:gameTime,dur:.15,col:b2.team===0?'#40ff80':'#ff6040'});}}}});
 
 buildings=buildings.filter(b2=>{if(b2.hp<=0){for(let i=0;i<8;i++)particles.push({x:b2.x+.5,y:b2.y+.5,vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3-2,life:1.5,ml:1.5,col:'#ff8040',sz:4});player.buildings=player.buildings.filter(p=>p!==b2);enemy.buildings=enemy.buildings.filter(p=>p!==b2);if(b2.team===0)showMessage("Building destroyed!");return false;}return true;});
 
 robots.forEach(r2=>{if(r2.hp<=0)return;
-if(r2.path&&r2.path.length>0){let t2=r2.path[0],dx=t2.x-r2.x,dy=t2.y-r2.y,d=Math.sqrt(dx*dx+dy*dy);if(d<.15)r2.path.shift();else{let ms=r2.speed*dt;r2.x+=(dx/d)*ms;r2.y+=(dy/d)*ms;r2.x=Math.max(.1,Math.min(MAP_SIZE-.1,r2.x));r2.y=Math.max(.1,Math.min(MAP_SIZE-.1,r2.y));r2.angle=Math.atan2(dy,dx);}}
+if(r2.path&&r2.path.length>0){let t2=r2.path[0],dx=t2.x-r2.x,dy=t2.y-r2.y,d=Math.sqrt(dx*dx+dy*dy);if(d<.15)r2.path.shift();else{let onRoad=roads.has(Math.floor(r2.x)+','+Math.floor(r2.y));let spdMult=onRoad?1:.35;let ms=r2.speed*spdMult*dt;r2.x+=(dx/d)*ms;r2.y+=(dy/d)*ms;r2.x=Math.max(.1,Math.min(MAP_SIZE-.1,r2.x));r2.y=Math.max(.1,Math.min(MAP_SIZE-.1,r2.y));r2.angle=Math.atan2(dy,dx);}}
 if(r2.type==='battle'&&r2.damage>0){let ne=null,nd=r2.range+.5;robots.forEach(e=>{if(e.team!==r2.team&&e.hp>0){let d=Math.sqrt((e.x-r2.x)**2+(e.y-r2.y)**2);if(d<nd){nd=d;ne=e;}}});if(!ne)buildings.forEach(b3=>{if(b3.team!==r2.team&&b3.hp>0){let d=Math.sqrt((b3.x+.5-r2.x)**2+(b3.y+.5-r2.y)**2);if(d<nd){nd=d;ne=b3;}}});
 if(ne){let ex=ne.speed!==undefined?ne.x:ne.x+.5,ey=ne.speed!==undefined?ne.y:ne.y+.5;r2.angle=Math.atan2(ey-r2.y,ex-r2.x);if(gameTime-r2.lastAttack>1/r2.fireRate){r2.lastAttack=gameTime;ne.hp-=r2.damage;projectiles.push({x1:r2.x,y1:r2.y-.3,x2:ex,y2:ey,time:gameTime,dur:.12,col:r2.team===0?'#40ff80':'#ff6040'});}if(nd>r2.range&&(!r2.path||!r2.path.length))r2.path=findPath(r2.x,r2.y,ex,ey);}}
 if(r2.type==='worker'&&r2.team===0&&r2.state==='idle'&&(!r2.path||!r2.path.length)){let nn=resourceNodes.find(n=>n.amount>0&&Math.abs(n.x-r2.x)<8&&Math.abs(n.y-r2.y)<8);if(nn){let d=Math.sqrt((nn.x-r2.x)**2+(nn.y-r2.y)**2);if(d<1.5){r2.working=true;if(gameTime-(r2.lastGather||0)>2){r2.lastGather=gameTime;let a2=Math.min(3,nn.amount);nn.amount-=a2;player[nn.type]+=a2;}}else{r2.working=false;r2.path=findPath(r2.x,r2.y,nn.x+.5,nn.y+.5);}}else r2.working=false;}});
@@ -268,12 +293,15 @@ if(facs.length<2)aiP('factory',hq,3);if(enemy.buildings.filter(b2=>b2.type==='tu
 let af=facs.find(f=>!f.producing);if(af){let wc=enemy.robots.filter(r2=>r2.type==='worker').length;if(wc<2&&canAfford(enemy,rD.worker.cost)){spend(enemy,rD.worker.cost);af.producing=true;af.productionType='worker';af.productionProgress=0;af.productionTime=rD.worker.bt;}else if(canAfford(enemy,rD.battle.cost)){spend(enemy,rD.battle.cost);af.producing=true;af.productionType='battle';af.productionProgress=0;af.productionTime=rD.battle.bt;}}
 let bots=enemy.robots.filter(r2=>r2.type==='battle'&&(!r2.path||!r2.path.length)),thr=difficulty==='easy'?4:difficulty==='medium'?3:2;
 if(bots.length>=thr&&player.buildings.length>0){let tgt=player.buildings[Math.floor(Math.random()*player.buildings.length)];bots.forEach(b2=>{b2.path=findPath(b2.x,b2.y,tgt.x+.5,tgt.y+.5);});}
-enemy.robots.filter(r2=>r2.type==='worker'&&(!r2.path||!r2.path.length)).forEach(w=>{let nn=resourceNodes.find(n=>n.amount>0);if(nn){let d=Math.sqrt((nn.x-w.x)**2+(nn.y-w.y)**2);if(d<1.5){if(gameTime-(w.lastGather||0)>2){w.lastGather=gameTime;let a2=Math.min(3,nn.amount);nn.amount-=a2;enemy[nn.type]+=a2;}}else w.path=findPath(w.x,w.y,nn.x+.5,nn.y+.5);}});}
+enemy.robots.filter(r2=>r2.type==='worker'&&(!r2.path||!r2.path.length)).forEach(w=>{let nn=resourceNodes.find(n=>n.amount>0);if(nn){let d=Math.sqrt((nn.x-w.x)**2+(nn.y-w.y)**2);if(d<1.5){if(gameTime-(w.lastGather||0)>2){w.lastGather=gameTime;let a2=Math.min(3,nn.amount);nn.amount-=a2;enemy[nn.type]+=a2;}}else w.path=findPath(w.x,w.y,nn.x+.5,nn.y+.5);}});
+// AI builds roads between buildings
+if(hq&&enemy.ore>=5){let eb=enemy.buildings[Math.floor(Math.random()*enemy.buildings.length)];if(eb){let dx=eb.x-hq.x,dy=eb.y-hq.y,steps=Math.max(Math.abs(dx),Math.abs(dy));for(let i=0;i<=steps&&enemy.ore>=5;i++){let rx=Math.round(hq.x+dx*i/steps),ry=Math.round(hq.y+dy*i/steps);if(rx>=0&&rx<MAP_SIZE&&ry>=0&&ry<MAP_SIZE&&!roads.has(rx+','+ry)){roads.add(rx+','+ry);enemy.ore-=5;}}}}}
 
 // Render
 function render(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.fillStyle='#080c14';ctx.fillRect(0,0,canvas.width,canvas.height);
 ctx.fillStyle='rgba(200,220,255,.3)';for(let i=0;i<80;i++){let x=(i*137.5+gameTime*.5)%canvas.width,y=(i*89.3)%canvas.height,s2=(Math.sin(i*3.7+gameTime)+1)*.8;ctx.beginPath();ctx.arc(x,y,s2,0,Math.PI*2);ctx.fill();}
 if(map.length>0){for(let sum=0;sum<MAP_SIZE*2;sum++){for(let x=Math.max(0,sum-MAP_SIZE+1);x<=Math.min(sum,MAP_SIZE-1);x++){let y=sum-x;if(y<0||y>=MAP_SIZE||!map[x]||!map[x][y])continue;let tile=map[x][y],fog=fogOfWar[x]?.[y]??0,{sx:tsx,sy:tsy}=isoToScreen(x,y);if(tsx<-TILE_W*zoom||tsx>canvas.width+TILE_W*zoom||tsy<-TILE_H*zoom*4||tsy>canvas.height+TILE_H*zoom*2)continue;let col=getTerrainColors(tile.type,tile.height);if(fog===0){drawIsoTile(x,y,'rgba(8,12,20,.95)',null);continue;}if(tile.type==='rock')drawIsoBlock(x,y,6,col.top,'hsl(220,10%,'+(20+tile.height*10)+'%)','hsl(220,10%,'+(15+tile.height*10)+'%)');else drawIsoTile(x,y,col.top,col.border);if(x===hoverTile.x&&y===hoverTile.y&&currentAction!=='select')drawIsoTile(x,y,'rgba(100,200,255,.2)','rgba(100,200,255,.5)');if(fog===1)drawIsoTile(x,y,'rgba(8,12,20,.6)',null);}}}
+roads.forEach(k=>{let[rx2,ry2]=k.split(',').map(Number);if(rx2>=0&&rx2<MAP_SIZE&&ry2>=0&&ry2<MAP_SIZE&&(fogOfWar[rx2]?.[ry2]??0)>=1){let{sx:rsx,sy:rsy}=isoToScreen(rx2,ry2),hw=TILE_W/2*zoom*.7,hh=TILE_H/2*zoom*.7;ctx.fillStyle='rgba(100,95,80,.5)';ctx.beginPath();ctx.moveTo(rsx,rsy-hh);ctx.lineTo(rsx+hw,rsy);ctx.lineTo(rsx,rsy+hh);ctx.lineTo(rsx-hw,rsy);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(140,130,100,.25)';ctx.lineWidth=.5;ctx.stroke();}});
 resourceNodes.forEach(n=>{if(n.x>=0&&n.x<MAP_SIZE&&n.y>=0&&n.y<MAP_SIZE&&fogOfWar[n.x]?.[n.y]>=1&&n.amount>0)drawResourceNode(n);});
 let ents=[];buildings.forEach(b2=>{if(fogOfWar[b2.x]?.[b2.y]>=1)ents.push({ty:'b',e:b2,sk:b2.x+b2.y});});robots.forEach(r2=>{let rx=Math.floor(r2.x),ry=Math.floor(r2.y);if(rx>=0&&ry>=0&&rx<MAP_SIZE&&ry<MAP_SIZE&&fogOfWar[rx]?.[ry]>=1)ents.push({ty:'r',e:r2,sk:r2.x+r2.y});});ents.sort((a,b2)=>a.sk-b2.sk);ents.forEach(e=>{if(e.ty==='b')drawBuilding(e.e);else drawRobot(e.e);});
 projectiles.forEach(p=>{let pr=(gameTime-p.time)/p.dur,px=p.x1+(p.x2-p.x1)*pr,py=p.y1+(p.y2-p.y1)*pr,{sx:psx,sy:psy}=isoToScreen(px,py);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(psx,psy,3*zoom,0,Math.PI*2);ctx.fill();});
@@ -290,8 +318,9 @@ document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key=
 document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
 canvas.addEventListener('mousedown',e=>{if(e.button===2||e.button===1){isDragging=true;dragSX=e.clientX;dragSY=e.clientY;dragCX=camX;dragCY=camY;e.preventDefault();return;}handleTap(e.clientX,e.clientY,false);});
 canvas.addEventListener('contextmenu',e=>{e.preventDefault();handleTap(e.clientX,e.clientY,true);});
-canvas.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;hoverTile=screenToIso(e.clientX,e.clientY);if(isDragging){camX=dragCX+(e.clientX-dragSX);camY=dragCY+(e.clientY-dragSY);}});
+canvas.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;hoverTile=screenToIso(e.clientX,e.clientY);if(isDragging){camX=dragCX+(e.clientX-dragSX);camY=dragCY+(e.clientY-dragSY);}updateTooltip(e.clientX,e.clientY);});
 canvas.addEventListener('mouseup',()=>{isDragging=false;});
+canvas.addEventListener('mouseleave',()=>{document.getElementById('tooltip').style.display='none';});
 canvas.addEventListener('wheel',e=>{let oz=zoom;zoom*=e.deltaY>0?.9:1.1;zoom=Math.max(.2,Math.min(3,zoom));let f=zoom/oz;camX=mouseX-(mouseX-camX)*f;camY=mouseY-(mouseY-camY)*f;},{passive:true});
 
 // Touch
@@ -301,21 +330,44 @@ canvas.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length==
 canvas.addEventListener('touchend',e=>{e.preventDefault();if(e.touches.length===0){lastPinch=0;if(touchPan&&!touches2.moved)handleTap(touches2.sx,touches2.sy,touchMode==='move');touchPan=false;}},{passive:false});
 minimapCanvas.addEventListener('click',e=>{let r=minimapCanvas.getBoundingClientRect(),mx=(e.clientX-r.left)/r.width*MAP_SIZE,my=(e.clientY-r.top)/r.height*MAP_SIZE,{sx:s1,sy:s2}=isoToScreen(mx,my);camX-=s1-canvas.width/2;camY-=s2-canvas.height/2;});
 
+function updateTooltip(mx,my){let tt=document.getElementById('tooltip');if(!gameRunning||gamePaused||isDragging){tt.style.display='none';return;}
+let tile=screenToIso(mx,my),info=null;
+// Check buildings
+let hb=buildings.find(b2=>b2.x===tile.x&&b2.y===tile.y);
+if(hb&&tooltips[hb.type]){info=tooltips[hb.type];}
+// Check robots
+if(!info){let hr=robots.find(r2=>{let d=Math.sqrt((r2.x-tile.x-.5)**2+(r2.y-tile.y-.5)**2);return d<.8;});if(hr&&tooltips[hr.type])info={name:tooltips[hr.type].name+(hr.team===0?' (Yours)':' (Enemy)'),desc:tooltips[hr.type].desc+' HP: '+Math.floor(hr.hp)+'/'+hr.maxHp};}
+// Check resource nodes
+if(!info){let rn=resourceNodes.find(n=>n.x===tile.x&&n.y===tile.y&&n.amount>0);if(rn&&tooltips[rn.type])info={name:tooltips[rn.type].name,desc:tooltips[rn.type].desc+' Remaining: '+rn.amount+'/'+rn.maxAmount};}
+// Check roads
+if(!info&&roads.has(tile.x+','+tile.y))info=tooltips.road;
+if(info){tt.style.display='block';tt.querySelector('.tt-title').textContent=info.name;tt.querySelector('.tt-desc').textContent=info.desc;let tx=mx+14,ty=my+14;if(tx+230>window.innerWidth)tx=mx-230;if(ty+80>window.innerHeight)ty=my-80;tt.style.left=tx+'px';tt.style.top=ty+'px';}else tt.style.display='none';}
+
 function handleTap(cx,cy,isMove){if(!gameRunning||gamePaused)return;let tile=screenToIso(cx,cy);
 if(isMove&&selectedEntity&&selectedEntity.speed){selectedEntity.path=findPath(selectedEntity.x,selectedEntity.y,tile.x+.5,tile.y+.5);selectedEntity.state='moving';selectedEntity.working=false;return;}
-if(currentAction==='select'){selectedEntity=null;document.getElementById('info-panel').style.display='none';let cr=robots.find(r2=>{let d=Math.sqrt((r2.x-tile.x-.5)**2+(r2.y-tile.y-.5)**2);return d<.8&&r2.team===0;});if(cr){selectedEntity=cr;showInfoPanel(cr);return;}let cb=buildings.find(b2=>b2.x===tile.x&&b2.y===tile.y);if(cb){selectedEntity=cb;showInfoPanel(cb);return;}}else if(currentAction.startsWith('build-')){let bt=currentAction.replace('build-',''),d=bD[bt];if(tile.x<0||tile.x>=MAP_SIZE||tile.y<0||tile.y>=MAP_SIZE||!map[tile.x]||!map[tile.x][tile.y])return;if(map[tile.x][tile.y].type==='water'){showMessage("Can't build on water!");return;}if(buildings.some(b2=>b2.x===tile.x&&b2.y===tile.y)){showMessage("Tile occupied!");return;}if(!canAfford(player,d.cost)){showMessage("Not enough resources!");return;}spend(player,d.cost);addBuilding(bt,tile.x,tile.y,0);showMessage('Building '+bt+'...');}}
+if(currentAction==='select'){selectedEntity=null;document.getElementById('info-panel').style.display='none';let cr=robots.find(r2=>{let d=Math.sqrt((r2.x-tile.x-.5)**2+(r2.y-tile.y-.5)**2);return d<.8&&r2.team===0;});if(cr){selectedEntity=cr;showInfoPanel(cr);return;}let cb=buildings.find(b2=>b2.x===tile.x&&b2.y===tile.y);if(cb){selectedEntity=cb;showInfoPanel(cb);return;}}else if(currentAction==='build-road'){
+if(tile.x<0||tile.x>=MAP_SIZE||tile.y<0||tile.y>=MAP_SIZE||!map[tile.x]||!map[tile.x][tile.y])return;
+if(map[tile.x][tile.y].type==='water'){showMessage("Can't build on water!");return;}
+if(roads.has(tile.x+','+tile.y)){showMessage("Road already here!");return;}
+if(player.ore<5){showMessage("Need 5 ore!");return;}
+player.ore-=5;roads.add(tile.x+','+tile.y);
+}else if(currentAction.startsWith('build-')){let bt=currentAction.replace('build-',''),d=bD[bt];if(tile.x<0||tile.x>=MAP_SIZE||tile.y<0||tile.y>=MAP_SIZE||!map[tile.x]||!map[tile.x][tile.y])return;if(map[tile.x][tile.y].type==='water'){showMessage("Can't build on water!");return;}if(buildings.some(b2=>b2.x===tile.x&&b2.y===tile.y)){showMessage("Tile occupied!");return;}if(!canAfford(player,d.cost)){showMessage("Not enough resources!");return;}spend(player,d.cost);addBuilding(bt,tile.x,tile.y,0);showMessage('Building '+bt+'...');}}
 
 function showInfoPanel(e){let p=document.getElementById('info-panel'),t=document.getElementById('info-title'),c=document.getElementById('info-content');p.style.display='block';let nm=e.type.charAt(0).toUpperCase()+e.type.slice(1),tm=e.team===0?'(You)':'(Enemy)';t.textContent=nm+' '+tm;let h='<p>HP: '+Math.floor(e.hp)+'/'+e.maxHp+'</p>';if(e.constructing)h+='<p>Build: '+Math.floor(e.constructProgress*100)+'%</p>';if(e.producing)h+='<p>Making: '+e.productionType+' '+Math.floor(e.productionProgress*100)+'%</p>';if(e.speed)h+='<p>Speed: '+e.speed+'</p>';if(e.damage)h+='<p>Dmg: '+e.damage+' Rng: '+e.range+'</p>';c.innerHTML=h;}
 
 // Launch
 function launchGame(){gameMode=getOpt('mode-pick');difficulty=getOpt('diff-pick');
 if(gameMode==='skirmish'){mapType=getOpt('map-pick');terrainType=getOpt('terrain-pick');MAP_SIZE=mapType==='small'?28:mapType==='large'?56:40;}else{MAP_SIZE=40;terrainType='continental';}
-player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};buildings=[];robots=[];projectiles=[];particles=[];selectedEntity=null;gameTime=0;aiTimer=0;currentAction='select';
+player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};buildings=[];robots=[];projectiles=[];particles=[];selectedEntity=null;gameTime=0;aiTimer=0;currentAction='select';roads=new Set();
 generateMap();
 let pb=addBuilding('hq',4,4,0);pb.constructing=false;pb.constructProgress=1;let pf=addBuilding('factory',6,4,0);pf.constructing=false;pf.constructProgress=1;let pr2=addBuilding('refinery',4,6,0);pr2.constructing=false;pr2.constructProgress=1;
 addRobot('worker',5,5,0);addRobot('worker',3,5,0);addRobot('battle',5,3,0);addRobot('scout',3,3,0);
+// Starting roads connecting player base
+for(let rx=3;rx<=7;rx++)roads.add(rx+',4');for(let ry=3;ry<=7;ry++)roads.add('4,'+ry);roads.add('5,5');roads.add('6,5');
 let eb=addBuilding('hq',MAP_SIZE-5,MAP_SIZE-5,1);eb.constructing=false;eb.constructProgress=1;let ef=addBuilding('factory',MAP_SIZE-7,MAP_SIZE-5,1);ef.constructing=false;ef.constructProgress=1;let er=addBuilding('refinery',MAP_SIZE-5,MAP_SIZE-7,1);er.constructing=false;er.constructProgress=1;
 addRobot('worker',MAP_SIZE-4,MAP_SIZE-4,1);addRobot('worker',MAP_SIZE-6,MAP_SIZE-4,1);addRobot('battle',MAP_SIZE-4,MAP_SIZE-6,1);addRobot('battle',MAP_SIZE-6,MAP_SIZE-6,1);
+// Enemy starting roads
+for(let rx=MAP_SIZE-8;rx<=MAP_SIZE-3;rx++)roads.add(rx+','+(MAP_SIZE-5));for(let ry=MAP_SIZE-8;ry<=MAP_SIZE-3;ry++)roads.add((MAP_SIZE-5)+','+ry);
 for(let dx=-2;dx<=2;dx++)for(let dy=-2;dy<=2;dy++){[4,MAP_SIZE-5].forEach(bx=>{[4,MAP_SIZE-5].forEach(by=>{let px2=bx+dx,py2=by+dy;if(px2>=0&&px2<MAP_SIZE&&py2>=0&&py2<MAP_SIZE&&map[px2]&&map[px2][py2]){map[px2][py2].type='ground';map[px2][py2].height=.45;}});});}
 for(let dx=-8;dx<=8;dx++)for(let dy=-8;dy<=8;dy++){let nx=4+dx,ny=4+dy;if(nx>=0&&nx<MAP_SIZE&&ny>=0&&ny<MAP_SIZE&&fogOfWar[nx])fogOfWar[nx][ny]=2;}
 let{sx:s1,sy:s2}=isoToScreen(4,4);camX=-(s1-canvas.width/2-camX);camY=-(s2-canvas.height/2-camY);
