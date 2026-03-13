@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mary Through the Bible — One Faith Delivered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #8B0000;
+            --crimson-light: #a01010;
+            --gold: #C5A55A;
+            --gold-light: #d4ba7a;
+            --parchment: #F5F0E8;
+            --parchment-dark: #e8e0d0;
+            --ink: #2c2420;
+            --ink-light: #5a4e44;
+            --ink-faint: #8a7e74;
+        }
+
+        [data-theme="dark"] {
+            --crimson: #c44040;
+            --crimson-light: #d45555;
+            --gold: #d4b96a;
+            --gold-light: #c5a55a;
+            --parchment: #1a1714;
+            --parchment-dark: #141210;
+            --ink: #d8d0c4;
+            --ink-light: #b0a898;
+            --ink-faint: #8a7e74;
+        }
+        [data-theme="dark"] .page-header {
+            background: linear-gradient(135deg, #0d0606 0%, #1a0c0c 40%, #221212 100%);
+        }
+        [data-theme="dark"] .toc {
+            background: #221e1a;
+            border-color: #3a332a;
+        }
+        [data-theme="dark"] .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.06), rgba(197, 165, 90, 0.02));
+        }
+        [data-theme="dark"] .editorial-note {
+            background: #221e1a;
+        }
+        [data-theme="dark"] .typology-note {
+            background: #1e1c16;
+        }
+        [data-theme="dark"] .section-header {
+            border-bottom-color: var(--crimson);
+        }
+        [data-theme="dark"] .passage-text .verse-num {
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .toc a {
+            color: var(--ink);
+        }
+        [data-theme="dark"] .toc a:hover {
+            color: var(--crimson);
+        }
+
+        /* ── Dark Mode Toggle ── */
+        .dark-toggle {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .dark-toggle:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .dark-toggle {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .dark-toggle:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .dark-toggle .toggle-icon {
+            font-size: 16px;
+            line-height: 1;
+            color: var(--gold-light);
+            transition: transform 0.4s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-icon {
+            color: #f0d060;
+        }
+        .dark-toggle:hover .toggle-icon {
+            transform: rotate(20deg);
+        }
+        .dark-toggle .toggle-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.95);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-label {
+            color: rgba(240, 208, 96, 0.9);
+        }
+
+        /* ── Back Button ── */
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            user-select: none;
+        }
+        .back-btn:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .back-btn {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .back-btn:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .back-btn .back-arrow {
+            font-size: 14px;
+            line-height: 1;
+            color: rgba(245, 240, 232, 0.8);
+            transition: transform 0.3s ease;
+        }
+        .back-btn:hover .back-arrow {
+            transform: translateX(-2px);
+        }
+        .back-btn .back-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.8);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .back-btn .back-arrow,
+        [data-theme="dark"] .back-btn .back-label {
+            color: rgba(212, 185, 106, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--crimson), var(--gold));
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--parchment);
+            color: var(--ink);
+            line-height: 1.75;
+            font-size: 17px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a0a0a 0%, #2c1010 40%, #3a1818 100%);
+            color: #fff;
+            padding: 80px 40px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C5A55A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 12px;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+        .page-header .subtitle {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 1.15em;
+            font-weight: 300;
+            color: var(--gold-light);
+            font-style: italic;
+            position: relative;
+        }
+        .page-header .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* Navigation / Table of Contents */
+        .toc-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px 20px;
+        }
+        .toc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--ink-faint);
+            margin-bottom: 16px;
+        }
+        .toc {
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 24px 28px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+        .toc ol li {
+            counter-increment: toc-counter;
+            margin-bottom: 8px;
+        }
+        .toc ol li::before {
+            content: counter(toc-counter, upper-roman) ".";
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .toc a {
+            color: var(--ink);
+            text-decoration: none;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.95em;
+            border-bottom: 1px dotted var(--gold);
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .toc a:hover {
+            color: var(--crimson);
+            border-bottom-color: var(--crimson);
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--crimson);
+            scroll-margin-top: 24px;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 4px;
+        }
+        .section-header .section-desc {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.95em;
+        }
+
+        /* Passage Blocks */
+        .passage {
+            margin-bottom: 36px;
+            padding: 0;
+        }
+        .passage-ref {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .passage-ref::before {
+            content: '✦';
+            color: var(--crimson);
+            font-size: 0.8em;
+        }
+        .passage-context {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            padding-left: 16px;
+            border-left: 2px solid var(--gold-light);
+        }
+        .passage-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            line-height: 1.85;
+            color: var(--ink);
+        }
+        .passage-text .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            color: var(--crimson);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+        }
+        .passage-text p {
+            margin-bottom: 8px;
+            text-indent: 0;
+        }
+
+        /* Key passages — gold highlight */
+        .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.08), rgba(197, 165, 90, 0.04));
+            border-left: 4px solid var(--gold);
+            padding: 20px 24px;
+            border-radius: 0 4px 4px 0;
+            margin: 20px 0 36px;
+            transition: background 0.4s ease;
+        }
+
+        /* Patristic / editorial comment blocks */
+        .editorial-note {
+            background: #fff;
+            border-left: 4px solid var(--crimson);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            transition: background-color 0.4s ease;
+        }
+        .editorial-note .note-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .editorial-note p {
+            font-size: 0.92em;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+
+        /* ── Typological Connection blocks ── */
+        .typology-note {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.06), rgba(197, 165, 90, 0.02));
+            border-left: 4px solid var(--gold);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            transition: background-color 0.4s ease;
+        }
+        .typology-note .note-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .typology-note p {
+            font-size: 0.92em;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+        .typology-note .parallel-table {
+            width: 100%;
+            margin: 12px 0 4px;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+        .typology-note .parallel-table th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 600;
+            text-align: left;
+            padding: 8px 12px 6px;
+            border-bottom: 1px solid var(--parchment-dark);
+        }
+        .typology-note .parallel-table td {
+            padding: 7px 12px;
+            color: var(--ink-light);
+            font-style: italic;
+            border-bottom: 1px solid rgba(197, 165, 90, 0.1);
+            vertical-align: top;
+        }
+        [data-theme="dark"] .typology-note .parallel-table th {
+            border-bottom-color: #3a332a;
+        }
+        [data-theme="dark"] .typology-note .parallel-table td {
+            border-bottom-color: rgba(197, 165, 90, 0.08);
+        }
+
+        /* ── Pinnacle Verse ── */
+        .pinnacle-verse {
+            display: block;
+            font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.25em;
+            line-height: 2;
+            color: var(--crimson);
+            text-align: center;
+            margin: 28px 0;
+            padding: 32px 28px;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+        .pinnacle-verse::before,
+        .pinnacle-verse::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+        .pinnacle-verse::before { margin-bottom: 24px; }
+        .pinnacle-verse::after { margin-top: 24px; }
+        .pinnacle-verse .pinnacle-ornament {
+            display: block;
+            text-align: center;
+            font-style: normal;
+            font-size: 0.55em;
+            letter-spacing: 10px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .pinnacle-verse .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55em;
+            color: var(--gold);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+            font-style: normal;
+        }
+        [data-theme="dark"] .pinnacle-verse {
+            color: #e8a0a0;
+        }
+
+        /* Separator */
+        .section-divider {
+            text-align: center;
+            margin: 50px 0 10px;
+            color: var(--gold);
+            letter-spacing: 12px;
+            font-size: 0.8em;
+        }
+
+        /* ── Floating Section Navigator ── */
+        .section-nav-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 998;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--crimson);
+            border: 2px solid rgba(197, 165, 90, 0.4);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .section-nav-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+            border-color: var(--gold);
+        }
+        .section-nav-btn.open {
+            background: var(--ink);
+        }
+        [data-theme="dark"] .section-nav-btn {
+            background: #4a1515;
+            border-color: rgba(197, 165, 90, 0.35);
+        }
+        [data-theme="dark"] .section-nav-btn.open {
+            background: #2a2420;
+        }
+
+        .section-nav-panel {
+            position: fixed;
+            bottom: 84px;
+            right: 24px;
+            z-index: 997;
+            width: 300px;
+            max-height: 70vh;
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-radius: 8px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .section-nav-panel.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        [data-theme="dark"] .section-nav-panel {
+            background: #221e1a;
+            border-color: #3a332a;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.45);
+        }
+
+        .section-nav-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-faint);
+            padding: 14px 18px 10px;
+            border-bottom: 1px solid var(--parchment-dark);
+        }
+        [data-theme="dark"] .section-nav-header {
+            border-bottom-color: #3a332a;
+        }
+
+        .section-nav-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: calc(70vh - 44px);
+            padding: 6px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--parchment-dark) transparent;
+        }
+        .section-nav-list::-webkit-scrollbar { width: 5px; }
+        .section-nav-list::-webkit-scrollbar-track { background: transparent; }
+        .section-nav-list::-webkit-scrollbar-thumb { background: var(--parchment-dark); border-radius: 3px; }
+
+        .section-nav-list li { margin: 0; }
+        .section-nav-list a {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 18px;
+            text-decoration: none;
+            color: var(--ink);
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.88em;
+            line-height: 1.35;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .section-nav-list a:hover {
+            background: var(--parchment);
+            border-left-color: var(--gold);
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .section-nav-list a:hover {
+            background: rgba(197, 165, 90, 0.06);
+        }
+        .section-nav-list a.active {
+            background: rgba(197, 165, 90, 0.08);
+            border-left-color: var(--crimson);
+            font-weight: 600;
+        }
+        .section-nav-list .nav-numeral {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            color: var(--crimson);
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .page-header { padding: 70px 20px 40px; }
+            .page-header h1 { font-size: 1.9em; }
+            .content { padding: 16px 16px 60px; }
+            .section-header h2 { font-size: 1.4em; }
+            .key-passage { padding: 16px 18px; }
+            .pinnacle-verse { font-size: 1.1em; padding: 24px 16px; }
+            .toc { padding: 18px 20px; }
+            .section-nav-panel { width: calc(100vw - 48px); right: 12px; bottom: 78px; }
+            .section-nav-btn { right: 12px; bottom: 16px; }
+            .typology-note .parallel-table { font-size: 0.82em; }
+            .typology-note .parallel-table th,
+            .typology-note .parallel-table td { padding: 6px 8px; }
+        }
+
+        /* Print Styles */
+        @media print {
+            .dark-toggle, .back-btn, .reading-progress, .section-nav-btn, .section-nav-panel { display: none !important; }
+            .page-header { background: #fff !important; color: #000 !important; padding: 30px 20px; border-bottom: 2px solid #000; }
+            .page-header .subtitle { color: #555 !important; }
+            .page-header .tagline { color: #888 !important; }
+            body { font-size: 11pt; }
+            .section-header { page-break-after: avoid; }
+            .passage { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Back Button -->
+<a class="back-btn" href="../biblical-reference-charts.html" title="Back to Biblical Reference Charts">
+    <span class="back-arrow">←</span>
+    <span class="back-label">Charts</span>
+</a>
+
+<!-- Dark Mode Toggle -->
+<div class="dark-toggle" id="darkToggle" role="button" tabindex="0" aria-label="Toggle dark mode">
+    <span class="toggle-icon" id="toggleIcon">☽</span>
+    <span class="toggle-label" id="toggleLabel">Night</span>
+</div>
+
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- ========== PAGE HEADER ========== -->
+<header class="page-header">
+    <div class="tagline">One Faith Delivered</div>
+    <h1>Mary Through the Bible</h1>
+    <p class="subtitle">Scripture, Typology &amp; the Mother of God</p>
+</header>
+
+<!-- ========== TABLE OF CONTENTS ========== -->
+<nav class="toc-wrapper">
+    <div class="toc-label">Contents</div>
+    <div class="toc">
+        <ol>
+            <li><a href="#sec-1">The Protoevangelium — The Woman &amp; the Serpent</a></li>
+            <li><a href="#sec-2">Types &amp; Shadows — Mary in the Old Testament</a></li>
+            <li><a href="#sec-3">The Annunciation</a></li>
+            <li><a href="#sec-4">The Visitation &amp; the New Ark</a></li>
+            <li><a href="#sec-5">The Magnificat</a></li>
+            <li><a href="#sec-6">The Nativity</a></li>
+            <li><a href="#sec-7">The Presentation &amp; Simeon's Prophecy</a></li>
+            <li><a href="#sec-8">The Flight into Egypt</a></li>
+            <li><a href="#sec-9">The Finding in the Temple</a></li>
+            <li><a href="#sec-10">The Wedding at Cana — Mary's Intercession</a></li>
+            <li><a href="#sec-11">Mary During the Ministry</a></li>
+            <li><a href="#sec-12">"Woman, Behold Thy Son" — Mary at the Cross</a></li>
+            <li><a href="#sec-13">Mary in the Upper Room</a></li>
+            <li><a href="#sec-14">The Ark in Heaven &amp; the Woman Clothed with the Sun</a></li>
+        </ol>
+    </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="content">
+
+    <div class="editorial-note">
+        <div class="note-label">About This Compilation</div>
+        <p>This document traces the Blessed Virgin Mary across the whole of Scripture — from the first prophecy in Genesis to the final vision of the Apocalypse. Where explicit Marian passages in the New Testament are fewer than those for, say, Peter, the Old Testament more than compensates: Mary's role was prepared across millennia through types, figures, and prophecies that the Church Fathers recognized from the earliest centuries. Typological connections are highlighted throughout in gold-bordered notes. The text is the Douay-Rheims translation. This compilation is intended for private study, apologetics, and devotional use.</p>
+    </div>
+
+    <!-- ===== I. THE PROTOEVANGELIUM ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-1">
+        <h2>I. The Protoevangelium</h2>
+        <p class="section-desc">The first promise of redemption — and the first appearance of "the Woman."</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Genesis 3:15</div>
+        <p class="passage-context">God's curse upon the serpent. A note on the pronoun: the Hebrew reads <em>hu</em> (הוּא, "he"), referring to the masculine noun "seed"; the Septuagint agrees with <em>autos</em> (αὐτός, "he"). The Latin Vulgate, however, reads <em>ipsa</em> ("she"), and it is this reading that the Douay-Rheims follows. The <em>ipsa</em> reading entered the Latin tradition early, but the Nova Vulgata (1979) corrected it to <em>ipsum</em> ("it"), aligning with the Hebrew and Greek. The Marian significance of this verse does not depend on the pronoun — it rests on the Woman herself, on the unique phrase "her seed," and on the total enmity God establishes between her and the serpent.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>I will put enmities between thee and the woman, and thy seed and her seed: she shall crush thy head, and thou shalt lie in wait for her heel.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">Typological Connection</div>
+        <p>Even with the masculine pronoun — "he shall crush" — the Marian reading is strong, because the text inseparably links the Woman and her seed. God does not merely place enmity between the serpent and the offspring; He places enmity between the serpent and <em>the Woman herself</em>. She is not an incidental vessel — she is a named combatant. And notice: "her seed." In the ancient world, seed belongs to the father. The phrase is unique in all of Scripture and points forward to a child born of a woman alone — a virgin birth. The victory over the serpent belongs to Christ, the seed; but it comes through the Woman, and it is her enmity with the serpent that frames the entire drama.</p>
+        <p>The Church Fathers saw this clearly. St. Irenaeus (c. 180 AD) explicitly taught that as Eve's disobedience "tied the knot" of human misery, Mary's obedience "untied" it (<em>Against Heresies</em> III.22.4). The parallel is deliberate: Eve was addressed in Eden; Mary is addressed by Christ as "Woman" at Cana (John 2:4) and at Calvary (John 19:26) — the same title, now redeemed. The seed crushes the serpent's head; but the Woman is the one through whom the seed enters the world, and she stands in total, unbroken enmity with the enemy from the first page of the Bible to the last.</p>
+    </div>
+
+    <!-- ===== II. TYPES & SHADOWS ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-2">
+        <h2>II. Types &amp; Shadows</h2>
+        <p class="section-desc">The Old Testament prepares Mary's role through the Ark of the Covenant, the Queen Mother, the Virgin of Isaiah, and the Daughter of Zion.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Why Typology Matters</div>
+        <p>Catholic biblical interpretation does not treat the Old Testament as merely historical. It reads the Old in light of the New — and the New as fulfillment of the Old. This is typological exegesis, the method used by Christ Himself (Luke 24:27), by the apostles (1 Corinthians 10:6, Hebrews 8–10), and by the Church Fathers. The types of Mary that follow are not pious speculation; they are the consensus reading of the patristic and medieval Church, reaffirmed by the Magisterium.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Exodus 25:10–11, 21</div>
+        <p class="passage-context">God's instructions for the Ark of the Covenant — the vessel built to house the presence of God. Overlaid with pure gold inside and out; a figure of purity.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">10</span>Frame an ark of setim wood, the length whereof shall be of two cubits and a half: the breadth, a cubit and a half: the height, likewise, a cubit and a half. <span class="verse-num">11</span>And thou shalt overlay it with the purest gold within and without. … <span class="verse-num">21</span>And thou shalt put the propitiatory over the ark, and in the ark thou shalt put the testimony which I will give thee.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Ark &amp; Mary — Type Fulfilled</div>
+        <p>The Ark of the Covenant contained three things: the tablets of the Law (the Word of God in stone), the manna (bread from heaven), and Aaron's rod that budded (the sign of true priesthood). Mary bore in her womb: the Word of God made flesh, the true Bread of Life, and the eternal High Priest. The Ark was "overshadowed" by the cloud of God's glory (Exodus 40:35, using the Greek <em>episkiasei</em> in the Septuagint); Mary was "overshadowed" by the Holy Spirit (Luke 1:35, using the identical word, <em>episkiasei</em>). This verbal echo is not coincidence — it is Luke's deliberate signal that Mary is the New Ark.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">2 Samuel 6:2–9, 11–16</div>
+        <p class="passage-context">David brings the Ark of the Covenant to Jerusalem. This passage will be shown in direct parallel with Luke's Visitation narrative in Section IV below.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">2</span>And David arose and went, with all the people that were with him of the men of Juda, to fetch the ark of God … <span class="verse-num">5</span>And David and all Israel played before the Lord on all manner of instruments made of wood, on harps, on lutes, on timbrels, and on cornets, and on cymbals. … <span class="verse-num">9</span>And David feared the Lord that day, saying: How shall the ark of the Lord come to me? … <span class="verse-num">11</span>And the ark of the Lord abode in the house of Obededom the Gethite three months … <span class="verse-num">14</span>And David danced with all his might before the Lord … <span class="verse-num">15</span>And David and all the house of Israel brought the ark of the covenant of the Lord with joyful shouting, and with sound of trumpet. <span class="verse-num">16</span>And when the ark of the Lord was come into the city of David, Michol the daughter of Saul, looking out through a window, saw king David leaping and dancing before the Lord.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">1 Kings 2:19–20</div>
+        <p class="passage-context">Bathsheba, the Queen Mother (<em>Gebirah</em>), approaches her son King Solomon. He rises, bows to her, and sets a throne at his right hand for her. She intercedes on behalf of a petitioner — and the king does not refuse her.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">19</span>Then Bethsabee came to king Solomon, to speak to him for Adonias: and the king arose to meet her, and bowed to her, and sat down upon his throne: and a throne was set for the king's mother, and she sat on his right hand. <span class="verse-num">20</span>And she said to him: I desire one small petition of thee, do not put me to confusion. And the king said to her: My mother, ask: for I must not turn away thy face.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Queen Mother (Gebirah)</div>
+        <p>In the Davidic kingdom, the queen was not the king's wife — it was the king's mother. Solomon had hundreds of wives; he had one <em>Gebirah</em>. She held a formal office, sat on a throne at the king's right hand, and served as intercessor between the people and the king. This is the Old Testament pattern that Mary fulfills. Christ is the Son of David. Mary is His mother. She sits at the place of honor, and she intercedes — not because the King lacks power, but because the King established this office. The Wedding at Cana (John 2) is precisely this dynamic in action: the mother brings a petition, the Son acts.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Isaiah 7:14</div>
+        <p class="passage-context">The sign given to the house of David. The Septuagint uses <em>parthenos</em> — virgin — a word choice affirmed by Matthew's Gospel as fulfilled in Mary.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">14</span>Therefore the Lord himself shall give you a sign. Behold a virgin shall conceive, and bear a son, and his name shall be called Emmanuel.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Zephaniah 3:14–17</div>
+        <p class="passage-context">The "Daughter of Zion" — a personification of Israel, but also a prophetic address to the one woman who would embody faithful Israel perfectly. The verbal parallels with Luke's Annunciation are striking.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">14</span>Give praise, O daughter of Sion: shout, O Israel: be glad, and rejoice with all thy heart, O daughter of Jerusalem. <span class="verse-num">15</span>The Lord hath taken away thy judgment, he hath turned away thy enemies: the king of Israel the Lord is in the midst of thee, thou shalt fear evil no more. <span class="verse-num">16</span>In that day it shall be said to Jerusalem: Fear not: to Sion: Let not thy hands be weakened. <span class="verse-num">17</span>The Lord thy God in the midst of thee is mighty; he will save: he will rejoice over thee with gladness, he will be silent in his love, he will be joyful over thee in praise.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">Daughter of Zion → The Annunciation</div>
+        <p>The Zephaniah passage and Luke's Annunciation share a remarkable structural parallel. "Give praise / Rejoice" corresponds to "Hail" (Greek <em>chaire</em> — literally "Rejoice!"). "The Lord is in the midst of thee" corresponds to "The Lord is with thee." "Fear not" appears verbatim in both texts. The Daughter of Zion was told the King would be "in her midst"; Mary was told the Son of the Most High would be conceived "in her womb." Luke, the most literary of the evangelists, crafted this echo deliberately. Mary is the Daughter of Zion in person — the faithful remnant of Israel in whom God takes up His dwelling.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Judith 13:18–20</div>
+        <p class="passage-context">Judith, who saved Israel by crushing the head of the enemy commander Holofernes, is greeted with words that reappear almost verbatim in the New Testament.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>And Ozias the prince of the people of Israel, said to her: Blessed art thou, O daughter, by the Lord the most high God, above all women upon the earth. <span class="verse-num">19</span>Blessed be the Lord who made heaven and earth, who hath directed thee to the cutting off of the head of the prince of our enemies. <span class="verse-num">20</span>Because he hath so magnified thy name this day, that thy praise shall not depart out of the mouth of men who shall be mindful of the power of the Lord for ever, for that thou hast not spared thy life, by reason of the distress and tribulation of thy people, but hast prevented our ruin in the presence of our God.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">Typological Connection</div>
+        <p>"Blessed art thou above all women upon the earth" — compare Elizabeth's greeting to Mary: "Blessed art thou among women" (Luke 1:42). Judith crushed the head of the enemy of Israel; Mary's Son crushes the head of the ancient serpent (Genesis 3:15). Judith was a virgin-widow who fasted and prayed; the tradition of Mary's perpetual virginity and life of prayer echoes the same pattern. The Book of Judith was recognized as canonical by the early Church and remains in the Catholic Bible — itself a witness to the typological reading that Protestantism lost when it removed the deuterocanonical books.</p>
+    </div>
+
+    <!-- ===== III. THE ANNUNCIATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-3">
+        <h2>III. The Annunciation</h2>
+        <p class="section-desc">The moment that changed everything — a young woman's fiat makes the Incarnation possible.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 1:26–38</div>
+        <p class="passage-context">The angel Gabriel is sent to Nazareth. The greeting "full of grace" translates the Greek <em>kecharitomene</em> — a perfect passive participle indicating that Mary has already been, and remains, completely graced by God. It functions as her name; Gabriel does not call her "Mary" but identifies her by this title.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">26</span>And in the sixth month, the angel Gabriel was sent from God into a city of Galilee, called Nazareth, <span class="verse-num">27</span>To a virgin espoused to a man whose name was Joseph, of the house of David; and the virgin's name was Mary. <span class="verse-num">28</span>And the angel being come in, said unto her: Hail, full of grace, the Lord is with thee: blessed art thou among women.</p>
+            <p><span class="verse-num">29</span>Who having heard, was troubled at his saying, and thought with herself what manner of salutation this should be. <span class="verse-num">30</span>And the angel said to her: Fear not, Mary, for thou hast found grace with God.</p>
+            <p><span class="verse-num">31</span>Behold thou shalt conceive in thy womb, and shalt bring forth a son; and thou shalt call his name Jesus. <span class="verse-num">32</span>He shall be great, and shall be called the Son of the most High; and the Lord God shall give unto him the throne of David his father; and he shall reign in the house of Jacob for ever. <span class="verse-num">33</span>And of his kingdom there shall be no end.</p>
+            <p><span class="verse-num">34</span>And Mary said to the angel: How shall this be done, because I know not man?</p>
+            <p><span class="verse-num">35</span>And the angel answering, said to her: The Holy Ghost shall come upon thee, and the power of the most High shall overshadow thee. And therefore also the Holy which shall be born of thee shall be called the Son of God.</p>
+            <p><span class="verse-num">36</span>And behold thy cousin Elizabeth, she also hath conceived a son in her old age; and this is the sixth month with her that is called barren: <span class="verse-num">37</span>Because no word shall be impossible with God. <span class="verse-num">38</span>And Mary said: Behold the handmaid of the Lord; be it done to me according to thy word. And the angel departed from her.</p>
+        </div>
+    </div>
+
+    <div class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        Hail, full of grace, the Lord is with thee:<br>
+        blessed art thou among women.
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">Kecharitomene — What the Greek Actually Says</div>
+        <p><em>Kecharitomene</em> is not a casual compliment. It is a perfect passive participle of <em>charitoo</em>, meaning "to grace" or "to fill with grace." The perfect tense in Greek indicates a completed action with ongoing results: Mary has been graced fully and remains in that state. The only other use of this verb in the New Testament is Ephesians 1:6, where Paul says God "hath graced us" (<em>echaritosen</em>) in Christ — but there the verb is aorist (simple past), not perfect. Gabriel's greeting to Mary uses the stronger, more permanent form. The angel does not say "you who have received some grace"; he identifies her as the one who has been completely and permanently transformed by grace. This is the scriptural foundation for the dogma of the Immaculate Conception.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Mary's Question — Evidence of a Vow</div>
+        <p>"How shall this be done, because I know not man?" Mary is betrothed to Joseph. If she expected a normal marriage, the angel's announcement of a son would be unsurprising — she would simply assume the child would come through her husband. Her question only makes sense if she had made a commitment to virginity — even within the context of her betrothal. The Fathers understood this as evidence that Mary had taken a vow of perpetual virginity, and that Joseph was her guardian and protector, not her conjugal partner in the ordinary sense. St. Augustine, St. Gregory of Nyssa, and St. Thomas Aquinas all affirm this reading.</p>
+    </div>
+
+    <!-- ===== IV. THE VISITATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-4">
+        <h2>IV. The Visitation &amp; the New Ark</h2>
+        <p class="section-desc">Mary travels to the hill country of Judah — and Luke narrates her journey in language drawn directly from the Ark's journey to Jerusalem.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 1:39–45</div>
+        <p class="passage-context">Mary visits Elizabeth. John the Baptist leaps in the womb — a priestly recognition of the divine presence, just as David leaped before the Ark. Elizabeth's greeting echoes the language of 2 Samuel 6.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">39</span>And Mary rising up in those days, went into the hill country with haste into a city of Juda. <span class="verse-num">40</span>And she entered into the house of Zachary, and saluted Elizabeth. <span class="verse-num">41</span>And it came to pass, that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost:</p>
+            <p><span class="verse-num">42</span>And she cried out with a loud voice, and said: Blessed art thou among women, and blessed is the fruit of thy womb. <span class="verse-num">43</span>And whence is this to me, that the mother of my Lord should come to me? <span class="verse-num">44</span>For behold as soon as the voice of thy salutation sounded in my ears, the infant in my womb leaped for joy. <span class="verse-num">45</span>And blessed is she that believed, because those things shall be accomplished that were spoken to her by the Lord.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Ark Parallel — 2 Samuel 6 &amp; Luke 1</div>
+        <p>The verbal and structural parallels between David bringing the Ark to Jerusalem and Mary's visit to Elizabeth are among the most striking typological connections in all of Scripture:</p>
+        <table class="parallel-table">
+            <thead>
+                <tr>
+                    <th>The Ark (2 Samuel 6)</th>
+                    <th>Mary (Luke 1)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>The Ark arises and goes to the hill country of Judah (6:2)</td>
+                    <td>Mary arises and goes to the hill country of Judah (1:39)</td>
+                </tr>
+                <tr>
+                    <td>David leaps and dances before the Ark (6:14, 16)</td>
+                    <td>John leaps in Elizabeth's womb before Mary (1:41, 44)</td>
+                </tr>
+                <tr>
+                    <td>"How shall the ark of the Lord come to me?" (6:9)</td>
+                    <td>"Whence is this to me, that the mother of my Lord should come to me?" (1:43)</td>
+                </tr>
+                <tr>
+                    <td>David shouts before the Ark (6:15)</td>
+                    <td>Elizabeth cries out with a loud voice (1:42)</td>
+                </tr>
+                <tr>
+                    <td>The Ark remains three months in the house of Obededom (6:11)</td>
+                    <td>Mary remains about three months in the house of Elizabeth (1:56)</td>
+                </tr>
+                <tr>
+                    <td>The household of Obededom is blessed by the Ark's presence (6:11–12)</td>
+                    <td>Elizabeth is filled with the Holy Ghost at Mary's arrival (1:41)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 10px;">Six parallels is not coincidence. Luke — a Gentile writing for Gentiles — nonetheless structures his narrative with meticulous attention to Old Testament typology. His message is unmistakable: Mary is the Ark of the New Covenant, bearing within her the presence of God Himself.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Theotokos — "Mother of My Lord"</div>
+        <p>Elizabeth's exclamation — "the mother of my Lord" — is the first recorded instance of what the Council of Ephesus (431 AD) would formally define: Mary is <em>Theotokos</em>, the God-Bearer, the Mother of God. Elizabeth, filled with the Holy Spirit, does not say "the mother of my teacher" or "the mother of the Messiah's human nature." She says "the mother of my Lord" — <em>Kyrios</em> — the word the Septuagint uses to translate YHWH. The Holy Spirit Himself, speaking through Elizabeth, declares Mary to be the Mother of the Lord.</p>
+    </div>
+
+    <!-- ===== V. THE MAGNIFICAT ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-5">
+        <h2>V. The Magnificat</h2>
+        <p class="section-desc">Mary's canticle — the longest recorded speech by any woman in the New Testament, and a revolutionary proclamation of divine justice.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 1:46–55</div>
+        <p class="passage-context">Mary's response to Elizabeth's greeting. The Magnificat echoes Hannah's prayer (1 Samuel 2:1–10) and weaves together the themes of Israel's salvation history into a single prophetic declaration.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">46</span>And Mary said: My soul doth magnify the Lord. <span class="verse-num">47</span>And my spirit hath rejoiced in God my Saviour. <span class="verse-num">48</span>Because he hath regarded the humility of his handmaid; for behold from henceforth all generations shall call me blessed. <span class="verse-num">49</span>Because he that is mighty hath done great things to me; and holy is his name. <span class="verse-num">50</span>And his mercy is from generation unto generations, to them that fear him.</p>
+            <p><span class="verse-num">51</span>He hath shewed might in his arm: he hath scattered the proud in the conceit of their heart. <span class="verse-num">52</span>He hath put down the mighty from their seat, and hath exalted the humble. <span class="verse-num">53</span>He hath filled the hungry with good things; and the rich he hath sent empty away. <span class="verse-num">54</span>He hath received Israel his servant, being mindful of his mercy: <span class="verse-num">55</span>As he spoke to our fathers, to Abraham and to his seed for ever.</p>
+        </div>
+    </div>
+
+    <div class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        From henceforth all generations<br>
+        shall call me blessed.
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">A Prophecy Still Being Fulfilled</div>
+        <p>"All generations shall call me blessed." This is not a suggestion — it is a prophecy, spoken under the inspiration of the Holy Spirit. Any Christian tradition that does not honor Mary as blessed is failing to fulfill Scripture. For two thousand years, the Catholic Church — in every generation, on every continent — has called her blessed. The Rosary, the feast days, the cathedrals bearing her name, the Angelus rung at dawn, noon, and dusk: all of it is the fulfillment of this single verse. To neglect Mary is not biblical fidelity; it is biblical disobedience.</p>
+    </div>
+
+    <!-- ===== VI. THE NATIVITY ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-6">
+        <h2>VI. The Nativity</h2>
+        <p class="section-desc">The Word made flesh — born of a virgin, laid in a manger, wrapped in swaddling clothes.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 1:18–25</div>
+        <p class="passage-context">Matthew's account of the birth of Christ, emphasizing the fulfillment of Isaiah 7:14 and the virginal conception. Joseph, the just man, receives the angel's instruction in a dream.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>Now the generation of Christ was in this wise. When as his mother Mary was espoused to Joseph, before they came together, she was found with child, of the Holy Ghost. <span class="verse-num">19</span>Whereupon Joseph her husband, being a just man, and not willing publicly to expose her, was minded to put her away privately. <span class="verse-num">20</span>But while he thought on these things, behold the angel of the Lord appeared to him in his sleep, saying: Joseph, son of David, fear not to take unto thee Mary thy wife, for that which is conceived in her, is of the Holy Ghost. <span class="verse-num">21</span>And she shall bring forth a son: and thou shalt call his name JESUS. For he shall save his people from their sins.</p>
+            <p><span class="verse-num">22</span>Now all this was done that it might be fulfilled which the Lord spoke by the prophet, saying: <span class="verse-num">23</span><em>Behold a virgin shall be with child, and bring forth a son, and they shall call his name Emmanuel</em>, which being interpreted is, God with us. <span class="verse-num">24</span>And Joseph rising up from sleep, did as the angel of the Lord had commanded him, and took unto him his wife. <span class="verse-num">25</span>And he knew her not till she brought forth her firstborn son: and he called his name JESUS.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">"Knew Her Not Till" — The Perpetual Virginity Question</div>
+        <p>"He knew her not till she brought forth her firstborn son." The word "till" (<em>heos</em>) in biblical Greek does not imply a change of state after the specified event. Consider 2 Samuel 6:23 (Septuagint): "Michol the daughter of Saul had no child till (<em>heos</em>) the day of her death" — which obviously does not mean she had children after death. Similarly, "firstborn" (<em>prototokos</em>) is a legal title designating rights and status under the Mosaic law; it does not require subsequent children. The Church has taught Mary's perpetual virginity from the earliest centuries — affirmed by the Second Council of Constantinople (553 AD) and held by Luther, Calvin, and Zwingli alike.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 2:6–7, 15–19</div>
+        <p class="passage-context">Luke's Nativity — spare, intimate, luminous. Mary "kept all these words, pondering them in her heart." Luke likely received his account from Mary herself — he is the only evangelist who narrates from her perspective.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">6</span>And it came to pass, that when they were there, her days were accomplished, that she should be delivered. <span class="verse-num">7</span>And she brought forth her firstborn son, and wrapped him up in swaddling clothes, and laid him in a manger; because there was no room for them in the inn.</p>
+            <p><span class="verse-num">15</span>And it came to pass, after the angels departed from them into heaven, the shepherds said one to another: Let us go over to Bethlehem, and let us see this word that is come to pass, which the Lord hath shewed to us. <span class="verse-num">16</span>And they came with haste; and they found Mary and Joseph, and the infant lying in the manger. <span class="verse-num">17</span>And seeing, they understood of the word that had been spoken to them concerning this child. <span class="verse-num">18</span>And all that heard, wondered; and at those things that were told them by the shepherds. <span class="verse-num">19</span>But Mary kept all these words, pondering them in her heart.</p>
+        </div>
+    </div>
+
+    <!-- ===== VII. THE PRESENTATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-7">
+        <h2>VII. The Presentation &amp; Simeon's Prophecy</h2>
+        <p class="section-desc">The child is presented at the Temple. A prophecy of glory — and a sword.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Luke 2:22–35</div>
+        <p class="passage-context">Mary and Joseph bring the infant Jesus to the Temple in accordance with the Law. Simeon, a just man who had been promised he would not die before seeing the Messiah, takes the child in his arms — and then turns to Mary with a devastating prophecy.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">22</span>And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord: <span class="verse-num">23</span>As it is written in the law of the Lord: <em>Every male opening the womb shall be called holy to the Lord:</em> <span class="verse-num">24</span>And to offer a sacrifice, according as it is written in the law of the Lord, a pair of turtledoves, or two young pigeons.</p>
+            <p><span class="verse-num">25</span>And behold there was a man in Jerusalem named Simeon, and this man was just and devout, waiting for the consolation of Israel; and the Holy Ghost was in him. <span class="verse-num">26</span>And he had received an answer from the Holy Ghost, that he should not see death, before he had seen the Christ of the Lord. <span class="verse-num">27</span>And he came by the Spirit into the temple. And when his parents brought in the child Jesus, to do for him according to the custom of the law, <span class="verse-num">28</span>He also took him into his arms, and blessed God, and said:</p>
+            <p><span class="verse-num">29</span>Now thou dost dismiss thy servant, O Lord, according to thy word in peace; <span class="verse-num">30</span>Because my eyes have seen thy salvation, <span class="verse-num">31</span>Which thou hast prepared before the face of all peoples: <span class="verse-num">32</span>A light to the revelation of the Gentiles, and the glory of thy people Israel.</p>
+            <p><span class="verse-num">33</span>And his father and mother were wondering at those things which were spoken concerning him. <span class="verse-num">34</span>And Simeon blessed them, and said to Mary his mother: Behold this child is set for the fall, and for the resurrection of many in Israel, and for a sign which shall be contradicted; <span class="verse-num">35</span>And thy own soul a sword shall pierce, that, out of many hearts, thoughts may be revealed.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Sword</div>
+        <p>"Thy own soul a sword shall pierce." From the very beginning, Mary's motherhood is defined by suffering. The Church sees in this prophecy the foundation of the devotion to Our Lady of Sorrows — the Mater Dolorosa who stands at the foot of the Cross. Mary's participation in the redemptive work of her Son is not a later medieval invention; it is foretold here, in the Temple, by a man filled with the Holy Spirit, before the child is forty days old.</p>
+    </div>
+
+    <!-- ===== VIII. THE FLIGHT ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-8">
+        <h2>VIII. The Flight into Egypt</h2>
+        <p class="section-desc">The Holy Family flees Herod — retracing Israel's own journey in reverse.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 2:13–15</div>
+        <p class="passage-context">Joseph is warned in a dream. The family flees to Egypt — and Matthew sees in their return the fulfillment of Hosea 11:1: "Out of Egypt I have called my son."</p>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>And after they were departed, behold an angel of the Lord appeared in sleep to Joseph, saying: Arise, and take the child and his mother, and fly into Egypt: and be there until I shall tell thee. For it will come to pass that Herod will seek the child to destroy him. <span class="verse-num">14</span>Who arose, and took the child and his mother by night, and retired into Egypt: and he was there until the death of Herod: <span class="verse-num">15</span>That it might be fulfilled which the Lord spoke by the prophet, saying: <em>Out of Egypt have I called my son.</em></p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">Typological Connection</div>
+        <p>Notice how Matthew frames the narrative: "the child and his mother" — repeated three times (vv. 13, 14, 20–21). Not "his parents," not "Joseph and Mary." The emphasis is consistently on the inseparable bond between the Child and His Mother. Where the Child goes, the Mother goes. Where God dwells, the Ark is present. The Flight into Egypt also recapitulates Israel's own history: as Israel went down into Egypt and was called out, so the new Israel — Christ, accompanied by the new Ark — descends into Egypt and is called forth. The pattern of salvation history repeats, now concentrated in this mother and child.</p>
+    </div>
+
+    <!-- ===== IX. THE FINDING IN THE TEMPLE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-9">
+        <h2>IX. The Finding in the Temple</h2>
+        <p class="section-desc">The last event recorded from Jesus' childhood — and the last time Scripture describes Mary and Jesus in a domestic scene before His public ministry.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 2:41–51</div>
+        <p class="passage-context">The twelve-year-old Jesus is found teaching in the Temple. Mary's response — and Jesus' enigmatic reply — reveal the tension between His divine mission and His human family. And again: Mary "kept all these words in her heart."</p>
+        <div class="passage-text">
+            <p><span class="verse-num">41</span>And his parents went every year to Jerusalem, at the solemn day of the pasch. <span class="verse-num">42</span>And when he was twelve years old, they going up into Jerusalem, according to the custom of the feast, <span class="verse-num">43</span>And having fulfilled the days, when they returned, the child Jesus remained in Jerusalem; and his parents knew it not. <span class="verse-num">44</span>And thinking that he was in the company, they came a day's journey, and sought him among their kinsfolks and acquaintance. <span class="verse-num">45</span>And not finding him, they returned into Jerusalem, seeking him.</p>
+            <p><span class="verse-num">46</span>And it came to pass, that, after three days, they found him in the temple, sitting in the midst of the doctors, hearing them, and asking them questions. <span class="verse-num">47</span>And all that heard him were astonished at his wisdom and his answers. <span class="verse-num">48</span>And seeing him, they wondered. And his mother said to him: Son, why hast thou done so to us? behold thy father and I have sought thee sorrowing. <span class="verse-num">49</span>And he said to them: How is it that you sought me? did you not know, that I must be about my father's business? <span class="verse-num">50</span>And they understood not the word that he spoke unto them.</p>
+            <p><span class="verse-num">51</span>And he went down with them, and came to Nazareth, and was subject to them. And his mother kept all these words in her heart.</p>
+        </div>
+    </div>
+
+    <!-- ===== X. THE WEDDING AT CANA ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-10">
+        <h2>X. The Wedding at Cana</h2>
+        <p class="section-desc">Mary's intercession initiates the first public miracle — and establishes the pattern for all Marian intercession thereafter.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 2:1–11</div>
+        <p class="passage-context">A wedding feast at Cana in Galilee. The wine runs out. Mary notices, brings the need to her Son, and instructs the servants with the most important command any Christian can hear. Christ addresses her as "Woman" — not a slight, but a title connecting her to Genesis 3:15 and anticipating John 19:26.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And the third day, there was a marriage in Cana of Galilee: and the mother of Jesus was there. <span class="verse-num">2</span>And Jesus also was invited, and his disciples, to the marriage. <span class="verse-num">3</span>And the wine failing, the mother of Jesus saith to him: They have no wine. <span class="verse-num">4</span>And Jesus saith to her: Woman, what is that to me and to thee? my hour is not yet come. <span class="verse-num">5</span>His mother saith to the waiters: Whatsoever he shall say to you, do it.</p>
+            <p><span class="verse-num">6</span>Now there were set there six waterpots of stone, according to the manner of the purifying of the Jews, containing two or three measures apiece. <span class="verse-num">7</span>Jesus saith to them: Fill the waterpots with water. And they filled them up to the brim. <span class="verse-num">8</span>And Jesus saith to them: Draw out now, and carry to the chief steward of the feast. And they carried it.</p>
+            <p><span class="verse-num">9</span>And when the chief steward had tasted the water made wine, and knew not whence it was, but the waiters knew who had drawn the water; the chief steward calleth the bridegroom, <span class="verse-num">10</span>And saith to him: Every man at first setteth forth good wine, and when men have well drunk, then that which is worse. But thou hast kept the good wine until now. <span class="verse-num">11</span>This beginning of miracles did Jesus in Cana of Galilee; and manifested his glory, and his disciples believed in him.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Queen Mother at Work</div>
+        <p>The pattern from 1 Kings 2:19–20 is now fulfilled. The Queen Mother (Mary) identifies a need. She brings it to the King (Jesus). The King acts. Mary does not perform the miracle — she intercedes. And notice: Jesus says "my hour is not yet come," yet He acts anyway. Why? Because His mother asked. This is not weakness in the King; it is the office of the <em>Gebirah</em> functioning exactly as it was designed to function in the Davidic kingdom. Mary's final recorded words in all of Scripture are: "Whatsoever he shall say to you, do it." She points always and only to her Son. Catholic devotion to Mary has never been about Mary for Mary's sake — it has always been about Mary as the one who leads us to Christ.</p>
+    </div>
+
+    <!-- ===== XI. DURING THE MINISTRY ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-11">
+        <h2>XI. Mary During the Ministry</h2>
+        <p class="section-desc">Brief but significant appearances — including a passage often misread as a dismissal of Mary, which in fact exalts her.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 11:27–28</div>
+        <p class="passage-context">A woman in the crowd cries out a blessing on Jesus' mother. His response is often misread by Protestants as a correction or dismissal — but read carefully: He does not deny the blessing. He expands it.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">27</span>And it came to pass, as he spoke these things, a certain woman from the crowd, lifting up her voice, said to him: Blessed is the womb that bore thee, and the paps that gave thee suck. <span class="verse-num">28</span>But he said: Yea rather, blessed are they who hear the word of God, and keep it.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Not a Correction — A Deeper Praise</div>
+        <p>The Greek <em>menounge</em> ("Yea rather") does not mean "No, instead." It means "Yes, and even more so" — an intensification, not a contradiction. Jesus is saying: "Yes, my mother is blessed — and she is blessed most of all because she heard the word of God and kept it." Who heard the word of God more perfectly than the woman who received the Word made flesh into her very body? Who kept it more faithfully than the woman who "kept all these words, pondering them in her heart" (Luke 2:19, 51)? Far from diminishing Mary, this passage is among the strongest affirmations of her blessedness in the entire Gospel.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 12:46–50</div>
+        <p class="passage-context">Another passage often cited against Marian devotion — and another that, properly understood, affirms it.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">46</span>As he was yet speaking to the multitudes, behold his mother and his brethren stood without, seeking to speak to him. <span class="verse-num">47</span>And one said unto him: Behold thy mother and thy brethren stand without, seeking thee. <span class="verse-num">48</span>But he answering him that told him, said: Who is my mother, and who are my brethren? <span class="verse-num">49</span>And stretching forth his hand towards his disciples, he said: Behold my mother and my brethren. <span class="verse-num">50</span>For whosoever shall do the will of my Father, that is in heaven, he is my brother, and sister, and mother.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Apologetic Note</div>
+        <p>Jesus does not say "Mary is not my mother." He redefines and expands the category of family: those who do the will of the Father are His kin. And who does the will of the Father more completely than Mary — the woman whose entire life is defined by "Be it done to me according to thy word" (Luke 1:38)? She is His mother both biologically and spiritually. Also note: the "brethren" (<em>adelphoi</em>) mentioned here are not children of Mary. The Greek <em>adelphos</em> covers brothers, half-brothers, cousins, and kinsmen. The Septuagint uses it for Abraham and Lot (Genesis 13:8), who were uncle and nephew. James and Joses, named as Jesus' "brothers" in Mark 6:3, are identified in Mark 15:40 as sons of "the other Mary" — not the Blessed Virgin.</p>
+    </div>
+
+    <!-- ===== XII. AT THE CROSS ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-12">
+        <h2>XII. "Woman, Behold Thy Son"</h2>
+        <p class="section-desc">Mary at the foot of the Cross — the New Eve beside the New Adam, and the Mother given to all believers.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 19:25–27</div>
+        <p class="passage-context">Jesus, dying on the Cross, addresses His mother as "Woman" — the same title used at Cana, and the same title given to Eve in Genesis. He entrusts her to the beloved disciple, and the beloved disciple to her. The Church has always understood "the beloved disciple" as a type of every believer.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">25</span>Now there stood by the cross of Jesus, his mother, and his mother's sister, Mary of Cleophas, and Mary Magdalen. <span class="verse-num">26</span>When Jesus therefore had seen his mother and the disciple standing whom he loved, he saith to his mother: Woman, behold thy son. <span class="verse-num">27</span>After that, he saith to the disciple: Behold thy mother. And from that hour, the disciple took her to his own.</p>
+        </div>
+    </div>
+
+    <div class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        Woman, behold thy son.<br>
+        Behold thy mother.
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The New Eve at the Foot of the Tree</div>
+        <p>The parallels are precise and deliberate. Eve stood beside the tree in the Garden and participated in humanity's fall through disobedience. Mary stands beside the tree of the Cross and participates in humanity's redemption through obedience. Eve was called "Woman" (Genesis 2:23); Mary is called "Woman" by Christ at Cana and at Calvary — never "Mother," always "Woman," because the title carries cosmic, typological weight. Eve was given as mother of all the living (Genesis 3:20); Mary is given as mother of all who live in Christ. The New Adam (Christ) gives the New Eve (Mary) from the Cross, just as the first Adam received Eve at the beginning. The Church Fathers — Irenaeus, Justin Martyr, Tertullian, Ephrem — saw this parallel not as allegory but as the deliberate architecture of redemption.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Not a Private Family Arrangement</div>
+        <p>If Jesus merely wanted to ensure His mother's care, He could have entrusted her to His "brethren" — the relatives mentioned in the Gospels (who, if they were Mary's other sons, would have had a natural obligation to care for her). That He instead entrusts her to the beloved disciple — who is not a family member — only makes sense if something more than domestic logistics is happening. Jesus is establishing a new spiritual relationship. Mary becomes the mother of the disciple; the disciple becomes Mary's son. The Church is being constituted from the Cross. Mary's motherhood, which began in Nazareth, is now extended to encompass all those whom the beloved disciple represents: the faithful.</p>
+    </div>
+
+    <!-- ===== XIII. IN THE UPPER ROOM ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-13">
+        <h2>XIII. Mary in the Upper Room</h2>
+        <p class="section-desc">Mary's last appearance in the narrative of Acts — present at the birth of the Church, just as she was present at the birth of Christ.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 1:14</div>
+        <p class="passage-context">After Christ's Ascension, the apostles return to the upper room in Jerusalem to await the Holy Spirit. Mary is there — listed by name, among the apostles, in prayer.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">14</span>All these were persevering with one mind in prayer with the women, and Mary the mother of Jesus, and with his brethren.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Ark in the Upper Room</div>
+        <p>The Holy Spirit overshadowed Mary at the Annunciation, and the Incarnation began. The Holy Spirit descends upon the apostles at Pentecost, and the Church begins. Mary is present at both events — the living Ark of the Covenant in whose presence the Spirit acts. Her presence in the upper room is not incidental. It is typologically necessary. Just as the Ark of the Covenant was present in the Tabernacle and the Temple when the glory of God descended (Exodus 40:34–35, 1 Kings 8:10–11), so the New Ark is present in the upper room when the Spirit descends in tongues of fire. Where the Ark is, the glory falls.</p>
+    </div>
+
+    <!-- ===== XIV. REVELATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-14">
+        <h2>XIV. The Ark in Heaven &amp; the Woman Clothed with the Sun</h2>
+        <p class="section-desc">The final book of the Bible contains the final portrait of the Woman of Genesis 3:15 — now revealed in glory. The original text had no chapter divisions; Revelation 11:19 and 12:1 are one continuous vision.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Revelation 11:19</div>
+        <p class="passage-context">The Ark of the Covenant — lost since the destruction of the First Temple — appears in heaven. The next verse (12:1, with no break in the original text) reveals what John actually sees: a Woman.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">19</span>And the temple of God was opened in heaven: and the ark of his testament was seen in his temple, and there were lightnings, and voices, and an earthquake, and great hail.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Revelation 12:1–6</div>
+        <p class="passage-context">John's vision continues without interruption. The Ark he has just seen is now revealed: a Woman, crowned with twelve stars, clothed with the sun, standing on the moon. She gives birth to the Messiah, who is caught up to God's throne. The dragon — "the ancient serpent" of Genesis 3 — pursues her.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars: <span class="verse-num">2</span>And being with child, she cried travailing in birth, and was in pain to be delivered.</p>
+            <p><span class="verse-num">3</span>And there was seen another sign in heaven: and behold a great red dragon, having seven heads and ten horns: and on his heads seven diadems: <span class="verse-num">4</span>And his tail drew the third part of the stars of heaven, and cast them to the earth: and the dragon stood before the woman who was ready to be delivered; that, when she should be delivered, he might devour her son.</p>
+            <p><span class="verse-num">5</span>And she brought forth a man child, who was to rule all nations with an iron rod: and her son was taken up to God, and to his throne. <span class="verse-num">6</span>And the woman fled into the wilderness, where she had a place prepared by God, that there they should feed her a thousand two hundred sixty days.</p>
+        </div>
+    </div>
+
+    <div class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        A woman clothed with the sun,<br>
+        and the moon under her feet,<br>
+        and on her head a crown of twelve stars.
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Revelation 12:13–17</div>
+        <p class="passage-context">The dragon, defeated in heaven, pursues the Woman and then turns his rage against "the rest of her seed" — those who keep the commandments of God and have the testimony of Jesus Christ. If Mary is the Woman, then all Christians are her children.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>And when the dragon saw that he was cast unto the earth, he persecuted the woman, who brought forth the man child: <span class="verse-num">14</span>And there were given to the woman two wings of a great eagle, that she might fly into the desert unto her place, where she is nourished for a time and times, and half a time, from the face of the serpent.</p>
+            <p><span class="verse-num">15</span>And the serpent cast out of his mouth after the woman, water as it were a river; that he might cause her to be carried away by the river. <span class="verse-num">16</span>And the earth helped the woman, and the earth opened her mouth, and swallowed up the river, which the dragon cast out of his mouth. <span class="verse-num">17</span>And the dragon was angry against the woman: and went to make war with the rest of her seed, who keep the commandments of God, and have the testimony of Jesus Christ.</p>
+        </div>
+    </div>
+
+    <div class="typology-note">
+        <div class="note-label">The Full Circle — Genesis 3:15 to Revelation 12</div>
+        <p>The Bible begins with a Woman and a serpent in a garden, and it ends with a Woman and a dragon in heaven. The architecture of Scripture itself frames Mary's role. In Genesis 3:15, God promises enmity between the Woman and the serpent, between her seed and his. In Revelation 12, that enmity reaches its climax: the dragon pursues the Woman, is defeated, and turns his fury against "the rest of her seed." The identity of the man child is beyond dispute — He "rules all nations with an iron rod" (cf. Psalm 2:9), a title belonging to Christ alone. If the child is Christ, the Woman who bears Him is Mary. The "rest of her seed" — those who keep God's commandments and have the testimony of Jesus — are Christians. Mary is their mother. The chapter division between Revelation 11:19 and 12:1, inserted centuries after John wrote, has obscured what is in fact one continuous vision: the Ark of the Covenant appears in the heavenly Temple, and that Ark is the Woman clothed with the sun. The lost Ark has been found — not in an earthly chamber, but in heaven, glorified, crowned with stars.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Assumption &amp; the Queenship</div>
+        <p>The vision of Revelation 12 is the scriptural foundation for two Marian dogmas. The Assumption: the Woman is seen in heaven, body and soul — not merely as a disembodied spirit, but as a sign, clothed and crowned, a physical presence in glory. The Queenship: she wears a crown of twelve stars, the royal insignia of the <em>Gebirah</em>, the Queen Mother of the Davidic kingdom now transposed to its eternal register. The Church did not invent these doctrines from silence; she read them from the text that closes the canon of Scripture.</p>
+    </div>
+
+    <!-- COLOPHON -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="editorial-note" style="margin-top: 40px;">
+        <div class="note-label">Colophon</div>
+        <p>Text: Douay-Rheims Bible (Challoner Revision). Old Testament types included alongside their New Testament fulfillments. Typological notes, contextual commentary, and apologetic annotations by the editors of One Faith Delivered. This compilation is intended for private study and apologetics and is not a replacement for reading each book of the Bible in its full canonical context.</p>
+    </div>
+
+</main>
+
+<!-- Floating Section Navigator -->
+<button class="section-nav-btn" id="sectionNavBtn" aria-label="Jump to section" title="Jump to section">
+    ☰
+</button>
+<div class="section-nav-panel" id="sectionNavPanel">
+    <div class="section-nav-header">Jump to Section</div>
+    <ul class="section-nav-list" id="sectionNavList">
+        <li><a href="#sec-1"><span class="nav-numeral">I</span> The Protoevangelium</a></li>
+        <li><a href="#sec-2"><span class="nav-numeral">II</span> Types &amp; Shadows</a></li>
+        <li><a href="#sec-3"><span class="nav-numeral">III</span> The Annunciation</a></li>
+        <li><a href="#sec-4"><span class="nav-numeral">IV</span> The Visitation &amp; the New Ark</a></li>
+        <li><a href="#sec-5"><span class="nav-numeral">V</span> The Magnificat</a></li>
+        <li><a href="#sec-6"><span class="nav-numeral">VI</span> The Nativity</a></li>
+        <li><a href="#sec-7"><span class="nav-numeral">VII</span> The Presentation</a></li>
+        <li><a href="#sec-8"><span class="nav-numeral">VIII</span> The Flight into Egypt</a></li>
+        <li><a href="#sec-9"><span class="nav-numeral">IX</span> The Finding in the Temple</a></li>
+        <li><a href="#sec-10"><span class="nav-numeral">X</span> The Wedding at Cana</a></li>
+        <li><a href="#sec-11"><span class="nav-numeral">XI</span> Mary During the Ministry</a></li>
+        <li><a href="#sec-12"><span class="nav-numeral">XII</span> At the Cross</a></li>
+        <li><a href="#sec-13"><span class="nav-numeral">XIII</span> In the Upper Room</a></li>
+        <li><a href="#sec-14"><span class="nav-numeral">XIV</span> The Ark &amp; the Woman</a></li>
+    </ul>
+</div>
+
+<script>
+    // Reading progress bar
+    window.addEventListener('scroll', function() {
+        var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (window.scrollY / docHeight) * 100;
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+    });
+
+    // Dark mode toggle
+    (function() {
+        var toggle = document.getElementById('darkToggle');
+        var icon = document.getElementById('toggleIcon');
+        var label = document.getElementById('toggleLabel');
+
+        function updateUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            icon.textContent = isDark ? '☀' : '☽';
+            label.textContent = isDark ? 'Day' : 'Night';
+        }
+
+        function flipTheme() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('ofd-mary-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('ofd-mary-theme', 'dark');
+            }
+            updateUI();
+        }
+
+        // Load saved preference
+        var saved = localStorage.getItem('ofd-mary-theme');
+        if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        toggle.addEventListener('click', flipTheme);
+        toggle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipTheme(); }
+        });
+
+        updateUI();
+    })();
+
+    // Section navigator
+    (function() {
+        var btn = document.getElementById('sectionNavBtn');
+        var panel = document.getElementById('sectionNavPanel');
+        var navLinks = document.querySelectorAll('#sectionNavList a');
+        var sectionIds = [];
+        var isOpen = false;
+
+        navLinks.forEach(function(link) {
+            sectionIds.push(link.getAttribute('href').substring(1));
+        });
+
+        function togglePanel() {
+            isOpen = !isOpen;
+            btn.classList.toggle('open', isOpen);
+            panel.classList.toggle('open', isOpen);
+            btn.textContent = isOpen ? '✕' : '☰';
+            if (isOpen) highlightCurrent();
+        }
+
+        btn.addEventListener('click', togglePanel);
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(function() {
+                    isOpen = false;
+                    btn.classList.remove('open');
+                    panel.classList.remove('open');
+                    btn.textContent = '☰';
+                }, 150);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (isOpen && !panel.contains(e.target) && e.target !== btn) {
+                isOpen = false;
+                btn.classList.remove('open');
+                panel.classList.remove('open');
+                btn.textContent = '☰';
+            }
+        });
+
+        function highlightCurrent() {
+            var scrollPos = window.scrollY + 120;
+            var currentId = sectionIds[0];
+
+            for (var i = 0; i < sectionIds.length; i++) {
+                var el = document.getElementById(sectionIds[i]);
+                if (el && el.offsetTop <= scrollPos) {
+                    currentId = sectionIds[i];
+                }
+            }
+
+            navLinks.forEach(function(link) {
+                var href = link.getAttribute('href').substring(1);
+                link.classList.toggle('active', href === currentId);
+            });
+
+            var activeLink = panel.querySelector('a.active');
+            if (activeLink) {
+                var list = document.getElementById('sectionNavList');
+                var linkTop = activeLink.offsetTop - list.offsetTop;
+                var listHeight = list.clientHeight;
+                if (linkTop < list.scrollTop || linkTop > list.scrollTop + listHeight - 40) {
+                    list.scrollTop = linkTop - listHeight / 3;
+                }
+            }
+        }
+
+        var scrollTimer;
+        window.addEventListener('scroll', function() {
+            if (isOpen) {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(highlightCurrent, 80);
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>
