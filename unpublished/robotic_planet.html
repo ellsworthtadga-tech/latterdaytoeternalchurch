@@ -2,2141 +2,331 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Robotic Planet</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
-body {
-  background: #0a0c12;
-  overflow: hidden;
-  font-family: 'Share Tech Mono', monospace;
-  color: #c8d8e4;
-  user-select: none;
-}
-
-#gameCanvas {
-  display: block;
-  cursor: crosshair;
-}
-
-#ui-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  pointer-events: none;
-  z-index: 10;
-}
-
-#top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  background: linear-gradient(180deg, rgba(10,20,30,0.95) 0%, rgba(10,20,30,0.7) 100%);
-  border-bottom: 1px solid rgba(100,200,255,0.15);
-  pointer-events: auto;
-}
-
-.resource-bar {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.resource-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  padding: 3px 10px;
-  background: rgba(20,40,60,0.8);
-  border: 1px solid rgba(100,200,255,0.12);
-  border-radius: 4px;
-}
-
-.resource-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-}
-
-.res-ore { background: linear-gradient(135deg, #8b5e3c, #c77a45); }
-.res-energy { background: linear-gradient(135deg, #3c8b5e, #45c77a); }
-.res-crystal { background: linear-gradient(135deg, #3c5e8b, #45a0c7); }
-.res-metal { background: linear-gradient(135deg, #7a7a8a, #b0b0c0); }
-.res-fuel { background: linear-gradient(135deg, #8b3c3c, #c74545); }
-
-.game-title {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 16px;
-  background: linear-gradient(135deg, #a0d4e8, #60a0c0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
-}
-
-#bottom-panel {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  pointer-events: auto;
-  z-index: 10;
-}
-
-#action-bar {
-  display: flex;
-  gap: 4px;
-  padding: 8px 16px;
-  background: linear-gradient(0deg, rgba(10,20,30,0.95) 0%, rgba(10,20,30,0.7) 100%);
-  border-top: 1px solid rgba(100,200,255,0.15);
-  overflow-x: auto;
-}
-
-.action-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 6px 10px;
-  min-width: 70px;
-  background: rgba(30,50,70,0.8);
-  border: 1px solid rgba(100,200,255,0.2);
-  border-radius: 6px;
-  color: #a0c4d8;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.action-btn:hover {
-  background: rgba(40,80,120,0.9);
-  border-color: rgba(100,200,255,0.5);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.action-btn.active {
-  background: rgba(50,120,180,0.9);
-  border-color: #60b0e0;
-  color: #fff;
-  box-shadow: 0 0 12px rgba(60,150,220,0.3);
-}
-
-.action-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn-icon {
-  font-size: 20px;
-  margin-bottom: 2px;
-}
-
-.btn-cost {
-  font-size: 8px;
-  opacity: 0.7;
-}
-
-#info-panel {
-  position: fixed;
-  right: 10px;
-  top: 55px;
-  width: 220px;
-  background: rgba(10,20,30,0.92);
-  border: 1px solid rgba(100,200,255,0.15);
-  border-radius: 8px;
-  padding: 10px;
-  pointer-events: auto;
-  z-index: 10;
-  font-size: 12px;
-  display: none;
-}
-
-#info-panel h3 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 13px;
-  color: #60b0e0;
-  margin-bottom: 6px;
-}
-
-#info-panel p {
-  margin: 3px 0;
-  color: #90b0c8;
-}
-
-#minimap-container {
-  position: fixed;
-  left: 10px;
-  bottom: 60px;
-  width: 160px;
-  height: 160px;
-  background: rgba(10,20,30,0.92);
-  border: 1px solid rgba(100,200,255,0.15);
-  border-radius: 8px;
-  overflow: hidden;
-  pointer-events: auto;
-  z-index: 10;
-}
-
-#minimap {
-  width: 100%;
-  height: 100%;
-}
-
-#start-screen {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at center, #0d1520 0%, #050810 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-}
-
-#start-screen h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 48px;
-  background: linear-gradient(135deg, #c0e8ff, #4090c0, #80d0ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 4px;
-  margin-bottom: 8px;
-  text-shadow: 0 0 60px rgba(60,150,220,0.3);
-}
-
-#start-screen .subtitle {
-  font-size: 14px;
-  color: #608090;
-  margin-bottom: 40px;
-  letter-spacing: 6px;
-}
-
-.start-btn {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
-  padding: 14px 50px;
-  background: linear-gradient(135deg, rgba(40,100,160,0.8), rgba(30,70,120,0.8));
-  border: 1px solid rgba(100,200,255,0.3);
-  border-radius: 8px;
-  color: #c0e0f0;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 2px;
-  margin: 6px;
-}
-
-.start-btn:hover {
-  background: linear-gradient(135deg, rgba(50,130,200,0.9), rgba(40,90,150,0.9));
-  border-color: rgba(100,200,255,0.6);
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(60,150,220,0.3);
-}
-
-#planet-canvas {
-  width: 200px;
-  height: 200px;
-  margin-bottom: 20px;
-}
-
-.controls-hint {
-  position: fixed;
-  left: 10px;
-  top: 55px;
-  font-size: 10px;
-  color: #506070;
-  z-index: 10;
-  pointer-events: none;
-  line-height: 1.6;
-}
-
-#message-log {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 70px;
-  z-index: 15;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.game-message {
-  padding: 4px 16px;
-  background: rgba(10,20,30,0.9);
-  border: 1px solid rgba(100,200,255,0.2);
-  border-radius: 4px;
-  font-size: 12px;
-  color: #80c0e0;
-  animation: msgFade 3s forwards;
-  white-space: nowrap;
-}
-
-@keyframes msgFade {
-  0% { opacity: 0; transform: translateY(10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  80% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px); }
-}
-
-.health-text { font-size: 10px; fill: #fff; text-anchor: middle; }
+html,body{width:100%;height:100%;overflow:hidden;touch-action:none}
+body{background:#0a0c12;font-family:'Share Tech Mono',monospace;color:#c8d8e4;user-select:none;-webkit-user-select:none}
+canvas#gameCanvas{display:block;position:fixed;inset:0;z-index:0}
+#top-bar{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;padding:5px 8px;background:linear-gradient(180deg,rgba(10,20,30,.95),rgba(10,20,30,.7));border-bottom:1px solid rgba(100,200,255,.15);z-index:20;gap:6px;flex-wrap:wrap}
+.game-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(10px,2.5vw,16px);background:linear-gradient(135deg,#a0d4e8,#60a0c0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;white-space:nowrap}
+.resource-bar{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.resource-item{display:flex;align-items:center;gap:3px;font-size:clamp(9px,2vw,12px);padding:2px 5px;background:rgba(20,40,60,.8);border:1px solid rgba(100,200,255,.12);border-radius:3px;white-space:nowrap}
+.resource-icon{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.res-ore{background:linear-gradient(135deg,#8b5e3c,#c77a45)}.res-energy{background:linear-gradient(135deg,#3c8b5e,#45c77a)}.res-crystal{background:linear-gradient(135deg,#3c5e8b,#45a0c7)}.res-metal{background:linear-gradient(135deg,#7a7a8a,#b0b0c0)}.res-fuel{background:linear-gradient(135deg,#8b3c3c,#c74545)}
+#top-right{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}
+#top-right span{font-size:clamp(9px,2vw,11px)}
+.icon-btn{width:34px;height:34px;border-radius:6px;border:1px solid rgba(100,200,255,.25);background:rgba(30,50,70,.85);color:#a0c4d8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.icon-btn:active{background:rgba(50,120,180,.9);color:#fff}
+#bottom-panel{position:fixed;bottom:0;left:0;right:0;z-index:20}
+#action-bar{display:flex;gap:3px;padding:5px 6px;background:linear-gradient(0deg,rgba(10,20,30,.95),rgba(10,20,30,.7));border-top:1px solid rgba(100,200,255,.15);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#action-bar::-webkit-scrollbar{display:none}
+.action-btn{display:flex;flex-direction:column;align-items:center;padding:5px 6px;min-width:54px;background:rgba(30,50,70,.8);border:1px solid rgba(100,200,255,.2);border-radius:6px;color:#a0c4d8;font-family:'Share Tech Mono',monospace;font-size:clamp(8px,1.8vw,10px);cursor:pointer;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.action-btn:active,.action-btn.active{background:rgba(50,120,180,.9);border-color:#60b0e0;color:#fff}
+.btn-icon{font-size:clamp(16px,4vw,22px);line-height:1}
+.btn-cost{font-size:7px;opacity:.65;white-space:nowrap}
+#info-panel{position:fixed;right:6px;top:50px;width:180px;background:rgba(10,20,30,.92);border:1px solid rgba(100,200,255,.15);border-radius:8px;padding:8px;z-index:20;font-size:11px;display:none}
+#info-panel h3{font-family:'Orbitron',sans-serif;font-size:11px;color:#60b0e0;margin-bottom:4px}
+#info-panel p{margin:2px 0;color:#90b0c8}
+#minimap-container{position:fixed;left:6px;bottom:56px;width:clamp(90px,20vw,160px);height:clamp(90px,20vw,160px);background:rgba(10,20,30,.92);border:1px solid rgba(100,200,255,.15);border-radius:8px;overflow:hidden;z-index:20}
+#minimap{width:100%;height:100%}
+#message-log{position:fixed;left:50%;transform:translateX(-50%);bottom:62px;z-index:25;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.game-message{padding:3px 12px;background:rgba(10,20,30,.9);border:1px solid rgba(100,200,255,.2);border-radius:4px;font-size:11px;color:#80c0e0;animation:msgFade 3s forwards;white-space:nowrap}
+@keyframes msgFade{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:translateY(0)}80%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
+.controls-hint{position:fixed;left:8px;top:50px;font-size:9px;color:#405060;z-index:10;pointer-events:none;line-height:1.5}
+@media(max-width:768px){.controls-hint{display:none}}
+#pause-menu{position:fixed;inset:0;background:rgba(5,8,16,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:200;gap:10px}
+#pause-menu h2{font-family:'Orbitron',sans-serif;font-size:24px;color:#60b0e0;margin-bottom:12px}
+.menu-btn{font-family:'Orbitron',sans-serif;font-size:14px;padding:12px 40px;min-width:220px;background:linear-gradient(135deg,rgba(40,100,160,.8),rgba(30,70,120,.8));border:1px solid rgba(100,200,255,.3);border-radius:8px;color:#c0e0f0;cursor:pointer;letter-spacing:1px;text-align:center;-webkit-tap-highlight-color:transparent}
+.menu-btn:active{background:linear-gradient(135deg,rgba(50,130,200,.9),rgba(40,90,150,.9))}
+.menu-btn.danger{background:linear-gradient(135deg,rgba(160,50,40,.8),rgba(120,30,30,.8));border-color:rgba(255,100,100,.3)}
+.menu-btn.danger:active{background:linear-gradient(135deg,rgba(200,60,50,.9),rgba(150,40,30,.9))}
+#start-screen{position:fixed;inset:0;background:radial-gradient(ellipse at center,#0d1520,#050810);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:300;padding:20px;overflow-y:auto}
+#start-screen h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(28px,7vw,52px);background:linear-gradient(135deg,#c0e8ff,#4090c0,#80d0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:4px}
+#start-screen .subtitle{font-size:clamp(10px,2.5vw,14px);color:#608090;margin-bottom:24px;letter-spacing:4px}
+#planet-canvas{width:clamp(120px,30vw,200px);height:clamp(120px,30vw,200px);margin-bottom:16px}
+.mode-section{margin-bottom:18px;text-align:center}
+.mode-section h3{font-family:'Orbitron',sans-serif;font-size:14px;color:#80b0d0;margin-bottom:8px;letter-spacing:2px}
+.mode-options{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.mode-opt{font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 16px;background:rgba(30,50,70,.7);border:1px solid rgba(100,200,255,.2);border-radius:6px;color:#90b0c8;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mode-opt:active,.mode-opt.sel{background:rgba(50,120,180,.9);border-color:#60b0e0;color:#fff}
+.start-btn{font-family:'Orbitron',sans-serif;font-size:clamp(13px,3vw,16px);padding:14px 44px;background:linear-gradient(135deg,rgba(40,100,160,.8),rgba(30,70,120,.8));border:1px solid rgba(100,200,255,.3);border-radius:8px;color:#c0e0f0;cursor:pointer;letter-spacing:2px;margin-top:6px;-webkit-tap-highlight-color:transparent}
+.start-btn:active{background:linear-gradient(135deg,rgba(50,130,200,.9),rgba(40,90,150,.9))}
+#save-slots{display:flex;flex-direction:column;gap:6px;margin-top:8px;width:min(320px,90vw)}
+.save-slot{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:rgba(25,45,65,.8);border:1px solid rgba(100,200,255,.15);border-radius:6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.save-slot:active{background:rgba(40,80,120,.9)}
+.save-slot .slot-info{font-size:11px;color:#90b0c8}
+.save-slot .slot-label{font-size:12px;color:#c0d8e8}
+.slot-delete{background:rgba(180,50,40,.6);border:none;border-radius:4px;color:#ffc0b0;padding:3px 8px;font-size:10px;cursor:pointer}
+#touch-mode-btn{position:fixed;right:10px;bottom:62px;width:46px;height:46px;border-radius:50%;background:rgba(30,60,90,.8);border:2px solid rgba(100,200,255,.3);display:none;align-items:center;justify-content:center;z-index:22;font-size:22px;color:#80b0d0;-webkit-tap-highlight-color:transparent}
+@media(max-width:900px){#touch-mode-btn{display:flex}#minimap-container{bottom:112px}}
+@media(max-width:500px){.res-label{display:none}}
 </style>
 </head>
 <body>
-
 <div id="start-screen">
-  <canvas id="planet-canvas" width="200" height="200"></canvas>
-  <h1>ROBOTIC PLANET</h1>
-  <div class="subtitle">HTML EDITION</div>
-  <button class="start-btn" onclick="startGame('easy')">EASY MISSION</button>
-  <button class="start-btn" onclick="startGame('medium')">MEDIUM MISSION</button>
-  <button class="start-btn" onclick="startGame('hard')">HARD MISSION</button>
+<canvas id="planet-canvas" width="200" height="200"></canvas>
+<h1>ROBOTIC PLANET</h1>
+<div class="subtitle">HTML EDITION</div>
+<div class="mode-section"><h3>GAME MODE</h3>
+<div class="mode-options" id="mode-pick">
+<div class="mode-opt sel" data-v="campaign" onclick="pickOpt('mode-pick',this)">Campaign</div>
+<div class="mode-opt" data-v="skirmish" onclick="pickOpt('mode-pick',this)">Skirmish</div>
+</div></div>
+<div class="mode-section"><h3>DIFFICULTY</h3>
+<div class="mode-options" id="diff-pick">
+<div class="mode-opt" data-v="easy" onclick="pickOpt('diff-pick',this)">Easy</div>
+<div class="mode-opt sel" data-v="medium" onclick="pickOpt('diff-pick',this)">Medium</div>
+<div class="mode-opt" data-v="hard" onclick="pickOpt('diff-pick',this)">Hard</div>
+</div></div>
+<div class="mode-section" id="map-section" style="display:none">
+<h3>MAP SIZE</h3>
+<div class="mode-options" id="map-pick">
+<div class="mode-opt sel" data-v="small" onclick="pickOpt('map-pick',this)">Small 28</div>
+<div class="mode-opt" data-v="medium" onclick="pickOpt('map-pick',this)">Medium 40</div>
+<div class="mode-opt" data-v="large" onclick="pickOpt('map-pick',this)">Large 56</div>
 </div>
-
+<h3 style="margin-top:10px">TERRAIN</h3>
+<div class="mode-options" id="terrain-pick">
+<div class="mode-opt sel" data-v="continental" onclick="pickOpt('terrain-pick',this)">Continental</div>
+<div class="mode-opt" data-v="archipelago" onclick="pickOpt('terrain-pick',this)">Archipelago</div>
+<div class="mode-opt" data-v="highlands" onclick="pickOpt('terrain-pick',this)">Highlands</div>
+<div class="mode-opt" data-v="desert" onclick="pickOpt('terrain-pick',this)">Desert</div>
+<div class="mode-opt" data-v="frozen" onclick="pickOpt('terrain-pick',this)">Frozen</div>
+</div></div>
+<button class="start-btn" onclick="launchGame()">▶ START GAME</button>
+<div class="mode-section" style="margin-top:20px"><h3>SAVED GAMES</h3><div id="save-slots"></div></div>
+</div>
 <canvas id="gameCanvas"></canvas>
-
-<div id="ui-overlay">
-  <div id="top-bar">
-    <div class="game-title">ROBOTIC PLANET</div>
-    <div class="resource-bar">
-      <div class="resource-item"><div class="resource-icon res-ore"></div><span id="res-ore">100</span> Ore</div>
-      <div class="resource-item"><div class="resource-icon res-energy"></div><span id="res-energy">80</span> Energy</div>
-      <div class="resource-item"><div class="resource-icon res-crystal"></div><span id="res-crystal">50</span> Crystal</div>
-      <div class="resource-item"><div class="resource-icon res-metal"></div><span id="res-metal">0</span> Metal</div>
-      <div class="resource-item"><div class="resource-icon res-fuel"></div><span id="res-fuel">0</span> Fuel</div>
-    </div>
-    <div style="font-size:11px"><span id="robot-count">0</span> Robots | <span id="building-count">0</span> Buildings</div>
-  </div>
+<div id="top-bar" style="display:none">
+<div class="game-title">ROBOTIC PLANET</div>
+<div class="resource-bar">
+<div class="resource-item"><div class="resource-icon res-ore"></div><span id="res-ore">0</span><span class="res-label"> Ore</span></div>
+<div class="resource-item"><div class="resource-icon res-energy"></div><span id="res-energy">0</span><span class="res-label"> Nrg</span></div>
+<div class="resource-item"><div class="resource-icon res-crystal"></div><span id="res-crystal">0</span><span class="res-label"> Cry</span></div>
+<div class="resource-item"><div class="resource-icon res-metal"></div><span id="res-metal">0</span><span class="res-label"> Met</span></div>
+<div class="resource-item"><div class="resource-icon res-fuel"></div><span id="res-fuel">0</span><span class="res-label"> Fuel</span></div>
 </div>
-
-<div class="controls-hint">
-  WASD/Arrow: Pan<br>
-  Mouse Wheel: Zoom<br>
-  Click: Select/Place<br>
-  ESC: Cancel
+<div id="top-right"><span><span id="robot-count">0</span>🤖 <span id="building-count">0</span>🏠</span><div class="icon-btn" onclick="togglePauseMenu()" title="Menu">☰</div></div>
 </div>
-
-<div id="minimap-container">
-  <canvas id="minimap" width="160" height="160"></canvas>
-</div>
-
-<div id="info-panel">
-  <h3 id="info-title">Selection</h3>
-  <div id="info-content"></div>
-</div>
-
+<div class="controls-hint">WASD: Pan · Scroll: Zoom · Click: Select · RightClick: Move · ESC: Cancel</div>
+<div id="minimap-container" style="display:none"><canvas id="minimap" width="160" height="160"></canvas></div>
+<div id="info-panel"><h3 id="info-title">Selection</h3><div id="info-content"></div></div>
 <div id="message-log"></div>
-
-<div id="bottom-panel">
-  <div id="action-bar">
-    <div class="action-btn" onclick="setAction('select')" id="btn-select">
-      <div class="btn-icon">🎯</div>Select
-    </div>
-    <div class="action-btn" onclick="setAction('build-hq')" id="btn-hq">
-      <div class="btn-icon">🏛️</div>HQ
-      <div class="btn-cost">50 Ore 30 Metal</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-mine')" id="btn-mine">
-      <div class="btn-icon">⛏️</div>Mine
-      <div class="btn-cost">30 Ore 10 Metal</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-power')" id="btn-power">
-      <div class="btn-icon">⚡</div>Power
-      <div class="btn-cost">25 Ore 15 Energy</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-factory')" id="btn-factory">
-      <div class="btn-icon">🏭</div>Factory
-      <div class="btn-cost">40 Ore 20 Metal</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-turret')" id="btn-turret">
-      <div class="btn-icon">🔫</div>Turret
-      <div class="btn-cost">35 Ore 25 Metal</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-storage')" id="btn-storage">
-      <div class="btn-icon">📦</div>Storage
-      <div class="btn-cost">20 Ore 10 Metal</div>
-    </div>
-    <div class="action-btn" onclick="setAction('build-refinery')" id="btn-refinery">
-      <div class="btn-icon">🔧</div>Refinery
-      <div class="btn-cost">45 Ore 20 Crystal</div>
-    </div>
-    <div class="action-btn" onclick="produceRobot('worker')" id="btn-worker">
-      <div class="btn-icon">🤖</div>Worker
-      <div class="btn-cost">20 Metal 10 Fuel</div>
-    </div>
-    <div class="action-btn" onclick="produceRobot('transport')" id="btn-transport">
-      <div class="btn-icon">🚜</div>Transport
-      <div class="btn-cost">25 Metal 15 Fuel</div>
-    </div>
-    <div class="action-btn" onclick="produceRobot('battle')" id="btn-battle">
-      <div class="btn-icon">⚔️</div>Battle
-      <div class="btn-cost">35 Metal 25 Fuel</div>
-    </div>
-    <div class="action-btn" onclick="produceRobot('scout')" id="btn-scout">
-      <div class="btn-icon">🔭</div>Scout
-      <div class="btn-cost">15 Metal 10 Fuel</div>
-    </div>
-  </div>
+<div id="touch-mode-btn" onclick="toggleTouchMode()">👆</div>
+<div id="bottom-panel" style="display:none"><div id="action-bar">
+<div class="action-btn" onclick="setAction('select')" id="btn-select"><div class="btn-icon">🎯</div>Select</div>
+<div class="action-btn" onclick="setAction('build-hq')" id="btn-hq"><div class="btn-icon">🏛️</div>HQ<div class="btn-cost">50O 30M</div></div>
+<div class="action-btn" onclick="setAction('build-mine')" id="btn-mine"><div class="btn-icon">⛏️</div>Mine<div class="btn-cost">30O 10M</div></div>
+<div class="action-btn" onclick="setAction('build-power')" id="btn-power"><div class="btn-icon">⚡</div>Power<div class="btn-cost">25O 15E</div></div>
+<div class="action-btn" onclick="setAction('build-factory')" id="btn-factory"><div class="btn-icon">🏭</div>Factory<div class="btn-cost">40O 20M</div></div>
+<div class="action-btn" onclick="setAction('build-turret')" id="btn-turret"><div class="btn-icon">🔫</div>Turret<div class="btn-cost">35O 25M</div></div>
+<div class="action-btn" onclick="setAction('build-storage')" id="btn-storage"><div class="btn-icon">📦</div>Store<div class="btn-cost">20O 10M</div></div>
+<div class="action-btn" onclick="setAction('build-refinery')" id="btn-refinery"><div class="btn-icon">🔧</div>Refine<div class="btn-cost">45O 20C</div></div>
+<div class="action-btn" onclick="produceRobot('worker')" id="btn-worker"><div class="btn-icon">🤖</div>Worker<div class="btn-cost">20M 10F</div></div>
+<div class="action-btn" onclick="produceRobot('transport')" id="btn-transport"><div class="btn-icon">🚜</div>Hauler<div class="btn-cost">25M 15F</div></div>
+<div class="action-btn" onclick="produceRobot('battle')" id="btn-battle"><div class="btn-icon">⚔️</div>Battle<div class="btn-cost">35M 25F</div></div>
+<div class="action-btn" onclick="produceRobot('scout')" id="btn-scout"><div class="btn-icon">🔭</div>Scout<div class="btn-cost">15M 10F</div></div>
+</div></div>
+<div id="pause-menu"><h2>PAUSED</h2>
+<div class="menu-btn" onclick="saveGame()">💾 SAVE GAME</div>
+<div class="menu-btn" onclick="togglePauseMenu()">▶ RESUME</div>
+<div class="menu-btn danger" onclick="returnToMenu()">🏠 MAIN MENU</div>
 </div>
-
 <script>
-// ============== GAME ENGINE ==============
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const minimapCanvas = document.getElementById('minimap');
-const minimapCtx = minimapCanvas.getContext('2d');
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d'),minimapCanvas=document.getElementById('minimap'),minimapCtx=minimapCanvas.getContext('2d');
+const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
+const TILE_W=64,TILE_H=32;let MAP_SIZE=40,zoom=isMobile?.7:1,camX=0,camY=0,gameRunning=false,gamePaused=false,currentAction='select',selectedEntity=null,difficulty='medium',gameTime=0,gameMode='campaign',mapType='small',terrainType='continental',touchMode='select';
+let player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0},enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};
+let map=[],buildings=[],robots=[],projectiles=[],particles=[],resourceNodes=[],fogOfWar=[],hoverTile={x:-1,y:-1},aiTimer=0;
 
-// Constants
-const TILE_W = 64;
-const TILE_H = 32;
-const MAP_SIZE = 40;
-let zoom = 1;
-let camX = 0, camY = 0;
-let gameRunning = false;
-let currentAction = 'select';
-let selectedEntity = null;
-let difficulty = 'medium';
-let gameTime = 0;
+function pickOpt(g,el){document.querySelectorAll('#'+g+' .mode-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');if(g==='mode-pick')document.getElementById('map-section').style.display=el.dataset.v==='skirmish'?'':'none';}
+function getOpt(g){let s=document.querySelector('#'+g+' .mode-opt.sel');return s?s.dataset.v:'medium';}
+function toggleTouchMode(){touchMode=touchMode==='select'?'move':'select';document.getElementById('touch-mode-btn').textContent=touchMode==='select'?'👆':'🏃';}
 
-// Resources
-const player = {
-  ore: 100, energy: 80, crystal: 50, metal: 30, fuel: 20,
-  buildings: [], robots: [], team: 0
-};
-const enemy = {
-  ore: 100, energy: 80, crystal: 50, metal: 30, fuel: 20,
-  buildings: [], robots: [], team: 1
-};
+// Save/Load
+function getSaves(){try{return JSON.parse(localStorage.getItem('rp_saves')||'{}');}catch(e){return {};}}
+function putSaves(s){try{localStorage.setItem('rp_saves',JSON.stringify(s));}catch(e){}}
+function serializeState(){return{v:2,gameTime,difficulty,gameMode,MAP_SIZE,terrainType,camX,camY,zoom,
+player:{ore:player.ore,energy:player.energy,crystal:player.crystal,metal:player.metal,fuel:player.fuel},
+enemy:{ore:enemy.ore,energy:enemy.energy,crystal:enemy.crystal,metal:enemy.metal,fuel:enemy.fuel},
+map:map.map(r=>r.map(t=>({t:t.type[0],h:t.height}))),fogOfWar:fogOfWar.map(r=>r.map(v=>v)),
+resourceNodes:resourceNodes.map(n=>({x:n.x,y:n.y,t:n.type,a:n.amount,m:n.maxAmount})),
+buildings:buildings.map(b=>({t:b.type,x:b.x,y:b.y,tm:b.team,hp:b.hp,mhp:b.maxHp,c:b.constructing,cp:b.constructProgress,ct:b.constructTime,v:b.vision,pr:b.producing,pt:b.productionType,pp:b.productionProgress,ptt:b.productionTime,lp:b.lastProduction,a:b.angle||0})),
+robots:robots.map(r=>({t:r.type,x:r.x,y:r.y,tm:r.team,hp:r.hp,mhp:r.maxHp,sp:r.speed,v:r.vision,st:r.state,a:r.angle||0,w:r.working,cg:r.cargo,ca:r.cargoAmount,cm:r.cargoMax,la:r.lastAttack,dm:r.damage,rn:r.range,fr:r.fireRate}))};}
 
-// Map
-let map = [];
-let buildings = [];
-let robots = [];
-let projectiles = [];
-let particles = [];
-let resourceNodes = [];
-let fogOfWar = [];
+function deserializeState(s){
+  MAP_SIZE=s.MAP_SIZE||40;gameTime=s.gameTime||0;difficulty=s.difficulty||'medium';gameMode=s.gameMode||'campaign';terrainType=s.terrainType||'continental';camX=s.camX||0;camY=s.camY||0;zoom=s.zoom||1;
+  const tm={g:'ground',w:'water',s:'sand',r:'rock',f:'frozen',d:'desert'};
+  map=s.map.map(r=>r.map(t=>({type:tm[t.t]||'ground',height:t.h,elevation:Math.floor(t.h*3)})));
+  fogOfWar=s.fogOfWar.map(r=>r.map(v=>v));resourceNodes=s.resourceNodes.map(n=>({x:n.x,y:n.y,type:n.t,amount:n.a,maxAmount:n.m}));
+  buildings=[];robots=[];
+  player={ore:s.player.ore,energy:s.player.energy,crystal:s.player.crystal,metal:s.player.metal,fuel:s.player.fuel,buildings:[],robots:[],team:0};
+  enemy={ore:s.enemy.ore,energy:s.enemy.energy,crystal:s.enemy.crystal,metal:s.enemy.metal,fuel:s.enemy.fuel,buildings:[],robots:[],team:1};
+  s.buildings.forEach(bd=>{let b={type:bd.t,x:bd.x,y:bd.y,team:bd.tm,hp:bd.hp,maxHp:bd.mhp,constructing:bd.c,constructProgress:bd.cp,constructTime:bd.ct,vision:bd.v,producing:!!bd.pr,productionType:bd.pt||'',productionProgress:bd.pp||0,productionTime:bd.ptt||5,lastProduction:bd.lp||0,angle:bd.a||0,firing:0,productionQueue:[]};buildings.push(b);(b.team===0?player:enemy).buildings.push(b);});
+  s.robots.forEach(rd=>{let r={type:rd.t,x:rd.x,y:rd.y,team:rd.tm,hp:rd.hp,maxHp:rd.mhp,speed:rd.sp,vision:rd.v,target:null,targetPos:null,state:rd.st||'idle',angle:rd.a||0,working:!!rd.w,cargo:rd.cg||null,cargoAmount:rd.ca||0,cargoMax:rd.cm||0,lastAttack:rd.la||0,damage:rd.dm||0,range:rd.rn||0,fireRate:rd.fr||1,path:null};robots.push(r);(r.team===0?player:enemy).robots.push(r);});
+  projectiles=[];particles=[];selectedEntity=null;}
 
-// ============== MAP GENERATION ==============
-function generateMap() {
-  map = [];
-  resourceNodes = [];
-  fogOfWar = [];
-  
-  // Perlin-like noise for terrain
-  const noise = [];
-  for (let i = 0; i < MAP_SIZE; i++) {
-    noise[i] = [];
-    for (let j = 0; j < MAP_SIZE; j++) {
-      noise[i][j] = Math.random();
-    }
-  }
-  
-  // Smooth noise
-  function smoothNoise(x, y) {
-    let sum = 0, count = 0;
-    for (let dx = -2; dx <= 2; dx++) {
-      for (let dy = -2; dy <= 2; dy++) {
-        let nx = x + dx, ny = y + dy;
-        if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE) {
-          let w = 1 / (1 + Math.abs(dx) + Math.abs(dy));
-          sum += noise[nx][ny] * w;
-          count += w;
-        }
-      }
-    }
-    return sum / count;
-  }
-  
-  for (let i = 0; i < MAP_SIZE; i++) {
-    map[i] = [];
-    fogOfWar[i] = [];
-    for (let j = 0; j < MAP_SIZE; j++) {
-      let h = smoothNoise(i, j);
-      let distFromCenter = Math.sqrt((i - MAP_SIZE/2)**2 + (j - MAP_SIZE/2)**2) / (MAP_SIZE/2);
-      h = h * (1 - distFromCenter * 0.7);
-      
-      let type = 'ground';
-      if (h < 0.25) type = 'water';
-      else if (h < 0.32) type = 'sand';
-      else if (h > 0.65) type = 'rock';
-      
-      map[i][j] = { type, height: h, elevation: Math.floor(h * 3) };
-      fogOfWar[i][j] = 0; // 0=hidden, 1=explored, 2=visible
-    }
-  }
-  
-  // Place resource nodes
-  const resourceTypes = ['ore', 'energy', 'crystal', 'ore', 'energy', 'crystal', 'ore', 'ore'];
-  for (let r = 0; r < 30; r++) {
-    let x, y, attempts = 0;
-    do {
-      x = Math.floor(Math.random() * (MAP_SIZE - 4)) + 2;
-      y = Math.floor(Math.random() * (MAP_SIZE - 4)) + 2;
-      attempts++;
-    } while ((map[x][y].type === 'water' || resourceNodes.some(n => Math.abs(n.x - x) < 3 && Math.abs(n.y - y) < 3)) && attempts < 100);
-    
-    if (attempts < 100) {
-      resourceNodes.push({
-        x, y,
-        type: resourceTypes[r % resourceTypes.length],
-        amount: 200 + Math.floor(Math.random() * 300),
-        maxAmount: 500
-      });
-    }
-  }
-}
+function saveGame(){let sv=getSaves(),id='save_'+Date.now(),lb=gameMode+' '+difficulty+' — '+Math.floor(gameTime/60)+'m '+Math.floor(gameTime%60)+'s';sv[id]={label:lb,date:new Date().toLocaleString(),state:serializeState()};let k=Object.keys(sv);while(k.length>8){delete sv[k.shift()];k=Object.keys(sv);}putSaves(sv);showMessage('Game saved!');}
+function loadGame(id){let sv=getSaves();if(!sv[id])return;deserializeState(sv[id].state);document.getElementById('start-screen').style.display='none';showGameUI(true);gameRunning=true;gamePaused=false;document.getElementById('pause-menu').style.display='none';showMessage('Game loaded!');}
+function deleteSave(id,e){e.stopPropagation();let sv=getSaves();delete sv[id];putSaves(sv);refreshSaveSlots();}
+function refreshSaveSlots(){let c=document.getElementById('save-slots'),sv=getSaves(),k=Object.keys(sv).sort().reverse();if(!k.length){c.innerHTML='<div style="font-size:11px;color:#506070;text-align:center">No saved games</div>';return;}c.innerHTML=k.map(k2=>'<div class="save-slot" onclick="loadGame(\''+k2+'\')"><div><div class="slot-label">'+sv[k2].label+'</div><div class="slot-info">'+sv[k2].date+'</div></div><button class="slot-delete" onclick="deleteSave(\''+k2+'\',event)">✕</button></div>').join('');}
 
-// ============== ISOMETRIC DRAWING ==============
-function isoToScreen(x, y) {
-  return {
-    sx: (x - y) * TILE_W / 2 * zoom + camX + canvas.width / 2,
-    sy: (x + y) * TILE_H / 2 * zoom + camY + canvas.height / 2
-  };
-}
+function togglePauseMenu(){if(!gameRunning)return;gamePaused=!gamePaused;document.getElementById('pause-menu').style.display=gamePaused?'flex':'none';}
+function returnToMenu(){gameRunning=false;gamePaused=false;document.getElementById('pause-menu').style.display='none';showGameUI(false);document.getElementById('start-screen').style.display='flex';refreshSaveSlots();map=[];buildings=[];robots=[];projectiles=[];particles=[];resourceNodes=[];fogOfWar=[];player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};selectedEntity=null;gameTime=0;aiTimer=0;drawTitlePlanet();}
+function showGameUI(s){['top-bar','bottom-panel','minimap-container'].forEach(id=>{document.getElementById(id).style.display=s?'':'none';});}
 
-function screenToIso(sx, sy) {
-  let rx = sx - camX - canvas.width / 2;
-  let ry = sy - camY - canvas.height / 2;
-  rx /= zoom;
-  ry /= zoom;
-  let x = (rx / (TILE_W / 2) + ry / (TILE_H / 2)) / 2;
-  let y = (ry / (TILE_H / 2) - rx / (TILE_W / 2)) / 2;
-  return { x: Math.floor(x), y: Math.floor(y) };
-}
+// Map Gen
+function generateMap(){map=[];resourceNodes=[];fogOfWar=[];let noise=[];for(let i=0;i<MAP_SIZE;i++){noise[i]=[];for(let j=0;j<MAP_SIZE;j++)noise[i][j]=Math.random();}
+function sn(x,y){let s=0,c=0,rd=terrainType==='archipelago'?1:2;for(let dx=-rd;dx<=rd;dx++)for(let dy=-rd;dy<=rd;dy++){let nx=x+dx,ny=y+dy;if(nx>=0&&nx<MAP_SIZE&&ny>=0&&ny<MAP_SIZE){let w=1/(1+Math.abs(dx)+Math.abs(dy));s+=noise[nx][ny]*w;c+=w;}}return s/c;}
+let wl,sl,rl;switch(terrainType){case 'archipelago':wl=.38;sl=.44;rl=.72;break;case 'highlands':wl=.18;sl=.24;rl=.50;break;case 'desert':wl=.12;sl=.55;rl=.80;break;case 'frozen':wl=.22;sl=.28;rl=.58;break;default:wl=.25;sl=.32;rl=.65;}
+for(let i=0;i<MAP_SIZE;i++){map[i]=[];fogOfWar[i]=[];for(let j=0;j<MAP_SIZE;j++){let h=sn(i,j),d=Math.sqrt((i-MAP_SIZE/2)**2+(j-MAP_SIZE/2)**2)/(MAP_SIZE/2);h*=(1-d*.7);let t='ground';if(h<wl)t='water';else if(h<sl)t=terrainType==='frozen'?'frozen':terrainType==='desert'?'desert':'sand';else if(h>rl)t='rock';else if(terrainType==='desert')t='desert';else if(terrainType==='frozen')t='frozen';map[i][j]={type:t,height:h,elevation:Math.floor(h*3)};fogOfWar[i][j]=0;}}
+let rT=['ore','energy','crystal','ore','energy','crystal','ore','ore'],nR=Math.floor(MAP_SIZE*.75);
+for(let r=0;r<nR;r++){let x,y,at=0;do{x=2+Math.floor(Math.random()*(MAP_SIZE-4));y=2+Math.floor(Math.random()*(MAP_SIZE-4));at++;}while(at<100&&((!map[x]||!map[x][y]||map[x][y].type==='water')||resourceNodes.some(n=>Math.abs(n.x-x)<3&&Math.abs(n.y-y)<3)));if(at<100)resourceNodes.push({x,y,type:rT[r%rT.length],amount:200+Math.floor(Math.random()*300),maxAmount:500});}}
 
-function drawIsometricTile(x, y, color, borderColor) {
-  let { sx, sy } = isoToScreen(x, y);
-  let hw = TILE_W / 2 * zoom;
-  let hh = TILE_H / 2 * zoom;
-  
-  ctx.beginPath();
-  ctx.moveTo(sx, sy - hh);
-  ctx.lineTo(sx + hw, sy);
-  ctx.lineTo(sx, sy + hh);
-  ctx.lineTo(sx - hw, sy);
-  ctx.closePath();
-  ctx.fillStyle = color;
-  ctx.fill();
-  if (borderColor) {
-    ctx.strokeStyle = borderColor;
-    ctx.lineWidth = 0.5;
-    ctx.stroke();
-  }
-}
+function getTerrainColors(t,h){switch(t){case 'water':return{top:'hsl(210,40%,'+(25+h*20)+'%)',border:'rgba(60,120,180,.3)'};case 'sand':return{top:'hsl(40,30%,'+(40+h*15)+'%)',border:'rgba(160,140,100,.2)'};case 'rock':return{top:'hsl(220,10%,'+(30+h*15)+'%)',border:'rgba(100,100,120,.3)'};case 'desert':return{top:'hsl(35,40%,'+(42+h*16)+'%)',border:'rgba(180,150,80,.2)'};case 'frozen':return{top:'hsl(200,15%,'+(55+h*18)+'%)',border:'rgba(160,190,210,.2)'};default:return{top:'hsl(150,20%,'+(28+h*18)+'%)',border:'rgba(80,120,80,.2)'};}}
 
-function drawIsoBlock(x, y, h, topColor, leftColor, rightColor) {
-  let { sx, sy } = isoToScreen(x, y);
-  let hw = TILE_W / 2 * zoom;
-  let hh = TILE_H / 2 * zoom;
-  let height = h * zoom;
-  
-  // Top face
-  ctx.beginPath();
-  ctx.moveTo(sx, sy - hh - height);
-  ctx.lineTo(sx + hw, sy - height);
-  ctx.lineTo(sx, sy + hh - height);
-  ctx.lineTo(sx - hw, sy - height);
-  ctx.closePath();
-  ctx.fillStyle = topColor;
-  ctx.fill();
-  
-  // Left face
-  ctx.beginPath();
-  ctx.moveTo(sx - hw, sy - height);
-  ctx.lineTo(sx, sy + hh - height);
-  ctx.lineTo(sx, sy + hh);
-  ctx.lineTo(sx - hw, sy);
-  ctx.closePath();
-  ctx.fillStyle = leftColor;
-  ctx.fill();
-  
-  // Right face
-  ctx.beginPath();
-  ctx.moveTo(sx + hw, sy - height);
-  ctx.lineTo(sx, sy + hh - height);
-  ctx.lineTo(sx, sy + hh);
-  ctx.lineTo(sx + hw, sy);
-  ctx.closePath();
-  ctx.fillStyle = rightColor;
-  ctx.fill();
-}
+function isoToScreen(x,y){return{sx:(x-y)*TILE_W/2*zoom+camX+canvas.width/2,sy:(x+y)*TILE_H/2*zoom+camY+canvas.height/2};}
+function screenToIso(sx,sy){let rx=(sx-camX-canvas.width/2)/zoom,ry=(sy-camY-canvas.height/2)/zoom;return{x:Math.floor((rx/(TILE_W/2)+ry/(TILE_H/2))/2),y:Math.floor((ry/(TILE_H/2)-rx/(TILE_W/2))/2)};}
+function drawIsoTile(x,y,c,b){let{sx,sy}=isoToScreen(x,y),hw=TILE_W/2*zoom,hh=TILE_H/2*zoom;ctx.beginPath();ctx.moveTo(sx,sy-hh);ctx.lineTo(sx+hw,sy);ctx.lineTo(sx,sy+hh);ctx.lineTo(sx-hw,sy);ctx.closePath();ctx.fillStyle=c;ctx.fill();if(b){ctx.strokeStyle=b;ctx.lineWidth=.5;ctx.stroke();}}
+function drawIsoBlock(x,y,h,top,left,right){let{sx,sy}=isoToScreen(x,y),hw=TILE_W/2*zoom,hh=TILE_H/2*zoom,ht=h*zoom;ctx.beginPath();ctx.moveTo(sx,sy-hh-ht);ctx.lineTo(sx+hw,sy-ht);ctx.lineTo(sx,sy+hh-ht);ctx.lineTo(sx-hw,sy-ht);ctx.closePath();ctx.fillStyle=top;ctx.fill();ctx.beginPath();ctx.moveTo(sx-hw,sy-ht);ctx.lineTo(sx,sy+hh-ht);ctx.lineTo(sx,sy+hh);ctx.lineTo(sx-hw,sy);ctx.closePath();ctx.fillStyle=left;ctx.fill();ctx.beginPath();ctx.moveTo(sx+hw,sy-ht);ctx.lineTo(sx,sy+hh-ht);ctx.lineTo(sx,sy+hh);ctx.lineTo(sx+hw,sy);ctx.closePath();ctx.fillStyle=right;ctx.fill();}
 
-// ============== TERRAIN COLORS ==============
-function getTerrainColors(type, h) {
-  switch (type) {
-    case 'water': return { top: `hsl(210,40%,${25 + h * 20}%)`, border: 'rgba(60,120,180,0.3)' };
-    case 'sand': return { top: `hsl(40,30%,${40 + h * 15}%)`, border: 'rgba(160,140,100,0.2)' };
-    case 'rock': return { top: `hsl(220,10%,${30 + h * 15}%)`, border: 'rgba(100,100,120,0.3)' };
-    default: return { top: `hsl(150,20%,${28 + h * 18}%)`, border: 'rgba(80,120,80,0.2)' };
-  }
-}
+// Building Draw
+function drawBuilding(b){let{sx,sy}=isoToScreen(b.x,b.y),s=zoom,tc=b.team===0?'#40a060':'#c06040',tl=b.team===0?'#60c080':'#e08060';
+switch(b.type){case 'hq':drawIsoBlock(b.x,b.y,28,'#808890','#606870','#505060');ctx.fillStyle='#909aa0';ctx.fillRect(sx-6*s,sy-45*s,12*s,20*s);ctx.fillStyle=tc;ctx.fillRect(sx-8*s,sy-48*s,16*s,5*s);ctx.strokeStyle=tl;ctx.lineWidth=2*s;ctx.beginPath();ctx.moveTo(sx,sy-48*s);ctx.lineTo(sx,sy-58*s);ctx.stroke();if(Math.sin(gameTime*3)>0){ctx.fillStyle=tl;ctx.beginPath();ctx.arc(sx,sy-58*s,3*s,0,Math.PI*2);ctx.fill();}break;
+case 'mine':drawIsoBlock(b.x,b.y,18,'#7a7060','#5a5040','#4a4030');ctx.fillStyle='#a0a0a0';ctx.fillRect(sx-3*s,sy-30*s,6*s,14*s);ctx.fillStyle=tc;ctx.fillRect(sx-5*s,sy-32*s,10*s,4*s);ctx.fillStyle='#8b5e3c';ctx.beginPath();ctx.arc(sx+12*s,sy-4*s,5*s,0,Math.PI*2);ctx.fill();break;
+case 'power':drawIsoBlock(b.x,b.y,15,'#506858','#304838','#203828');ctx.fillStyle='#2040a0';ctx.save();ctx.translate(sx,sy-22*s);ctx.rotate(Math.sin(gameTime*.5)*.1);ctx.fillRect(-14*s,-3*s,28*s,6*s);ctx.fillStyle='#4080e0';ctx.fillRect(-12*s,-1*s,5*s,2*s);ctx.fillRect(-4*s,-1*s,5*s,2*s);ctx.fillRect(4*s,-1*s,5*s,2*s);ctx.restore();ctx.fillStyle=tc;ctx.fillRect(sx-2*s,sy-22*s,4*s,8*s);break;
+case 'factory':drawIsoBlock(b.x,b.y,22,'#708088','#506068','#405058');ctx.fillStyle='#606870';ctx.fillRect(sx+8*s,sy-40*s,6*s,18*s);if(b.producing){let t2=gameTime*2;for(let i=0;i<3;i++){ctx.fillStyle='rgba(180,180,180,'+(0.3-i*.1)+')';ctx.beginPath();ctx.arc(sx+11*s+Math.sin(t2+i)*3*s,sy-42*s-i*6*s,(3+i)*s,0,Math.PI*2);ctx.fill();}}ctx.fillStyle=tc;ctx.fillRect(sx-5*s,sy-14*s,10*s,8*s);ctx.fillStyle=tl;ctx.beginPath();ctx.arc(sx-10*s,sy-28*s,4*s,0,Math.PI*2);ctx.fill();break;
+case 'turret':drawIsoBlock(b.x,b.y,12,'#606870','#404850','#303840');var ta=b.angle||0;ctx.save();ctx.translate(sx,sy-18*s);ctx.rotate(ta);ctx.fillStyle='#808890';ctx.fillRect(0,-2*s,18*s,4*s);ctx.fillStyle=tc;ctx.beginPath();ctx.arc(0,0,6*s,0,Math.PI*2);ctx.fill();ctx.restore();if(b.firing&&b.firing>gameTime-.1){ctx.fillStyle='#ffaa40';ctx.beginPath();ctx.arc(sx+Math.cos(ta)*18*s,sy-18*s+Math.sin(ta)*18*s,4*s,0,Math.PI*2);ctx.fill();}break;
+case 'storage':drawIsoBlock(b.x,b.y,14,'#887860','#685840','#584830');ctx.fillStyle='#a08050';ctx.fillRect(sx-8*s,sy-20*s,7*s,6*s);ctx.fillRect(sx+1*s,sy-20*s,7*s,6*s);ctx.fillStyle=tc;ctx.fillRect(sx-6*s,sy-18*s,3*s,2*s);ctx.fillRect(sx+3*s,sy-18*s,3*s,2*s);break;
+case 'refinery':drawIsoBlock(b.x,b.y,20,'#607080','#405060','#304050');ctx.strokeStyle='#808890';ctx.lineWidth=3*s;ctx.beginPath();ctx.moveTo(sx-12*s,sy-25*s);ctx.quadraticCurveTo(sx-12*s,sy-35*s,sx,sy-35*s);ctx.quadraticCurveTo(sx+12*s,sy-35*s,sx+12*s,sy-25*s);ctx.stroke();ctx.fillStyle=b.team===0?'rgba(60,200,120,.4)':'rgba(200,100,60,.4)';ctx.beginPath();ctx.arc(sx,sy-30*s,5*s,0,Math.PI*2);ctx.fill();ctx.fillStyle=tc;ctx.fillRect(sx-3*s,sy-12*s,6*s,4*s);break;}
+if(b.hp<b.maxHp){let bw=24*s,bh=3*s,by2=sy-55*s;ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(sx-bw/2,by2,bw,bh);ctx.fillStyle=b.hp>b.maxHp*.5?'#40c060':b.hp>b.maxHp*.25?'#c0c040':'#c04040';ctx.fillRect(sx-bw/2,by2,bw*(b.hp/b.maxHp),bh);}
+if(b.constructing){let bw=30*s,by2=sy-60*s;ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(sx-bw/2,by2,bw,4*s);ctx.fillStyle='#40a0e0';ctx.fillRect(sx-bw/2,by2,bw*b.constructProgress,4*s);}}
 
-// ============== BUILDING DRAWING ==============
-function drawBuilding(b) {
-  let { sx, sy } = isoToScreen(b.x, b.y);
-  let s = zoom;
-  let teamColor = b.team === 0 ? '#40a060' : '#c06040';
-  let teamLight = b.team === 0 ? '#60c080' : '#e08060';
-  let teamDark = b.team === 0 ? '#205030' : '#603020';
-  
-  switch (b.type) {
-    case 'hq':
-      drawIsoBlock(b.x, b.y, 28, '#808890', '#606870', '#505060');
-      // Tower
-      ctx.fillStyle = '#909aa0';
-      ctx.fillRect(sx - 6*s, sy - 45*s, 12*s, 20*s);
-      // Team indicator
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 8*s, sy - 48*s, 16*s, 5*s);
-      // Antenna
-      ctx.strokeStyle = teamLight;
-      ctx.lineWidth = 2*s;
-      ctx.beginPath();
-      ctx.moveTo(sx, sy - 48*s);
-      ctx.lineTo(sx, sy - 58*s);
-      ctx.stroke();
-      // Blinking light
-      if (Math.sin(gameTime * 3) > 0) {
-        ctx.fillStyle = teamLight;
-        ctx.beginPath();
-        ctx.arc(sx, sy - 58*s, 3*s, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      break;
-      
-    case 'mine':
-      drawIsoBlock(b.x, b.y, 18, '#7a7060', '#5a5040', '#4a4030');
-      // Drill
-      ctx.fillStyle = '#a0a0a0';
-      ctx.fillRect(sx - 3*s, sy - 30*s, 6*s, 14*s);
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 5*s, sy - 32*s, 10*s, 4*s);
-      // Ore pile
-      ctx.fillStyle = '#8b5e3c';
-      ctx.beginPath();
-      ctx.arc(sx + 12*s, sy - 4*s, 5*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'power':
-      drawIsoBlock(b.x, b.y, 15, '#506858', '#304838', '#203828');
-      // Solar panels
-      ctx.fillStyle = '#2040a0';
-      let panelAngle = Math.sin(gameTime * 0.5) * 0.1;
-      ctx.save();
-      ctx.translate(sx, sy - 22*s);
-      ctx.rotate(panelAngle);
-      ctx.fillRect(-14*s, -3*s, 28*s, 6*s);
-      ctx.fillStyle = '#4080e0';
-      ctx.fillRect(-12*s, -1*s, 5*s, 2*s);
-      ctx.fillRect(-4*s, -1*s, 5*s, 2*s);
-      ctx.fillRect(4*s, -1*s, 5*s, 2*s);
-      ctx.restore();
-      // Base
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 2*s, sy - 22*s, 4*s, 8*s);
-      break;
-      
-    case 'factory':
-      drawIsoBlock(b.x, b.y, 22, '#708088', '#506068', '#405058');
-      // Chimney
-      ctx.fillStyle = '#606870';
-      ctx.fillRect(sx + 8*s, sy - 40*s, 6*s, 18*s);
-      // Smoke
-      if (b.producing) {
-        let t = gameTime * 2;
-        for (let i = 0; i < 3; i++) {
-          ctx.fillStyle = `rgba(180,180,180,${0.3 - i * 0.1})`;
-          ctx.beginPath();
-          ctx.arc(sx + 11*s + Math.sin(t + i) * 3*s, sy - 42*s - i * 6*s, (3 + i)*s, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      // Door
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 5*s, sy - 14*s, 10*s, 8*s);
-      // Gears indicator
-      ctx.fillStyle = teamLight;
-      ctx.beginPath();
-      ctx.arc(sx - 10*s, sy - 28*s, 4*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'turret':
-      drawIsoBlock(b.x, b.y, 12, '#606870', '#404850', '#303840');
-      // Gun barrel
-      let turretAngle = b.angle || 0;
-      ctx.save();
-      ctx.translate(sx, sy - 18*s);
-      ctx.rotate(turretAngle);
-      ctx.fillStyle = '#808890';
-      ctx.fillRect(0, -2*s, 18*s, 4*s);
-      ctx.fillStyle = teamColor;
-      ctx.beginPath();
-      ctx.arc(0, 0, 6*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-      // Flash when firing
-      if (b.firing && b.firing > gameTime - 0.1) {
-        ctx.fillStyle = '#ffaa40';
-        ctx.beginPath();
-        ctx.arc(sx + Math.cos(turretAngle) * 18*s, sy - 18*s + Math.sin(turretAngle) * 18*s, 4*s, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      break;
-      
-    case 'storage':
-      drawIsoBlock(b.x, b.y, 14, '#887860', '#685840', '#584830');
-      // Crates
-      ctx.fillStyle = '#a08050';
-      ctx.fillRect(sx - 8*s, sy - 20*s, 7*s, 6*s);
-      ctx.fillRect(sx + 1*s, sy - 20*s, 7*s, 6*s);
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 6*s, sy - 18*s, 3*s, 2*s);
-      ctx.fillRect(sx + 3*s, sy - 18*s, 3*s, 2*s);
-      break;
-      
-    case 'refinery':
-      drawIsoBlock(b.x, b.y, 20, '#607080', '#405060', '#304050');
-      // Pipes
-      ctx.strokeStyle = '#808890';
-      ctx.lineWidth = 3*s;
-      ctx.beginPath();
-      ctx.moveTo(sx - 12*s, sy - 25*s);
-      ctx.quadraticCurveTo(sx - 12*s, sy - 35*s, sx, sy - 35*s);
-      ctx.quadraticCurveTo(sx + 12*s, sy - 35*s, sx + 12*s, sy - 25*s);
-      ctx.stroke();
-      // Glow
-      ctx.fillStyle = b.team === 0 ? 'rgba(60,200,120,0.4)' : 'rgba(200,100,60,0.4)';
-      ctx.beginPath();
-      ctx.arc(sx, sy - 30*s, 5*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 3*s, sy - 12*s, 6*s, 4*s);
-      break;
-  }
-  
-  // Health bar
-  if (b.hp < b.maxHp) {
-    let barW = 24 * s;
-    let barH = 3 * s;
-    let barY = sy - 55 * s;
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(sx - barW/2, barY, barW, barH);
-    ctx.fillStyle = b.hp > b.maxHp * 0.5 ? '#40c060' : b.hp > b.maxHp * 0.25 ? '#c0c040' : '#c04040';
-    ctx.fillRect(sx - barW/2, barY, barW * (b.hp / b.maxHp), barH);
-  }
-  
-  // Construction progress
-  if (b.constructing) {
-    let barW = 30 * s;
-    let barY = sy - 60 * s;
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(sx - barW/2, barY, barW, 4*s);
-    ctx.fillStyle = '#40a0e0';
-    ctx.fillRect(sx - barW/2, barY, barW * b.constructProgress, 4*s);
-  }
-}
+// Robot Draw
+function drawRobot(r){let{sx,sy}=isoToScreen(r.x,r.y),s=zoom,tc=r.team===0?'#40c060':'#e08040',bc='#b0b8c0',bd='#808890';ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(sx,sy+2*s,10*s,5*s,0,0,Math.PI*2);ctx.fill();let bob=Math.sin(gameTime*4+r.x*3+r.y*7)*1.5*s;
+switch(r.type){case 'worker':ctx.fillStyle='#303030';ctx.fillRect(sx-9*s,sy-4*s+bob,4*s,6*s);ctx.fillRect(sx+5*s,sy-4*s+bob,4*s,6*s);ctx.fillStyle=bc;ctx.fillRect(sx-7*s,sy-12*s+bob,14*s,10*s);ctx.fillStyle=bd;ctx.fillRect(sx-7*s,sy-6*s+bob,14*s,4*s);ctx.fillStyle=tc;ctx.fillRect(sx-5*s,sy-18*s+bob,10*s,7*s);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx-2*s,sy-15*s+bob,2.5*s,0,Math.PI*2);ctx.arc(sx+3*s,sy-15*s+bob,2.5*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(sx-1.5*s,sy-15*s+bob,1.2*s,0,Math.PI*2);ctx.arc(sx+3.5*s,sy-15*s+bob,1.2*s,0,Math.PI*2);ctx.fill();if(r.working){var aa=Math.sin(gameTime*6)*.4;ctx.save();ctx.translate(sx+8*s,sy-10*s+bob);ctx.rotate(aa);ctx.fillStyle='#808080';ctx.fillRect(0,-1.5*s,8*s,3*s);ctx.fillStyle='#c0a040';ctx.fillRect(7*s,-3*s,4*s,6*s);ctx.restore();}break;
+case 'transport':ctx.fillStyle='#303030';ctx.fillRect(sx-11*s,sy-4*s+bob,5*s,7*s);ctx.fillRect(sx+6*s,sy-4*s+bob,5*s,7*s);ctx.fillStyle=bc;ctx.fillRect(sx-9*s,sy-14*s+bob,18*s,12*s);ctx.fillStyle='#707880';ctx.fillRect(sx-7*s,sy-20*s+bob,14*s,7*s);if(r.cargo&&r.cargoAmount>0){var cc=r.cargo==='ore'?'#8b5e3c':r.cargo==='energy'?'#40a060':r.cargo==='crystal'?'#4080c0':r.cargo==='metal'?'#a0a0b0':'#c04040';ctx.fillStyle=cc;ctx.fillRect(sx-5*s,sy-19*s+bob,10*s,5*s);}ctx.fillStyle=tc;ctx.fillRect(sx-4*s,sy-24*s+bob,8*s,5*s);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx-1*s,sy-22*s+bob,2*s,0,Math.PI*2);ctx.arc(sx+3*s,sy-22*s+bob,2*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(sx-.5*s,sy-22*s+bob,1*s,0,Math.PI*2);ctx.arc(sx+3.5*s,sy-22*s+bob,1*s,0,Math.PI*2);ctx.fill();break;
+case 'battle':ctx.fillStyle='#252525';ctx.fillRect(sx-12*s,sy-3*s+bob,6*s,8*s);ctx.fillRect(sx+6*s,sy-3*s+bob,6*s,8*s);ctx.fillStyle='#353535';for(var i=0;i<3;i++){ctx.fillRect(sx-11*s,sy-2*s+i*2.5*s+bob,4*s,1.5*s);ctx.fillRect(sx+7*s,sy-2*s+i*2.5*s+bob,4*s,1.5*s);}ctx.fillStyle='#707880';ctx.fillRect(sx-10*s,sy-12*s+bob,20*s,11*s);ctx.fillStyle='#606870';ctx.fillRect(sx-8*s,sy-10*s+bob,16*s,7*s);ctx.fillStyle=tc;ctx.beginPath();ctx.arc(sx,sy-16*s+bob,7*s,0,Math.PI*2);ctx.fill();var ga=r.angle||0;ctx.save();ctx.translate(sx,sy-16*s+bob);ctx.rotate(ga);ctx.fillStyle='#505860';ctx.fillRect(0,-2*s,16*s,4*s);ctx.fillRect(14*s,-3*s,4*s,6*s);ctx.restore();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx-2*s,sy-17*s+bob,2*s,0,Math.PI*2);ctx.arc(sx+3*s,sy-17*s+bob,2*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c02020';ctx.beginPath();ctx.arc(sx-1.5*s,sy-17*s+bob,1*s,0,Math.PI*2);ctx.arc(sx+3.5*s,sy-17*s+bob,1*s,0,Math.PI*2);ctx.fill();break;
+case 'scout':ctx.fillStyle='#303030';ctx.fillRect(sx-7*s,sy-2*s+bob,3*s,5*s);ctx.fillRect(sx+4*s,sy-2*s+bob,3*s,5*s);ctx.fillStyle=bc;ctx.fillRect(sx-5*s,sy-10*s+bob,10*s,9*s);ctx.fillStyle=tc;ctx.fillRect(sx-4*s,sy-15*s+bob,8*s,6*s);ctx.strokeStyle=tc;ctx.lineWidth=1.5*s;ctx.beginPath();ctx.moveTo(sx+3*s,sy-15*s+bob);ctx.lineTo(sx+8*s,sy-22*s+bob);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx+8*s,sy-22*s+bob,2*s,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx,sy-13*s+bob,3*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(sx+.5*s,sy-13*s+bob,1.5*s,0,Math.PI*2);ctx.fill();break;}
+if(r.hp<r.maxHp){let bw=18*s,bh=2*s,by2=sy-28*s+bob;ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(sx-bw/2,by2,bw,bh);ctx.fillStyle=r.hp>r.maxHp*.5?'#40c060':'#c04040';ctx.fillRect(sx-bw/2,by2,bw*(r.hp/r.maxHp),bh);}
+if(r===selectedEntity){ctx.strokeStyle='#40e0ff';ctx.lineWidth=2*s;ctx.beginPath();ctx.ellipse(sx,sy+2*s,12*s,6*s,0,0,Math.PI*2);ctx.stroke();}}
 
-// ============== ROBOT DRAWING ==============
-function drawRobot(r) {
-  let { sx, sy } = isoToScreen(r.x, r.y);
-  let s = zoom;
-  let teamColor = r.team === 0 ? '#40c060' : '#e08040';
-  let teamDark = r.team === 0 ? '#208040' : '#a05020';
-  let bodyColor = '#b0b8c0';
-  let bodyDark = '#808890';
-  
-  // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.2)';
-  ctx.beginPath();
-  ctx.ellipse(sx, sy + 2*s, 10*s, 5*s, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  let bobY = Math.sin(gameTime * 4 + r.x * 3 + r.y * 7) * 1.5 * s;
-  
-  switch (r.type) {
-    case 'worker':
-      // Wheels
-      ctx.fillStyle = '#303030';
-      ctx.fillRect(sx - 9*s, sy - 4*s + bobY, 4*s, 6*s);
-      ctx.fillRect(sx + 5*s, sy - 4*s + bobY, 4*s, 6*s);
-      // Body
-      ctx.fillStyle = bodyColor;
-      ctx.fillRect(sx - 7*s, sy - 12*s + bobY, 14*s, 10*s);
-      ctx.fillStyle = bodyDark;
-      ctx.fillRect(sx - 7*s, sy - 6*s + bobY, 14*s, 4*s);
-      // Head
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 5*s, sy - 18*s + bobY, 10*s, 7*s);
-      // Eyes
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(sx - 2*s, sy - 15*s + bobY, 2.5*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3*s, sy - 15*s + bobY, 2.5*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#111';
-      ctx.beginPath();
-      ctx.arc(sx - 1.5*s, sy - 15*s + bobY, 1.2*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3.5*s, sy - 15*s + bobY, 1.2*s, 0, Math.PI * 2);
-      ctx.fill();
-      // Tool arm
-      if (r.working) {
-        let armAngle = Math.sin(gameTime * 6) * 0.4;
-        ctx.save();
-        ctx.translate(sx + 8*s, sy - 10*s + bobY);
-        ctx.rotate(armAngle);
-        ctx.fillStyle = '#808080';
-        ctx.fillRect(0, -1.5*s, 8*s, 3*s);
-        ctx.fillStyle = '#c0a040';
-        ctx.fillRect(7*s, -3*s, 4*s, 6*s);
-        ctx.restore();
-      }
-      break;
-      
-    case 'transport':
-      // Bigger wheels
-      ctx.fillStyle = '#303030';
-      ctx.fillRect(sx - 11*s, sy - 4*s + bobY, 5*s, 7*s);
-      ctx.fillRect(sx + 6*s, sy - 4*s + bobY, 5*s, 7*s);
-      // Larger body
-      ctx.fillStyle = bodyColor;
-      ctx.fillRect(sx - 9*s, sy - 14*s + bobY, 18*s, 12*s);
-      // Cargo area
-      ctx.fillStyle = '#707880';
-      ctx.fillRect(sx - 7*s, sy - 20*s + bobY, 14*s, 7*s);
-      // Cargo
-      if (r.cargo && r.cargoAmount > 0) {
-        let cargoColor = r.cargo === 'ore' ? '#8b5e3c' : r.cargo === 'energy' ? '#40a060' : 
-                         r.cargo === 'crystal' ? '#4080c0' : r.cargo === 'metal' ? '#a0a0b0' : '#c04040';
-        ctx.fillStyle = cargoColor;
-        ctx.fillRect(sx - 5*s, sy - 19*s + bobY, 10*s, 5*s);
-      }
-      // Small head
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 4*s, sy - 24*s + bobY, 8*s, 5*s);
-      // Eyes
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(sx - 1*s, sy - 22*s + bobY, 2*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3*s, sy - 22*s + bobY, 2*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#111';
-      ctx.beginPath();
-      ctx.arc(sx - 0.5*s, sy - 22*s + bobY, 1*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3.5*s, sy - 22*s + bobY, 1*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'battle':
-      // Treads
-      ctx.fillStyle = '#252525';
-      ctx.fillRect(sx - 12*s, sy - 3*s + bobY, 6*s, 8*s);
-      ctx.fillRect(sx + 6*s, sy - 3*s + bobY, 6*s, 8*s);
-      // Tread detail
-      ctx.fillStyle = '#353535';
-      for (let i = 0; i < 3; i++) {
-        ctx.fillRect(sx - 11*s, sy - 2*s + i*2.5*s + bobY, 4*s, 1.5*s);
-        ctx.fillRect(sx + 7*s, sy - 2*s + i*2.5*s + bobY, 4*s, 1.5*s);
-      }
-      // Body
-      ctx.fillStyle = '#707880';
-      ctx.fillRect(sx - 10*s, sy - 12*s + bobY, 20*s, 11*s);
-      ctx.fillStyle = '#606870';
-      ctx.fillRect(sx - 8*s, sy - 10*s + bobY, 16*s, 7*s);
-      // Turret
-      ctx.fillStyle = teamColor;
-      ctx.beginPath();
-      ctx.arc(sx, sy - 16*s + bobY, 7*s, 0, Math.PI * 2);
-      ctx.fill();
-      // Gun
-      let gunAngle = r.angle || 0;
-      ctx.save();
-      ctx.translate(sx, sy - 16*s + bobY);
-      ctx.rotate(gunAngle);
-      ctx.fillStyle = '#505860';
-      ctx.fillRect(0, -2*s, 16*s, 4*s);
-      ctx.fillRect(14*s, -3*s, 4*s, 6*s);
-      ctx.restore();
-      // Eyes on turret
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(sx - 2*s, sy - 17*s + bobY, 2*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3*s, sy - 17*s + bobY, 2*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#c02020';
-      ctx.beginPath();
-      ctx.arc(sx - 1.5*s, sy - 17*s + bobY, 1*s, 0, Math.PI * 2);
-      ctx.arc(sx + 3.5*s, sy - 17*s + bobY, 1*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'scout':
-      // Small fast wheels
-      ctx.fillStyle = '#303030';
-      ctx.fillRect(sx - 7*s, sy - 2*s + bobY, 3*s, 5*s);
-      ctx.fillRect(sx + 4*s, sy - 2*s + bobY, 3*s, 5*s);
-      // Slim body
-      ctx.fillStyle = bodyColor;
-      ctx.fillRect(sx - 5*s, sy - 10*s + bobY, 10*s, 9*s);
-      // Head with antenna
-      ctx.fillStyle = teamColor;
-      ctx.fillRect(sx - 4*s, sy - 15*s + bobY, 8*s, 6*s);
-      // Antenna
-      ctx.strokeStyle = teamColor;
-      ctx.lineWidth = 1.5*s;
-      ctx.beginPath();
-      ctx.moveTo(sx + 3*s, sy - 15*s + bobY);
-      ctx.lineTo(sx + 8*s, sy - 22*s + bobY);
-      ctx.stroke();
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(sx + 8*s, sy - 22*s + bobY, 2*s, 0, Math.PI * 2);
-      ctx.fill();
-      // Eye (singular - scanner)
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(sx, sy - 13*s + bobY, 3*s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#111';
-      ctx.beginPath();
-      ctx.arc(sx + 0.5*s, sy - 13*s + bobY, 1.5*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-  }
-  
-  // Health bar
-  if (r.hp < r.maxHp) {
-    let barW = 18 * s;
-    let barH = 2 * s;
-    let barY = sy - 28 * s + bobY;
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(sx - barW/2, barY, barW, barH);
-    ctx.fillStyle = r.hp > r.maxHp * 0.5 ? '#40c060' : '#c04040';
-    ctx.fillRect(sx - barW/2, barY, barW * (r.hp / r.maxHp), barH);
-  }
-  
-  // Selection ring
-  if (r === selectedEntity) {
-    ctx.strokeStyle = '#40e0ff';
-    ctx.lineWidth = 2*s;
-    ctx.beginPath();
-    ctx.ellipse(sx, sy + 2*s, 12*s, 6*s, 0, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-}
+function drawResourceNode(n){let{sx,sy}=isoToScreen(n.x,n.y),s=zoom,rat=n.amount/n.maxAmount;switch(n.type){case 'ore':ctx.fillStyle='hsl(25,40%,'+(25+rat*20)+'%)';ctx.beginPath();ctx.arc(sx,sy-4*s,8*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();ctx.fillStyle='hsl(25,50%,'+(35+rat*15)+'%)';ctx.beginPath();ctx.arc(sx-3*s,sy-6*s,5*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx+4*s,sy-5*s,4*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();break;case 'energy':ctx.fillStyle='hsl(130,50%,'+(20+rat*25)+'%)';ctx.beginPath();for(var i=0;i<5;i++){var a2=(i/5)*Math.PI*2+gameTime*.3,r2=(6+Math.sin(gameTime*2+i)*2)*s*(.5+rat*.5);ctx.arc(sx+Math.cos(a2)*3*s,sy-6*s+Math.sin(a2)*2*s,r2,0,Math.PI*2);}ctx.fill();ctx.fillStyle='rgba(80,255,120,'+(0.15+Math.sin(gameTime*2)*.05)+')';ctx.beginPath();ctx.arc(sx,sy-6*s,12*s,0,Math.PI*2);ctx.fill();break;case 'crystal':ctx.fillStyle='hsl(210,60%,'+(30+rat*30)+'%)';for(var i2=0;i2<3;i2++){var cx2=sx+(i2-1)*5*s,ch=(8+i2*3)*s*(.5+rat*.5);ctx.beginPath();ctx.moveTo(cx2,sy-ch-4*s);ctx.lineTo(cx2+3*s,sy-4*s);ctx.lineTo(cx2-3*s,sy-4*s);ctx.closePath();ctx.fill();}ctx.fillStyle='rgba(150,200,255,'+(0.3+Math.sin(gameTime*3)*.2)+')';ctx.beginPath();ctx.arc(sx,sy-10*s,3*s,0,Math.PI*2);ctx.fill();break;}}
 
-// ============== RESOURCE NODE DRAWING ==============
-function drawResourceNode(n) {
-  let { sx, sy } = isoToScreen(n.x, n.y);
-  let s = zoom;
-  let ratio = n.amount / n.maxAmount;
-  
-  switch (n.type) {
-    case 'ore':
-      // Rock pile
-      ctx.fillStyle = `hsl(25,40%,${25 + ratio * 20}%)`;
-      ctx.beginPath();
-      ctx.arc(sx, sy - 4*s, 8*s * (0.5 + ratio * 0.5), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = `hsl(25,50%,${35 + ratio * 15}%)`;
-      ctx.beginPath();
-      ctx.arc(sx - 3*s, sy - 6*s, 5*s * (0.5 + ratio * 0.5), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(sx + 4*s, sy - 5*s, 4*s * (0.5 + ratio * 0.5), 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'energy':
-      // Green glowing plant
-      ctx.fillStyle = `hsl(130,50%,${20 + ratio * 25}%)`;
-      ctx.beginPath();
-      for (let i = 0; i < 5; i++) {
-        let angle = (i / 5) * Math.PI * 2 + gameTime * 0.3;
-        let r2 = (6 + Math.sin(gameTime * 2 + i) * 2) * s * (0.5 + ratio * 0.5);
-        ctx.arc(sx + Math.cos(angle) * 3*s, sy - 6*s + Math.sin(angle) * 2*s, r2, 0, Math.PI * 2);
-      }
-      ctx.fill();
-      // Glow
-      ctx.fillStyle = `rgba(80,255,120,${0.15 + Math.sin(gameTime * 2) * 0.05})`;
-      ctx.beginPath();
-      ctx.arc(sx, sy - 6*s, 12*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-      
-    case 'crystal':
-      // Blue crystals
-      ctx.fillStyle = `hsl(210,60%,${30 + ratio * 30}%)`;
-      for (let i = 0; i < 3; i++) {
-        let cx = sx + (i - 1) * 5 * s;
-        let ch = (8 + i * 3) * s * (0.5 + ratio * 0.5);
-        ctx.beginPath();
-        ctx.moveTo(cx, sy - ch - 4*s);
-        ctx.lineTo(cx + 3*s, sy - 4*s);
-        ctx.lineTo(cx - 3*s, sy - 4*s);
-        ctx.closePath();
-        ctx.fill();
-      }
-      // Sparkle
-      ctx.fillStyle = `rgba(150,200,255,${0.3 + Math.sin(gameTime * 3) * 0.2})`;
-      ctx.beginPath();
-      ctx.arc(sx, sy - 10*s, 3*s, 0, Math.PI * 2);
-      ctx.fill();
-      break;
-  }
-}
+// Defs
+const bD={hq:{cost:{ore:50,metal:30},hp:500,bt:8,vis:6},mine:{cost:{ore:30,metal:10},hp:200,bt:5,vis:3},power:{cost:{ore:25,energy:15},hp:150,bt:4,vis:3},factory:{cost:{ore:40,metal:20},hp:300,bt:6,vis:3},turret:{cost:{ore:35,metal:25},hp:250,bt:5,vis:5,dmg:15,range:5,fr:1.2},storage:{cost:{ore:20,metal:10},hp:180,bt:3,vis:2},refinery:{cost:{ore:45,crystal:20},hp:250,bt:6,vis:3}};
+const rD={worker:{cost:{metal:20,fuel:10},hp:60,sp:1.5,vis:3,bt:3},transport:{cost:{metal:25,fuel:15},hp:80,sp:1.2,cm:50,vis:3,bt:4},battle:{cost:{metal:35,fuel:25},hp:150,sp:1,dmg:12,range:4,fr:1,vis:4,bt:5},scout:{cost:{metal:15,fuel:10},hp:40,sp:2.5,vis:6,bt:2}};
+function canAfford(o,c){for(let[r,a]of Object.entries(c))if(o[r]<a)return false;return true;}
+function spend(o,c){for(let[r,a]of Object.entries(c))o[r]-=a;}
+function addBuilding(t,x,y,tm){let d=bD[t],b={type:t,x,y,team:tm,hp:d.hp,maxHp:d.hp,constructing:true,constructProgress:0,constructTime:d.bt,vision:d.vis||3,producing:false,productionQueue:[],productionType:'',productionProgress:0,productionTime:5,angle:0,firing:0,lastProduction:0};buildings.push(b);(tm===0?player:enemy).buildings.push(b);return b;}
+function addRobot(t,x,y,tm){let d=rD[t],r={type:t,x:x+.5,y:y+.5,team:tm,hp:d.hp,maxHp:d.hp,speed:d.sp,vision:d.vis||3,target:null,targetPos:null,state:'idle',angle:0,working:false,cargo:null,cargoAmount:0,cargoMax:d.cm||0,lastAttack:0,damage:d.dmg||0,range:d.range||0,fireRate:d.fr||1,path:null};robots.push(r);(tm===0?player:enemy).robots.push(r);return r;}
+function setAction(a){currentAction=a;document.querySelectorAll('.action-btn').forEach(b2=>b2.classList.remove('active'));let btn=document.getElementById('btn-'+a.replace('build-',''));if(btn)btn.classList.add('active');}
+function produceRobot(t){let d=rD[t];if(!canAfford(player,d.cost)){showMessage("Not enough resources!");return;}let f=player.buildings.find(b2=>b2.type==='factory'&&!b2.constructing&&!b2.producing);if(!f){showMessage("Need an available Factory!");return;}spend(player,d.cost);f.producing=true;f.productionType=t;f.productionProgress=0;f.productionTime=d.bt;showMessage('Producing '+t+'...');}
+function showMessage(t){let l=document.getElementById('message-log'),m=document.createElement('div');m.className='game-message';m.textContent=t;l.appendChild(m);setTimeout(()=>m.remove(),3000);}
 
-// ============== GAME LOGIC ==============
-const buildingDefs = {
-  hq:       { cost: { ore: 50, metal: 30 }, hp: 500, buildTime: 8, vision: 6 },
-  mine:     { cost: { ore: 30, metal: 10 }, hp: 200, buildTime: 5, vision: 3, produces: 'ore' },
-  power:    { cost: { ore: 25, energy: 15 }, hp: 150, buildTime: 4, vision: 3, produces: 'energy' },
-  factory:  { cost: { ore: 40, metal: 20 }, hp: 300, buildTime: 6, vision: 3 },
-  turret:   { cost: { ore: 35, metal: 25 }, hp: 250, buildTime: 5, vision: 5, damage: 15, range: 5, fireRate: 1.2 },
-  storage:  { cost: { ore: 20, metal: 10 }, hp: 180, buildTime: 3, vision: 2 },
-  refinery: { cost: { ore: 45, crystal: 20 }, hp: 250, buildTime: 6, vision: 3 }
-};
+// Pathfinding
+function findPath(sx2,sy2,ex2,ey2){let open=[{x:Math.floor(sx2),y:Math.floor(sy2),g:0,h:0,f:0,p:null}],closed=new Set(),eX=Math.floor(ex2),eY=Math.floor(ey2),mI=600;function h(x,y){return Math.abs(x-eX)+Math.abs(y-eY);}while(open.length&&mI-->0){open.sort((a,b2)=>a.f-b2.f);let c=open.shift();if(c.x===eX&&c.y===eY){let path=[],n=c;while(n){path.unshift({x:n.x+.5,y:n.y+.5});n=n.p;}return path;}closed.add(c.x+','+c.y);for(let[dx,dy]of[[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,-1],[1,-1],[-1,1]]){let nx=c.x+dx,ny=c.y+dy;if(nx<0||nx>=MAP_SIZE||ny<0||ny>=MAP_SIZE)continue;if(!map[nx]||!map[nx][ny]||map[nx][ny].type==='water')continue;if(closed.has(nx+','+ny)||buildings.some(b2=>b2.x===nx&&b2.y===ny))continue;let g=c.g+(dx&&dy?1.414:1),hv=h(nx,ny),ex3=open.find(n=>n.x===nx&&n.y===ny);if(ex3){if(g<ex3.g){ex3.g=g;ex3.f=g+hv;ex3.p=c;}}else open.push({x:nx,y:ny,g,h:hv,f:g+hv,p:c});}}return null;}
 
-const robotDefs = {
-  worker:    { cost: { metal: 20, fuel: 10 }, hp: 60, speed: 1.5, vision: 3, buildTime: 3 },
-  transport: { cost: { metal: 25, fuel: 15 }, hp: 80, speed: 1.2, cargoMax: 50, vision: 3, buildTime: 4 },
-  battle:    { cost: { metal: 35, fuel: 25 }, hp: 150, speed: 1.0, damage: 12, range: 4, fireRate: 1.0, vision: 4, buildTime: 5 },
-  scout:     { cost: { metal: 15, fuel: 10 }, hp: 40, speed: 2.5, vision: 6, buildTime: 2 }
-};
+// Update
+function updateGame(dt){gameTime+=dt;
+for(let i=0;i<MAP_SIZE;i++){if(!fogOfWar[i])continue;for(let j=0;j<MAP_SIZE;j++)if(fogOfWar[i][j]===2)fogOfWar[i][j]=1;}
+function reveal(x,y,rng){for(let dx=-rng;dx<=rng;dx++)for(let dy=-rng;dy<=rng;dy++){let nx=Math.floor(x)+dx,ny=Math.floor(y)+dy;if(nx>=0&&nx<MAP_SIZE&&ny>=0&&ny<MAP_SIZE&&fogOfWar[nx]&&dx*dx+dy*dy<=rng*rng)fogOfWar[nx][ny]=2;}}
+player.buildings.forEach(b2=>reveal(b2.x,b2.y,b2.vision));player.robots.forEach(r2=>reveal(r2.x,r2.y,r2.vision));
 
-function canAfford(owner, costs) {
-  for (let [res, amt] of Object.entries(costs)) {
-    if (owner[res] < amt) return false;
-  }
-  return true;
-}
+buildings.forEach(b2=>{if(b2.hp<=0)return;
+if(b2.constructing){b2.constructProgress+=dt/b2.constructTime;if(b2.constructProgress>=1){b2.constructing=false;b2.constructProgress=1;}return;}
+if(b2.producing){b2.productionProgress+=dt/b2.productionTime;if(b2.productionProgress>=1){b2.producing=false;let rx2=b2.x+(Math.random()>.5?1:-1),ry2=b2.y+(Math.random()>.5?1:-1);if(rx2>=0&&rx2<MAP_SIZE&&ry2>=0&&ry2<MAP_SIZE&&map[rx2]&&map[rx2][ry2]&&map[rx2][ry2].type!=='water'){addRobot(b2.productionType,rx2,ry2,b2.team);if(b2.team===0)showMessage(b2.productionType+' robot ready!');}}}
+if(!b2.constructing&&(b2.type==='mine'||b2.type==='power')){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=3){b2.lastProduction=gameTime;if(b2.type==='mine'){let nn=resourceNodes.find(n=>Math.abs(n.x-b2.x)<=2&&Math.abs(n.y-b2.y)<=2&&n.amount>0);if(nn){let a2=Math.min(5,nn.amount);nn.amount-=a2;o[nn.type]+=a2;}else o.ore+=2;}else o.energy+=3;}}
+if(!b2.constructing&&b2.type==='refinery'){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=4){b2.lastProduction=gameTime;if(o.ore>=5&&o.energy>=3){o.ore-=5;o.energy-=3;o.metal+=4;o.fuel+=2;}}}
+if(b2.type==='turret'&&!b2.constructing){let d=bD.turret,ne=null,nd=d.range+.5;robots.forEach(r2=>{if(r2.team!==b2.team&&r2.hp>0){let d2=Math.sqrt((r2.x-b2.x)**2+(r2.y-b2.y)**2);if(d2<nd){nd=d2;ne=r2;}}});if(ne){b2.angle=Math.atan2(ne.y-b2.y,ne.x-b2.x);if(gameTime-b2.firing>1/d.fr){b2.firing=gameTime;ne.hp-=d.dmg;projectiles.push({x1:b2.x,y1:b2.y-.5,x2:ne.x,y2:ne.y,time:gameTime,dur:.15,col:b2.team===0?'#40ff80':'#ff6040'});}}}});
 
-function spendResources(owner, costs) {
-  for (let [res, amt] of Object.entries(costs)) {
-    owner[res] -= amt;
-  }
-}
+buildings=buildings.filter(b2=>{if(b2.hp<=0){for(let i=0;i<8;i++)particles.push({x:b2.x+.5,y:b2.y+.5,vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3-2,life:1.5,ml:1.5,col:'#ff8040',sz:4});player.buildings=player.buildings.filter(p=>p!==b2);enemy.buildings=enemy.buildings.filter(p=>p!==b2);if(b2.team===0)showMessage("Building destroyed!");return false;}return true;});
 
-function addBuilding(type, x, y, team) {
-  let def = buildingDefs[type];
-  let owner = team === 0 ? player : enemy;
-  
-  let b = {
-    type, x, y, team,
-    hp: def.hp, maxHp: def.hp,
-    constructing: true,
-    constructProgress: 0,
-    constructTime: def.buildTime,
-    vision: def.vision || 3,
-    producing: false,
-    productionQueue: [],
-    angle: 0, firing: 0,
-    lastProduction: 0
-  };
-  
-  buildings.push(b);
-  owner.buildings.push(b);
-  return b;
-}
+robots.forEach(r2=>{if(r2.hp<=0)return;
+if(r2.path&&r2.path.length>0){let t2=r2.path[0],dx=t2.x-r2.x,dy=t2.y-r2.y,d=Math.sqrt(dx*dx+dy*dy);if(d<.15)r2.path.shift();else{let ms=r2.speed*dt;r2.x+=(dx/d)*ms;r2.y+=(dy/d)*ms;r2.x=Math.max(.1,Math.min(MAP_SIZE-.1,r2.x));r2.y=Math.max(.1,Math.min(MAP_SIZE-.1,r2.y));r2.angle=Math.atan2(dy,dx);}}
+if(r2.type==='battle'&&r2.damage>0){let ne=null,nd=r2.range+.5;robots.forEach(e=>{if(e.team!==r2.team&&e.hp>0){let d=Math.sqrt((e.x-r2.x)**2+(e.y-r2.y)**2);if(d<nd){nd=d;ne=e;}}});if(!ne)buildings.forEach(b3=>{if(b3.team!==r2.team&&b3.hp>0){let d=Math.sqrt((b3.x+.5-r2.x)**2+(b3.y+.5-r2.y)**2);if(d<nd){nd=d;ne=b3;}}});
+if(ne){let ex=ne.speed!==undefined?ne.x:ne.x+.5,ey=ne.speed!==undefined?ne.y:ne.y+.5;r2.angle=Math.atan2(ey-r2.y,ex-r2.x);if(gameTime-r2.lastAttack>1/r2.fireRate){r2.lastAttack=gameTime;ne.hp-=r2.damage;projectiles.push({x1:r2.x,y1:r2.y-.3,x2:ex,y2:ey,time:gameTime,dur:.12,col:r2.team===0?'#40ff80':'#ff6040'});}if(nd>r2.range&&(!r2.path||!r2.path.length))r2.path=findPath(r2.x,r2.y,ex,ey);}}
+if(r2.type==='worker'&&r2.team===0&&r2.state==='idle'&&(!r2.path||!r2.path.length)){let nn=resourceNodes.find(n=>n.amount>0&&Math.abs(n.x-r2.x)<8&&Math.abs(n.y-r2.y)<8);if(nn){let d=Math.sqrt((nn.x-r2.x)**2+(nn.y-r2.y)**2);if(d<1.5){r2.working=true;if(gameTime-(r2.lastGather||0)>2){r2.lastGather=gameTime;let a2=Math.min(3,nn.amount);nn.amount-=a2;player[nn.type]+=a2;}}else{r2.working=false;r2.path=findPath(r2.x,r2.y,nn.x+.5,nn.y+.5);}}else r2.working=false;}});
 
-function addRobot(type, x, y, team) {
-  let def = robotDefs[type];
-  let r = {
-    type, x: x + 0.5, y: y + 0.5, team,
-    hp: def.hp, maxHp: def.hp,
-    speed: def.speed,
-    vision: def.vision || 3,
-    target: null,
-    targetPos: null,
-    state: 'idle',
-    angle: 0,
-    working: false,
-    cargo: null,
-    cargoAmount: 0,
-    cargoMax: def.cargoMax || 0,
-    lastAttack: 0,
-    damage: def.damage || 0,
-    range: def.range || 0,
-    fireRate: def.fireRate || 1
-  };
-  
-  robots.push(r);
-  let owner = team === 0 ? player : enemy;
-  owner.robots.push(r);
-  return r;
-}
+robots=robots.filter(r2=>{if(r2.hp<=0){for(let i=0;i<5;i++)particles.push({x:r2.x,y:r2.y,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2-1,life:1,ml:1,col:'#ffaa40',sz:3});player.robots=player.robots.filter(p=>p!==r2);enemy.robots=enemy.robots.filter(p=>p!==r2);return false;}return true;});
+projectiles=projectiles.filter(p=>gameTime-p.time<p.dur);
+particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=3*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
+updateAI(dt);
+document.getElementById('res-ore').textContent=Math.floor(player.ore);document.getElementById('res-energy').textContent=Math.floor(player.energy);document.getElementById('res-crystal').textContent=Math.floor(player.crystal);document.getElementById('res-metal').textContent=Math.floor(player.metal);document.getElementById('res-fuel').textContent=Math.floor(player.fuel);document.getElementById('robot-count').textContent=player.robots.length;document.getElementById('building-count').textContent=player.buildings.length;
+if(enemy.buildings.length===0&&enemy.robots.length===0&&gameTime>10){showMessage("🎉 VICTORY!");gameRunning=false;}
+if(player.buildings.length===0&&player.robots.length===0&&gameTime>10){showMessage("💀 DEFEAT!");gameRunning=false;}}
 
-function setAction(action) {
-  currentAction = action;
-  document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
-  let id = 'btn-' + action.replace('build-', '');
-  let btn = document.getElementById(id);
-  if (btn) btn.classList.add('active');
-}
+// AI
+function updateAI(dt){aiTimer+=dt;let spd=difficulty==='easy'?8:difficulty==='medium'?5:3;if(aiTimer<spd)return;aiTimer=0;let m=difficulty==='easy'?1:difficulty==='medium'?2:3;enemy.ore+=5*m;enemy.energy+=3*m;enemy.metal+=2.5*m;enemy.fuel+=1.5*m;enemy.crystal+=1.5*m;
+let hqs=enemy.buildings.filter(b2=>b2.type==='hq'&&!b2.constructing),facs=enemy.buildings.filter(b2=>b2.type==='factory'&&!b2.constructing);
+function aiP(t,near,rd){if(!canAfford(enemy,bD[t].cost))return;for(let i=0;i<20;i++){let tx=near.x+Math.floor(Math.random()*rd*2)-rd,ty=near.y+Math.floor(Math.random()*rd*2)-rd;if(tx>=0&&tx<MAP_SIZE&&ty>=0&&ty<MAP_SIZE&&map[tx]&&map[tx][ty]&&map[tx][ty].type!=='water'&&!buildings.some(b2=>b2.x===tx&&b2.y===ty)){spend(enemy,bD[t].cost);addBuilding(t,tx,ty,1);return;}}}
+if(!hqs.length)aiP('hq',{x:MAP_SIZE-5,y:MAP_SIZE-5},3);let hq=enemy.buildings.find(b2=>b2.type==='hq');if(!hq)return;
+if(facs.length<2)aiP('factory',hq,3);if(enemy.buildings.filter(b2=>b2.type==='turret').length<3)aiP('turret',hq,4);if(enemy.buildings.filter(b2=>b2.type==='refinery').length<1)aiP('refinery',hq,2);if(enemy.buildings.filter(b2=>b2.type==='mine').length<2)aiP('mine',hq,4);
+let af=facs.find(f=>!f.producing);if(af){let wc=enemy.robots.filter(r2=>r2.type==='worker').length;if(wc<2&&canAfford(enemy,rD.worker.cost)){spend(enemy,rD.worker.cost);af.producing=true;af.productionType='worker';af.productionProgress=0;af.productionTime=rD.worker.bt;}else if(canAfford(enemy,rD.battle.cost)){spend(enemy,rD.battle.cost);af.producing=true;af.productionType='battle';af.productionProgress=0;af.productionTime=rD.battle.bt;}}
+let bots=enemy.robots.filter(r2=>r2.type==='battle'&&(!r2.path||!r2.path.length)),thr=difficulty==='easy'?4:difficulty==='medium'?3:2;
+if(bots.length>=thr&&player.buildings.length>0){let tgt=player.buildings[Math.floor(Math.random()*player.buildings.length)];bots.forEach(b2=>{b2.path=findPath(b2.x,b2.y,tgt.x+.5,tgt.y+.5);});}
+enemy.robots.filter(r2=>r2.type==='worker'&&(!r2.path||!r2.path.length)).forEach(w=>{let nn=resourceNodes.find(n=>n.amount>0);if(nn){let d=Math.sqrt((nn.x-w.x)**2+(nn.y-w.y)**2);if(d<1.5){if(gameTime-(w.lastGather||0)>2){w.lastGather=gameTime;let a2=Math.min(3,nn.amount);nn.amount-=a2;enemy[nn.type]+=a2;}}else w.path=findPath(w.x,w.y,nn.x+.5,nn.y+.5);}});}
 
-function produceRobot(type) {
-  let def = robotDefs[type];
-  if (!canAfford(player, def.cost)) {
-    showMessage("Not enough resources!");
-    return;
-  }
-  
-  // Need a factory
-  let factory = player.buildings.find(b => b.type === 'factory' && !b.constructing && !b.producing);
-  if (!factory) {
-    showMessage("Need an available Factory!");
-    return;
-  }
-  
-  spendResources(player, def.cost);
-  factory.producing = true;
-  factory.productionType = type;
-  factory.productionProgress = 0;
-  factory.productionTime = def.buildTime;
-  showMessage(`Producing ${type} robot...`);
-}
+// Render
+function render(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.fillStyle='#080c14';ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle='rgba(200,220,255,.3)';for(let i=0;i<80;i++){let x=(i*137.5+gameTime*.5)%canvas.width,y=(i*89.3)%canvas.height,s2=(Math.sin(i*3.7+gameTime)+1)*.8;ctx.beginPath();ctx.arc(x,y,s2,0,Math.PI*2);ctx.fill();}
+if(map.length>0){for(let sum=0;sum<MAP_SIZE*2;sum++){for(let x=Math.max(0,sum-MAP_SIZE+1);x<=Math.min(sum,MAP_SIZE-1);x++){let y=sum-x;if(y<0||y>=MAP_SIZE||!map[x]||!map[x][y])continue;let tile=map[x][y],fog=fogOfWar[x]?.[y]??0,{sx:tsx,sy:tsy}=isoToScreen(x,y);if(tsx<-TILE_W*zoom||tsx>canvas.width+TILE_W*zoom||tsy<-TILE_H*zoom*4||tsy>canvas.height+TILE_H*zoom*2)continue;let col=getTerrainColors(tile.type,tile.height);if(fog===0){drawIsoTile(x,y,'rgba(8,12,20,.95)',null);continue;}if(tile.type==='rock')drawIsoBlock(x,y,6,col.top,'hsl(220,10%,'+(20+tile.height*10)+'%)','hsl(220,10%,'+(15+tile.height*10)+'%)');else drawIsoTile(x,y,col.top,col.border);if(x===hoverTile.x&&y===hoverTile.y&&currentAction!=='select')drawIsoTile(x,y,'rgba(100,200,255,.2)','rgba(100,200,255,.5)');if(fog===1)drawIsoTile(x,y,'rgba(8,12,20,.6)',null);}}}
+resourceNodes.forEach(n=>{if(n.x>=0&&n.x<MAP_SIZE&&n.y>=0&&n.y<MAP_SIZE&&fogOfWar[n.x]?.[n.y]>=1&&n.amount>0)drawResourceNode(n);});
+let ents=[];buildings.forEach(b2=>{if(fogOfWar[b2.x]?.[b2.y]>=1)ents.push({ty:'b',e:b2,sk:b2.x+b2.y});});robots.forEach(r2=>{let rx=Math.floor(r2.x),ry=Math.floor(r2.y);if(rx>=0&&ry>=0&&rx<MAP_SIZE&&ry<MAP_SIZE&&fogOfWar[rx]?.[ry]>=1)ents.push({ty:'r',e:r2,sk:r2.x+r2.y});});ents.sort((a,b2)=>a.sk-b2.sk);ents.forEach(e=>{if(e.ty==='b')drawBuilding(e.e);else drawRobot(e.e);});
+projectiles.forEach(p=>{let pr=(gameTime-p.time)/p.dur,px=p.x1+(p.x2-p.x1)*pr,py=p.y1+(p.y2-p.y1)*pr,{sx:psx,sy:psy}=isoToScreen(px,py);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(psx,psy,3*zoom,0,Math.PI*2);ctx.fill();});
+particles.forEach(p=>{let{sx:psx,sy:psy}=isoToScreen(p.x,p.y),a=Math.max(0,Math.min(1,p.life/p.ml));ctx.globalAlpha=a;ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(psx,psy,Math.max(.1,p.sz*zoom*a),0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;});
+if(selectedEntity){let{sx:ssx,sy:ssy}=isoToScreen(selectedEntity.x,selectedEntity.y);ctx.strokeStyle='#40e0ff';ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.ellipse(ssx,ssy,16*zoom,8*zoom,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
+drawMinimap();}
 
-function showMessage(text) {
-  let log = document.getElementById('message-log');
-  let msg = document.createElement('div');
-  msg.className = 'game-message';
-  msg.textContent = text;
-  log.appendChild(msg);
-  setTimeout(() => msg.remove(), 3000);
-}
+function drawMinimap(){let sz=minimapCanvas.width,ts=sz/MAP_SIZE;minimapCtx.fillStyle='#0a0e18';minimapCtx.fillRect(0,0,sz,sz);if(!map.length)return;for(let x=0;x<MAP_SIZE;x++)for(let y=0;y<MAP_SIZE;y++){if(!map[x]||!map[x][y])continue;let f=fogOfWar[x]?.[y]??0;minimapCtx.fillStyle=f===0?'#0a0e18':f===1?'rgba(30,40,50,.8)':getTerrainColors(map[x][y].type,map[x][y].height).top;minimapCtx.fillRect(x*ts,y*ts,ts+.5,ts+.5);}
+buildings.forEach(b2=>{minimapCtx.fillStyle=b2.team===0?'#40ff80':'#ff4040';minimapCtx.fillRect(b2.x*ts-1,b2.y*ts-1,3,3);});robots.forEach(r2=>{let rx=Math.floor(r2.x),ry=Math.floor(r2.y);if(rx>=0&&ry>=0&&rx<MAP_SIZE&&ry<MAP_SIZE&&fogOfWar[rx]?.[ry]>=2){minimapCtx.fillStyle=r2.team===0?'#80ffb0':'#ff8080';minimapCtx.fillRect(r2.x*ts,r2.y*ts,2,2);}});}
 
-// ============== PATHFINDING ==============
-function findPath(sx, sy, ex, ey) {
-  // Simple A* on the grid
-  let open = [{ x: Math.floor(sx), y: Math.floor(sy), g: 0, h: 0, f: 0, parent: null }];
-  let closed = new Set();
-  let endX = Math.floor(ex), endY = Math.floor(ey);
-  
-  function heuristic(x, y) {
-    return Math.abs(x - endX) + Math.abs(y - endY);
-  }
-  
-  let maxIter = 500;
-  while (open.length > 0 && maxIter-- > 0) {
-    open.sort((a, b) => a.f - b.f);
-    let current = open.shift();
-    
-    if (current.x === endX && current.y === endY) {
-      let path = [];
-      let node = current;
-      while (node) {
-        path.unshift({ x: node.x + 0.5, y: node.y + 0.5 });
-        node = node.parent;
-      }
-      return path;
-    }
-    
-    closed.add(`${current.x},${current.y}`);
-    
-    for (let [dx, dy] of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,-1],[1,-1],[-1,1]]) {
-      let nx = current.x + dx, ny = current.y + dy;
-      if (nx < 0 || nx >= MAP_SIZE || ny < 0 || ny >= MAP_SIZE) continue;
-      if (!map[nx] || !map[nx][ny] || map[nx][ny].type === 'water') continue;
-      if (closed.has(`${nx},${ny}`)) continue;
-      if (buildings.some(b => b.x === nx && b.y === ny)) continue;
-      
-      let g = current.g + (dx !== 0 && dy !== 0 ? 1.414 : 1);
-      let h = heuristic(nx, ny);
-      let existing = open.find(n => n.x === nx && n.y === ny);
-      if (existing) {
-        if (g < existing.g) {
-          existing.g = g;
-          existing.f = g + h;
-          existing.parent = current;
-        }
-      } else {
-        open.push({ x: nx, y: ny, g, h, f: g + h, parent: current });
-      }
-    }
-  }
-  
-  return null;
-}
+// Input
+let keys={},mouseX=0,mouseY=0,isDragging=false,dragSX,dragSY,dragCX,dragCY;
+document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='Escape'){if(gamePaused)togglePauseMenu();else{setAction('select');selectedEntity=null;document.getElementById('info-panel').style.display='none';}}});
+document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
+canvas.addEventListener('mousedown',e=>{if(e.button===2||e.button===1){isDragging=true;dragSX=e.clientX;dragSY=e.clientY;dragCX=camX;dragCY=camY;e.preventDefault();return;}handleTap(e.clientX,e.clientY,false);});
+canvas.addEventListener('contextmenu',e=>{e.preventDefault();handleTap(e.clientX,e.clientY,true);});
+canvas.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;hoverTile=screenToIso(e.clientX,e.clientY);if(isDragging){camX=dragCX+(e.clientX-dragSX);camY=dragCY+(e.clientY-dragSY);}});
+canvas.addEventListener('mouseup',()=>{isDragging=false;});
+canvas.addEventListener('wheel',e=>{let oz=zoom;zoom*=e.deltaY>0?.9:1.1;zoom=Math.max(.2,Math.min(3,zoom));let f=zoom/oz;camX=mouseX-(mouseX-camX)*f;camY=mouseY-(mouseY-camY)*f;},{passive:true});
 
-// ============== UPDATE LOOP ==============
-function updateGame(dt) {
-  gameTime += dt;
-  
-  // Update fog of war
-  for (let i = 0; i < MAP_SIZE; i++) {
-    if (!fogOfWar[i]) continue;
-    for (let j = 0; j < MAP_SIZE; j++) {
-      if (fogOfWar[i][j] === 2) fogOfWar[i][j] = 1;
-    }
-  }
-  
-  // Reveal around player entities
-  function reveal(x, y, range) {
-    for (let dx = -range; dx <= range; dx++) {
-      for (let dy = -range; dy <= range; dy++) {
-        let nx = Math.floor(x) + dx, ny = Math.floor(y) + dy;
-        if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE && fogOfWar[nx]) {
-          if (dx*dx + dy*dy <= range*range) {
-            fogOfWar[nx][ny] = 2;
-          }
-        }
-      }
-    }
-  }
-  
-  player.buildings.forEach(b => reveal(b.x, b.y, b.vision));
-  player.robots.forEach(r => reveal(r.x, r.y, r.vision));
-  
-  // Update buildings
-  buildings.forEach(b => {
-    if (b.hp <= 0) return;
-    
-    // Construction
-    if (b.constructing) {
-      b.constructProgress += dt / b.constructTime;
-      if (b.constructProgress >= 1) {
-        b.constructing = false;
-        b.constructProgress = 1;
-      }
-      return;
-    }
-    
-    // Production
-    if (b.producing) {
-      b.productionProgress += dt / b.productionTime;
-      if (b.productionProgress >= 1) {
-        b.producing = false;
-        // Spawn robot near factory
-        let rx = b.x + (Math.random() > 0.5 ? 1 : -1);
-        let ry = b.y + (Math.random() > 0.5 ? 1 : -1);
-        if (rx >= 0 && rx < MAP_SIZE && ry >= 0 && ry < MAP_SIZE && map[rx][ry].type !== 'water') {
-          addRobot(b.productionType, rx, ry, b.team);
-          if (b.team === 0) showMessage(`${b.productionType} robot ready!`);
-        }
-      }
-    }
-    
-    // Resource generation
-    if (!b.constructing && (b.type === 'mine' || b.type === 'power')) {
-      let owner = b.team === 0 ? player : enemy;
-      let interval = 3;
-      if (gameTime - b.lastProduction >= interval) {
-        b.lastProduction = gameTime;
-        if (b.type === 'mine') {
-          // Check nearby resource node
-          let nearNode = resourceNodes.find(n => Math.abs(n.x - b.x) <= 2 && Math.abs(n.y - b.y) <= 2 && n.amount > 0);
-          if (nearNode) {
-            let amt = Math.min(5, nearNode.amount);
-            nearNode.amount -= amt;
-            owner[nearNode.type] += amt;
-          } else {
-            owner.ore += 2;
-          }
-        } else if (b.type === 'power') {
-          owner.energy += 3;
-        }
-      }
-    }
-    
-    // Refinery converts ore+energy to metal and fuel
-    if (!b.constructing && b.type === 'refinery') {
-      let owner = b.team === 0 ? player : enemy;
-      let interval = 4;
-      if (gameTime - b.lastProduction >= interval) {
-        b.lastProduction = gameTime;
-        if (owner.ore >= 5 && owner.energy >= 3) {
-          owner.ore -= 5;
-          owner.energy -= 3;
-          owner.metal += 4;
-          owner.fuel += 2;
-        }
-      }
-    }
-    
-    // Turret targeting
-    if (b.type === 'turret' && !b.constructing) {
-      let def = buildingDefs.turret;
-      let nearestEnemy = null;
-      let nearestDist = def.range + 0.5;
-      
-      robots.forEach(r => {
-        if (r.team !== b.team && r.hp > 0) {
-          let dist = Math.sqrt((r.x - b.x)**2 + (r.y - b.y)**2);
-          if (dist < nearestDist) {
-            nearestDist = dist;
-            nearestEnemy = r;
-          }
-        }
-      });
-      
-      if (nearestEnemy) {
-        b.angle = Math.atan2(nearestEnemy.y - b.y, nearestEnemy.x - b.x);
-        if (gameTime - b.firing > 1 / def.fireRate) {
-          b.firing = gameTime;
-          nearestEnemy.hp -= def.damage;
-          // Projectile effect
-          projectiles.push({
-            x1: b.x, y1: b.y - 0.5,
-            x2: nearestEnemy.x, y2: nearestEnemy.y,
-            time: gameTime, duration: 0.15,
-            color: b.team === 0 ? '#40ff80' : '#ff6040'
-          });
-        }
-      }
-    }
-  });
-  
-  // Remove destroyed buildings
-  buildings = buildings.filter(b => {
-    if (b.hp <= 0) {
-      for (let i = 0; i < 8; i++) {
-        particles.push({
-          x: b.x + 0.5, y: b.y + 0.5,
-          vx: (Math.random() - 0.5) * 3,
-          vy: (Math.random() - 0.5) * 3 - 2,
-          life: 1.5, maxLife: 1.5,
-          color: '#ff8040', size: 4
-        });
-      }
-      player.buildings = player.buildings.filter(pb => pb !== b);
-      enemy.buildings = enemy.buildings.filter(eb => eb !== b);
-      if (b.team === 0) showMessage("Building destroyed!");
-      return false;
-    }
-    return true;
-  });
-  
-  // Update robots
-  robots.forEach(r => {
-    if (r.hp <= 0) return;
-    
-    // Movement
-    if (r.path && r.path.length > 0) {
-      let target = r.path[0];
-      let dx = target.x - r.x;
-      let dy = target.y - r.y;
-      let dist = Math.sqrt(dx*dx + dy*dy);
-      
-      if (dist < 0.15) {
-        r.path.shift();
-      } else {
-        let moveSpeed = r.speed * dt;
-        r.x += (dx / dist) * moveSpeed;
-        r.y += (dy / dist) * moveSpeed;
-        r.x = Math.max(0.1, Math.min(MAP_SIZE - 0.1, r.x));
-        r.y = Math.max(0.1, Math.min(MAP_SIZE - 0.1, r.y));
-        r.angle = Math.atan2(dy, dx);
-      }
-    }
-    
-    // Battle robot auto-attack
-    if (r.type === 'battle' && r.damage > 0) {
-      let nearestEnemy = null;
-      let nearestDist = r.range + 0.5;
-      
-      // Check enemy robots
-      robots.forEach(e => {
-        if (e.team !== r.team && e.hp > 0) {
-          let dist = Math.sqrt((e.x - r.x)**2 + (e.y - r.y)**2);
-          if (dist < nearestDist) {
-            nearestDist = dist;
-            nearestEnemy = e;
-          }
-        }
-      });
-      
-      // Check enemy buildings
-      if (!nearestEnemy) {
-        buildings.forEach(b => {
-          if (b.team !== r.team && b.hp > 0) {
-            let dist = Math.sqrt((b.x + 0.5 - r.x)**2 + (b.y + 0.5 - r.y)**2);
-            if (dist < nearestDist) {
-              nearestDist = dist;
-              nearestEnemy = b;
-            }
-          }
-        });
-      }
-      
-      if (nearestEnemy) {
-        let ex = nearestEnemy.speed !== undefined ? nearestEnemy.x : nearestEnemy.x + 0.5;
-        let ey = nearestEnemy.speed !== undefined ? nearestEnemy.y : nearestEnemy.y + 0.5;
-        r.angle = Math.atan2(ey - r.y, ex - r.x);
-        if (gameTime - r.lastAttack > 1 / r.fireRate) {
-          r.lastAttack = gameTime;
-          nearestEnemy.hp -= r.damage;
-          projectiles.push({
-            x1: r.x, y1: r.y - 0.3,
-            x2: ex,
-            y2: ey,
-            time: gameTime, duration: 0.12,
-            color: r.team === 0 ? '#40ff80' : '#ff6040'
-          });
-        }
-        
-        // Move toward if out of range
-        if (nearestDist > r.range && (!r.path || r.path.length === 0)) {
-          r.path = findPath(r.x, r.y, ex, ey);
-        }
-      }
-    }
-    
-    // Worker auto-gather
-    if (r.type === 'worker' && r.team === 0 && r.state === 'idle' && (!r.path || r.path.length === 0)) {
-      let nearNode = resourceNodes.find(n => n.amount > 0 && Math.abs(n.x - r.x) < 8 && Math.abs(n.y - r.y) < 8);
-      if (nearNode) {
-        let dist = Math.sqrt((nearNode.x - r.x)**2 + (nearNode.y - r.y)**2);
-        if (dist < 1.5) {
-          r.working = true;
-          if (gameTime - (r.lastGather || 0) > 2) {
-            r.lastGather = gameTime;
-            let amt = Math.min(3, nearNode.amount);
-            nearNode.amount -= amt;
-            player[nearNode.type] += amt;
-          }
-        } else {
-          r.working = false;
-          r.path = findPath(r.x, r.y, nearNode.x + 0.5, nearNode.y + 0.5);
-        }
-      } else {
-        r.working = false;
-      }
-    }
-  });
-  
-  // Remove dead robots
-  robots = robots.filter(r => {
-    if (r.hp <= 0) {
-      for (let i = 0; i < 5; i++) {
-        particles.push({
-          x: r.x, y: r.y,
-          vx: (Math.random() - 0.5) * 2,
-          vy: (Math.random() - 0.5) * 2 - 1,
-          life: 1, maxLife: 1,
-          color: '#ffaa40', size: 3
-        });
-      }
-      player.robots = player.robots.filter(pr => pr !== r);
-      enemy.robots = enemy.robots.filter(er => er !== r);
-      return false;
-    }
-    return true;
-  });
-  
-  // Update projectiles
-  projectiles = projectiles.filter(p => gameTime - p.time < p.duration);
-  
-  // Update particles
-  particles.forEach(p => {
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
-    p.vy += 3 * dt;
-    p.life -= dt;
-  });
-  particles = particles.filter(p => p.life > 0);
-  
-  // AI
-  updateAI(dt);
-  
-  // Update UI
-  document.getElementById('res-ore').textContent = Math.floor(player.ore);
-  document.getElementById('res-energy').textContent = Math.floor(player.energy);
-  document.getElementById('res-crystal').textContent = Math.floor(player.crystal);
-  document.getElementById('res-metal').textContent = Math.floor(player.metal);
-  document.getElementById('res-fuel').textContent = Math.floor(player.fuel);
-  document.getElementById('robot-count').textContent = player.robots.length;
-  document.getElementById('building-count').textContent = player.buildings.length;
-  
-  // Check win/lose
-  if (enemy.buildings.length === 0 && enemy.robots.length === 0 && gameTime > 10) {
-    showMessage("🎉 VICTORY! You conquered the planet!");
-    gameRunning = false;
-  }
-  if (player.buildings.length === 0 && player.robots.length === 0 && gameTime > 10) {
-    showMessage("💀 DEFEAT! Your colony was destroyed.");
-    gameRunning = false;
-  }
-}
+// Touch
+let touches2={},lastPinch=0,touchPan=false;
+canvas.addEventListener('touchstart',e=>{e.preventDefault();if(e.touches.length===2){let dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;lastPinch=Math.sqrt(dx*dx+dy*dy);touchPan=false;return;}let t=e.touches[0];touches2.sx=t.clientX;touches2.sy=t.clientY;touches2.cx=camX;touches2.cy=camY;touches2.moved=false;touchPan=true;},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){let dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY,d=Math.sqrt(dx*dx+dy*dy);if(lastPinch>0){let sc=d/lastPinch,cx2=(e.touches[0].clientX+e.touches[1].clientX)/2,cy2=(e.touches[0].clientY+e.touches[1].clientY)/2,oz=zoom;zoom=Math.max(.2,Math.min(3,zoom*sc));let f=zoom/oz;camX=cx2-(cx2-camX)*f;camY=cy2-(cy2-camY)*f;}lastPinch=d;return;}if(!touchPan)return;let t=e.touches[0],dx2=t.clientX-touches2.sx,dy2=t.clientY-touches2.sy;if(Math.abs(dx2)+Math.abs(dy2)>8)touches2.moved=true;camX=touches2.cx+dx2;camY=touches2.cy+dy2;},{passive:false});
+canvas.addEventListener('touchend',e=>{e.preventDefault();if(e.touches.length===0){lastPinch=0;if(touchPan&&!touches2.moved)handleTap(touches2.sx,touches2.sy,touchMode==='move');touchPan=false;}},{passive:false});
+minimapCanvas.addEventListener('click',e=>{let r=minimapCanvas.getBoundingClientRect(),mx=(e.clientX-r.left)/r.width*MAP_SIZE,my=(e.clientY-r.top)/r.height*MAP_SIZE,{sx:s1,sy:s2}=isoToScreen(mx,my);camX-=s1-canvas.width/2;camY-=s2-canvas.height/2;});
 
-// ============== AI ==============
-let aiTimer = 0;
-let aiPhase = 'build';
+function handleTap(cx,cy,isMove){if(!gameRunning||gamePaused)return;let tile=screenToIso(cx,cy);
+if(isMove&&selectedEntity&&selectedEntity.speed){selectedEntity.path=findPath(selectedEntity.x,selectedEntity.y,tile.x+.5,tile.y+.5);selectedEntity.state='moving';selectedEntity.working=false;return;}
+if(currentAction==='select'){selectedEntity=null;document.getElementById('info-panel').style.display='none';let cr=robots.find(r2=>{let d=Math.sqrt((r2.x-tile.x-.5)**2+(r2.y-tile.y-.5)**2);return d<.8&&r2.team===0;});if(cr){selectedEntity=cr;showInfoPanel(cr);return;}let cb=buildings.find(b2=>b2.x===tile.x&&b2.y===tile.y);if(cb){selectedEntity=cb;showInfoPanel(cb);return;}}else if(currentAction.startsWith('build-')){let bt=currentAction.replace('build-',''),d=bD[bt];if(tile.x<0||tile.x>=MAP_SIZE||tile.y<0||tile.y>=MAP_SIZE||!map[tile.x]||!map[tile.x][tile.y])return;if(map[tile.x][tile.y].type==='water'){showMessage("Can't build on water!");return;}if(buildings.some(b2=>b2.x===tile.x&&b2.y===tile.y)){showMessage("Tile occupied!");return;}if(!canAfford(player,d.cost)){showMessage("Not enough resources!");return;}spend(player,d.cost);addBuilding(bt,tile.x,tile.y,0);showMessage('Building '+bt+'...');}}
 
-function updateAI(dt) {
-  aiTimer += dt;
-  let aiSpeed = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 5 : 3;
-  
-  if (aiTimer < aiSpeed) return;
-  aiTimer = 0;
-  
-  // Passive resource generation for AI
-  enemy.ore += difficulty === 'easy' ? 5 : difficulty === 'medium' ? 10 : 15;
-  enemy.energy += difficulty === 'easy' ? 3 : difficulty === 'medium' ? 6 : 10;
-  enemy.metal += difficulty === 'easy' ? 2 : difficulty === 'medium' ? 5 : 8;
-  enemy.fuel += difficulty === 'easy' ? 1 : difficulty === 'medium' ? 3 : 6;
-  enemy.crystal += difficulty === 'easy' ? 1 : difficulty === 'medium' ? 3 : 5;
-  
-  let hqs = enemy.buildings.filter(b => b.type === 'hq' && !b.constructing);
-  let factories = enemy.buildings.filter(b => b.type === 'factory' && !b.constructing);
-  let turrets = enemy.buildings.filter(b => b.type === 'turret');
-  
-  // Build phase
-  if (hqs.length === 0 && canAfford(enemy, buildingDefs.hq.cost)) {
-    // Find spot near enemy start
-    let baseX = MAP_SIZE - 5, baseY = MAP_SIZE - 5;
-    for (let tries = 0; tries < 20; tries++) {
-      let tx = baseX + Math.floor(Math.random() * 6) - 3;
-      let ty = baseY + Math.floor(Math.random() * 6) - 3;
-      if (tx >= 0 && tx < MAP_SIZE && ty >= 0 && ty < MAP_SIZE && 
-          map[tx][ty].type !== 'water' && !buildings.some(b => b.x === tx && b.y === ty)) {
-        spendResources(enemy, buildingDefs.hq.cost);
-        addBuilding('hq', tx, ty, 1);
-        break;
-      }
-    }
-  }
-  
-  if (factories.length < 2 && canAfford(enemy, buildingDefs.factory.cost)) {
-    let hq = enemy.buildings.find(b => b.type === 'hq');
-    if (hq) {
-      for (let tries = 0; tries < 20; tries++) {
-        let tx = hq.x + Math.floor(Math.random() * 6) - 3;
-        let ty = hq.y + Math.floor(Math.random() * 6) - 3;
-        if (tx >= 0 && tx < MAP_SIZE && ty >= 0 && ty < MAP_SIZE && 
-            map[tx][ty].type !== 'water' && !buildings.some(b => b.x === tx && b.y === ty)) {
-          spendResources(enemy, buildingDefs.factory.cost);
-          addBuilding('factory', tx, ty, 1);
-          break;
-        }
-      }
-    }
-  }
-  
-  // Build turrets
-  if (turrets.length < 3 && canAfford(enemy, buildingDefs.turret.cost)) {
-    let hq = enemy.buildings.find(b => b.type === 'hq');
-    if (hq) {
-      for (let tries = 0; tries < 20; tries++) {
-        let tx = hq.x + Math.floor(Math.random() * 8) - 4;
-        let ty = hq.y + Math.floor(Math.random() * 8) - 4;
-        if (tx >= 0 && tx < MAP_SIZE && ty >= 0 && ty < MAP_SIZE && 
-            map[tx][ty].type !== 'water' && !buildings.some(b => b.x === tx && b.y === ty)) {
-          spendResources(enemy, buildingDefs.turret.cost);
-          addBuilding('turret', tx, ty, 1);
-          break;
-        }
-      }
-    }
-  }
-  
-  // Build refinery
-  let refineries = enemy.buildings.filter(b => b.type === 'refinery');
-  if (refineries.length < 1 && canAfford(enemy, buildingDefs.refinery.cost)) {
-    let hq = enemy.buildings.find(b => b.type === 'hq');
-    if (hq) {
-      for (let tries = 0; tries < 20; tries++) {
-        let tx = hq.x + Math.floor(Math.random() * 4) - 2;
-        let ty = hq.y + Math.floor(Math.random() * 4) - 2;
-        if (tx >= 0 && tx < MAP_SIZE && ty >= 0 && ty < MAP_SIZE && 
-            map[tx][ty].type !== 'water' && !buildings.some(b => b.x === tx && b.y === ty)) {
-          spendResources(enemy, buildingDefs.refinery.cost);
-          addBuilding('refinery', tx, ty, 1);
-          break;
-        }
-      }
-    }
-  }
-  
-  // Produce robots
-  let availableFactory = factories.find(f => !f.producing);
-  if (availableFactory) {
-    let battleCount = enemy.robots.filter(r => r.type === 'battle').length;
-    let workerCount = enemy.robots.filter(r => r.type === 'worker').length;
-    
-    if (workerCount < 2 && canAfford(enemy, robotDefs.worker.cost)) {
-      spendResources(enemy, robotDefs.worker.cost);
-      availableFactory.producing = true;
-      availableFactory.productionType = 'worker';
-      availableFactory.productionProgress = 0;
-      availableFactory.productionTime = robotDefs.worker.buildTime;
-    } else if (canAfford(enemy, robotDefs.battle.cost)) {
-      spendResources(enemy, robotDefs.battle.cost);
-      availableFactory.producing = true;
-      availableFactory.productionType = 'battle';
-      availableFactory.productionProgress = 0;
-      availableFactory.productionTime = robotDefs.battle.buildTime;
-    }
-  }
-  
-  // Send battle robots to attack
-  let battleBots = enemy.robots.filter(r => r.type === 'battle' && (!r.path || r.path.length === 0));
-  let attackThreshold = difficulty === 'easy' ? 4 : difficulty === 'medium' ? 3 : 2;
-  
-  if (battleBots.length >= attackThreshold && player.buildings.length > 0) {
-    let target = player.buildings[Math.floor(Math.random() * player.buildings.length)];
-    battleBots.forEach(bot => {
-      bot.path = findPath(bot.x, bot.y, target.x + 0.5, target.y + 0.5);
-    });
-  }
-  
-  // Worker auto-gather for AI
-  enemy.robots.filter(r => r.type === 'worker' && (!r.path || r.path.length === 0)).forEach(w => {
-    let nearNode = resourceNodes.find(n => n.amount > 0);
-    if (nearNode) {
-      let dist = Math.sqrt((nearNode.x - w.x)**2 + (nearNode.y - w.y)**2);
-      if (dist < 1.5) {
-        if (gameTime - (w.lastGather || 0) > 2) {
-          w.lastGather = gameTime;
-          let amt = Math.min(3, nearNode.amount);
-          nearNode.amount -= amt;
-          enemy[nearNode.type] += amt;
-        }
-      } else {
-        w.path = findPath(w.x, w.y, nearNode.x + 0.5, nearNode.y + 0.5);
-      }
-    }
-  });
-}
+function showInfoPanel(e){let p=document.getElementById('info-panel'),t=document.getElementById('info-title'),c=document.getElementById('info-content');p.style.display='block';let nm=e.type.charAt(0).toUpperCase()+e.type.slice(1),tm=e.team===0?'(You)':'(Enemy)';t.textContent=nm+' '+tm;let h='<p>HP: '+Math.floor(e.hp)+'/'+e.maxHp+'</p>';if(e.constructing)h+='<p>Build: '+Math.floor(e.constructProgress*100)+'%</p>';if(e.producing)h+='<p>Making: '+e.productionType+' '+Math.floor(e.productionProgress*100)+'%</p>';if(e.speed)h+='<p>Speed: '+e.speed+'</p>';if(e.damage)h+='<p>Dmg: '+e.damage+' Rng: '+e.range+'</p>';c.innerHTML=h;}
 
-// ============== RENDERING ==============
-let hoverTile = { x: -1, y: -1 };
+// Launch
+function launchGame(){gameMode=getOpt('mode-pick');difficulty=getOpt('diff-pick');
+if(gameMode==='skirmish'){mapType=getOpt('map-pick');terrainType=getOpt('terrain-pick');MAP_SIZE=mapType==='small'?28:mapType==='large'?56:40;}else{MAP_SIZE=40;terrainType='continental';}
+player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};buildings=[];robots=[];projectiles=[];particles=[];selectedEntity=null;gameTime=0;aiTimer=0;currentAction='select';
+generateMap();
+let pb=addBuilding('hq',4,4,0);pb.constructing=false;pb.constructProgress=1;let pf=addBuilding('factory',6,4,0);pf.constructing=false;pf.constructProgress=1;let pr2=addBuilding('refinery',4,6,0);pr2.constructing=false;pr2.constructProgress=1;
+addRobot('worker',5,5,0);addRobot('worker',3,5,0);addRobot('battle',5,3,0);addRobot('scout',3,3,0);
+let eb=addBuilding('hq',MAP_SIZE-5,MAP_SIZE-5,1);eb.constructing=false;eb.constructProgress=1;let ef=addBuilding('factory',MAP_SIZE-7,MAP_SIZE-5,1);ef.constructing=false;ef.constructProgress=1;let er=addBuilding('refinery',MAP_SIZE-5,MAP_SIZE-7,1);er.constructing=false;er.constructProgress=1;
+addRobot('worker',MAP_SIZE-4,MAP_SIZE-4,1);addRobot('worker',MAP_SIZE-6,MAP_SIZE-4,1);addRobot('battle',MAP_SIZE-4,MAP_SIZE-6,1);addRobot('battle',MAP_SIZE-6,MAP_SIZE-6,1);
+for(let dx=-2;dx<=2;dx++)for(let dy=-2;dy<=2;dy++){[4,MAP_SIZE-5].forEach(bx=>{[4,MAP_SIZE-5].forEach(by=>{let px2=bx+dx,py2=by+dy;if(px2>=0&&px2<MAP_SIZE&&py2>=0&&py2<MAP_SIZE&&map[px2]&&map[px2][py2]){map[px2][py2].type='ground';map[px2][py2].height=.45;}});});}
+for(let dx=-8;dx<=8;dx++)for(let dy=-8;dy<=8;dy++){let nx=4+dx,ny=4+dy;if(nx>=0&&nx<MAP_SIZE&&ny>=0&&ny<MAP_SIZE&&fogOfWar[nx])fogOfWar[nx][ny]=2;}
+let{sx:s1,sy:s2}=isoToScreen(4,4);camX=-(s1-canvas.width/2-camX);camY=-(s2-canvas.height/2-camY);
+document.getElementById('start-screen').style.display='none';showGameUI(true);gameRunning=true;gamePaused=false;showMessage(gameMode+' — '+difficulty+' — Go!');}
 
-function render() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  
-  ctx.fillStyle = '#080c14';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Draw stars in background
-  ctx.fillStyle = 'rgba(200,220,255,0.3)';
-  for (let i = 0; i < 80; i++) {
-    let x = (i * 137.5 + gameTime * 0.5) % canvas.width;
-    let y = (i * 89.3) % canvas.height;
-    let s = (Math.sin(i * 3.7 + gameTime) + 1) * 0.8;
-    ctx.beginPath();
-    ctx.arc(x, y, s, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  
-  // Draw map tiles (isometric order)
-  if (map.length > 0) {
-  for (let sum = 0; sum < MAP_SIZE * 2; sum++) {
-    for (let x = Math.max(0, sum - MAP_SIZE + 1); x <= Math.min(sum, MAP_SIZE - 1); x++) {
-      let y = sum - x;
-      if (y < 0 || y >= MAP_SIZE) continue;
-      if (!map[x] || !map[x][y]) continue;
-      
-      let tile = map[x][y];
-      let fog = fogOfWar[x]?.[y] ?? 0;
-      
-      let { sx, sy } = isoToScreen(x, y);
-      
-      // Frustum culling
-      if (sx < -TILE_W * zoom || sx > canvas.width + TILE_W * zoom ||
-          sy < -TILE_H * zoom * 4 || sy > canvas.height + TILE_H * zoom * 2) continue;
-      
-      let colors = getTerrainColors(tile.type, tile.height);
-      
-      if (fog === 0) {
-        drawIsometricTile(x, y, 'rgba(8,12,20,0.95)', null);
-        continue;
-      }
-      
-      // Draw elevated terrain
-      if (tile.type === 'rock') {
-        drawIsoBlock(x, y, 6, colors.top, 
-          `hsl(220,10%,${20 + tile.height * 10}%)`,
-          `hsl(220,10%,${15 + tile.height * 10}%)`);
-      } else {
-        drawIsometricTile(x, y, colors.top, colors.border);
-      }
-      
-      // Hover highlight
-      if (x === hoverTile.x && y === hoverTile.y && currentAction !== 'select') {
-        drawIsometricTile(x, y, 'rgba(100,200,255,0.2)', 'rgba(100,200,255,0.5)');
-      }
-      
-      // Fog overlay for explored but not visible
-      if (fog === 1) {
-        drawIsometricTile(x, y, 'rgba(8,12,20,0.6)', null);
-      }
-    }
-  }
-  } // end map.length guard
-  
-  // Draw resource nodes
-  resourceNodes.forEach(n => {
-    if (n.x >= 0 && n.x < MAP_SIZE && n.y >= 0 && n.y < MAP_SIZE &&
-        fogOfWar[n.x]?.[n.y] >= 1 && n.amount > 0) {
-      drawResourceNode(n);
-    }
-  });
-  
-  // Collect all entities and sort by draw order (y + x)
-  let entities = [];
-  buildings.forEach(b => {
-    if (fogOfWar[b.x]?.[b.y] >= 1) {
-      entities.push({ type: 'building', entity: b, sortKey: b.x + b.y });
-    }
-  });
-  robots.forEach(r => {
-    let rx = Math.floor(r.x), ry = Math.floor(r.y);
-    if (rx >= 0 && ry >= 0 && rx < MAP_SIZE && ry < MAP_SIZE && fogOfWar[rx]?.[ry] >= 1) {
-      entities.push({ type: 'robot', entity: r, sortKey: r.x + r.y });
-    }
-  });
-  
-  entities.sort((a, b) => a.sortKey - b.sortKey);
-  
-  entities.forEach(e => {
-    if (e.type === 'building') drawBuilding(e.entity);
-    else drawRobot(e.entity);
-  });
-  
-  // Draw projectiles
-  projectiles.forEach(p => {
-    let progress = (gameTime - p.time) / p.duration;
-    let px = p.x1 + (p.x2 - p.x1) * progress;
-    let py = p.y1 + (p.y2 - p.y1) * progress;
-    let { sx, sy } = isoToScreen(px, py);
-    
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(sx, sy, 3 * zoom, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = p.color.replace(')', ',0.3)').replace('rgb', 'rgba');
-    ctx.beginPath();
-    ctx.arc(sx, sy, 6 * zoom, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  
-  // Draw particles
-  particles.forEach(p => {
-    let { sx, sy } = isoToScreen(p.x, p.y);
-    let alpha = Math.max(0, Math.min(1, p.life / p.maxLife));
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(sx, sy, Math.max(0.1, p.size * zoom * alpha), 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  });
-  
-  // Selection info
-  if (selectedEntity) {
-    let { sx, sy } = isoToScreen(selectedEntity.x, selectedEntity.y);
-    ctx.strokeStyle = '#40e0ff';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.ellipse(sx, sy, 16 * zoom, 8 * zoom, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
-  
-  // Draw minimap
-  drawMinimap();
-}
+// Main Loop
+let lastTime=0;
+function gameLoop(ts){let dt=Math.min((ts-lastTime)/1000,.05);lastTime=ts;let ps=400*dt/zoom;if(keys.w||keys.arrowup)camY+=ps;if(keys.s||keys.arrowdown)camY-=ps;if(keys.a||keys.arrowleft)camX+=ps;if(keys.d||keys.arrowright)camX-=ps;if(gameRunning&&!gamePaused){try{updateGame(dt);}catch(e){console.warn('Tick:',e);}}try{render();}catch(e){console.warn('Render:',e);}requestAnimationFrame(gameLoop);}
 
-function drawMinimap() {
-  let mw = 160, mh = 160;
-  let tileSize = mw / MAP_SIZE;
-  
-  minimapCtx.fillStyle = '#0a0e18';
-  minimapCtx.fillRect(0, 0, mw, mh);
-  
-  if (map.length === 0) return;
-  
-  for (let x = 0; x < MAP_SIZE; x++) {
-    for (let y = 0; y < MAP_SIZE; y++) {
-      if (!map[x] || !map[x][y]) continue;
-      let tile = map[x][y];
-      let fog = fogOfWar[x]?.[y] ?? 0;
-      
-      if (fog === 0) {
-        minimapCtx.fillStyle = '#0a0e18';
-      } else {
-        let colors = getTerrainColors(tile.type, tile.height);
-        minimapCtx.fillStyle = fog === 1 ? 'rgba(30,40,50,0.8)' : colors.top;
-      }
-      minimapCtx.fillRect(x * tileSize, y * tileSize, tileSize + 0.5, tileSize + 0.5);
-    }
-  }
-  
-  // Buildings on minimap
-  buildings.forEach(b => {
-    minimapCtx.fillStyle = b.team === 0 ? '#40ff80' : '#ff4040';
-    minimapCtx.fillRect(b.x * tileSize - 1, b.y * tileSize - 1, 3, 3);
-  });
-  
-  // Robots on minimap
-  robots.forEach(r => {
-    let rx = Math.floor(r.x), ry = Math.floor(r.y);
-    if (rx >= 0 && ry >= 0 && rx < MAP_SIZE && ry < MAP_SIZE && fogOfWar[rx]?.[ry] >= 2) {
-      minimapCtx.fillStyle = r.team === 0 ? '#80ffb0' : '#ff8080';
-      minimapCtx.fillRect(r.x * tileSize, r.y * tileSize, 2, 2);
-    }
-  });
-  
-  // Camera viewport
-  let center = screenToIso(canvas.width / 2, canvas.height / 2);
-  let corner1 = screenToIso(0, 0);
-  let corner2 = screenToIso(canvas.width, canvas.height);
-  minimapCtx.strokeStyle = 'rgba(100,200,255,0.5)';
-  minimapCtx.lineWidth = 1;
-  minimapCtx.strokeRect(
-    corner1.x * tileSize, corner1.y * tileSize,
-    (corner2.x - corner1.x) * tileSize, (corner2.y - corner1.y) * tileSize
-  );
-}
+// Title Planet
+function drawTitlePlanet(){let pc=document.getElementById('planet-canvas'),p=pc.getContext('2d'),cx=100,cy=100,rd=80;(function a(){if(document.getElementById('start-screen').style.display==='none')return;p.clearRect(0,0,200,200);let g=p.createRadialGradient(cx,cy,rd*.8,cx,cy,rd*1.5);g.addColorStop(0,'rgba(60,120,200,.15)');g.addColorStop(1,'rgba(60,120,200,0)');p.fillStyle=g;p.fillRect(0,0,200,200);let g2=p.createRadialGradient(cx-20,cy-20,10,cx,cy,rd);g2.addColorStop(0,'#3a5a7a');g2.addColorStop(.5,'#2a3a5a');g2.addColorStop(1,'#0a1020');p.beginPath();p.arc(cx,cy,rd,0,Math.PI*2);p.fillStyle=g2;p.fill();p.save();p.beginPath();p.arc(cx,cy,rd,0,Math.PI*2);p.clip();let t=Date.now()*.0005;for(let i=0;i<12;i++){let an=t+i*.5,px2=cx+Math.cos(an)*(rd*.6),py2=cy+Math.sin(an*1.3)*(rd*.5);p.fillStyle='rgba(60,'+(100+i*10)+','+(80+i*8)+',.3)';p.beginPath();p.arc(px2,py2,8+i*2,0,Math.PI*2);p.fill();}p.restore();let at=p.createRadialGradient(cx,cy,rd*.95,cx,cy,rd);at.addColorStop(0,'rgba(100,200,255,0)');at.addColorStop(1,'rgba(100,200,255,.15)');p.beginPath();p.arc(cx,cy,rd,0,Math.PI*2);p.fillStyle=at;p.fill();requestAnimationFrame(a);})();}
 
-// ============== INPUT ==============
-let keys = {};
-let mouseX = 0, mouseY = 0;
-let isDragging = false;
-let dragStartX, dragStartY, dragCamX, dragCamY;
-
-document.addEventListener('keydown', e => {
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === 'Escape') {
-    setAction('select');
-    selectedEntity = null;
-    document.getElementById('info-panel').style.display = 'none';
-  }
-});
-
-document.addEventListener('keyup', e => {
-  keys[e.key.toLowerCase()] = false;
-});
-
-canvas.addEventListener('mousedown', e => {
-  if (e.button === 2 || e.button === 1) {
-    isDragging = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    dragCamX = camX;
-    dragCamY = camY;
-    e.preventDefault();
-    return;
-  }
-  
-  let tile = screenToIso(e.clientX, e.clientY);
-  
-  if (currentAction === 'select') {
-    // Select entity
-    selectedEntity = null;
-    document.getElementById('info-panel').style.display = 'none';
-    
-    // Check robots first
-    let clickedRobot = robots.find(r => {
-      let dist = Math.sqrt((r.x - tile.x - 0.5)**2 + (r.y - tile.y - 0.5)**2);
-      return dist < 0.8 && r.team === 0;
-    });
-    
-    if (clickedRobot) {
-      selectedEntity = clickedRobot;
-      showInfoPanel(clickedRobot);
-      return;
-    }
-    
-    // Check buildings
-    let clickedBuilding = buildings.find(b => b.x === tile.x && b.y === tile.y);
-    if (clickedBuilding) {
-      selectedEntity = clickedBuilding;
-      showInfoPanel(clickedBuilding);
-      return;
-    }
-    
-    // Right-click to move selected robot
-    if (selectedEntity && selectedEntity.speed) {
-      selectedEntity.path = findPath(selectedEntity.x, selectedEntity.y, tile.x + 0.5, tile.y + 0.5);
-      selectedEntity.state = 'moving';
-      selectedEntity.working = false;
-    }
-  } else if (currentAction.startsWith('build-')) {
-    let buildType = currentAction.replace('build-', '');
-    let def = buildingDefs[buildType];
-    
-    if (tile.x < 0 || tile.x >= MAP_SIZE || tile.y < 0 || tile.y >= MAP_SIZE) return;
-    if (!map[tile.x] || !map[tile.x][tile.y]) return;
-    if (map[tile.x][tile.y].type === 'water') {
-      showMessage("Can't build on water!");
-      return;
-    }
-    if (buildings.some(b => b.x === tile.x && b.y === tile.y)) {
-      showMessage("Tile occupied!");
-      return;
-    }
-    if (!canAfford(player, def.cost)) {
-      showMessage("Not enough resources!");
-      return;
-    }
-    
-    spendResources(player, def.cost);
-    addBuilding(buildType, tile.x, tile.y, 0);
-    showMessage(`Building ${buildType}...`);
-  }
-});
-
-canvas.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  if (selectedEntity && selectedEntity.speed) {
-    let tile = screenToIso(e.clientX, e.clientY);
-    selectedEntity.path = findPath(selectedEntity.x, selectedEntity.y, tile.x + 0.5, tile.y + 0.5);
-    selectedEntity.state = 'moving';
-    selectedEntity.working = false;
-  }
-});
-
-canvas.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  hoverTile = screenToIso(e.clientX, e.clientY);
-  
-  if (isDragging) {
-    camX = dragCamX + (e.clientX - dragStartX);
-    camY = dragCamY + (e.clientY - dragStartY);
-  }
-});
-
-canvas.addEventListener('mouseup', e => {
-  isDragging = false;
-});
-
-canvas.addEventListener('wheel', e => {
-  let oldZoom = zoom;
-  zoom *= e.deltaY > 0 ? 0.9 : 1.1;
-  zoom = Math.max(0.3, Math.min(3, zoom));
-  
-  // Zoom toward mouse
-  let factor = zoom / oldZoom;
-  camX = mouseX - (mouseX - camX) * factor;
-  camY = mouseY - (mouseY - camY) * factor;
-});
-
-// Minimap click
-minimapCanvas.addEventListener('click', e => {
-  let rect = minimapCanvas.getBoundingClientRect();
-  let mx = (e.clientX - rect.left) / rect.width * MAP_SIZE;
-  let my = (e.clientY - rect.top) / rect.height * MAP_SIZE;
-  
-  let { sx, sy } = isoToScreen(mx, my);
-  camX -= sx - canvas.width / 2;
-  camY -= sy - canvas.height / 2;
-});
-
-function showInfoPanel(entity) {
-  let panel = document.getElementById('info-panel');
-  let title = document.getElementById('info-title');
-  let content = document.getElementById('info-content');
-  
-  panel.style.display = 'block';
-  
-  if (entity.maxHp !== undefined) {
-    let type = entity.type.charAt(0).toUpperCase() + entity.type.slice(1);
-    let teamStr = entity.team === 0 ? '(Friendly)' : '(Enemy)';
-    title.textContent = `${type} ${teamStr}`;
-    
-    let html = `<p>HP: ${Math.floor(entity.hp)}/${entity.maxHp}</p>`;
-    
-    if (entity.constructing) {
-      html += `<p>Building: ${Math.floor(entity.constructProgress * 100)}%</p>`;
-    }
-    if (entity.producing) {
-      html += `<p>Producing: ${entity.productionType} ${Math.floor(entity.productionProgress * 100)}%</p>`;
-    }
-    if (entity.speed) {
-      html += `<p>Speed: ${entity.speed}</p>`;
-    }
-    if (entity.damage) {
-      html += `<p>Damage: ${entity.damage}</p>`;
-      html += `<p>Range: ${entity.range}</p>`;
-    }
-    if (entity.cargo) {
-      html += `<p>Cargo: ${entity.cargoAmount} ${entity.cargo}</p>`;
-    }
-    
-    content.innerHTML = html;
-  }
-}
-
-// ============== GAME START ==============
-function startGame(diff) {
-  difficulty = diff;
-  document.getElementById('start-screen').style.display = 'none';
-  
-  generateMap();
-  
-  // Place player base
-  let playerBase = addBuilding('hq', 4, 4, 0);
-  playerBase.constructing = false;
-  playerBase.constructProgress = 1;
-  
-  // Starting factory
-  let playerFactory = addBuilding('factory', 6, 4, 0);
-  playerFactory.constructing = false;
-  playerFactory.constructProgress = 1;
-  
-  // Starting refinery
-  let playerRefinery = addBuilding('refinery', 4, 6, 0);
-  playerRefinery.constructing = false;
-  playerRefinery.constructProgress = 1;
-  
-  // Starting robots
-  addRobot('worker', 5, 5, 0);
-  addRobot('worker', 3, 5, 0);
-  addRobot('battle', 5, 3, 0);
-  addRobot('scout', 3, 3, 0);
-  
-  // Place enemy base
-  let enemyBase = addBuilding('hq', MAP_SIZE - 5, MAP_SIZE - 5, 1);
-  enemyBase.constructing = false;
-  enemyBase.constructProgress = 1;
-  
-  let enemyFactory = addBuilding('factory', MAP_SIZE - 7, MAP_SIZE - 5, 1);
-  enemyFactory.constructing = false;
-  enemyFactory.constructProgress = 1;
-  
-  let enemyRefinery = addBuilding('refinery', MAP_SIZE - 5, MAP_SIZE - 7, 1);
-  enemyRefinery.constructing = false;
-  enemyRefinery.constructProgress = 1;
-  
-  addRobot('worker', MAP_SIZE - 4, MAP_SIZE - 4, 1);
-  addRobot('worker', MAP_SIZE - 6, MAP_SIZE - 4, 1);
-  addRobot('battle', MAP_SIZE - 4, MAP_SIZE - 6, 1);
-  addRobot('battle', MAP_SIZE - 6, MAP_SIZE - 6, 1);
-  
-  // Ensure terrain is walkable at bases
-  for (let dx = -2; dx <= 2; dx++) {
-    for (let dy = -2; dy <= 2; dy++) {
-      let px = 4 + dx, py = 4 + dy;
-      let ex = MAP_SIZE - 5 + dx, ey = MAP_SIZE - 5 + dy;
-      if (px >= 0 && px < MAP_SIZE && py >= 0 && py < MAP_SIZE) {
-        map[px][py].type = 'ground';
-        map[px][py].height = 0.45;
-      }
-      if (ex >= 0 && ex < MAP_SIZE && ey >= 0 && ey < MAP_SIZE) {
-        map[ex][ey].type = 'ground';
-        map[ex][ey].height = 0.45;
-      }
-    }
-  }
-  
-  // Center camera on player base
-  let { sx, sy } = isoToScreen(4, 4);
-  camX = -(sx - canvas.width / 2 - camX);
-  camY = -(sy - canvas.height / 2 - camY);
-  
-  // Reveal starting area
-  for (let dx = -8; dx <= 8; dx++) {
-    for (let dy = -8; dy <= 8; dy++) {
-      let nx = 4 + dx, ny = 4 + dy;
-      if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE) {
-        fogOfWar[nx][ny] = 2;
-      }
-    }
-  }
-  
-  gameRunning = true;
-  showMessage("Welcome to Robotic Planet! Build your colony and defeat the enemy.");
-}
-
-// ============== MAIN LOOP ==============
-let lastTime = 0;
-
-function gameLoop(timestamp) {
-  let dt = Math.min((timestamp - lastTime) / 1000, 0.05);
-  lastTime = timestamp;
-  
-  // Camera movement
-  let panSpeed = 400 * dt / zoom;
-  if (keys['w'] || keys['arrowup']) camY += panSpeed;
-  if (keys['s'] || keys['arrowdown']) camY -= panSpeed;
-  if (keys['a'] || keys['arrowleft']) camX += panSpeed;
-  if (keys['d'] || keys['arrowright']) camX -= panSpeed;
-  
-  if (gameRunning) {
-    try { updateGame(dt); } catch(e) { console.warn('Game tick error:', e); }
-  }
-  
-  try { render(); } catch(e) { console.warn('Render error:', e); }
-  requestAnimationFrame(gameLoop);
-}
-
-// ============== TITLE SCREEN PLANET ==============
-function drawTitlePlanet() {
-  let pc = document.getElementById('planet-canvas');
-  let pctx = pc.getContext('2d');
-  let cx = 100, cy = 100, r = 80;
-  
-  function animatePlanet() {
-    pctx.clearRect(0, 0, 200, 200);
-    
-    // Planet glow
-    let glow = pctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r * 1.5);
-    glow.addColorStop(0, 'rgba(60,120,200,0.15)');
-    glow.addColorStop(1, 'rgba(60,120,200,0)');
-    pctx.fillStyle = glow;
-    pctx.fillRect(0, 0, 200, 200);
-    
-    // Planet
-    let grad = pctx.createRadialGradient(cx - 20, cy - 20, 10, cx, cy, r);
-    grad.addColorStop(0, '#3a5a7a');
-    grad.addColorStop(0.5, '#2a3a5a');
-    grad.addColorStop(1, '#0a1020');
-    pctx.beginPath();
-    pctx.arc(cx, cy, r, 0, Math.PI * 2);
-    pctx.fillStyle = grad;
-    pctx.fill();
-    
-    // Surface details
-    let t = Date.now() * 0.0005;
-    pctx.save();
-    pctx.beginPath();
-    pctx.arc(cx, cy, r, 0, Math.PI * 2);
-    pctx.clip();
-    
-    for (let i = 0; i < 12; i++) {
-      let angle = t + i * 0.5;
-      let px = cx + Math.cos(angle) * (r * 0.6);
-      let py = cy + Math.sin(angle * 1.3) * (r * 0.5);
-      pctx.fillStyle = `rgba(60,${100 + i * 10},${80 + i * 8},0.3)`;
-      pctx.beginPath();
-      pctx.arc(px, py, 8 + i * 2, 0, Math.PI * 2);
-      pctx.fill();
-    }
-    
-    pctx.restore();
-    
-    // Atmosphere
-    let atmo = pctx.createRadialGradient(cx, cy, r * 0.95, cx, cy, r);
-    atmo.addColorStop(0, 'rgba(100,200,255,0)');
-    atmo.addColorStop(1, 'rgba(100,200,255,0.15)');
-    pctx.beginPath();
-    pctx.arc(cx, cy, r, 0, Math.PI * 2);
-    pctx.fillStyle = atmo;
-    pctx.fill();
-    
-    if (document.getElementById('start-screen').style.display !== 'none') {
-      requestAnimationFrame(animatePlanet);
-    }
-  }
-  
-  animatePlanet();
-}
-
-// Init
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-drawTitlePlanet();
-requestAnimationFrame(gameLoop);
-</script>
-</body>
-</html>
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;refreshSaveSlots();drawTitlePlanet();requestAnimationFrame(gameLoop);
+</script></body></html>
