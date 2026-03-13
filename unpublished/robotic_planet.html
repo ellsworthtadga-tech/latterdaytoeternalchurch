@@ -129,6 +129,7 @@ canvas#gameCanvas{display:block;position:fixed;inset:0;z-index:0}
 <div class="action-btn" onclick="setAction('build-turret')" id="btn-turret"><div class="btn-icon">🔫</div>Turret<div class="btn-cost">35O 25M</div></div>
 <div class="action-btn" onclick="setAction('build-storage')" id="btn-storage"><div class="btn-icon">📦</div>Store<div class="btn-cost">20O 10M</div></div>
 <div class="action-btn" onclick="setAction('build-refinery')" id="btn-refinery"><div class="btn-icon">🔧</div>Refine<div class="btn-cost">45O 20C</div></div>
+<div class="action-btn" onclick="setAction('build-silo')" id="btn-silo"><div class="btn-icon">🚀</div>Silo<div class="btn-cost">60O 40M 15C</div></div>
 <div class="action-btn" onclick="setAction('build-road')" id="btn-road"><div class="btn-icon">🛤️</div>Road<div class="btn-cost">5 Ore</div></div>
 <div class="action-btn" onclick="produceRobot('worker')" id="btn-worker"><div class="btn-icon">🤖</div>Worker<div class="btn-cost">20M 10F</div></div>
 <div class="action-btn" onclick="produceRobot('transport')" id="btn-transport"><div class="btn-icon">🚜</div>Hauler<div class="btn-cost">25M 15F</div></div>
@@ -145,7 +146,7 @@ const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d'),m
 const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 const TILE_W=64,TILE_H=32;let MAP_SIZE=40,zoom=isMobile?.7:1,camX=0,camY=0,gameRunning=false,gamePaused=false,currentAction='select',selectedEntity=null,difficulty='medium',gameTime=0,gameMode='campaign',mapType='small',terrainType='continental',touchMode='select';
 let player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0},enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};
-let map=[],buildings=[],robots=[],projectiles=[],particles=[],resourceNodes=[],fogOfWar=[],hoverTile={x:-1,y:-1},aiTimer=0;
+let map=[],buildings=[],robots=[],projectiles=[],particles=[],missiles=[],resourceNodes=[],fogOfWar=[],hoverTile={x:-1,y:-1},aiTimer=0;
 let roads=new Set();
 
 const tooltips={
@@ -155,7 +156,8 @@ const tooltips={
   factory:{name:'Factory',desc:'Produces new robots. Select a robot type from the bar to queue production.'},
   turret:{name:'Turret',desc:'Auto-targets and fires at nearby enemy units. Range: 5 tiles.'},
   storage:{name:'Storage',desc:'Increases your max resource capacity.'},
-  refinery:{name:'Refinery',desc:'Converts raw materials into metal and fuel over time.'},
+  refinery:{name:'Refinery',desc:'Converts 5 ore + 3 energy into 4 metal + 2 fuel every 4 seconds.'},
+  silo:{name:'Missile Silo',desc:'Launches long-range missiles at enemy buildings. Range: 12 tiles. Deals 45 damage every ~5.5s. Expensive but devastating.'},
   road:{name:'Road',desc:'Robots travel much faster on roads. Cheap to build — connect your base!'},
   ore:{name:'Ore Deposit',desc:'Raw ore. Build a Mine nearby or send Workers to gather.'},
   energy:{name:'Energy Crops',desc:'Glowing plants. Build a Power Plant nearby or send Workers.'},
@@ -192,7 +194,7 @@ function deserializeState(s){
   enemy={ore:s.enemy.ore,energy:s.enemy.energy,crystal:s.enemy.crystal,metal:s.enemy.metal,fuel:s.enemy.fuel,buildings:[],robots:[],team:1};
   s.buildings.forEach(bd=>{let b={type:bd.t,x:bd.x,y:bd.y,team:bd.tm,hp:bd.hp,maxHp:bd.mhp,constructing:bd.c,constructProgress:bd.cp,constructTime:bd.ct,vision:bd.v,producing:!!bd.pr,productionType:bd.pt||'',productionProgress:bd.pp||0,productionTime:bd.ptt||5,lastProduction:bd.lp||0,angle:bd.a||0,firing:0,productionQueue:[]};buildings.push(b);(b.team===0?player:enemy).buildings.push(b);});
   s.robots.forEach(rd=>{let r={type:rd.t,x:rd.x,y:rd.y,team:rd.tm,hp:rd.hp,maxHp:rd.mhp,speed:rd.sp,vision:rd.v,target:null,targetPos:null,state:rd.st||'idle',angle:rd.a||0,working:!!rd.w,cargo:rd.cg||null,cargoAmount:rd.ca||0,cargoMax:rd.cm||0,lastAttack:rd.la||0,damage:rd.dm||0,range:rd.rn||0,fireRate:rd.fr||1,path:null};robots.push(r);(r.team===0?player:enemy).robots.push(r);});
-  projectiles=[];particles=[];selectedEntity=null;roads=new Set(s.roads||[]);}
+  projectiles=[];particles=[];missiles=[];selectedEntity=null;roads=new Set(s.roads||[]);}
 
 function saveGame(){let sv=getSaves(),id='save_'+Date.now(),lb=gameMode+' '+difficulty+' — '+Math.floor(gameTime/60)+'m '+Math.floor(gameTime%60)+'s';sv[id]={label:lb,date:new Date().toLocaleString(),state:serializeState()};let k=Object.keys(sv);while(k.length>8){delete sv[k.shift()];k=Object.keys(sv);}putSaves(sv);showMessage('Game saved!');}
 function loadGame(id){let sv=getSaves();if(!sv[id])return;deserializeState(sv[id].state);document.getElementById('start-screen').style.display='none';showGameUI(true);gameRunning=true;gamePaused=false;document.getElementById('pause-menu').style.display='none';showMessage('Game loaded!');}
@@ -200,7 +202,7 @@ function deleteSave(id,e){e.stopPropagation();let sv=getSaves();delete sv[id];pu
 function refreshSaveSlots(){let c=document.getElementById('save-slots'),sv=getSaves(),k=Object.keys(sv).sort().reverse();if(!k.length){c.innerHTML='<div style="font-size:11px;color:#506070;text-align:center">No saved games</div>';return;}c.innerHTML=k.map(k2=>'<div class="save-slot" onclick="loadGame(\''+k2+'\')"><div><div class="slot-label">'+sv[k2].label+'</div><div class="slot-info">'+sv[k2].date+'</div></div><button class="slot-delete" onclick="deleteSave(\''+k2+'\',event)">✕</button></div>').join('');}
 
 function togglePauseMenu(){if(!gameRunning)return;gamePaused=!gamePaused;document.getElementById('pause-menu').style.display=gamePaused?'flex':'none';}
-function returnToMenu(){gameRunning=false;gamePaused=false;document.getElementById('pause-menu').style.display='none';showGameUI(false);document.getElementById('start-screen').style.display='flex';refreshSaveSlots();map=[];buildings=[];robots=[];projectiles=[];particles=[];resourceNodes=[];fogOfWar=[];roads=new Set();player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};selectedEntity=null;gameTime=0;aiTimer=0;drawTitlePlanet();}
+function returnToMenu(){gameRunning=false;gamePaused=false;document.getElementById('pause-menu').style.display='none';showGameUI(false);document.getElementById('start-screen').style.display='flex';refreshSaveSlots();map=[];buildings=[];robots=[];projectiles=[];particles=[];missiles=[];resourceNodes=[];fogOfWar=[];roads=new Set();player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};selectedEntity=null;gameTime=0;aiTimer=0;drawTitlePlanet();}
 function showGameUI(s){['top-bar','bottom-panel','minimap-container'].forEach(id=>{document.getElementById(id).style.display=s?'':'none';});}
 
 // Map Gen
@@ -226,7 +228,26 @@ case 'power':drawIsoBlock(b.x,b.y,15,'#506858','#304838','#203828');ctx.fillStyl
 case 'factory':drawIsoBlock(b.x,b.y,22,'#708088','#506068','#405058');ctx.fillStyle='#606870';ctx.fillRect(sx+8*s,sy-40*s,6*s,18*s);if(b.producing){let t2=gameTime*2;for(let i=0;i<3;i++){ctx.fillStyle='rgba(180,180,180,'+(0.3-i*.1)+')';ctx.beginPath();ctx.arc(sx+11*s+Math.sin(t2+i)*3*s,sy-42*s-i*6*s,(3+i)*s,0,Math.PI*2);ctx.fill();}}ctx.fillStyle=tc;ctx.fillRect(sx-5*s,sy-14*s,10*s,8*s);ctx.fillStyle=tl;ctx.beginPath();ctx.arc(sx-10*s,sy-28*s,4*s,0,Math.PI*2);ctx.fill();break;
 case 'turret':drawIsoBlock(b.x,b.y,12,'#606870','#404850','#303840');var ta=b.angle||0;ctx.save();ctx.translate(sx,sy-18*s);ctx.rotate(ta);ctx.fillStyle='#808890';ctx.fillRect(0,-2*s,18*s,4*s);ctx.fillStyle=tc;ctx.beginPath();ctx.arc(0,0,6*s,0,Math.PI*2);ctx.fill();ctx.restore();if(b.firing&&b.firing>gameTime-.1){ctx.fillStyle='#ffaa40';ctx.beginPath();ctx.arc(sx+Math.cos(ta)*18*s,sy-18*s+Math.sin(ta)*18*s,4*s,0,Math.PI*2);ctx.fill();}break;
 case 'storage':drawIsoBlock(b.x,b.y,14,'#887860','#685840','#584830');ctx.fillStyle='#a08050';ctx.fillRect(sx-8*s,sy-20*s,7*s,6*s);ctx.fillRect(sx+1*s,sy-20*s,7*s,6*s);ctx.fillStyle=tc;ctx.fillRect(sx-6*s,sy-18*s,3*s,2*s);ctx.fillRect(sx+3*s,sy-18*s,3*s,2*s);break;
-case 'refinery':drawIsoBlock(b.x,b.y,20,'#607080','#405060','#304050');ctx.strokeStyle='#808890';ctx.lineWidth=3*s;ctx.beginPath();ctx.moveTo(sx-12*s,sy-25*s);ctx.quadraticCurveTo(sx-12*s,sy-35*s,sx,sy-35*s);ctx.quadraticCurveTo(sx+12*s,sy-35*s,sx+12*s,sy-25*s);ctx.stroke();ctx.fillStyle=b.team===0?'rgba(60,200,120,.4)':'rgba(200,100,60,.4)';ctx.beginPath();ctx.arc(sx,sy-30*s,5*s,0,Math.PI*2);ctx.fill();ctx.fillStyle=tc;ctx.fillRect(sx-3*s,sy-12*s,6*s,4*s);break;}
+case 'refinery':drawIsoBlock(b.x,b.y,20,'#607080','#405060','#304050');ctx.strokeStyle='#808890';ctx.lineWidth=3*s;ctx.beginPath();ctx.moveTo(sx-12*s,sy-25*s);ctx.quadraticCurveTo(sx-12*s,sy-35*s,sx,sy-35*s);ctx.quadraticCurveTo(sx+12*s,sy-35*s,sx+12*s,sy-25*s);ctx.stroke();ctx.fillStyle=b.team===0?'rgba(60,200,120,.4)':'rgba(200,100,60,.4)';ctx.beginPath();ctx.arc(sx,sy-30*s,5*s,0,Math.PI*2);ctx.fill();ctx.fillStyle=tc;ctx.fillRect(sx-3*s,sy-12*s,6*s,4*s);break;
+case 'silo':
+drawIsoBlock(b.x,b.y,24,'#505860','#383e48','#2a3038');
+// Silo tube
+ctx.fillStyle='#606870';ctx.fillRect(sx-5*s,sy-44*s,10*s,22*s);
+ctx.fillStyle='#707880';ctx.fillRect(sx-6*s,sy-46*s,12*s,4*s);
+// Silo opening / hatch
+ctx.fillStyle=b.siloOpen?'#181c22':'#484e58';
+ctx.fillRect(sx-4*s,sy-48*s,8*s,3*s);
+// Missile visible when reloaded
+if(!b.siloOpen){ctx.fillStyle='#c04040';ctx.fillRect(sx-2*s,sy-45*s,4*s,10*s);ctx.fillStyle='#e06050';ctx.beginPath();ctx.moveTo(sx,sy-48*s);ctx.lineTo(sx+2.5*s,sy-44*s);ctx.lineTo(sx-2.5*s,sy-44*s);ctx.closePath();ctx.fill();
+// Fins
+ctx.fillStyle='#a03030';ctx.fillRect(sx-3.5*s,sy-36*s,2*s,4*s);ctx.fillRect(sx+1.5*s,sy-36*s,2*s,4*s);}
+// Team stripe
+ctx.fillStyle=tc;ctx.fillRect(sx-7*s,sy-24*s,14*s,3*s);
+// Warning stripes
+ctx.fillStyle='rgba(200,180,40,.4)';for(let ws=0;ws<3;ws++){ctx.fillRect(sx-6*s+ws*4*s,sy-22*s,2*s,2*s);}
+// Launch flash
+if(b.siloOpen&&b.firing>gameTime-.3){ctx.fillStyle='rgba(255,160,40,'+(0.7-(gameTime-b.firing)*2)+')';ctx.beginPath();ctx.arc(sx,sy-48*s,(8+Math.random()*4)*s,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,220,100,'+(0.5-(gameTime-b.firing)*1.5)+')';ctx.beginPath();ctx.arc(sx,sy-48*s,(4+Math.random()*2)*s,0,Math.PI*2);ctx.fill();}
+break;}
 if(b.hp<b.maxHp){let bw=24*s,bh=3*s,by2=sy-55*s;ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(sx-bw/2,by2,bw,bh);ctx.fillStyle=b.hp>b.maxHp*.5?'#40c060':b.hp>b.maxHp*.25?'#c0c040':'#c04040';ctx.fillRect(sx-bw/2,by2,bw*(b.hp/b.maxHp),bh);}
 if(b.constructing){let bw=30*s,by2=sy-60*s;ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(sx-bw/2,by2,bw,4*s);ctx.fillStyle='#40a0e0';ctx.fillRect(sx-bw/2,by2,bw*b.constructProgress,4*s);}}
 
@@ -242,7 +263,7 @@ if(r===selectedEntity){ctx.strokeStyle='#40e0ff';ctx.lineWidth=2*s;ctx.beginPath
 function drawResourceNode(n){let{sx,sy}=isoToScreen(n.x,n.y),s=zoom,rat=n.amount/n.maxAmount;switch(n.type){case 'ore':ctx.fillStyle='hsl(25,40%,'+(25+rat*20)+'%)';ctx.beginPath();ctx.arc(sx,sy-4*s,8*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();ctx.fillStyle='hsl(25,50%,'+(35+rat*15)+'%)';ctx.beginPath();ctx.arc(sx-3*s,sy-6*s,5*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx+4*s,sy-5*s,4*s*(.5+rat*.5),0,Math.PI*2);ctx.fill();break;case 'energy':ctx.fillStyle='hsl(130,50%,'+(20+rat*25)+'%)';ctx.beginPath();for(var i=0;i<5;i++){var a2=(i/5)*Math.PI*2+gameTime*.3,r2=(6+Math.sin(gameTime*2+i)*2)*s*(.5+rat*.5);ctx.arc(sx+Math.cos(a2)*3*s,sy-6*s+Math.sin(a2)*2*s,r2,0,Math.PI*2);}ctx.fill();ctx.fillStyle='rgba(80,255,120,'+(0.15+Math.sin(gameTime*2)*.05)+')';ctx.beginPath();ctx.arc(sx,sy-6*s,12*s,0,Math.PI*2);ctx.fill();break;case 'crystal':ctx.fillStyle='hsl(210,60%,'+(30+rat*30)+'%)';for(var i2=0;i2<3;i2++){var cx2=sx+(i2-1)*5*s,ch=(8+i2*3)*s*(.5+rat*.5);ctx.beginPath();ctx.moveTo(cx2,sy-ch-4*s);ctx.lineTo(cx2+3*s,sy-4*s);ctx.lineTo(cx2-3*s,sy-4*s);ctx.closePath();ctx.fill();}ctx.fillStyle='rgba(150,200,255,'+(0.3+Math.sin(gameTime*3)*.2)+')';ctx.beginPath();ctx.arc(sx,sy-10*s,3*s,0,Math.PI*2);ctx.fill();break;}}
 
 // Defs
-const bD={hq:{cost:{ore:50,metal:30},hp:500,bt:8,vis:6},mine:{cost:{ore:30,metal:10},hp:200,bt:5,vis:3},power:{cost:{ore:25,energy:15},hp:150,bt:4,vis:3},factory:{cost:{ore:40,metal:20},hp:300,bt:6,vis:3},turret:{cost:{ore:35,metal:25},hp:250,bt:5,vis:5,dmg:15,range:5,fr:1.2},storage:{cost:{ore:20,metal:10},hp:180,bt:3,vis:2},refinery:{cost:{ore:45,crystal:20},hp:250,bt:6,vis:3}};
+const bD={hq:{cost:{ore:50,metal:30},hp:500,bt:8,vis:6},mine:{cost:{ore:30,metal:10},hp:200,bt:5,vis:3},power:{cost:{ore:25,energy:15},hp:150,bt:4,vis:3},factory:{cost:{ore:40,metal:20},hp:300,bt:6,vis:3},turret:{cost:{ore:35,metal:25},hp:250,bt:5,vis:5,dmg:15,range:5,fr:1.2},storage:{cost:{ore:20,metal:10},hp:180,bt:3,vis:2},refinery:{cost:{ore:45,crystal:20},hp:250,bt:6,vis:3},silo:{cost:{ore:60,metal:40,crystal:15},hp:350,bt:10,vis:4,dmg:45,range:12,fr:0.18}};
 const rD={worker:{cost:{metal:20,fuel:10},hp:60,sp:1.5,vis:3,bt:3},transport:{cost:{metal:25,fuel:15},hp:80,sp:1.2,cm:50,vis:3,bt:4},battle:{cost:{metal:35,fuel:25},hp:150,sp:1,dmg:12,range:4,fr:1,vis:4,bt:5},scout:{cost:{metal:15,fuel:10},hp:40,sp:2.5,vis:6,bt:2}};
 function canAfford(o,c){for(let[r,a]of Object.entries(c))if(o[r]<a)return false;return true;}
 function spend(o,c){for(let[r,a]of Object.entries(c))o[r]-=a;}
@@ -265,8 +286,15 @@ buildings.forEach(b2=>{if(b2.hp<=0)return;
 if(b2.constructing){b2.constructProgress+=dt/b2.constructTime;if(b2.constructProgress>=1){b2.constructing=false;b2.constructProgress=1;}return;}
 if(b2.producing){b2.productionProgress+=dt/b2.productionTime;if(b2.productionProgress>=1){b2.producing=false;let rx2=b2.x+(Math.random()>.5?1:-1),ry2=b2.y+(Math.random()>.5?1:-1);if(rx2>=0&&rx2<MAP_SIZE&&ry2>=0&&ry2<MAP_SIZE&&map[rx2]&&map[rx2][ry2]&&map[rx2][ry2].type!=='water'){addRobot(b2.productionType,rx2,ry2,b2.team);if(b2.team===0)showMessage(b2.productionType+' robot ready!');}}}
 if(!b2.constructing&&(b2.type==='mine'||b2.type==='power')){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=3){b2.lastProduction=gameTime;if(b2.type==='mine'){let nn=resourceNodes.find(n=>Math.abs(n.x-b2.x)<=2&&Math.abs(n.y-b2.y)<=2&&n.amount>0);if(nn){let a2=Math.min(5,nn.amount);nn.amount-=a2;o[nn.type]+=a2;}else o.ore+=2;}else o.energy+=3;}}
-if(!b2.constructing&&b2.type==='refinery'){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=4){b2.lastProduction=gameTime;o.metal+=3;o.fuel+=2;}}
-if(b2.type==='turret'&&!b2.constructing){let d=bD.turret,ne=null,nd=d.range+.5;robots.forEach(r2=>{if(r2.team!==b2.team&&r2.hp>0){let d2=Math.sqrt((r2.x-b2.x)**2+(r2.y-b2.y)**2);if(d2<nd){nd=d2;ne=r2;}}});if(ne){b2.angle=Math.atan2(ne.y-b2.y,ne.x-b2.x);if(gameTime-b2.firing>1/d.fr){b2.firing=gameTime;ne.hp-=d.dmg;projectiles.push({x1:b2.x,y1:b2.y-.5,x2:ne.x,y2:ne.y,time:gameTime,dur:.15,col:b2.team===0?'#40ff80':'#ff6040'});}}}});
+if(!b2.constructing&&b2.type==='refinery'){let o=b2.team===0?player:enemy;if(gameTime-b2.lastProduction>=4){b2.lastProduction=gameTime;if(o.ore>=5&&o.energy>=3){o.ore-=5;o.energy-=3;o.metal+=4;o.fuel+=2;}}}
+if(b2.type==='turret'&&!b2.constructing){let d=bD.turret,ne=null,nd=d.range+.5;robots.forEach(r2=>{if(r2.team!==b2.team&&r2.hp>0){let d2=Math.sqrt((r2.x-b2.x)**2+(r2.y-b2.y)**2);if(d2<nd){nd=d2;ne=r2;}}});if(ne){b2.angle=Math.atan2(ne.y-b2.y,ne.x-b2.x);if(gameTime-b2.firing>1/d.fr){b2.firing=gameTime;ne.hp-=d.dmg;projectiles.push({x1:b2.x,y1:b2.y-.5,x2:ne.x,y2:ne.y,time:gameTime,dur:.15,col:b2.team===0?'#40ff80':'#ff6040'});}}}
+if(b2.type==='silo'&&!b2.constructing){let sd=bD.silo,tgt=null,td=sd.range+.5;
+buildings.forEach(eb=>{if(eb.team!==b2.team&&eb.hp>0){let d2=Math.sqrt((eb.x-b2.x)**2+(eb.y-b2.y)**2);if(d2<td){td=d2;tgt=eb;}}});
+if(!tgt){robots.forEach(r2=>{if(r2.team!==b2.team&&r2.hp>0){let d2=Math.sqrt((r2.x-b2.x)**2+(r2.y-b2.y)**2);if(d2<td){td=d2;tgt=r2;}}});}
+if(tgt&&gameTime-b2.firing>1/sd.fr){b2.firing=gameTime;b2.siloOpen=true;setTimeout(()=>{b2.siloOpen=false;},2000);
+let tx=tgt.speed!==undefined?tgt.x:tgt.x+.5,ty=tgt.speed!==undefined?tgt.y:tgt.y+.5;
+missiles.push({x1:b2.x,y1:b2.y,x2:tx,y2:ty,team:b2.team,dmg:sd.dmg,time:gameTime,dur:1.2,target:tgt});}}
+});
 
 buildings=buildings.filter(b2=>{if(b2.hp<=0){for(let i=0;i<8;i++)particles.push({x:b2.x+.5,y:b2.y+.5,vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3-2,life:1.5,ml:1.5,col:'#ff8040',sz:4});player.buildings=player.buildings.filter(p=>p!==b2);enemy.buildings=enemy.buildings.filter(p=>p!==b2);if(b2.team===0)showMessage("Building destroyed!");return false;}return true;});
 
@@ -278,6 +306,12 @@ if(r2.type==='worker'&&r2.team===0&&r2.state==='idle'&&(!r2.path||!r2.path.lengt
 
 robots=robots.filter(r2=>{if(r2.hp<=0){for(let i=0;i<5;i++)particles.push({x:r2.x,y:r2.y,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2-1,life:1,ml:1,col:'#ffaa40',sz:3});player.robots=player.robots.filter(p=>p!==r2);enemy.robots=enemy.robots.filter(p=>p!==r2);return false;}return true;});
 projectiles=projectiles.filter(p=>gameTime-p.time<p.dur);
+// Update missiles
+missiles=missiles.filter(m=>{let pr=(gameTime-m.time)/m.dur;if(pr>=1){
+if(m.target&&m.target.hp>0)m.target.hp-=m.dmg;
+for(let i=0;i<12;i++)particles.push({x:m.x2+(Math.random()-.5)*.8,y:m.y2+(Math.random()-.5)*.8,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4-2,life:1.2,ml:1.2,col:i<6?'#ff6030':'#ffcc40',sz:i<4?5:3});
+for(let i=0;i<6;i++)particles.push({x:m.x2+(Math.random()-.5)*1.2,y:m.y2+(Math.random()-.5)*1.2,vx:(Math.random()-.5)*2,vy:-Math.random()*2-1,life:2,ml:2,col:'#606060',sz:4});
+return false;}return true;});
 particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=3*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
 updateAI(dt);
 document.getElementById('res-ore').textContent=Math.floor(player.ore);document.getElementById('res-energy').textContent=Math.floor(player.energy);document.getElementById('res-crystal').textContent=Math.floor(player.crystal);document.getElementById('res-metal').textContent=Math.floor(player.metal);document.getElementById('res-fuel').textContent=Math.floor(player.fuel);document.getElementById('robot-count').textContent=player.robots.length;document.getElementById('building-count').textContent=player.buildings.length;
@@ -290,6 +324,7 @@ let hqs=enemy.buildings.filter(b2=>b2.type==='hq'&&!b2.constructing),facs=enemy.
 function aiP(t,near,rd){if(!canAfford(enemy,bD[t].cost))return;for(let i=0;i<20;i++){let tx=near.x+Math.floor(Math.random()*rd*2)-rd,ty=near.y+Math.floor(Math.random()*rd*2)-rd;if(tx>=0&&tx<MAP_SIZE&&ty>=0&&ty<MAP_SIZE&&map[tx]&&map[tx][ty]&&map[tx][ty].type!=='water'&&!buildings.some(b2=>b2.x===tx&&b2.y===ty)){spend(enemy,bD[t].cost);addBuilding(t,tx,ty,1);return;}}}
 if(!hqs.length)aiP('hq',{x:MAP_SIZE-5,y:MAP_SIZE-5},3);let hq=enemy.buildings.find(b2=>b2.type==='hq');if(!hq)return;
 if(facs.length<2)aiP('factory',hq,3);if(enemy.buildings.filter(b2=>b2.type==='turret').length<3)aiP('turret',hq,4);if(enemy.buildings.filter(b2=>b2.type==='refinery').length<1)aiP('refinery',hq,2);if(enemy.buildings.filter(b2=>b2.type==='mine').length<2)aiP('mine',hq,4);
+if(enemy.buildings.filter(b2=>b2.type==='silo').length<1&&gameTime>60)aiP('silo',hq,5);
 let af=facs.find(f=>!f.producing);if(af){let wc=enemy.robots.filter(r2=>r2.type==='worker').length;if(wc<2&&canAfford(enemy,rD.worker.cost)){spend(enemy,rD.worker.cost);af.producing=true;af.productionType='worker';af.productionProgress=0;af.productionTime=rD.worker.bt;}else if(canAfford(enemy,rD.battle.cost)){spend(enemy,rD.battle.cost);af.producing=true;af.productionType='battle';af.productionProgress=0;af.productionTime=rD.battle.bt;}}
 let bots=enemy.robots.filter(r2=>r2.type==='battle'&&(!r2.path||!r2.path.length)),thr=difficulty==='easy'?4:difficulty==='medium'?3:2;
 if(bots.length>=thr&&player.buildings.length>0){let tgt=player.buildings[Math.floor(Math.random()*player.buildings.length)];bots.forEach(b2=>{b2.path=findPath(b2.x,b2.y,tgt.x+.5,tgt.y+.5);});}
@@ -305,6 +340,19 @@ roads.forEach(k=>{let[rx2,ry2]=k.split(',').map(Number);if(rx2>=0&&rx2<MAP_SIZE&
 resourceNodes.forEach(n=>{if(n.x>=0&&n.x<MAP_SIZE&&n.y>=0&&n.y<MAP_SIZE&&fogOfWar[n.x]?.[n.y]>=1&&n.amount>0)drawResourceNode(n);});
 let ents=[];buildings.forEach(b2=>{if(fogOfWar[b2.x]?.[b2.y]>=1)ents.push({ty:'b',e:b2,sk:b2.x+b2.y});});robots.forEach(r2=>{let rx=Math.floor(r2.x),ry=Math.floor(r2.y);if(rx>=0&&ry>=0&&rx<MAP_SIZE&&ry<MAP_SIZE&&fogOfWar[rx]?.[ry]>=1)ents.push({ty:'r',e:r2,sk:r2.x+r2.y});});ents.sort((a,b2)=>a.sk-b2.sk);ents.forEach(e=>{if(e.ty==='b')drawBuilding(e.e);else drawRobot(e.e);});
 projectiles.forEach(p=>{let pr=(gameTime-p.time)/p.dur,px=p.x1+(p.x2-p.x1)*pr,py=p.y1+(p.y2-p.y1)*pr,{sx:psx,sy:psy}=isoToScreen(px,py);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(psx,psy,3*zoom,0,Math.PI*2);ctx.fill();});
+// Draw missiles with arc
+missiles.forEach(m=>{let pr=(gameTime-m.time)/m.dur;
+let mx=m.x1+(m.x2-m.x1)*pr,my=m.y1+(m.y2-m.y1)*pr;
+let arc=Math.sin(pr*Math.PI)*3.5;
+let{sx:msx,sy:msy}=isoToScreen(mx,my);msy-=arc*TILE_H*zoom;
+// Trail
+for(let ti=1;ti<=4;ti++){let tp=Math.max(0,pr-ti*.04);let tx=m.x1+(m.x2-m.x1)*tp,ty=m.y1+(m.y2-m.y1)*tp;let ta=Math.sin(tp*Math.PI)*3.5;let{sx:tsx2,sy:tsy2}=isoToScreen(tx,ty);tsy2-=ta*TILE_H*zoom;ctx.globalAlpha=.4-ti*.08;ctx.fillStyle='#a0a0a0';ctx.beginPath();ctx.arc(tsx2,tsy2,(4-ti)*zoom,0,Math.PI*2);ctx.fill();}
+ctx.globalAlpha=1;
+// Missile body
+ctx.fillStyle=m.team===0?'#40e060':'#e04040';ctx.beginPath();ctx.arc(msx,msy,4*zoom,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#ffcc40';ctx.beginPath();ctx.arc(msx,msy,2*zoom,0,Math.PI*2);ctx.fill();
+// Flame trail at back
+let flAngle=Math.atan2(m.y2-m.y1,m.x2-m.x1);ctx.fillStyle='rgba(255,140,30,.6)';ctx.beginPath();ctx.arc(msx-Math.cos(flAngle)*5*zoom,msy+arc*.2*zoom,3*zoom,0,Math.PI*2);ctx.fill();});
 particles.forEach(p=>{let{sx:psx,sy:psy}=isoToScreen(p.x,p.y),a=Math.max(0,Math.min(1,p.life/p.ml));ctx.globalAlpha=a;ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(psx,psy,Math.max(.1,p.sz*zoom*a),0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;});
 if(selectedEntity){let{sx:ssx,sy:ssy}=isoToScreen(selectedEntity.x,selectedEntity.y);ctx.strokeStyle='#40e0ff';ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.ellipse(ssx,ssy,16*zoom,8*zoom,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
 drawMinimap();}
@@ -358,7 +406,7 @@ function showInfoPanel(e){let p=document.getElementById('info-panel'),t=document
 // Launch
 function launchGame(){gameMode=getOpt('mode-pick');difficulty=getOpt('diff-pick');
 if(gameMode==='skirmish'){mapType=getOpt('map-pick');terrainType=getOpt('terrain-pick');MAP_SIZE=mapType==='small'?28:mapType==='large'?56:40;}else{MAP_SIZE=40;terrainType='continental';}
-player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};buildings=[];robots=[];projectiles=[];particles=[];selectedEntity=null;gameTime=0;aiTimer=0;currentAction='select';roads=new Set();
+player={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:0};enemy={ore:100,energy:80,crystal:50,metal:30,fuel:20,buildings:[],robots:[],team:1};buildings=[];robots=[];projectiles=[];particles=[];missiles=[];selectedEntity=null;gameTime=0;aiTimer=0;currentAction='select';roads=new Set();
 generateMap();
 let pb=addBuilding('hq',4,4,0);pb.constructing=false;pb.constructProgress=1;let pf=addBuilding('factory',6,4,0);pf.constructing=false;pf.constructProgress=1;let pr2=addBuilding('refinery',4,6,0);pr2.constructing=false;pr2.constructProgress=1;
 addRobot('worker',5,5,0);addRobot('worker',3,5,0);addRobot('battle',5,3,0);addRobot('scout',3,3,0);
