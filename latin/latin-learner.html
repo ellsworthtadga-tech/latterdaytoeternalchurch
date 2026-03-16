@@ -1165,7 +1165,7 @@ const ACHIEVEMENTS=[
 // STATE & PERSISTENCE
 // ═══════════════════════════════════════════════════════════════════
 const CASES=["Nom.","Gen.","Dat.","Acc.","Abl."];
-function defaultState(){return{activeTab:"home",learnedWords:[],score:{correct:0,total:0},streak:0,bestStreak:0,vocabFilter:"All",vocabSearch:"",flippedCards:[],prayerExpanded:null,prayerShowLatin:true,activeLesson:0,quizMode:"latin-to-english",quizCategory:"All",quizCurrent:null,quizOptions:[],quizSelected:null,darkMode:false,studyDays:[],currentDayStreak:0,sr:{},practiceTab:"quiz",sbIndex:0,sbPlaced:[],sbChecked:false,completedLessons:[],scrSection:"john",scrChapter:0,fontSize:1,bookmarks:[],vcFilter:"All",vcSearch:"",practiceSubTab:"quiz",fabStory:0,fabChapter:0,fabFontSize:1};}
+function defaultState(){return{activeTab:"home",learnedWords:[],score:{correct:0,total:0},streak:0,bestStreak:0,vocabFilter:"All",vocabSearch:"",flippedCards:[],prayerExpanded:null,prayerShowLatin:true,activeLesson:0,quizMode:"latin-to-english",quizCategory:"All",quizCurrent:null,quizOptions:[],quizSelected:null,darkMode:false,studyDays:[],currentDayStreak:0,sr:{},practiceTab:"quiz",sbIndex:0,sbPlaced:[],sbChecked:false,completedLessons:[],scrSection:"john",scrChapter:0,fontSize:1,bookmarks:[],vcFilter:"All",vcSearch:"",practiceSubTab:"quiz",fabStory:0,fabChapter:0,fabFontSize:1,psalmIndex:0,readFabChapters:[]};}
 let S=defaultState();
 function saveState(){try{const d={learnedWords:S.learnedWords,score:S.score,bestStreak:S.bestStreak,darkMode:S.darkMode,studyDays:S.studyDays,currentDayStreak:S.currentDayStreak,sr:S.sr,activeLesson:S.activeLesson,completedLessons:S.completedLessons,scrChapter:S.scrChapter,fontSize:S.fontSize,bookmarks:S.bookmarks};localStorage.setItem("latina_state",JSON.stringify(d));}catch(e){}}
 function loadState(){try{const d=JSON.parse(localStorage.getItem("latina_state"));if(d){S.learnedWords=d.learnedWords||[];S.score=d.score||{correct:0,total:0};S.bestStreak=d.bestStreak||0;S.darkMode=d.darkMode||false;S.studyDays=d.studyDays||[];S.currentDayStreak=d.currentDayStreak||0;S.sr=d.sr||{};S.activeLesson=d.activeLesson||0;S.completedLessons=d.completedLessons||[];S.scrChapter=d.scrChapter||0;S.fontSize=d.fontSize||1;S.bookmarks=d.bookmarks||[];}}catch(e){}}
@@ -2366,7 +2366,7 @@ ${HYMNS.map((h,i)=>`<div class="hymn-card ${S._hymnExp===i?'expanded':''}" data-
 // SCRIPTURE
 // ═══════════════════════════════════════════════════════════════════
 function renderScripture(){
-  const sections=[{id:"john",label:"Gospel of John"},{id:"vulgate",label:"Vulgate Core Words"},{id:"bookmarks",label:"\u2661 Bookmarks"},{id:"other",label:"Other Passages"}];
+  const sections=[{id:"john",label:"Gospel of John"},{id:"psalms",label:"Psalms"},{id:"vulgate",label:"Vulgate Core Words"},{id:"bookmarks",label:"\u2661 Bookmarks"},{id:"other",label:"Other Passages"}];
   let content="";
   const fz=S.fontSize||1;
   const fontStyle="font-size:"+(fz)+"rem";
@@ -2379,6 +2379,16 @@ function renderScripture(){
 <p class="instructions">Tap any Latin word to see its definition. Grammar notes appear below each verse.</p>
 <div class="interlinear" style="${fontStyle}">${ch.verses.map(v=>{const ref="Io."+ch.ch+":"+v.v;const bk=isBookmarked(ref);const words=v.la.split(/\b/).map(w=>/[a-zA-ZāēīōūÀ-ÿ]{2,}/.test(w)?`<span class="word-tap" data-word="${w}">${w}</span>`:w).join('');return`<div class="il-line ${bk?'bookmarked':''}"><button class="verse-bookmark ${bk?'active':''}" data-ref="${ref}" title="Bookmark">${bk?'\u2665':'\u2661'}</button><div class="il-latin"><span class="verse-num">${v.v}</span>${words}</div><div class="il-english">${v.en}</div>${v.n?`<div class="il-note">${v.n}</div>`:''}</div>`;}).join('')}</div>
 <div style="display:flex;justify-content:space-between;margin-top:20px">${S.scrChapter>0?`<button class="next-btn" id="prev-ch">\u2190 Ch. ${JOHN_CHAPTERS[S.scrChapter-1].ch}</button>`:'<div></div>'}${S.scrChapter<JOHN_CHAPTERS.length-1?`<button class="next-btn" id="next-ch">Ch. ${JOHN_CHAPTERS[S.scrChapter+1].ch} \u2192</button>`:'<div></div>'}</div>`;
+  } else if(S.scrSection==="psalms"){
+    const psIdx=S.psalmIndex||0;
+    const ps=VULGATE_PSALMS[psIdx];
+    content=`<div class="font-controls"><button class="font-btn" id="font-down">A\u2212</button><span class="font-label">Text Size</span><button class="font-btn" id="font-up">A+</button></div>
+<div id="scr-ch-nav" class="scripture-nav">${VULGATE_PSALMS.map((p,i)=>`<button class="scripture-nav-btn ps-nav-btn ${psIdx===i?'active':''}" data-psi="${i}">Ps. ${p.ps}</button>`).join('')}</div>
+<div class="chapter-title">${ps.title}</div>
+<div class="chapter-subtitle">${ps.subtitle}</div>
+<p class="instructions">Tap any Latin word to see its definition. Grammar notes appear below each verse.</p>
+<div class="interlinear" style="${fontStyle}">${ps.verses.map(v=>{const ref="Ps."+ps.ps+":"+v.v;const bk=isBookmarked(ref);const words=v.la.split(/\b/).map(w=>/[a-zA-Z\u0101\u0113\u012B\u014D\u016B\u00C0-\u00FF]{2,}/.test(w)?`<span class="word-tap" data-word="${w}">${w}</span>`:w).join('');return`<div class="il-line ${bk?'bookmarked':''}"><button class="verse-bookmark ${bk?'active':''}" data-ref="${ref}" title="Bookmark">${bk?'\u2665':'\u2661'}</button><div class="il-latin"><span class="verse-num">${v.v}</span>${words}</div><div class="il-english">${v.en}</div>${v.n?`<div class="il-note">${v.n}</div>`:''}</div>`;}).join('')}</div>
+<div style="display:flex;justify-content:space-between;margin-top:20px">${psIdx>0?`<button class="next-btn" id="prev-ps">\u2190 Ps. ${VULGATE_PSALMS[psIdx-1].ps}</button>`:'<div></div>'}${psIdx<VULGATE_PSALMS.length-1?`<button class="next-btn" id="next-ps">Ps. ${VULGATE_PSALMS[psIdx+1].ps} \u2192</button>`:'<div></div>'}</div>`;
   } else if(S.scrSection==="vulgate"){
     const cats=["All","noun","verb","adj","prep","conj","pron","adv"];
     let filtered=S.vcFilter==="All"?VULGATE_CORE:VULGATE_CORE.filter(w=>w.pos===S.vcFilter);
@@ -2393,7 +2403,7 @@ ${filtered.map((w,i)=>`<div class="vc-card" data-vci="${i}"><div><span class="vc
       content='<div style="text-align:center;padding:40px 20px;color:var(--brown-muted)"><div style="font-size:2rem;margin-bottom:10px">\u2661</div><p>No bookmarked verses yet.</p><p style="font-size:0.85rem;margin-top:8px">Tap the heart icon on any verse while reading to save it here.</p></div>';
     } else {
       const bkVerses=[];
-      S.bookmarks.forEach(ref=>{const m=ref.match(/Io\.(\d+):(\d+)/);if(m){const ch=JOHN_CHAPTERS.find(c=>c.ch===parseInt(m[1]));if(ch){const v=ch.verses.find(x=>x.v===parseInt(m[2]));if(v)bkVerses.push({ref,ch:ch.ch,...v});}}});
+      S.bookmarks.forEach(ref=>{const mJ=ref.match(/Io\.(\d+):(\d+)/);if(mJ){const ch=JOHN_CHAPTERS.find(c=>c.ch===parseInt(mJ[1]));if(ch){const v=ch.verses.find(x=>x.v===parseInt(mJ[2]));if(v)bkVerses.push({ref,ch:ch.ch,...v});}};const mP=ref.match(/Ps\.(\d+):(\d+)/);if(mP){const ps=VULGATE_PSALMS.find(p=>p.ps===parseInt(mP[1]));if(ps){const v=ps.verses.find(x=>x.v===parseInt(mP[2]));if(v)bkVerses.push({ref,ch:ps.ps,...v});}}});
       content=`<p class="instructions">Your saved verses (${bkVerses.length})</p><div class="interlinear">${bkVerses.map(v=>`<div class="il-line bookmarked"><button class="verse-bookmark active" data-ref="${v.ref}" title="Remove">\u2665</button><div class="il-latin"><span class="verse-num">Io.${v.ch}:${v.v}</span>${v.la}</div><div class="il-english">${v.en}</div></div>`).join('')}</div>`;
     }
   } else {
@@ -2414,6 +2424,10 @@ ${content}`;
   const fu=document.getElementById("font-up"),fd=document.getElementById("font-down");
   if(fu)fu.addEventListener("click",()=>{S.fontSize=Math.min((S.fontSize||1)+0.1,1.5);saveState();renderScripture();});
   if(fd)fd.addEventListener("click",()=>{S.fontSize=Math.max((S.fontSize||1)-0.1,0.7);saveState();renderScripture();});
+  document.querySelectorAll(".ps-nav-btn").forEach(b=>b.addEventListener("click",()=>{S.psalmIndex=parseInt(b.dataset.psi);saveState();renderScripture();scrollToEl("scr-ch-nav");}));
+  const pp=$("prev-ps"),np=$("next-ps");
+  if(pp)pp.addEventListener("click",()=>{S.psalmIndex=Math.max(0,(S.psalmIndex||0)-1);saveState();renderScripture();scrollToEl("scr-ch-nav");});
+  if(np)np.addEventListener("click",()=>{S.psalmIndex=Math.min(VULGATE_PSALMS.length-1,(S.psalmIndex||0)+1);saveState();renderScripture();scrollToEl("scr-ch-nav");});
   const pc=$("prev-ch"),nc=$("next-ch");
   if(pc)pc.addEventListener("click",()=>{S.scrChapter--;saveState();renderScripture();scrollToEl("scr-ch-nav");});
   if(nc)nc.addEventListener("click",()=>{S.scrChapter++;saveState();renderScripture();scrollToEl("scr-ch-nav");});
@@ -2424,6 +2438,471 @@ ${content}`;
 // ═══════════════════════════════════════════════════════════════════
 // FABULAE FACILES — Public Domain (Ritchie, 1903)
 // ═══════════════════════════════════════════════════════════════════
+
+
+const VULGATE_PSALMS=[
+{ps:1,title:"Psalm 1 — Beatus Vir",subtitle:"The Way of the Righteous and the Wicked",
+verses:[
+{v:1,la:"Beatus vir qui non abiit in consilio impiorum, et in via peccatorum non stetit, et in cathedra pestilentiae non sedit;",en:"Blessed is the man who has not walked in the counsel of the ungodly, nor stood in the way of sinners, nor sat in the seat of pestilence;",n:"<b>beatus</b> = blessed (adj. m. nom.); <b>vir</b> = man; <b>abiit</b> = went (perfect of abire); <b>consilio</b> = counsel (abl.); <b>impiorum</b> = of the ungodly (gen. pl.); <b>peccatorum</b> = of sinners (gen. pl.); <b>cathedra</b> = seat/chair (abl.); <b>pestilentiae</b> = of pestilence (gen.). Spanish: <i>beato</i>, <i>pecadores</i>, <i>cátedra</i>"},
+{v:2,la:"sed in lege Domini voluntas eius, et in lege eius meditabitur die ac nocte.",en:"but his delight is in the law of the Lord, and on his law he shall meditate day and night.",n:"<b>lege</b> = law (f. abl.); <b>Domini</b> = of the Lord (gen.); <b>voluntas</b> = will/delight (f. nom.); <b>meditabitur</b> = he will meditate (future deponent); <b>die ac nocte</b> = day and night (abl.). Spanish: <i>ley</i>, <i>voluntad</i>, <i>meditar</i>"},
+{v:3,la:"Et erit tamquam lignum quod plantatum est secus decursus aquarum, quod fructum suum dabit in tempore suo;",en:"And he shall be like a tree planted by streams of water, which yields its fruit in its season;",n:"<b>tamquam</b> = just as, like; <b>lignum</b> = tree/wood (n. nom.); <b>plantatum est</b> = has been planted (perfect passive); <b>secus</b> = beside (prep. + acc.); <b>decursus aquarum</b> = streams of waters (acc. pl. + gen. pl.); <b>fructum</b> = fruit (acc.); <b>dabit</b> = will give (future). Spanish: <i>fruto</i>"},
+{v:4,la:"et folium eius non defluet; et omnia quaecumque faciet prosperabuntur.",en:"and its leaf shall not wither; and everything he does shall prosper.",n:"<b>folium</b> = leaf (n. nom.); <b>defluet</b> = will fall off/wither (future); <b>quaecumque</b> = whatever (n. nom. pl.); <b>faciet</b> = he will do (future); <b>prosperabuntur</b> = will prosper (future passive)"},
+{v:5,la:"Non sic impii, non sic; sed tamquam pulvis quem proicit ventus a facie terrae.",en:"Not so the ungodly, not so; but they are like the dust which the wind drives from the face of the earth.",n:"<b>impii</b> = the ungodly (m. nom. pl.); <b>pulvis</b> = dust (m. nom.); <b>proicit</b> = throws/drives (present); <b>ventus</b> = wind (m. nom.); <b>a facie</b> = from the face (abl.); <b>terrae</b> = of the earth (gen.). Spanish: <i>impío</i>, <i>viento</i>"},
+{v:6,la:"Ideo non resurgent impii in iudicio, neque peccatores in concilio iustorum;",en:"Therefore the ungodly shall not rise in judgment, nor sinners in the assembly of the just;",n:"<b>ideo</b> = therefore; <b>resurgent</b> = will rise (future); <b>iudicio</b> = judgment (abl.); <b>peccatores</b> = sinners (m. nom. pl.); <b>concilio</b> = assembly (abl.); <b>iustorum</b> = of the just (gen. pl.). Spanish: <i>juicio</i>, <i>justos</i>"},
+{v:7,la:"quoniam novit Dominus viam iustorum, et iter impiorum peribit.",en:"for the Lord knows the way of the just, and the way of the ungodly shall perish.",n:"<b>quoniam</b> = because, for; <b>novit</b> = he knows (perfect with present meaning); <b>viam</b> = way (acc.); <b>iustorum</b> = of the just (gen. pl.); <b>iter</b> = way/path (n. nom.); <b>peribit</b> = will perish (future). Spanish: <i>vía</i>"}
+]},
+{ps:23,title:"Psalm 23 (22) — Dominus Regit Me",subtitle:"The Lord Is My Shepherd",
+verses:[
+{v:1,la:"Dominus regit me, et nihil mihi deerit.",en:"The Lord rules me, and I shall want for nothing.",n:"<b>Dominus</b> = the Lord (m. nom.); <b>regit</b> = rules/shepherds (present); <b>nihil</b> = nothing; <b>mihi</b> = to me (dat.); <b>deerit</b> = will be lacking (future of deesse). Spanish: <i>regir</i>"},
+{v:2,la:"In loco pascuae ibi me conlocavit; super aquam refectionis educavit me.",en:"In a place of pasture he has placed me; beside the water of refreshment he has led me.",n:"<b>loco pascuae</b> = place of pasture (abl. + gen.); <b>conlocavit</b> = he placed (perfect); <b>super aquam</b> = beside/upon the water (acc.); <b>refectionis</b> = of refreshment (gen.); <b>educavit</b> = he led forth (perfect). Spanish: <i>pasto</i>"},
+{v:3,la:"Animam meam convertit; deduxit me super semitas iustitiae propter nomen suum.",en:"He has restored my soul; he has led me on paths of justice for the sake of his name.",n:"<b>animam meam</b> = my soul (acc.); <b>convertit</b> = he turned back/restored (perfect); <b>deduxit</b> = he led (perfect); <b>semitas</b> = paths (f. acc. pl.); <b>iustitiae</b> = of justice (gen.); <b>propter nomen suum</b> = for the sake of his name (acc.). Spanish: <i>ánima</i>, <i>justicia</i>"},
+{v:4,la:"Nam etsi ambulavero in medio umbrae mortis, non timebo mala, quoniam tu mecum es.",en:"For even though I walk in the midst of the shadow of death, I will fear no evil, for you are with me.",n:"<b>etsi</b> = even if; <b>ambulavero</b> = I shall have walked (future perfect); <b>in medio</b> = in the midst (abl.); <b>umbrae mortis</b> = of the shadow of death (gen. + gen.); <b>timebo</b> = I will fear (future); <b>mala</b> = evils (n. acc. pl.); <b>mecum</b> = with me. Spanish: <i>sombra</i>, <i>muerte</i>"},
+{v:5,la:"Virga tua et baculus tuus, ipsa me consolata sunt.",en:"Your rod and your staff, they have comforted me.",n:"<b>virga</b> = rod (f. nom.); <b>baculus</b> = staff (m. nom.); <b>tuus/tua</b> = your; <b>consolata sunt</b> = have comforted (perfect deponent). Spanish: <i>consolar</i>"},
+{v:6,la:"Parasti in conspectu meo mensam adversus eos qui tribulant me;",en:"You have prepared a table before me against those who trouble me;",n:"<b>parasti</b> = you have prepared (2nd sg. perfect); <b>in conspectu meo</b> = in my sight/before me (abl.); <b>mensam</b> = table (f. acc.); <b>adversus</b> = against (prep. + acc.); <b>tribulant</b> = trouble/afflict (present). Spanish: <i>mesa</i>"},
+{v:7,la:"inpinguasti in oleo caput meum, et calix meus inebrians quam praeclarus est.",en:"you have anointed my head with oil, and my overflowing cup, how excellent it is.",n:"<b>inpinguasti</b> = you have anointed/made rich (2nd sg. perfect); <b>in oleo</b> = with oil (abl.); <b>caput meum</b> = my head; <b>calix</b> = cup (m. nom.); <b>inebrians</b> = intoxicating/overflowing (present participle); <b>praeclarus</b> = excellent (adj.)"},
+{v:8,la:"Et misericordia tua subsequetur me omnibus diebus vitae meae,",en:"And your mercy shall follow me all the days of my life,",n:"<b>misericordia</b> = mercy (f. nom.); <b>subsequetur</b> = will follow (future deponent); <b>omnibus diebus</b> = all the days (abl.); <b>vitae meae</b> = of my life (gen.). Spanish: <i>misericordia</i>"},
+{v:9,la:"et ut inhabitem in domo Domini in longitudinem dierum.",en:"and that I may dwell in the house of the Lord for length of days.",n:"<b>ut inhabitem</b> = that I may dwell (purpose clause + present subjunctive); <b>in domo Domini</b> = in the house of the Lord (abl. + gen.); <b>in longitudinem dierum</b> = for the length of days (acc.). Spanish: <i>habitar</i>"}
+]},
+{ps:51,title:"Psalm 51 (50) — Miserere Mei",subtitle:"A Prayer of Repentance",
+verses:[
+{v:1,la:"Miserere mei, Deus, secundum magnam misericordiam tuam;",en:"Have mercy on me, O God, according to your great mercy;",n:"<b>miserere</b> = have mercy! (imperative deponent + gen.); <b>mei</b> = on me (gen.); <b>Deus</b> = O God (voc.); <b>secundum</b> = according to (prep. + acc.); <b>misericordiam</b> = mercy (f. acc.). Spanish: <i>misericordia</i>"},
+{v:2,la:"et secundum multitudinem miserationum tuarum dele iniquitatem meam.",en:"and according to the multitude of your mercies, blot out my iniquity.",n:"<b>multitudinem</b> = multitude (f. acc.); <b>miserationum</b> = of mercies (f. gen. pl.); <b>dele</b> = blot out! (sg. imperative); <b>iniquitatem</b> = iniquity (f. acc.). Spanish: <i>multitud</i>, <i>iniquidad</i>"},
+{v:3,la:"Amplius lava me ab iniquitate mea, et a peccato meo munda me.",en:"Wash me thoroughly from my iniquity, and cleanse me from my sin.",n:"<b>amplius</b> = more fully (comparative adverb); <b>lava</b> = wash! (imperative); <b>ab iniquitate</b> = from iniquity (abl.); <b>peccato</b> = sin (n. abl.); <b>munda</b> = cleanse! (imperative). Spanish: <i>lavar</i>, <i>pecado</i>"},
+{v:4,la:"Quoniam iniquitatem meam ego cognosco, et peccatum meum contra me est semper.",en:"For I know my iniquity, and my sin is always before me.",n:"<b>ego cognosco</b> = I know (emphatic pronoun + present); <b>peccatum meum</b> = my sin (n. nom.); <b>contra me</b> = against/before me; <b>semper</b> = always"},
+{v:5,la:"Tibi soli peccavi et malum coram te feci,",en:"Against you alone have I sinned, and done evil before you,",n:"<b>tibi soli</b> = against you alone (dat.); <b>peccavi</b> = I have sinned (1st sg. perfect); <b>malum</b> = evil (n. acc.); <b>coram te</b> = before you (prep. + abl.). Spanish: <i>pecar</i>"},
+{v:6,la:"ut iustificeris in sermonibus tuis et vincas cum iudicaris.",en:"so that you may be justified in your words and prevail when you are judged.",n:"<b>ut iustificeris</b> = so that you may be justified (purpose + present passive subjunctive); <b>sermonibus</b> = words (m. abl. pl.); <b>vincas</b> = you may conquer (present subjunctive); <b>cum iudicaris</b> = when you are judged (present passive). Spanish: <i>justificar</i>"},
+{v:7,la:"Ecce enim in iniquitatibus conceptus sum, et in peccatis concepit me mater mea.",en:"For behold, I was conceived in iniquities, and in sins did my mother conceive me.",n:"<b>ecce</b> = behold; <b>iniquitatibus</b> = iniquities (f. abl. pl.); <b>conceptus sum</b> = I was conceived (perfect passive); <b>peccatis</b> = sins (n. abl. pl.); <b>concepit</b> = she conceived (perfect)"},
+{v:8,la:"Asperges me hyssopo, et mundabor; lavabis me, et super nivem dealbabor.",en:"You will sprinkle me with hyssop, and I shall be cleansed; you will wash me, and I shall be made whiter than snow.",n:"<b>asperges</b> = you will sprinkle (future); <b>hyssopo</b> = with hyssop (abl.); <b>mundabor</b> = I shall be cleansed (future passive); <b>lavabis</b> = you will wash (future); <b>super nivem</b> = above/whiter than snow (acc.); <b>dealbabor</b> = I shall be whitened (future passive)"},
+{v:9,la:"Cor mundum crea in me, Deus, et spiritum rectum innova in visceribus meis.",en:"Create a clean heart in me, O God, and renew a right spirit within my inmost parts.",n:"<b>cor mundum</b> = a clean heart (n. acc.); <b>crea</b> = create! (imperative); <b>spiritum rectum</b> = a right spirit (m. acc.); <b>innova</b> = renew! (imperative); <b>visceribus</b> = inmost parts (n. abl. pl.). Spanish: <i>corazón</i>, <i>crear</i>, <i>espíritu</i>, <i>innovar</i>"},
+{v:10,la:"Ne proicias me a facie tua, et Spiritum Sanctum tuum ne auferas a me.",en:"Cast me not away from your face, and take not your Holy Spirit from me.",n:"<b>ne proicias</b> = do not cast away (negative subjunctive); <b>a facie tua</b> = from your face (abl.); <b>Spiritum Sanctum</b> = Holy Spirit (m. acc.); <b>ne auferas</b> = do not take away (negative subjunctive)"},
+{v:11,la:"Redde mihi laetitiam salutaris tui, et spiritu principali confirma me.",en:"Restore to me the joy of your salvation, and strengthen me with a willing spirit.",n:"<b>redde</b> = restore! give back! (imperative); <b>laetitiam</b> = joy (f. acc.); <b>salutaris tui</b> = of your salvation (gen.); <b>spiritu principali</b> = with a ruling/willing spirit (abl.); <b>confirma</b> = strengthen! (imperative). Spanish: <i>confirmar</i>"},
+{v:12,la:"Domine, labia mea aperies, et os meum adnuntiabit laudem tuam.",en:"O Lord, you will open my lips, and my mouth shall declare your praise.",n:"<b>Domine</b> = O Lord (voc.); <b>labia</b> = lips (n. acc. pl.); <b>aperies</b> = you will open (future); <b>os meum</b> = my mouth (n. nom.); <b>adnuntiabit</b> = will declare (future); <b>laudem</b> = praise (f. acc.). Spanish: <i>labios</i>, <i>anunciar</i>"}
+]},
+{ps:91,title:"Psalm 91 (90) — Qui Habitat",subtitle:"Under the Shadow of the Almighty",
+verses:[
+{v:1,la:"Qui habitat in adiutorio Altissimi, in protectione Dei caeli commorabitur.",en:"He who dwells in the shelter of the Most High shall abide under the protection of the God of heaven.",n:"<b>qui habitat</b> = he who dwells (present); <b>in adiutorio</b> = in the shelter/help (abl.); <b>Altissimi</b> = of the Most High (gen. superlative); <b>protectione</b> = protection (f. abl.); <b>commorabitur</b> = he will abide (future deponent). Spanish: <i>habitar</i>, <i>protección</i>"},
+{v:2,la:"Dicet Domino: Susceptor meus es tu et refugium meum; Deus meus, sperabo in eum.",en:"He will say to the Lord: You are my protector and my refuge; my God, I will hope in him.",n:"<b>dicet</b> = he will say (future); <b>Domino</b> = to the Lord (dat.); <b>susceptor</b> = protector (m. nom.); <b>refugium</b> = refuge (n. nom.); <b>sperabo</b> = I will hope (future). Spanish: <i>refugio</i>, <i>esperar</i>"},
+{v:3,la:"Quoniam ipse liberabit me de laqueo venantium et a verbo aspero.",en:"For he himself will free me from the snare of hunters and from the harsh word.",n:"<b>ipse</b> = he himself; <b>liberabit</b> = will free (future); <b>de laqueo</b> = from the snare (abl.); <b>venantium</b> = of hunters (gen. pl. present participle); <b>verbo aspero</b> = harsh word (abl.). Spanish: <i>liberar</i>"},
+{v:4,la:"Scapulis suis obumbrabit tibi, et sub pennis eius sperabis.",en:"He will overshadow you with his shoulders, and under his wings you will hope.",n:"<b>scapulis suis</b> = with his shoulders (abl.); <b>obumbrabit</b> = will overshadow (future); <b>sub pennis</b> = under the wings (abl.); <b>sperabis</b> = you will hope (future 2nd sg.)"},
+{v:5,la:"Scuto circumdabit te veritas eius; non timebis a timore nocturno,",en:"His truth will surround you as a shield; you will not fear the terror of the night,",n:"<b>scuto</b> = with a shield (n. abl.); <b>circumdabit</b> = will surround (future); <b>veritas</b> = truth (f. nom.); <b>non timebis</b> = you will not fear (future); <b>timore nocturno</b> = nocturnal fear (abl.). Spanish: <i>verdad</i>, <i>nocturno</i>"},
+{v:6,la:"a sagitta volante in die, a negotio perambulante in tenebris, ab incursu et daemonio meridiano.",en:"from the arrow that flies by day, from the trouble that walks in darkness, from the assault and the noonday demon.",n:"<b>sagitta volante</b> = flying arrow (f. abl. + present participle); <b>in die</b> = by day (abl.); <b>negotio perambulante</b> = trouble walking about (n. abl. + participle); <b>in tenebris</b> = in darkness (f. abl. pl.); <b>daemonio meridiano</b> = noonday demon (n. abl.)"},
+{v:7,la:"Cadent a latere tuo mille, et decem milia a dextris tuis; ad te autem non appropinquabit.",en:"A thousand shall fall at your side, and ten thousand at your right hand; but it shall not come near you.",n:"<b>cadent</b> = they will fall (future); <b>a latere tuo</b> = at your side (abl.); <b>mille</b> = a thousand; <b>decem milia</b> = ten thousand; <b>a dextris tuis</b> = at your right hand (abl.); <b>non appropinquabit</b> = will not approach (future)"},
+{v:8,la:"Quoniam angelis suis mandavit de te, ut custodiant te in omnibus viis tuis.",en:"For he has given his angels charge over you, to keep you in all your ways.",n:"<b>angelis suis</b> = to his angels (dat.); <b>mandavit</b> = he has commanded (perfect); <b>de te</b> = concerning you; <b>ut custodiant</b> = that they may guard (purpose + present subjunctive); <b>viis tuis</b> = your ways (f. abl. pl.). Spanish: <i>ángeles</i>, <i>custodiar</i>"},
+{v:9,la:"In manibus portabunt te, ne forte offendas ad lapidem pedem tuum.",en:"In their hands they shall bear you up, lest you dash your foot against a stone.",n:"<b>in manibus</b> = in their hands (abl.); <b>portabunt</b> = they will carry (future); <b>ne forte</b> = lest perhaps; <b>offendas</b> = you strike (present subjunctive); <b>ad lapidem</b> = against a stone (acc.); <b>pedem tuum</b> = your foot (acc.)"},
+{v:10,la:"Super aspidem et basiliscum ambulabis, et conculcabis leonem et draconem.",en:"You shall tread upon the asp and the basilisk, and trample the lion and the dragon.",n:"<b>super</b> = upon (prep. + acc.); <b>aspidem</b> = asp (f. acc.); <b>basiliscum</b> = basilisk (m. acc.); <b>ambulabis</b> = you will walk (future); <b>conculcabis</b> = you will trample (future); <b>leonem</b> = lion (m. acc.); <b>draconem</b> = dragon (m. acc.). Spanish: <i>león</i>, <i>dragón</i>"},
+{v:11,la:"Quoniam in me speravit, liberabo eum; protegam eum, quoniam cognovit nomen meum.",en:"Because he has hoped in me, I will free him; I will protect him, because he has known my name.",n:"<b>speravit</b> = he has hoped (perfect); <b>liberabo</b> = I will free (future 1st sg.); <b>protegam</b> = I will protect (future 1st sg.); <b>cognovit</b> = he has known (perfect). Spanish: <i>proteger</i>"},
+{v:12,la:"Clamabit ad me, et ego exaudiam eum; cum ipso sum in tribulatione, eripiam eum et glorificabo eum.",en:"He shall cry to me, and I will hear him; I am with him in trouble, I will deliver him and glorify him.",n:"<b>clamabit</b> = he will cry out (future); <b>exaudiam</b> = I will hear (future); <b>cum ipso</b> = with him (abl.); <b>tribulatione</b> = trouble (f. abl.); <b>eripiam</b> = I will deliver (future); <b>glorificabo</b> = I will glorify (future). Spanish: <i>clamar</i>, <i>tribulación</i>, <i>glorificar</i>"},
+{v:13,la:"Longitudine dierum replebo eum, et ostendam illi salutare meum.",en:"With length of days I will fill him, and I will show him my salvation.",n:"<b>longitudine dierum</b> = with length of days (abl.); <b>replebo</b> = I will fill (future); <b>ostendam</b> = I will show (future); <b>illi</b> = to him (dat.); <b>salutare meum</b> = my salvation (n. acc.). Spanish: <i>longitud</i>, <i>ostentar</i>"}
+]}
+];
+
+
+const PSALMS_FORMS={
+"beatus":"adj. m. nom.: blessed, happy",
+"vir":"m. nom.: man",
+"abiit":"abire: he went (perfect)",
+"consilio":"n. abl.: counsel, advice",
+"impiorum":"adj. m. gen. pl.: of the ungodly",
+"via":"f. abl./nom.: way, road",
+"peccatorum":"m./n. gen. pl.: of sinners / of sins",
+"stetit":"stare: he stood (perfect)",
+"cathedra":"f. abl.: seat, chair",
+"pestilentiae":"f. gen.: of pestilence",
+"sedit":"sedere: he sat (perfect)",
+"sed":"conj.: but",
+"lege":"f. abl.: law (3rd decl.)",
+"domini":"m. gen.: of the Lord",
+"voluntas":"f. nom.: will, desire, delight",
+"meditabitur":"meditari: he will meditate (future deponent)",
+"die":"f./m. abl.: day",
+"nocte":"f. abl.: night",
+"erit":"esse: he/she/it will be (future)",
+"tamquam":"conj.: just as, like",
+"lignum":"n. nom./acc.: wood, tree",
+"plantatum":"plantare: planted (perf. pass. part. n.)",
+"secus":"prep. + acc.: beside, along",
+"decursus":"m. acc. pl.: streams, courses (4th decl.)",
+"aquarum":"f. gen. pl.: of waters",
+"fructum":"m. acc.: fruit",
+"dabit":"dare: he/she will give (future)",
+"folium":"n. nom./acc.: leaf",
+"defluet":"defluere: it will fall off/wither (future)",
+"quaecumque":"pron. n. nom./acc. pl.: whatever things",
+"faciet":"facere: he will do/make (future)",
+"prosperabuntur":"prosperare: they will prosper (future passive)",
+"sic":"adv.: so, thus",
+"impii":"adj. m. nom. pl.: ungodly, wicked",
+"pulvis":"m. nom.: dust",
+"proicit":"proicere: it throws/drives (present)",
+"ventus":"m. nom.: wind",
+"facie":"f. abl.: face (5th decl.)",
+"terrae":"f. gen./dat.: of/to the earth",
+"ideo":"adv.: therefore",
+"resurgent":"resurgere: they will rise (future)",
+"iudicio":"n. abl.: in judgment",
+"peccatores":"m. nom./acc. pl.: sinners",
+"concilio":"n. abl.: assembly, council",
+"iustorum":"adj. m. gen. pl.: of the just/righteous",
+"quoniam":"conj.: because, since, for",
+"novit":"novisse: he knows (perfect with present meaning)",
+"dominus":"m. nom.: Lord, master",
+"iter":"n. nom./acc.: way, path, journey (3rd decl.)",
+"peribit":"perire: it will perish (future)",
+"regit":"regere: he rules/guides (present)",
+"deerit":"deesse: will be lacking (future)",
+"loco":"m. abl.: place",
+"pascuae":"f. gen.: of pasture",
+"conlocavit":"conlocare: he placed (perfect)",
+"aquam":"f. acc.: water",
+"refectionis":"f. gen.: of refreshment/restoration",
+"educavit":"educare: he led forth (perfect)",
+"animam":"f. acc.: soul",
+"meam":"adj. f. acc.: my",
+"convertit":"convertere: he turned/restored (perfect)",
+"deduxit":"deducere: he led (perfect)",
+"semitas":"f. acc. pl.: paths",
+"iustitiae":"f. gen.: of justice/righteousness",
+"nomen":"n. nom./acc.: name (3rd decl.)",
+"etsi":"conj.: even if, although",
+"ambulavero":"ambulare: I shall have walked (future perfect)",
+"medio":"adj. n. abl.: the middle, midst",
+"umbrae":"f. gen./dat.: of/to the shadow",
+"mortis":"f. gen.: of death (3rd decl.)",
+"timebo":"timere: I will fear (future)",
+"mala":"adj. n. acc. pl.: evils, bad things",
+"mecum":"prep. + pron.: with me",
+"virga":"f. nom.: rod, staff",
+"tua":"adj. f. nom.: your",
+"baculus":"m. nom.: staff, stick",
+"tuus":"adj. m. nom.: your",
+"ipsa":"pron. f. nom. / n. nom. pl.: herself / themselves",
+"consolata":"consolari: comforted (perf. deponent part. n. pl.)",
+"parasti":"parare: you have prepared (2nd sg. perfect)",
+"conspectu":"m. abl.: sight, view (4th decl.)",
+"meo":"adj. m./n. abl.: my",
+"mensam":"f. acc.: table",
+"adversus":"prep. + acc.: against",
+"eos":"pron. m. acc. pl.: those, them",
+"tribulant":"tribulare: they trouble/afflict (present)",
+"inpinguasti":"inpinguare: you anointed/enriched (2nd sg. perfect)",
+"oleo":"n. abl.: oil",
+"meum":"adj. m. acc./n. nom.: my",
+"calix":"m. nom.: cup, chalice",
+"meus":"adj. m. nom.: my",
+"inebrians":"inebriare: intoxicating (present participle)",
+"praeclarus":"adj. m. nom.: excellent, famous",
+"misericordia":"f. nom.: mercy",
+"subsequetur":"subsequi: it will follow (future deponent)",
+"diebus":"m. dat./abl. pl.: days",
+"vitae":"f. gen./dat.: of/to life",
+"meae":"adj. f. gen./dat.: of my / to my",
+"inhabitem":"inhabitare: I may dwell (present subjunctive)",
+"domo":"f. abl.: house (irregular 4th/2nd decl.)",
+"longitudinem":"f. acc.: length",
+"dierum":"m. gen. pl.: of days",
+"miserere":"misereri: have mercy! (imperative deponent + gen.)",
+"mei":"pron. gen.: of me",
+"deus":"m. nom./voc.: God",
+"secundum":"prep. + acc.: according to",
+"magnam":"adj. f. acc.: great",
+"misericordiam":"f. acc.: mercy",
+"tuam":"adj. f. acc.: your",
+"multitudinem":"f. acc.: multitude",
+"miserationum":"f. gen. pl.: of mercies/compassions",
+"tuarum":"adj. f. gen. pl.: of your",
+"dele":"delere: blot out! (sg. imperative)",
+"iniquitatem":"f. acc.: iniquity",
+"amplius":"adv.: more fully, more abundantly (comparative)",
+"lava":"lavare: wash! (sg. imperative)",
+"iniquitate":"f. abl.: iniquity",
+"peccato":"n. abl.: sin",
+"munda":"mundare: cleanse! (sg. imperative)",
+"ego":"pron. nom.: I (emphatic)",
+"cognosco":"cognoscere: I know (present)",
+"peccatum":"n. nom./acc.: sin",
+"contra":"prep. + acc.: against",
+"tibi":"pron. dat.: to you",
+"soli":"adj. m. dat.: to alone/only",
+"peccavi":"peccare: I have sinned (1st sg. perfect)",
+"malum":"n. nom./acc.: evil",
+"coram":"prep. + abl.: before, in the presence of",
+"feci":"facere: I have done/made (1st sg. perfect)",
+"iustificeris":"iustificare: you may be justified (present passive subjunctive)",
+"sermonibus":"m. abl. pl.: words, speeches",
+"tuis":"adj. dat./abl. pl.: your",
+"vincas":"vincere: you may conquer (present subjunctive)",
+"iudicaris":"iudicare: you are judged (present passive)",
+"ecce":"interj.: behold!",
+"iniquitatibus":"f. abl. pl.: iniquities",
+"conceptus":"concipere: conceived (perf. pass. part. m. nom.)",
+"peccatis":"n. abl. pl.: sins",
+"concepit":"concipere: she conceived (perfect)",
+"asperges":"aspergere: you will sprinkle (future 2nd sg.)",
+"hyssopo":"m./f. abl.: hyssop",
+"mundabor":"mundare: I shall be cleansed (future passive)",
+"lavabis":"lavare: you will wash (future 2nd sg.)",
+"nivem":"f. acc.: snow",
+"dealbabor":"dealbare: I shall be whitened (future passive)",
+"cor":"n. nom./acc.: heart (3rd decl.)",
+"mundum":"adj. n. acc.: clean, pure",
+"crea":"creare: create! (sg. imperative)",
+"spiritum":"m. acc.: spirit",
+"rectum":"adj. m. acc.: right, upright",
+"innova":"innovare: renew! (sg. imperative)",
+"visceribus":"n. abl. pl.: inmost parts, bowels",
+"meis":"adj. dat./abl. pl.: my",
+"proicias":"proicere: you may cast away (present subjunctive)",
+"sanctum":"adj. m. acc.: holy",
+"tuum":"adj. m. acc.: your",
+"auferas":"auferre: you may take away (present subjunctive)",
+"redde":"reddere: give back! restore! (sg. imperative)",
+"laetitiam":"f. acc.: joy, gladness",
+"salutaris":"adj. gen./m. nom.: of salvation / saving",
+"tui":"adj. m. gen. / pron. gen.: of your / of you",
+"spiritu":"m. abl.: spirit (4th decl.)",
+"principali":"adj. abl.: ruling, principal",
+"confirma":"confirmare: strengthen! (sg. imperative)",
+"domine":"m. voc.: O Lord",
+"labia":"n. acc. pl.: lips",
+"aperies":"aperire: you will open (future 2nd sg.)",
+"os":"n. nom./acc.: mouth (3rd decl.)",
+"adnuntiabit":"adnuntiare: it will declare (future)",
+"laudem":"f. acc.: praise",
+"habitat":"habitare: he dwells (present)",
+"adiutorio":"n. abl.: help, shelter",
+"altissimi":"adj. m. gen.: of the Most High (superlative)",
+"protectione":"f. abl.: protection",
+"caeli":"m. gen.: of heaven",
+"commorabitur":"commorari: he will abide (future deponent)",
+"dicet":"dicere: he will say (future)",
+"domino":"m. dat.: to the Lord",
+"susceptor":"m. nom.: protector, supporter",
+"refugium":"n. nom.: refuge",
+"sperabo":"sperare: I will hope (future 1st sg.)",
+"liberabit":"liberare: he will free (future)",
+"laqueo":"m. abl.: snare",
+"venantium":"venari: of hunters (gen. pl. present participle)",
+"verbo":"n. abl.: word",
+"aspero":"adj. n. abl.: harsh, rough",
+"scapulis":"f. abl. pl.: shoulders",
+"obumbrabit":"obumbrare: he will overshadow (future)",
+"pennis":"f. abl. pl.: wings, feathers",
+"sperabis":"sperare: you will hope (future 2nd sg.)",
+"scuto":"n. abl.: shield",
+"circumdabit":"circumdare: he will surround (future)",
+"veritas":"f. nom.: truth",
+"timore":"m. abl.: fear, terror",
+"nocturno":"adj. m. abl.: nocturnal, of the night",
+"sagitta":"f. abl.: arrow",
+"volante":"volare: flying (abl. present participle)",
+"negotio":"n. abl.: trouble, business",
+"perambulante":"perambulare: walking about (abl. present participle)",
+"tenebris":"f. abl. pl.: darkness",
+"incursu":"m. abl.: assault, attack (4th decl.)",
+"daemonio":"n. abl.: demon",
+"meridiano":"adj. n. abl.: of midday, noonday",
+"cadent":"cadere: they will fall (future)",
+"latere":"n. abl.: side",
+"tuo":"adj. m./n. abl.: your",
+"mille":"num.: a thousand",
+"decem":"num.: ten",
+"milia":"n. nom./acc. pl.: thousands",
+"dextris":"f. abl. pl.: right hand",
+"angelis":"m. dat./abl. pl.: to/by angels",
+"mandavit":"mandare: he commanded (perfect)",
+"custodiant":"custodire: they may guard (present subjunctive)",
+"viis":"f. abl. pl.: ways, roads",
+"manibus":"f. dat./abl. pl.: hands",
+"portabunt":"portare: they will carry (future)",
+"offendas":"offendere: you may strike (present subjunctive)",
+"lapidem":"m. acc.: stone",
+"pedem":"m. acc.: foot",
+"aspidem":"f. acc.: asp, serpent",
+"basiliscum":"m. acc.: basilisk",
+"ambulabis":"ambulare: you will walk (future 2nd sg.)",
+"conculcabis":"conculcare: you will trample (future 2nd sg.)",
+"leonem":"m. acc.: lion",
+"draconem":"m. acc.: dragon",
+"speravit":"sperare: he has hoped (perfect)",
+"liberabo":"liberare: I will free (future 1st sg.)",
+"protegam":"protegere: I will protect (future 1st sg.)",
+"clamabit":"clamare: he will cry out (future)",
+"exaudiam":"exaudire: I will hear (future 1st sg.)",
+"ipso":"pron. m./n. abl.: himself/itself",
+"tribulatione":"f. abl.: trouble, tribulation",
+"eripiam":"eripere: I will deliver/rescue (future 1st sg.)",
+"glorificabo":"glorificare: I will glorify (future 1st sg.)",
+"longitudine":"f. abl.: length",
+"replebo":"replere: I will fill (future 1st sg.)",
+"ostendam":"ostendere: I will show (future 1st sg.)",
+"illi":"pron. dat.: to him",
+"salutare":"n. nom./acc.: salvation"
+};
+
+
+const EXTRA_FABULAE_FORMS={
+"poetis":"m. dat./abl. pl.: to/by poets",
+"de":"prep. + abl.: about, concerning, from",
+"a":"prep. + abl.: from, by",
+"et":"conj.: and",
+"non":"adv.: not",
+"se":"pron. reflexive acc./abl.: himself/herself/themselves",
+"ad":"prep. + acc.: to, toward",
+"ex":"prep. + abl.: out of, from",
+"quod":"conj.: because / pron. n. nom./acc.: which, that",
+"ab":"prep. + abl.: from, by (before vowels)",
+"haec":"pron. f. nom./n. nom. pl.: this / these things",
+"hic":"pron. m. nom.: this / adv.: here",
+"quidam":"pron. m. nom.: a certain (indefinite)",
+"quodam":"pron. m./n. abl.: a certain",
+"quae":"pron. f. nom./n. nom. pl.: which, who, that",
+"qui":"pron. m. nom.: who, which, that",
+"illa":"pron. f. nom./n. nom. pl.: that / those",
+"ille":"pron. m. nom.: that one, he",
+"suam":"adj. f. acc.: his/her own",
+"illa":"pron. f. nom.: that",
+"illam":"pron. f. acc.: that, her",
+"illo":"pron. m./n. abl.: that, by that",
+"eorum":"pron. m./n. gen. pl.: of them, their",
+"earum":"pron. f. gen. pl.: of them, their",
+"sua":"adj. f. nom./abl.: his/her own",
+"sibi":"pron. dat. reflexive: to himself/herself",
+"te":"pron. acc./abl.: you",
+"tu":"pron. nom.: you",
+"me":"pron. acc./abl.: me",
+"nos":"pron. nom./acc.: we / us",
+"es":"esse: you are (2nd sg. present)",
+"ac":"conj.: and (= atque)",
+"neque":"conj.: and not, neither, nor",
+"nec":"conj.: and not, nor",
+"ut":"conj.: so that, in order that / as",
+"ubi":"conj./adv.: when / where",
+"cum":"prep. + abl.: with / conj.: when, since, although",
+"dum":"conj.: while (+ present indicative)",
+"postquam":"conj.: after, when",
+"antequam":"conj.: before",
+"quoque":"adv.: also, too (postpositive)",
+"autem":"conj.: however, but (postpositive)",
+"tamen":"adv.: however, nevertheless",
+"igitur":"conj.: therefore (postpositive)",
+"enim":"conj.: for (postpositive — explains previous statement)",
+"iamque":"adv.: and already, and now",
+"denique":"adv.: finally, at last",
+"simul":"adv.: at the same time",
+"olim":"adv.: once, formerly, one day",
+"adhuc":"adv.: still, up to this point",
+"iam":"adv.: now, already",
+"mox":"adv.: soon",
+"diu":"adv.: for a long time",
+"statim":"adv.: immediately",
+"tandem":"adv.: at last, finally",
+"subito":"adv.: suddenly",
+"frustra":"adv.: in vain",
+"rursus":"adv.: again",
+"iterum":"adv.: again, a second time",
+"procul":"adv.: far off, at a distance",
+"omnino":"adv.: entirely, completely",
+"magnopere":"adv.: greatly",
+"graviter":"adv.: seriously, heavily",
+"paene":"adv.: almost",
+"libenter":"adv.: gladly, willingly",
+"benigne":"adv.: kindly",
+"minime":"adv.: not at all, by no means",
+"forte":"adv.: by chance",
+"cottidie":"adv.: daily, every day",
+"desuper":"adv.: from above",
+"undique":"adv.: on all sides, from everywhere",
+"circum":"prep. + acc.: around",
+"interea":"adv.: meanwhile",
+"praeterea":"adv.: moreover, besides",
+"postea":"adv.: afterward",
+"casu":"m. abl.: by chance, accident (4th decl.)",
+"inter":"prep. + acc.: among, between",
+"apud":"prep. + acc.: among, at the house of",
+"propter":"prep. + acc.: on account of, because of",
+"ob":"prep. + acc.: because of",
+"per":"prep. + acc.: through",
+"sine":"prep. + abl.: without",
+"pro":"prep. + abl.: for, on behalf of",
+"super":"prep. + acc./abl.: above, upon, over",
+"in":"prep. + abl.: in, on; + acc.: into",
+"ante":"prep. + acc.: before",
+"post":"prep. + acc.: after / adv.: afterward",
+"hoc":"pron. n. nom./acc.: this",
+"hanc":"pron. f. acc.: this",
+"hunc":"pron. m. acc.: this",
+"huius":"pron. gen.: of this",
+"his":"pron. dat./abl. pl.: to/from these",
+"hi":"pron. m. nom. pl.: these",
+"has":"pron. f. acc. pl.: these",
+"ea":"pron. f. nom./n. nom. pl.: that / those",
+"id":"pron. n. nom./acc.: it, that",
+"eo":"pron. m./n. abl.: by/with him/it / adv.: to that place",
+"ei":"pron. dat.: to him/her",
+"eam":"pron. f. acc.: her, it",
+"eum":"pron. m. acc.: him, that",
+"quis":"pron. m./f. nom.: who?",
+"quem":"pron. m. acc.: whom, which",
+"cui":"pron. dat.: to whom",
+"cuius":"pron. gen.: whose, of which",
+"quo":"pron. m./n. abl. / adv.: by which / whither",
+"rex":"m. nom.: king",
+"regis":"m. gen.: of the king",
+"regi":"m. dat.: to the king",
+"regem":"m. acc.: king",
+"homo":"m. nom.: man, human being (3rd decl.)",
+"homines":"m. nom./acc. pl.: people, men",
+"hominum":"m. gen. pl.: of people",
+"puer":"m. nom.: boy, child",
+"puerum":"m. acc.: boy",
+"puella":"f. nom.: girl, maiden",
+"puellam":"f. acc.: girl",
+"filius":"m. nom.: son",
+"filium":"m. acc.: son",
+"filia":"f. nom.: daughter",
+"filiam":"f. acc.: daughter",
+"mater":"f. nom.: mother (3rd decl.)",
+"matrem":"f. acc.: mother",
+"matris":"f. gen.: of the mother",
+"matre":"f. abl.: mother",
+"pater":"m. nom.: father (3rd decl.)",
+"patri":"m. dat.: to the father",
+"uxore":"f. abl.: wife",
+"vir":"m. nom.: man, husband",
+"caput":"n. nom./acc.: head (3rd decl.)",
+"corpus":"n. nom./acc.: body (3rd decl.)",
+"mare":"n. nom./acc.: sea (3rd decl.)",
+"maris":"n. gen.: of the sea",
+"mari":"n. abl.: from the sea",
+"aquam":"f. acc.: water",
+"terra":"f. nom./abl.: earth, land",
+"terram":"f. acc.: earth, land",
+"urbs":"f. nom.: city (3rd decl.)",
+"urbem":"f. acc.: city",
+"urbis":"f. gen.: of the city",
+"domus":"f. nom.: house (irregular)",
+"domum":"f. acc.: house, home",
+"domo":"f. abl.: from the house",
+"locus":"m. nom.: place",
+"locum":"m. acc.: place",
+"loci":"m. gen.: of the place",
+"tempus":"n. nom./acc.: time (3rd decl.)",
+"tempore":"n. abl.: at the time",
+"annus":"m. nom.: year",
+"annos":"m. acc. pl.: years",
+"dies":"f./m. nom.: day (5th decl.)",
+"diem":"f./m. acc.: day",
+"nox":"f. nom.: night (3rd decl.)",
+"nocte":"f. abl.: at night",
+"manus":"f. nom./acc. pl.: hands (4th decl.)",
+"gladium":"m. acc.: sword",
+"gladio":"m. abl.: with a sword",
+"arma":"n. nom./acc. pl.: weapons, arms",
+"impetum":"m. acc.: attack",
+"bellum":"n. nom./acc.: war",
+"vulnera":"n. nom./acc. pl.: wounds"
+};
+
 
 const FABULAE_STORIES = [
 {id:"perseus",title:"Perseus",subtitle:"The Myth of Perseus and Medusa",
@@ -3008,7 +3487,8 @@ function renderFabulae(){
 
   const introHtml='<div style="background:var(--gold-08);border:1px solid var(--gold-border);border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:0.88rem;color:var(--brown-soft);line-height:1.6"><b>Background:</b> '+story.intro+'</div>';
 
-  const chapterNav='<div id="fab-ch-nav" class="scripture-nav">'+story.chapters.map((c,i)=>'<button class="scripture-nav-btn fab-ch-btn '+(S.fabChapter===i?'active':'')+'" data-fabch="'+i+'">'+c.ch+'</button>').join('')+'</div>';
+  const fabKey=story.id+":"+S.fabChapter;
+  const chapterNav='<div id="fab-ch-nav" class="scripture-nav">'+story.chapters.map((c,i)=>{const key=story.id+":"+i;const read=(S.readFabChapters||[]).includes(key);return '<button class="scripture-nav-btn fab-ch-btn '+(S.fabChapter===i?'active':'')+'" data-fabch="'+i+'">'+(read?'\u2713 ':'')+c.ch+'</button>';}).join('')+'</div>';
 
   const verses=ch.verses.map(v=>{
     const words=v.la.split(/\b/).map(w=>/[a-zA-ZāēīōūÀ-ÿ]{2,}/.test(w)?'<span class="word-tap" data-word="'+w+'">'+w+'</span>':w).join('');
@@ -3031,6 +3511,7 @@ function renderFabulae(){
     '<p class="instructions">Tap any Latin word to see its definition. Grammar notes appear below each verse.</p>'+
     '<div class="interlinear" style="'+fontStyle+'">'+verses+'</div>'+
     prevNext+
+    '<div class="lesson-complete-row"><button class="complete-lesson-btn '+((S.readFabChapters||[]).includes(story.id+":"+S.fabChapter)?'completed':'')+'" id="fab-mark-read">'+((S.readFabChapters||[]).includes(story.id+":"+S.fabChapter)?'\u2713 Chapter Read':'Mark Chapter as Read')+'</button></div>'+
     '<div style="margin-top:28px;padding:14px;background:var(--gold-08);border-radius:10px;font-size:0.8rem;color:var(--brown-muted);text-align:center">Source: <i>Fabulae Faciles</i> by Francis Ritchie (1903) \u2014 Public Domain via Project Gutenberg</div>';
 
   // Event listeners
@@ -3041,12 +3522,13 @@ function renderFabulae(){
   if(fu)fu.addEventListener("click",()=>{S.fabFontSize=Math.min((S.fabFontSize||1)+0.1,1.5);saveState();renderFabulae();});
   if(fd)fd.addEventListener("click",()=>{S.fabFontSize=Math.max((S.fabFontSize||1)-0.1,0.7);saveState();renderFabulae();});
   const fp=document.getElementById("fab-prev"),fn_btn=document.getElementById("fab-next");
+  const markBtn=document.getElementById("fab-mark-read");if(markBtn)markBtn.addEventListener("click",()=>{if(!S.readFabChapters)S.readFabChapters=[];const key=FABULAE_STORIES[S.fabStory].id+":"+S.fabChapter;if(S.readFabChapters.includes(key))S.readFabChapters=S.readFabChapters.filter(x=>x!==key);else{S.readFabChapters.push(key);playAchievement();haptic('success');}saveState();renderFabulae();});
   if(fp)fp.addEventListener("click",()=>{S.fabChapter--;saveState();renderFabulae();scrollToEl("fab-ch-nav");});
   if(fn_btn)fn_btn.addEventListener("click",()=>{S.fabChapter++;saveState();renderFabulae();scrollToEl("fab-ch-nav");});
 }
 
 // Merge FABULAE_FORMS into LATIN_FORMS
-Object.assign(LATIN_FORMS, FABULAE_FORMS);
+Object.assign(LATIN_FORMS, FABULAE_FORMS, PSALMS_FORMS, EXTRA_FABULAE_FORMS);
 
 renderNav();renderHome();
 </script>
