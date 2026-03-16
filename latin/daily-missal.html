@@ -74,11 +74,11 @@ body {
 }
 
 .header-cross {
-  font-size: 14px;
+  font-size: 24px;
   color: var(--gold);
-  letter-spacing: 8px;
-  margin-bottom: 2px;
-  opacity: 0.7;
+  letter-spacing: 0;
+  margin-bottom: 0px;
+  opacity: 0.85;
 }
 
 .header-title {
@@ -262,36 +262,78 @@ body {
 .season-red { background: rgba(139,0,0,0.06); border-color: rgba(139,0,0,0.2); color: var(--crimson); }
 .season-rose { background: rgba(196,101,133,0.06); border-color: rgba(196,101,133,0.2); color: var(--rose); }
 
-/* ─── Reading Cards ─── */
+/* ─── Reading Cards (Accordion) ─── */
 .reading-card {
-  margin-bottom: 24px;
+  margin-bottom: 4px;
   position: relative;
+  border: 1px solid var(--parchment-deeper);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.3s;
 }
+
+.reading-card.expanded { border-color: var(--gold); }
+
+.reading-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.2s;
+}
+
+.reading-header:hover { background: rgba(255,255,255,0.4); }
+
+.reading-header-left { flex: 1; }
 
 .reading-label {
   font-family: 'Cinzel', serif;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--crimson);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .reading-reference {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: 12px;
 }
+
+.reading-chevron {
+  font-size: 18px;
+  color: var(--ink-faded);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.reading-card.expanded .reading-chevron { transform: rotate(180deg); }
+
+.reading-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.reading-card.expanded .reading-body { max-height: 5000px; }
 
 .reading-text {
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--ink);
   text-align: justify;
   hyphens: auto;
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--parchment-deeper);
+  padding-top: 14px;
 }
 
 .reading-text p { margin-bottom: 12px; }
@@ -301,7 +343,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin: 28px 0;
+  margin: 8px 0;
   color: var(--ink-faded);
 }
 
@@ -314,8 +356,8 @@ body {
 }
 
 .reading-divider span {
-  font-size: 16px;
-  opacity: 0.5;
+  font-size: 14px;
+  opacity: 0.4;
 }
 
 /* ─── USCCB Link ─── */
@@ -388,27 +430,28 @@ body {
   background: linear-gradient(135deg, rgba(184,134,11,0.06), rgba(184,134,11,0.02));
   border: 1px solid rgba(184,134,11,0.2);
   border-radius: 4px;
-  padding: 20px;
+  padding: 24px 20px;
   margin-bottom: 24px;
   text-align: center;
 }
 
 .saint-card img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid var(--gold);
-  margin-bottom: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .saint-card .saint-name {
   font-family: 'Cinzel', serif;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--ink);
   margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .saint-card .saint-type {
@@ -416,29 +459,91 @@ body {
   font-size: 13px;
   font-style: italic;
   color: var(--ink-faded);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .saint-card .saint-desc {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.7;
   color: var(--ink-light);
+  text-align: left;
 }
 
 .saint-card .saint-quote {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
+  font-size: 16px;
   font-style: italic;
   color: var(--ink);
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px solid rgba(184,134,11,0.2);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .saint-card .saint-quote::before { content: '\201C'; }
 .saint-card .saint-quote::after { content: '\201D'; }
+
+.saint-overview {
+  text-align: left;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(184,134,11,0.15);
+}
+
+.saint-overview-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.saint-overview-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.saint-overview-text p { margin-bottom: 10px; }
+
+.saint-overview-loading {
+  text-align: center;
+  color: var(--ink-faded);
+  font-style: italic;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.saint-feast-info {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 14px 0 4px;
+  flex-wrap: wrap;
+}
+
+.saint-feast-item {
+  text-align: center;
+}
+
+.saint-feast-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+
+.saint-feast-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  color: var(--ink);
+  margin-top: 1px;
+}
 
 /* ─── Journal Page ─── */
 .journal-date-header {
@@ -691,7 +796,7 @@ body {
 
 <!-- ─── Header ─── -->
 <header class="app-header">
-  <div class="header-cross">&#10013;</div>
+  <div class="header-cross">☧</div>
   <div class="header-title">Daily Missal</div>
   <div class="header-subtitle">Lectionary & Reflection</div>
 </header>
@@ -1038,17 +1143,27 @@ async function renderReadings() {
     html += `</div>`;
   }
 
-  // If we have Universalis full text, show it
+  // Helper to build an accordion reading card
+  function buildCard(label, source, text) {
+    let card = `<div class="reading-card" onclick="this.classList.toggle('expanded')">`;
+    card += `<div class="reading-header">`;
+    card += `<div class="reading-header-left">`;
+    card += `<div class="reading-label">${label}</div>`;
+    if (source) card += `<div class="reading-reference">${source}</div>`;
+    card += `</div>`;
+    card += `<div class="reading-chevron">\u25BE</div>`;
+    card += `</div>`;
+    if (text) {
+      card += `<div class="reading-body"><div class="reading-text">${text}</div></div>`;
+    }
+    card += `</div>`;
+    return card;
+  }
+
+  // If we have Universalis full text, show accordion cards
   if (uniReadings && uniReadings.sections.length > 0) {
-    uniReadings.sections.forEach((section, i) => {
-      html += `<div class="reading-card">`;
-      html += `<div class="reading-label">${section.label}</div>`;
-      if (section.source) html += `<div class="reading-reference">${section.source}</div>`;
-      html += `<div class="reading-text">${section.text}</div>`;
-      html += `</div>`;
-      if (i < uniReadings.sections.length - 1) {
-        html += `<div class="reading-divider"><span>\u271F</span></div>`;
-      }
+    uniReadings.sections.forEach((section) => {
+      html += buildCard(section.label, section.source, section.text);
     });
 
     // Copyright notice (required by Universalis)
@@ -1059,39 +1174,13 @@ async function renderReadings() {
     html += `<a class="usccb-link" href="https://universalis.com/mass.htm" target="_blank" rel="noopener">Readings provided by Universalis</a>`;
 
   } else if (readings) {
-    // Fallback: show just references from Catholic Readings API
+    // Fallback: show references from Catholic Readings API (no full text)
     const r = readings.readings || {};
 
-    if (r.firstReading) {
-      html += `<div class="reading-card">`;
-      html += `<div class="reading-label">First Reading</div>`;
-      html += `<div class="reading-reference">${r.firstReading}</div>`;
-      html += `</div>`;
-      html += `<div class="reading-divider"><span>\u271F</span></div>`;
-    }
-
-    if (r.psalm) {
-      html += `<div class="reading-card">`;
-      html += `<div class="reading-label">Responsorial Psalm</div>`;
-      html += `<div class="reading-reference">${r.psalm}</div>`;
-      html += `</div>`;
-      html += `<div class="reading-divider"><span>\u271F</span></div>`;
-    }
-
-    if (r.secondReading) {
-      html += `<div class="reading-card">`;
-      html += `<div class="reading-label">Second Reading</div>`;
-      html += `<div class="reading-reference">${r.secondReading}</div>`;
-      html += `</div>`;
-      html += `<div class="reading-divider"><span>\u271F</span></div>`;
-    }
-
-    if (r.gospel) {
-      html += `<div class="reading-card">`;
-      html += `<div class="reading-label">Gospel</div>`;
-      html += `<div class="reading-reference">${r.gospel}</div>`;
-      html += `</div>`;
-    }
+    if (r.firstReading) html += buildCard('First Reading', r.firstReading, null);
+    if (r.psalm) html += buildCard('Responsorial Psalm', r.psalm, null);
+    if (r.secondReading) html += buildCard('Second Reading', r.secondReading, null);
+    if (r.gospel) html += buildCard('Gospel', r.gospel, null);
 
     // USCCB Link
     if (readings.usccbLink) {
@@ -1105,6 +1194,38 @@ async function renderReadings() {
   }
 
   container.innerHTML = html;
+}
+
+// ─── Saint Overview Cache ───
+let saintOverviewCache = {};
+
+async function fetchSaintOverview(saintName) {
+  const cacheKey = saintName.toLowerCase().trim();
+  if (saintOverviewCache[cacheKey]) return saintOverviewCache[cacheKey];
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `Give a concise but rich overview of "${saintName}" for a Catholic daily missal app. Include: when and where they lived, what they are known for, their significance to the Church, and their patronage (if notable). Write in a warm, reverent tone suitable for daily devotional reading. Use 2-3 short paragraphs. Do not use any markdown formatting, headers, or bullet points. Just flowing prose paragraphs separated by blank lines.`
+        }]
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const text = data.content.map(c => c.text || '').join('');
+    saintOverviewCache[cacheKey] = text;
+    return text;
+  } catch (e) {
+    console.warn('Saint overview fetch failed:', e);
+    return null;
+  }
 }
 
 // ─── Render Saint ───
@@ -1126,6 +1247,7 @@ async function renderSaint() {
   }
 
   const cel = calendar.celebration;
+  const info = formatDate(currentDate);
   let html = `<div class="saint-card">`;
 
   if (cel.image) {
@@ -1133,17 +1255,46 @@ async function renderSaint() {
   }
 
   html += `<div class="saint-name">${cel.name}</div>`;
-  if (cel.type) html += `<div class="saint-type">${cel.type}</div>`;
+  if (cel.type) {
+    html += `<div class="saint-type">${cel.type}</div>`;
+  }
+
+  // Feast day info row
+  html += `<div class="saint-feast-info">`;
+  html += `<div class="saint-feast-item"><div class="saint-feast-label">Feast Day</div><div class="saint-feast-value">${info.fullDate}</div></div>`;
+  if (calendar.season) {
+    html += `<div class="saint-feast-item"><div class="saint-feast-label">Season</div><div class="saint-feast-value">${calendar.season}</div></div>`;
+  }
+  html += `</div>`;
+
   if (cel.description) html += `<div class="saint-desc">${cel.description}</div>`;
   if (cel.quote) html += `<div class="saint-quote">${cel.quote}</div>`;
 
-  html += `</div>`;
+  // Overview section - loaded async via Claude
+  html += `<div class="saint-overview">`;
+  html += `<div class="saint-overview-title">About This Saint</div>`;
+  html += `<div class="saint-overview-text" id="saint-overview-text">`;
+  html += `<div class="saint-overview-loading">Loading overview\u2026</div>`;
+  html += `</div></div>`;
+
+  html += `</div>`; // close saint-card
 
   if (calendar.wikipediaLink) {
-    html += `<a class="usccb-link" href="${calendar.wikipediaLink}" target="_blank" rel="noopener">Learn More</a>`;
+    html += `<a class="usccb-link" href="${calendar.wikipediaLink}" target="_blank" rel="noopener">Read More on Wikipedia</a>`;
   }
 
   container.innerHTML = html;
+
+  // Now fetch the AI-generated overview
+  const overview = await fetchSaintOverview(cel.name);
+  const overviewEl = document.getElementById('saint-overview-text');
+  if (overviewEl) {
+    if (overview) {
+      overviewEl.innerHTML = overview.split('\n\n').filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
+    } else {
+      overviewEl.innerHTML = `<p style="font-style:italic;color:var(--ink-faded);">Overview not available. Tap the link below to learn more.</p>`;
+    }
+  }
 }
 
 // ─── Date Navigation ───
