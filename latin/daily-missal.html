@@ -1080,43 +1080,51 @@ async function expandReading(cardId, label, reference, dateStr) {
   }
 }
 
-// ─── On-Demand Reading Text via Claude API + Web Search ───
+// ─── On-Demand Reading Text via bible-api.com (free, CORS-enabled) ───
 let readingTextCache = {};
+
+function cleanReference(ref) {
+  // Remove trailing letter suffixes like "18b" -> "18", "Wisdom 9:13-18b" -> "Wisdom 9:13-18"
+  // Also handle "Psalm 90:3-4, 5-6, 12-13, 14 and 17" -> multiple ranges
+  return ref.replace(/(\d+)[a-d]\b/g, '$1');
+}
 
 async function fetchReadingText(label, reference, dateStr) {
   const cacheKey = dateStr + ':' + reference;
   if (readingTextCache[cacheKey]) return readingTextCache[cacheKey];
 
+  const cleanRef = cleanReference(reference);
+
+  // Use Douay-Rheims (Catholic translation) from bible-api.com
+  const url = `https://bible-api.com/${encodeURIComponent(cleanRef)}?translation=dra`;
+
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
-        messages: [{
-          role: "user",
-          content: `Look up the Catholic Mass reading for "${reference}" as used in the lectionary for ${dateStr}. Return ONLY the scripture text itself — no introductions, no commentary, no headers. If it is a Psalm, include the response/antiphon. Output plain text with paragraph breaks. Do not include the reference citation in your output.`
-        }]
-      })
-    });
-
-    if (!response.ok) throw new Error('API error');
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('API returned ' + response.status);
     const data = await response.json();
-    const text = data.content
-      .filter(c => c.type === 'text')
-      .map(c => c.text)
-      .join('')
-      .trim();
 
-    if (text) {
+    if (data.text) {
+      const text = data.text.trim();
       readingTextCache[cacheKey] = text;
       return text;
     }
     return null;
   } catch (e) {
-    console.warn('Reading text fetch failed:', e);
+    console.warn('Bible API fetch failed for "' + reference + '":', e);
+    // Fallback: try World English Bible (more forgiving with references)
+    try {
+      const fallbackUrl = `https://bible-api.com/${encodeURIComponent(cleanRef)}`;
+      const resp2 = await fetch(fallbackUrl);
+      if (!resp2.ok) throw new Error('Fallback also failed');
+      const data2 = await resp2.json();
+      if (data2.text) {
+        const text = data2.text.trim();
+        readingTextCache[cacheKey] = text;
+        return text;
+      }
+    } catch (e2) {
+      console.warn('Bible API fallback also failed:', e2);
+    }
     return null;
   }
 }

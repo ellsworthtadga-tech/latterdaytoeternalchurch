@@ -362,7 +362,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <button class="nav-btn active" data-screen="learn" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>LEARN</button>
   <button class="nav-btn" data-screen="games" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>GAMES</button>
   <button class="nav-btn" data-screen="vocab" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>VOCAB</button>
-  <button class="nav-btn" data-screen="grammar" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>TIPS</button>
+  <button class="nav-btn" data-screen="grammar" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>GRAMMAR</button>
   <button class="nav-btn" data-screen="profile" onclick="switchTab(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ME</button>
 </nav>
 <div class="screen active" id="screen-learn">
@@ -416,8 +416,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="filter-row" id="vocab-filter"></div><div id="vocab-list"></div></div>
 </div>
 <div class="screen" id="screen-grammar">
-  <div class="top-bar"><div class="top-bar-title">Conversation Tips</div></div>
-  <div class="scroll-area" id="grammar-list"></div>
+  <div class="top-bar"><div class="top-bar-title">Grammar</div></div>
+  <div class="scroll-area" id="grammar-scroll"></div>
 </div>
 <div class="screen" id="screen-profile">
   <div class="top-bar"><div class="top-bar-title">Profile</div></div>
@@ -663,9 +663,33 @@ function startVocabPractice(){
 }
 
 // GRAMMAR
-function renderGrammar(){document.getElementById('grammar-list').innerHTML=GRAMMAR.map(g=>
-  `<div class="grammar-card"><div class="grammar-title">${g.title}</div><div class="grammar-rule">${g.rule}</div>
-  ${g.ex.map(e=>`<div class="grammar-ex"><div class="es">${e.es}</div><div class="en">${e.en}</div></div>`).join('')}</div>`).join('')}
+function renderGrammar(){
+  const el=document.getElementById('grammar-scroll');
+  let h='';
+  // Grammar lessons section
+  h+='<div class="section-label">Grammar Lessons</div>';
+  h+='<div class="section-nav">';
+  h+='<button class="section-pill active" onclick="filterGrammar(\'all\',this)">All</button>';
+  h+='<button class="section-pill" onclick="filterGrammar(\'tense\',this)">Tenses</button>';
+  h+='<button class="section-pill" onclick="filterGrammar(\'grammar\',this)">Grammar</button>';
+  h+='<button class="section-pill" onclick="filterGrammar(\'irreg\',this)">Irregular</button>';
+  h+='</div>';
+  h+='<div id="grammar-lesson-list">';
+  GRAMMAR_LESSONS.forEach(gl=>{
+    const done=(state.grammarCompleted||[]).includes(gl.id);
+    h+='<div class="grammar-lesson-card '+(done?'gl-completed':'')+'" data-gl-type="'+gl.iconCls+'" onclick="startGrammarLesson(\''+gl.id+'\')">';
+    h+='<div class="gl-header"><div class="gl-icon '+gl.iconCls+'">'+gl.icon+'</div>';
+    h+='<div class="gl-info"><div class="gl-title">'+gl.title+'</div><div class="gl-desc">'+gl.desc+'</div></div>';
+    h+=(done?'<div class="gl-crown">👑</div>':'')+'</div></div>';
+  });
+  h+='</div>';
+  // Conversation tips section below
+  h+='<div class="section-label" style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border)">Conversation Tips</div>';
+  h+=GRAMMAR.map(g=>
+    '<div class="grammar-card"><div class="grammar-title">'+g.title+'</div><div class="grammar-rule">'+g.rule+'</div>'+
+    g.ex.map(e=>'<div class="grammar-ex"><div class="es">'+e.es+'</div><div class="en">'+e.en+'</div></div>').join('')+'</div>').join('');
+  el.innerHTML=h;
+}
 
 // PROFILE
 function renderProfile(){
@@ -2013,52 +2037,8 @@ function startGramPractice() {
 }
 
 // ============================================================
-// PATCH renderLearn to add Grammar section + jump button
+// renderLearn is already defined above — no grammar patch needed
 // ============================================================
-const _prevRenderLearn = renderLearn;
-renderLearn = function() {
-  _prevRenderLearn();
-  const el = document.getElementById('learn-scroll');
-
-  // Build grammar section HTML
-  let h = '<div id="grammar-section-anchor" style="padding-top:8px"></div>';
-  h += '<div class="section-label" style="margin-top:32px;padding-top:16px;border-top:1px solid var(--border)">📖 Grammar Lessons</div>';
-
-  // Filter pills
-  h += '<div class="section-nav">';
-  h += '<button class="section-pill active" onclick="filterGrammar(\'all\',this)">All</button>';
-  h += '<button class="section-pill" onclick="filterGrammar(\'tense\',this)">Tenses</button>';
-  h += '<button class="section-pill" onclick="filterGrammar(\'grammar\',this)">Grammar</button>';
-  h += '<button class="section-pill" onclick="filterGrammar(\'irreg\',this)">Irregular</button>';
-  h += '</div>';
-
-  h += '<div id="grammar-lesson-list">';
-  GRAMMAR_LESSONS.forEach((gl, i) => {
-    const done = (state.grammarCompleted || []).includes(gl.id);
-    h += '<div class="grammar-lesson-card ' + (done ? 'gl-completed' : '') + '" data-gl-type="' + gl.iconCls + '" onclick="startGrammarLesson(\'' + gl.id + '\')">';
-    h += '<div class="gl-header"><div class="gl-icon ' + gl.iconCls + '">' + gl.icon + '</div>';
-    h += '<div class="gl-info"><div class="gl-title">' + gl.title + '</div><div class="gl-desc">' + gl.desc + '</div></div>';
-    h += (done ? '<div class="gl-crown">👑</div>' : '') + '</div></div>';
-  });
-  h += '</div>';
-
-  // Append grammar section using DOM so we don't nuke event listeners
-  const gramDiv = document.createElement('div');
-  gramDiv.innerHTML = h;
-  el.appendChild(gramDiv);
-
-  // Now insert jump button after streak banner (both use DOM methods, no innerHTML clobber)
-  const banner = el.querySelector('.streak-banner');
-  if (banner) {
-    const jumpBtn = document.createElement('button');
-    jumpBtn.className = 'jump-btn';
-    jumpBtn.innerHTML = '📖 Jump to Grammar Lessons ↓';
-    jumpBtn.onclick = function() {
-      document.getElementById('grammar-section-anchor').scrollIntoView({behavior:'smooth'});
-    };
-    banner.after(jumpBtn);
-  }
-};
 
 // Grammar filter
 window.filterGrammar = function(type, btn) {

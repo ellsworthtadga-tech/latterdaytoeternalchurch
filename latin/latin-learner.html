@@ -2022,6 +2022,7 @@ function playCorrect(){try{const ctx=ensureAudio();const o=ctx.createOscillator(
 function playWrong(){try{const ctx=ensureAudio();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime(330,ctx.currentTime);o.frequency.setValueAtTime(277,ctx.currentTime+0.12);g.gain.setValueAtTime(0.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.3);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.3);}catch(e){}}
 function playAchievement(){try{const ctx=ensureAudio();[0,0.12,0.24].forEach((t,i)=>{const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime([523.25,659.25,783.99][i],ctx.currentTime+t);g.gain.setValueAtTime(0.25,ctx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+t+0.2);o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.2);});}catch(e){}}
 function haptic(style){try{if(navigator.vibrate)navigator.vibrate(style==='success'?[10]:style==='error'?[30,20,30]:[10]);}catch(e){}}
+function scrollToEl(id){setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},50);}
 
 if(S.darkMode)document.documentElement.setAttribute("data-theme","dark");
 
@@ -2372,7 +2373,7 @@ function renderScripture(){
   if(S.scrSection==="john"){
     const ch=JOHN_CHAPTERS[S.scrChapter];
     content=`<div class="font-controls"><button class="font-btn" id="font-down">A\u2212</button><span class="font-label">Text Size</span><button class="font-btn" id="font-up">A+</button></div>
-<div class="scripture-nav">${JOHN_CHAPTERS.map((c,i)=>`<button class="scripture-nav-btn ${S.scrChapter===i?'active':''}" data-ch="${i}">Ch. ${c.ch}</button>`).join('')}</div>
+<div id="scr-ch-nav" class="scripture-nav">${JOHN_CHAPTERS.map((c,i)=>`<button class="scripture-nav-btn ${S.scrChapter===i?'active':''}" data-ch="${i}">Ch. ${c.ch}</button>`).join('')}</div>
 <div class="chapter-title">${ch.title}</div>
 <div class="chapter-subtitle">${ch.subtitle}</div>
 <p class="instructions">Tap any Latin word to see its definition. Grammar notes appear below each verse.</p>
@@ -2404,7 +2405,7 @@ ${ST("Scriptura Sacra \u2014 Holy Scripture")}
 ${content}`;
   // Event listeners
   document.querySelectorAll("#view-scripture .toggle-btn").forEach(b=>b.addEventListener("click",()=>{S.scrSection=b.dataset.sec;renderScripture();}));
-  document.querySelectorAll(".scripture-nav-btn").forEach(b=>b.addEventListener("click",()=>{S.scrChapter=parseInt(b.dataset.ch);saveState();renderScripture();window.scrollTo({top:0,behavior:"smooth"});}));
+  document.querySelectorAll(".scripture-nav-btn").forEach(b=>b.addEventListener("click",()=>{S.scrChapter=parseInt(b.dataset.ch);saveState();renderScripture();scrollToEl("scr-ch-nav");}));
   document.querySelectorAll(".word-tap").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();showWordPanel(el.dataset.word,e);}));
   document.querySelectorAll(".verse-bookmark").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();toggleBookmark(b.dataset.ref);renderScripture();}));
   document.querySelectorAll(".vc-card").forEach(c=>c.addEventListener("click",()=>c.classList.toggle("expanded")));
@@ -2414,8 +2415,8 @@ ${content}`;
   if(fu)fu.addEventListener("click",()=>{S.fontSize=Math.min((S.fontSize||1)+0.1,1.5);saveState();renderScripture();});
   if(fd)fd.addEventListener("click",()=>{S.fontSize=Math.max((S.fontSize||1)-0.1,0.7);saveState();renderScripture();});
   const pc=$("prev-ch"),nc=$("next-ch");
-  if(pc)pc.addEventListener("click",()=>{S.scrChapter--;saveState();renderScripture();window.scrollTo({top:0,behavior:"smooth"});});
-  if(nc)nc.addEventListener("click",()=>{S.scrChapter++;saveState();renderScripture();window.scrollTo({top:0,behavior:"smooth"});});
+  if(pc)pc.addEventListener("click",()=>{S.scrChapter--;saveState();renderScripture();scrollToEl("scr-ch-nav");});
+  if(nc)nc.addEventListener("click",()=>{S.scrChapter++;saveState();renderScripture();scrollToEl("scr-ch-nav");});
   
 }
 
@@ -3007,7 +3008,7 @@ function renderFabulae(){
 
   const introHtml='<div style="background:var(--gold-08);border:1px solid var(--gold-border);border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:0.88rem;color:var(--brown-soft);line-height:1.6"><b>Background:</b> '+story.intro+'</div>';
 
-  const chapterNav='<div class="scripture-nav">'+story.chapters.map((c,i)=>'<button class="scripture-nav-btn fab-ch-btn '+(S.fabChapter===i?'active':'')+'" data-fabch="'+i+'">'+c.ch+'</button>').join('')+'</div>';
+  const chapterNav='<div id="fab-ch-nav" class="scripture-nav">'+story.chapters.map((c,i)=>'<button class="scripture-nav-btn fab-ch-btn '+(S.fabChapter===i?'active':'')+'" data-fabch="'+i+'">'+c.ch+'</button>').join('')+'</div>';
 
   const verses=ch.verses.map(v=>{
     const words=v.la.split(/\b/).map(w=>/[a-zA-ZāēīōūÀ-ÿ]{2,}/.test(w)?'<span class="word-tap" data-word="'+w+'">'+w+'</span>':w).join('');
@@ -3033,15 +3034,15 @@ function renderFabulae(){
     '<div style="margin-top:28px;padding:14px;background:var(--gold-08);border-radius:10px;font-size:0.8rem;color:var(--brown-muted);text-align:center">Source: <i>Fabulae Faciles</i> by Francis Ritchie (1903) \u2014 Public Domain via Project Gutenberg</div>';
 
   // Event listeners
-  document.querySelectorAll("[data-fabstory]").forEach(b=>b.addEventListener("click",()=>{S.fabStory=parseInt(b.dataset.fabstory);S.fabChapter=0;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});}));
-  document.querySelectorAll(".fab-ch-btn").forEach(b=>b.addEventListener("click",()=>{S.fabChapter=parseInt(b.dataset.fabch);saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});}));
+  document.querySelectorAll("[data-fabstory]").forEach(b=>b.addEventListener("click",()=>{S.fabStory=parseInt(b.dataset.fabstory);S.fabChapter=0;saveState();renderFabulae();scrollToEl("fab-ch-nav");}));
+  document.querySelectorAll(".fab-ch-btn").forEach(b=>b.addEventListener("click",()=>{S.fabChapter=parseInt(b.dataset.fabch);saveState();renderFabulae();scrollToEl("fab-ch-nav");}));
   document.querySelectorAll("#view-fabulae .word-tap").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();showWordPanel(el.dataset.word,e);}));
   const fu=document.getElementById("fab-font-up"),fd=document.getElementById("fab-font-down");
   if(fu)fu.addEventListener("click",()=>{S.fabFontSize=Math.min((S.fabFontSize||1)+0.1,1.5);saveState();renderFabulae();});
   if(fd)fd.addEventListener("click",()=>{S.fabFontSize=Math.max((S.fabFontSize||1)-0.1,0.7);saveState();renderFabulae();});
   const fp=document.getElementById("fab-prev"),fn_btn=document.getElementById("fab-next");
-  if(fp)fp.addEventListener("click",()=>{S.fabChapter--;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});});
-  if(fn_btn)fn_btn.addEventListener("click",()=>{S.fabChapter++;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});});
+  if(fp)fp.addEventListener("click",()=>{S.fabChapter--;saveState();renderFabulae();scrollToEl("fab-ch-nav");});
+  if(fn_btn)fn_btn.addEventListener("click",()=>{S.fabChapter++;saveState();renderFabulae();scrollToEl("fab-ch-nav");});
 }
 
 // Merge FABULAE_FORMS into LATIN_FORMS
