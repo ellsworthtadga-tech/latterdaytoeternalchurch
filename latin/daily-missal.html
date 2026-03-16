@@ -319,10 +319,8 @@ body {
 .reading-body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease;
+  transition: max-height 0.5s ease-in-out;
 }
-
-.reading-card.expanded .reading-body { max-height: 5000px; }
 
 .reading-text {
   font-family: 'Cormorant Garamond', serif;
@@ -1024,6 +1022,32 @@ function setStore(key, val) {
   localStorage.setItem('missal_' + key, JSON.stringify(val));
 }
 
+// ─── Reading Accordion Toggle ───
+function toggleReading(headerEl) {
+  const card = headerEl.parentElement;
+  const body = card.querySelector('.reading-body');
+  if (!body) return;
+
+  if (card.classList.contains('expanded')) {
+    // Collapse: set explicit height first, then animate to 0
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      body.style.maxHeight = '0px';
+    });
+    card.classList.remove('expanded');
+  } else {
+    // Expand: animate to scrollHeight, then remove cap
+    card.classList.add('expanded');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    body.addEventListener('transitionend', function handler() {
+      if (card.classList.contains('expanded')) {
+        body.style.maxHeight = 'none';
+      }
+      body.removeEventListener('transitionend', handler);
+    });
+  }
+}
+
 // ─── Universalis JSONP ───
 // Universalis provides full reading text via JSONP - bypasses CORS
 function fetchUniversalis(d) {
@@ -1234,17 +1258,27 @@ async function renderReadings() {
 
   // Helper to build an accordion reading card
   function buildCard(label, source, text) {
-    let card = `<div class="reading-card" onclick="this.classList.toggle('expanded')">`;
-    card += `<div class="reading-header">`;
+    let card = `<div class="reading-card">`;
+    card += `<div class="reading-header" onclick="toggleReading(this)">`;
     card += `<div class="reading-header-left">`;
     card += `<div class="reading-label">${label}</div>`;
     if (source) card += `<div class="reading-reference">${source}</div>`;
     card += `</div>`;
-    card += `<div class="reading-chevron">\u25BE</div>`;
-    card += `</div>`;
     if (text) {
-      card += `<div class="reading-body"><div class="reading-text">${text}</div></div>`;
+      card += `<div class="reading-chevron">\u25BE</div>`;
     }
+    card += `</div>`;
+    card += `<div class="reading-body">`;
+    if (text) {
+      card += `<div class="reading-text">${text}</div>`;
+    } else {
+      // No full text available - show link to USCCB
+      const mm = String(currentDate.getMonth()+1).padStart(2,'0');
+      const dd = String(currentDate.getDate()).padStart(2,'0');
+      const yy = String(currentDate.getFullYear()).slice(-2);
+      card += `<div class="reading-text" style="text-align:center;font-style:italic;color:var(--ink-faded);">Full text not available from API.<br><a href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener" style="color:var(--crimson);">Read on USCCB.org \u2192</a></div>`;
+    }
+    card += `</div>`;
     card += `</div>`;
     return card;
   }
