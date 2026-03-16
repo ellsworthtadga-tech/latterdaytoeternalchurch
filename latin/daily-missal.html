@@ -360,6 +360,95 @@ body {
   opacity: 0.4;
 }
 
+/* ─── Readings Summary Box ─── */
+.summary-box {
+  margin-top: 20px;
+  border: 1px solid rgba(184,134,11,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(184,134,11,0.05), rgba(184,134,11,0.02));
+}
+
+.summary-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.2s;
+}
+
+.summary-trigger:hover { background: rgba(184,134,11,0.06); }
+
+.summary-trigger-icon {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.summary-trigger-text {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.summary-trigger-hint {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-faded);
+}
+
+.summary-content {
+  padding: 0 20px 20px;
+  display: none;
+}
+
+.summary-content.visible { display: block; }
+
+.summary-content-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.summary-content-text p { margin-bottom: 10px; }
+
+.summary-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 0;
+  color: var(--ink-faded);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.summary-loading .loading-spinner {
+  width: 20px; height: 20px;
+  border-width: 2px;
+  margin: 0;
+}
+
+.summary-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 12px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(184,134,11,0.15);
+}
+
 /* ─── USCCB Link ─── */
 .usccb-link {
   display: block;
@@ -1193,7 +1282,105 @@ async function renderReadings() {
     }
   }
 
+  // ── Summary Box (on-demand, at the bottom) ──
+  // Build a data blob the summary generator can use
+  const summaryData = [];
+  if (uniReadings && uniReadings.sections.length > 0) {
+    uniReadings.sections.forEach(s => {
+      summaryData.push(`${s.label}${s.source ? ' (' + s.source + ')' : ''}: ${s.text ? s.text.replace(/<[^>]*>/g, '').substring(0, 600) : ''}`);
+    });
+  } else if (readings && readings.readings) {
+    const r = readings.readings;
+    if (r.firstReading) summaryData.push('First Reading: ' + r.firstReading);
+    if (r.psalm) summaryData.push('Psalm: ' + r.psalm);
+    if (r.secondReading) summaryData.push('Second Reading: ' + r.secondReading);
+    if (r.gospel) summaryData.push('Gospel: ' + r.gospel);
+  }
+
+  if (summaryData.length > 0) {
+    const encodedData = btoa(unescape(encodeURIComponent(summaryData.join('\n---\n'))));
+    html += `<div class="summary-box" id="summary-box">`;
+    html += `<div class="summary-trigger" id="summary-trigger" data-readings="${encodedData}">`;
+    html += `<div class="summary-trigger-icon">✦</div>`;
+    html += `<div><div class="summary-trigger-text">Today's Theme</div>`;
+    html += `<div class="summary-trigger-hint">Tap to generate a family-friendly summary</div></div>`;
+    html += `</div>`;
+    html += `<div class="summary-content" id="summary-content"></div>`;
+    html += `</div>`;
+  }
+
   container.innerHTML = html;
+
+  // Attach the click handler for the summary trigger
+  const trigger = document.getElementById('summary-trigger');
+  if (trigger) {
+    trigger.addEventListener('click', function() {
+      const contentEl = document.getElementById('summary-content');
+      if (contentEl.classList.contains('visible')) return; // already loaded
+      contentEl.classList.add('visible');
+      contentEl.innerHTML = `<div class="summary-loading"><div class="loading-spinner"></div>Reflecting on today's readings\u2026</div>`;
+      const readingsBlob = decodeURIComponent(escape(atob(this.dataset.readings)));
+      generateReadingsSummary(readingsBlob, contentEl);
+      // Hide the trigger text hint
+      this.style.cursor = 'default';
+      this.querySelector('.summary-trigger-hint').textContent = '';
+    });
+  }
+}
+
+// ─── Readings Summary Generator ───
+let summaryCache = {};
+
+async function generateReadingsSummary(readingsText, containerEl) {
+  const cacheKey = readingsText.substring(0, 100);
+  if (summaryCache[cacheKey]) {
+    renderSummaryResult(summaryCache[cacheKey], containerEl);
+    return;
+  }
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `You are a warm, faithful Catholic commentator helping a father understand and explain today's Mass readings to his young children.
+
+Here are today's readings:
+${readingsText}
+
+Write a summary in two parts:
+1. THEME: A single sentence capturing the overarching theme that connects all of today's readings.
+2. REFLECTION: A short paragraph (3-5 sentences) explaining what these readings mean for daily life, written so a parent could read it aloud or paraphrase it for kids ages 5-12. Use simple, concrete language. If helpful, include a brief analogy a child would understand.
+
+Do not use markdown formatting, headers, or bullet points. Start with the theme sentence, then a blank line, then the reflection paragraph.`
+        }]
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const text = data.content.map(c => c.text || '').join('');
+    summaryCache[cacheKey] = text;
+    renderSummaryResult(text, containerEl);
+  } catch (e) {
+    console.warn('Summary generation failed:', e);
+    containerEl.innerHTML = `<p style="font-style:italic;color:var(--ink-faded);text-align:center;padding:8px 0;">Summary unavailable. Check your connection and try refreshing.</p>`;
+  }
+}
+
+function renderSummaryResult(text, containerEl) {
+  const parts = text.split('\n\n').filter(p => p.trim());
+  let html = `<div class="summary-label">Today's Theme</div>`;
+  html += `<div class="summary-content-text">`;
+  parts.forEach(p => {
+    html += `<p>${p.trim()}</p>`;
+  });
+  html += `</div>`;
+  containerEl.innerHTML = html;
 }
 
 // ─── Saint Overview Cache ───
