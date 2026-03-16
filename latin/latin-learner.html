@@ -328,6 +328,7 @@ footer .footer-text{margin-top:10px;font-size:0.78rem;color:var(--brown-muted)}
 <div id="view-mass" class="view"></div>
 <div id="view-hymns" class="view"></div>
 <div id="view-scripture" class="view"></div>
+<div id="view-fabulae" class="view"></div>
 </main>
 <footer><div class="ornament">&#10022; &#10022; &#10022;</div><p class="footer-text">Ad Maiorem Dei Gloriam</p></footer><div id="word-panel"></div>
 </div>
@@ -1164,7 +1165,7 @@ const ACHIEVEMENTS=[
 // STATE & PERSISTENCE
 // ═══════════════════════════════════════════════════════════════════
 const CASES=["Nom.","Gen.","Dat.","Acc.","Abl."];
-function defaultState(){return{activeTab:"home",learnedWords:[],score:{correct:0,total:0},streak:0,bestStreak:0,vocabFilter:"All",vocabSearch:"",flippedCards:[],prayerExpanded:null,prayerShowLatin:true,activeLesson:0,quizMode:"latin-to-english",quizCategory:"All",quizCurrent:null,quizOptions:[],quizSelected:null,darkMode:false,studyDays:[],currentDayStreak:0,sr:{},practiceTab:"quiz",sbIndex:0,sbPlaced:[],sbChecked:false,completedLessons:[],scrSection:"john",scrChapter:0,fontSize:1,bookmarks:[],vcFilter:"All",vcSearch:"",practiceSubTab:"quiz"};}
+function defaultState(){return{activeTab:"home",learnedWords:[],score:{correct:0,total:0},streak:0,bestStreak:0,vocabFilter:"All",vocabSearch:"",flippedCards:[],prayerExpanded:null,prayerShowLatin:true,activeLesson:0,quizMode:"latin-to-english",quizCategory:"All",quizCurrent:null,quizOptions:[],quizSelected:null,darkMode:false,studyDays:[],currentDayStreak:0,sr:{},practiceTab:"quiz",sbIndex:0,sbPlaced:[],sbChecked:false,completedLessons:[],scrSection:"john",scrChapter:0,fontSize:1,bookmarks:[],vcFilter:"All",vcSearch:"",practiceSubTab:"quiz",fabStory:0,fabChapter:0,fabFontSize:1};}
 let S=defaultState();
 function saveState(){try{const d={learnedWords:S.learnedWords,score:S.score,bestStreak:S.bestStreak,darkMode:S.darkMode,studyDays:S.studyDays,currentDayStreak:S.currentDayStreak,sr:S.sr,activeLesson:S.activeLesson,completedLessons:S.completedLessons,scrChapter:S.scrChapter,fontSize:S.fontSize,bookmarks:S.bookmarks};localStorage.setItem("latina_state",JSON.stringify(d));}catch(e){}}
 function loadState(){try{const d=JSON.parse(localStorage.getItem("latina_state"));if(d){S.learnedWords=d.learnedWords||[];S.score=d.score||{correct:0,total:0};S.bestStreak=d.bestStreak||0;S.darkMode=d.darkMode||false;S.studyDays=d.studyDays||[];S.currentDayStreak=d.currentDayStreak||0;S.sr=d.sr||{};S.activeLesson=d.activeLesson||0;S.completedLessons=d.completedLessons||[];S.scrChapter=d.scrChapter||0;S.fontSize=d.fontSize||1;S.bookmarks=d.bookmarks||[];}}catch(e){}}
@@ -2043,7 +2044,7 @@ $("theme-toggle").addEventListener("click",toggleTheme);
 // ═══════════════════════════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════════════════════════
-const TABS=[{id:"home",l:"Domus",e:"Home"},{id:"vocabulary",l:"Vocabula",e:"Vocabulary"},{id:"prayers",l:"Orationes",e:"Prayers"},{id:"grammar",l:"Grammatica",e:"Grammar"},{id:"practice",l:"Exercitia",e:"Practice"},{id:"mass",l:"Missa",e:"Mass"},{id:"hymns",l:"Hymni",e:"Hymns"},{id:"scripture",l:"Scriptura",e:"Scripture"}];
+const TABS=[{id:"home",l:"Domus",e:"Home"},{id:"vocabulary",l:"Vocabula",e:"Vocabulary"},{id:"prayers",l:"Orationes",e:"Prayers"},{id:"grammar",l:"Grammatica",e:"Grammar"},{id:"practice",l:"Exercitia",e:"Practice"},{id:"mass",l:"Missa",e:"Mass"},{id:"hymns",l:"Hymni",e:"Hymns"},{id:"scripture",l:"Scriptura",e:"Scripture"},{id:"fabulae",l:"Fabulae",e:"Stories"}];
 function renderNav(){
   $("main-nav").innerHTML=TABS.map(t=>`<button class="nav-btn ${S.activeTab===t.id?'active':''}" data-tab="${t.id}"><span class="nav-latin">${t.l}</span><span class="nav-english">${t.e}</span></button>`).join("");
   document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
@@ -2052,7 +2053,7 @@ function switchTab(tab){
   const m=document.querySelector("main");m.style.opacity="0";
   setTimeout(()=>{S.activeTab=tab;document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$("view-"+tab).classList.add("active");renderNav();renderView(tab);m.style.opacity="1";window.scrollTo({top:0,behavior:"smooth"});},200);
 }
-function renderView(t){const fn={home:renderHome,vocabulary:renderVocabulary,prayers:renderPrayers,grammar:renderGrammar,practice:renderPractice,mass:renderMass,hymns:renderHymns,scripture:renderScripture};if(fn[t])fn[t]();}
+function renderView(t){const fn={home:renderHome,vocabulary:renderVocabulary,prayers:renderPrayers,grammar:renderGrammar,practice:renderPractice,mass:renderMass,hymns:renderHymns,scripture:renderScripture,fabulae:renderFabulae};if(fn[t])fn[t]();}
 
 // ═══════════════════════════════════════════════════════════════════
 // HOME
@@ -2113,6 +2114,7 @@ ${ST("Begin Your Studies")}
 {tab:"mass",icon:"\u26ea",title:"Missa",desc:"Complete Ordinary of the Mass"},
 {tab:"hymns",icon:"\ud83c\udfb5",title:"Hymni",desc:"Famous Latin hymns"},
 {tab:"scripture",icon:"\ud83d\udcd6",title:"Scriptura",desc:"Gospel readings (Vulgate)"},
+{tab:"fabulae",icon:"\ud83c\udfdb",title:"Fabulae",desc:"Easy Latin stories (Ritchie)"},
 ].map(i=>`<button class="quick-card" data-tab="${i.tab}"><div class="quick-icon">${i.icon}</div><div class="quick-title">${i.title}</div><div class="quick-desc">${i.desc}</div></button>`).join("")}</div>
 <div class="tip-box"><div class="tip-header">\ud83d\udccc Study Path</div><p class="tip-text"><b>Recommended:</b> Grammar Lesson 1 (Pronunciation) \u2192 Vocabulary by category \u2192 Quiz as you go \u2192 Prayers alongside grammar \u2192 Mass walkthrough once comfortable \u2192 Scripture for advanced reading.</p></div>`;
   document.querySelectorAll(".quick-card").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
@@ -2416,6 +2418,634 @@ ${content}`;
   if(nc)nc.addEventListener("click",()=>{S.scrChapter++;saveState();renderScripture();window.scrollTo({top:0,behavior:"smooth"});});
   
 }
+
+
+// ═══════════════════════════════════════════════════════════════════
+// FABULAE FACILES — Public Domain (Ritchie, 1903)
+// ═══════════════════════════════════════════════════════════════════
+
+const FABULAE_STORIES = [
+{id:"perseus",title:"Perseus",subtitle:"The Myth of Perseus and Medusa",
+ intro:"Acrisius, an ancient king of Argos, had been warned by an oracle that he should perish by the hand of his grandson. On discovering that his daughter Danae had given birth to a son, he set both mother and child adrift on the sea. They were saved by Jupiter, and Perseus grew up at the court of Polydectes. Sent to fetch the head of Medusa, Perseus accomplished this with the help of Apollo and Minerva, rescued Andromeda from a sea-monster, and returned to fulfill the oracle.",
+ chapters:[
+{ch:1,title:"I. The Ark",subtitle:"Arca — Perseus is cast into the sea",
+verses:[
+{v:1,la:"Haec narrantur a poetis de Perseo.",en:"These things are told by the poets about Perseus.",n:"<b>narrantur</b> = 3rd pl. present passive (are told); <b>a poetis</b> = by the poets (abl. of agent); <b>de Perseo</b> = about Perseus (abl.)"},
+{v:2,la:"Perseus filius erat Iovis, maximi deorum; avus eius Acrisius appellabatur.",en:"Perseus was the son of Jupiter, greatest of the gods; his grandfather was called Acrisius.",n:"<b>filius</b> = m. nom. (son); <b>Iovis</b> = gen. of Iuppiter; <b>maximi deorum</b> = greatest of the gods (gen. partitive); <b>avus</b> = grandfather; <b>appellabatur</b> = imperfect passive (was called)"},
+{v:3,la:"Acrisius volebat Perseum nepotem suum necare; nam propter oraculum puerum timebat.",en:"Acrisius wanted to kill Perseus, his grandson; for he feared the boy on account of an oracle.",n:"<b>volebat</b> = imperfect (was wanting); <b>nepotem suum</b> = his grandson (acc.); <b>necare</b> = to kill (infinitive); <b>propter oraculum</b> = on account of an oracle (acc.); <b>timebat</b> = imperfect (was fearing). Spanish parallel: <i>nepote</i> → <i>nieto</i>"},
+{v:4,la:"Comprehendit igitur Perseum adhuc infantem, et cum matre in arca lignea inclusit.",en:"He therefore seized Perseus, still an infant, and shut him up with his mother in a wooden chest.",n:"<b>comprehendit</b> = perfect (seized); <b>adhuc infantem</b> = still an infant (acc.); <b>cum matre</b> = with his mother (abl.); <b>in arca lignea</b> = in a wooden chest (abl.); <b>inclusit</b> = perfect (shut in). Spanish: <i>arca</i> = arca, <i>incluir</i> = to include/enclose"},
+{v:5,la:"Tum arcam ipsam in mare coniecit.",en:"Then he threw the chest itself into the sea.",n:"<b>arcam ipsam</b> = the chest itself (acc. + intensive pronoun); <b>in mare</b> = into the sea (acc. of motion); <b>coniecit</b> = perfect (threw)"},
+{v:6,la:"Danae, Persei mater, magnopere territa est; tempestas enim magna mare turbabat.",en:"Danae, the mother of Perseus, was greatly terrified; for a great storm was disturbing the sea.",n:"<b>magnopere</b> = greatly (adverb); <b>territa est</b> = perfect passive (was terrified); <b>tempestas</b> = f. nom. (storm); <b>turbabat</b> = imperfect (was disturbing). Spanish: <i>tempestad</i>, <i>turbar</i>"},
+{v:7,la:"Perseus autem in sinu matris dormiebat.",en:"Perseus, however, was sleeping in his mother's lap.",n:"<b>autem</b> = however (postpositive conjunction); <b>in sinu</b> = in the lap/bosom (abl.); <b>matris</b> = of the mother (gen.); <b>dormiebat</b> = imperfect (was sleeping). Spanish: <i>seno</i> = bosom, <i>dormir</i>"}
+]},
+{ch:2,title:"II. Jupiter Saves His Son",subtitle:"Iuppiter filium suum servat",
+verses:[
+{v:1,la:"Iuppiter tamen haec omnia vidit, et filium suum servare constituit.",en:"Jupiter, however, saw all these things, and decided to save his son.",n:"<b>vidit</b> = perfect (saw); <b>servare</b> = to save (infinitive); <b>constituit</b> = perfect (decided). Spanish: <i>servir/conservar</i>"},
+{v:2,la:"Tranquillum igitur fecit mare, et arcam ad insulam Seriphum perduxit.",en:"He therefore made the sea calm, and brought the chest to the island of Seriphos.",n:"<b>tranquillum fecit</b> = made calm (predicate acc.); <b>perduxit</b> = perfect (led/brought through). Spanish: <i>tranquilo</i>"},
+{v:3,la:"Huius insulae Polydectes tum rex erat.",en:"Polydectes was then king of this island.",n:"<b>huius insulae</b> = of this island (gen.); <b>tum</b> = then (adverb)"},
+{v:4,la:"Postquam arca ad litus appulsa est, Danae in harena quietem capiebat.",en:"After the chest was driven to shore, Danae was resting on the sand.",n:"<b>postquam</b> = after (conjunction); <b>ad litus</b> = to the shore (acc.); <b>appulsa est</b> = perfect passive (was driven); <b>in harena</b> = on the sand (abl.); <b>quietem capiebat</b> = was taking rest (imperfect). Spanish: <i>arena</i>"},
+{v:5,la:"Post breve tempus a piscatore quodam reperta est, et ad domum regis Polydectis adducta est.",en:"After a short time she was found by a certain fisherman, and was brought to the house of king Polydectes.",n:"<b>a piscatore quodam</b> = by a certain fisherman (abl. of agent); <b>reperta est</b> = perfect passive (was found); <b>adducta est</b> = perfect passive (was led to). Spanish: <i>pescador</i>"},
+{v:6,la:"Ille matrem et puerum benigne excepit, et iis sedem tutam in finibus suis dedit.",en:"He received the mother and child kindly, and gave them a safe home in his territory.",n:"<b>benigne</b> = kindly (adverb); <b>excepit</b> = perfect (received); <b>sedem tutam</b> = a safe seat/home (acc.); <b>in finibus suis</b> = in his own territory (abl.)"},
+{v:7,la:"Danae hoc donum libenter accepit, et pro tanto beneficio regi gratias egit.",en:"Danae gladly accepted this gift, and gave thanks to the king for so great a kindness.",n:"<b>libenter</b> = gladly (adverb); <b>pro tanto beneficio</b> = for so great a benefit (abl.); <b>gratias egit</b> = gave thanks (idiom). Spanish: <i>beneficio</i>, <i>gracias</i>"}
+]},
+{ch:3,title:"III. Perseus Is Sent on His Travels",subtitle:"Perseus dimittitur",
+verses:[
+{v:1,la:"Perseus igitur multos annos ibi habitabat, et cum matre sua vitam beatam agebat.",en:"Perseus therefore lived there for many years, and was leading a happy life with his mother.",n:"<b>multos annos</b> = for many years (acc. of duration); <b>vitam beatam agebat</b> = was living a happy life (idiom: agere vitam). Spanish: <i>beato</i> = blessed/happy"},
+{v:2,la:"At Polydectes Danaen magnopere amabat, atque eam in matrimonium ducere volebat.",en:"But Polydectes greatly loved Danae, and wanted to take her in marriage.",n:"<b>magnopere</b> = greatly; <b>in matrimonium ducere</b> = to lead into marriage (idiom). Spanish: <i>matrimonio</i>"},
+{v:3,la:"Hoc tamen consilium Perseo minime gratum erat.",en:"This plan, however, was by no means pleasing to Perseus.",n:"<b>consilium</b> = plan (n. nom.); <b>Perseo</b> = to Perseus (dat.); <b>minime gratum</b> = by no means pleasing (superlative adverb + adj.)"},
+{v:4,la:"Polydectes igitur Perseum dimittere constituit.",en:"Polydectes therefore decided to send Perseus away.",n:"<b>dimittere</b> = to send away (infinitive); <b>constituit</b> = decided (perfect). Spanish: <i>dimitir</i>"},
+{v:5,la:"Tum iuvenem ad se vocavit et haec dixit:",en:"Then he called the young man to him and said these things:",n:"<b>iuvenem</b> = the young man (acc.); <b>ad se</b> = to himself (reflexive); <b>vocavit</b> = called (perfect). Spanish: <i>joven</i>"},
+{v:6,la:'"Turpe est hanc ignavam vitam agere; iam dudum tu adulescens es."',en:'"It is shameful to live this idle life; you have been a young man for some time now."',n:'<b>turpe est</b> = it is shameful (predicate adj.); <b>ignavam</b> = idle, lazy (acc. adj.); <b>iam dudum</b> = for some time now; <b>adulescens</b> = young man (nom.). Spanish: <i>adolescente</i>'},
+{v:7,la:'"Quo usque hic manebis? Tempus est arma capere et virtutem praestare."',en:'"How long will you stay here? It is time to take up arms and show courage."',n:'<b>quo usque</b> = how long? until when?; <b>manebis</b> = you will stay (future); <b>arma capere</b> = to take up arms; <b>virtutem praestare</b> = to show/display virtue. Spanish: <i>virtud</i>'},
+{v:8,la:'"Hinc abi, et caput Medusae mihi refer."',en:'"Go from here, and bring me back the head of Medusa."',n:'<b>hinc</b> = from here; <b>abi</b> = go! (imperative of abire); <b>caput Medusae</b> = the head of Medusa (acc. + gen.); <b>refer</b> = bring back (imperative of referre)'}
+]},
+{ch:4,title:"IV. Perseus Gets His Outfit",subtitle:"Perseus arma accipit",
+verses:[
+{v:1,la:"Perseus ubi haec audivit, ex insula discessit, et postquam ad continentem venit, Medusam quaesivit.",en:"When Perseus heard these things, he left the island, and after he came to the mainland, he sought Medusa.",n:"<b>ubi</b> = when; <b>discessit</b> = departed (perfect); <b>continentem</b> = the mainland (acc.); <b>quaesivit</b> = sought (perfect). Spanish: <i>continente</i>"},
+{v:2,la:"Diu frustra quaerebat; namque naturam loci ignorabat.",en:"For a long time he searched in vain; for he did not know the nature of the place.",n:"<b>diu</b> = for a long time; <b>frustra</b> = in vain; <b>naturam loci</b> = the nature of the place (acc. + gen.); <b>ignorabat</b> = did not know (imperfect). Spanish: <i>ignorar</i>"},
+{v:3,la:"Tandem Apollo et Minerva viam demonstraverunt.",en:"At last Apollo and Minerva showed him the way.",n:"<b>tandem</b> = at last; <b>viam</b> = the way (acc.); <b>demonstraverunt</b> = showed (perfect). Spanish: <i>demostrar</i>"},
+{v:4,la:"Primum ad Graeas, sorores Medusae, pervenit.",en:"First he reached the Graeae, the sisters of Medusa.",n:"<b>primum</b> = first (adverb); <b>sorores</b> = sisters (acc. pl.); <b>pervenit</b> = arrived at (perfect)"},
+{v:5,la:"Ab his talaria et galeam magicam accepit.",en:"From them he received winged sandals and a magic helmet.",n:"<b>ab his</b> = from these (abl.); <b>talaria</b> = winged sandals (n. acc. pl.); <b>galeam magicam</b> = magic helmet (acc.); <b>accepit</b> = received (perfect)"},
+{v:6,la:"Apollo autem et Minerva falcem et speculum dederunt.",en:"Apollo and Minerva, moreover, gave him a curved sword and a mirror.",n:"<b>falcem</b> = curved blade/sickle (acc.); <b>speculum</b> = mirror (acc.); <b>dederunt</b> = gave (perfect). Spanish: <i>espéculo/espejo</i>"},
+{v:7,la:"Tum postquam talaria pedibus induit, in aera ascendit.",en:"Then, after he put the sandals on his feet, he rose into the air.",n:"<b>pedibus</b> = on his feet (dat.); <b>induit</b> = put on (perfect); <b>in aera</b> = into the air (acc.); <b>ascendit</b> = ascended (perfect). Spanish: <i>ascender</i>"},
+{v:8,la:"Diu per aera volabat; tandem tamen ad eum locum venit ubi Medusa cum ceteris Gorgonibus habitabat.",en:"For a long time he flew through the air; at last, however, he came to that place where Medusa lived with the other Gorgons.",n:"<b>per aera</b> = through the air (acc.); <b>volabat</b> = was flying (imperfect); <b>eum locum</b> = that place (acc.); <b>ceteris Gorgonibus</b> = the other Gorgons (abl.)"},
+{v:9,la:"Gorgones autem monstra erant specie horribili; capita enim earum anguibus omnino contecta erant.",en:"The Gorgons were monsters of horrible appearance; for their heads were entirely covered with snakes.",n:"<b>monstra</b> = monsters (n. nom. pl.); <b>specie horribili</b> = of horrible appearance (abl. of description); <b>capita</b> = heads (n. nom. pl.); <b>anguibus</b> = with snakes (abl.); <b>contecta erant</b> = were covered (pluperfect passive). Spanish: <i>horrible</i>, <i>serpiente/anguis</i>"},
+{v:10,la:"Manus etiam ex aere factae erant.",en:"Their hands also were made of bronze.",n:"<b>manus</b> = hands (f. nom. pl., 4th decl.); <b>ex aere</b> = of/from bronze (abl.); <b>factae erant</b> = had been made (pluperfect passive)"}
+]},
+{ch:5,title:"V. The Gorgon's Head",subtitle:"Caput Gorgonis",
+verses:[
+{v:1,la:"Res difficillima erat caput Gorgonis abscidere; eius enim conspectu homines in saxum vertebantur.",en:"It was a most difficult task to cut off the Gorgon's head; for by the sight of her, men were turned to stone.",n:"<b>res difficillima</b> = a most difficult thing (superlative); <b>abscidere</b> = to cut off (infinitive); <b>conspectu</b> = by the sight (abl.); <b>in saxum</b> = into stone (acc.); <b>vertebantur</b> = were turned (imperfect passive). Spanish: <i>difícil</i>"},
+{v:2,la:"Propter hanc causam Minerva speculum Perseo dederat.",en:"For this reason Minerva had given a mirror to Perseus.",n:"<b>propter hanc causam</b> = for this reason; <b>dederat</b> = had given (pluperfect)"},
+{v:3,la:"Ille igitur tergum vertit, et in speculum inspiciebat; hoc modo ad locum venit ubi Medusa dormiebat.",en:"He therefore turned his back, and kept looking into the mirror; in this way he came to the place where Medusa was sleeping.",n:"<b>tergum vertit</b> = turned his back (idiom); <b>inspiciebat</b> = was looking into (imperfect); <b>hoc modo</b> = in this way; <b>dormiebat</b> = was sleeping (imperfect). Spanish: <i>inspeccionar</i>"},
+{v:4,la:"Tum falce sua caput eius uno ictu abscidit.",en:"Then with his curved sword he cut off her head with one blow.",n:"<b>falce sua</b> = with his sickle/sword (abl.); <b>uno ictu</b> = with one blow (abl.); <b>abscidit</b> = cut off (perfect)"},
+{v:5,la:"Ceterae Gorgones statim e somno excitatae sunt, et ubi rem viderunt, ira commotae sunt.",en:"The other Gorgons were immediately awakened from sleep, and when they saw the deed, they were stirred with anger.",n:"<b>e somno</b> = from sleep (abl.); <b>excitatae sunt</b> = were awakened (perfect passive); <b>ira commotae sunt</b> = were moved by anger (abl. of cause)"},
+{v:6,la:"Arma rapuerunt, et Perseum occidere volebant.",en:"They seized their weapons, and wanted to kill Perseus.",n:"<b>rapuerunt</b> = seized (perfect); <b>occidere</b> = to kill (infinitive)"},
+{v:7,la:"Ille autem dum fugit, galeam magicam induit; et ubi hoc fecit, statim e conspectu earum evasit.",en:"But he, while fleeing, put on the magic helmet; and when he did this, he immediately vanished from their sight.",n:"<b>dum fugit</b> = while he flees (present with dum); <b>galeam magicam induit</b> = put on the magic helmet; <b>e conspectu</b> = from the sight (abl.); <b>evasit</b> = escaped/vanished (perfect). Spanish: <i>evadir</i>"}
+]},
+{ch:6,title:"VI. The Sea-Serpent",subtitle:"Monstrum marinum",
+verses:[
+{v:1,la:"Post haec Perseus in finis Aethiopum venit.",en:"After these things Perseus came into the territory of the Ethiopians.",n:"<b>post haec</b> = after these things; <b>in finis</b> = into the territory (acc. pl.); <b>Aethiopum</b> = of the Ethiopians (gen. pl.)"},
+{v:2,la:"Ibi Cepheus quidam illo tempore regnabat.",en:"There a certain Cepheus was ruling at that time.",n:"<b>quidam</b> = a certain (indefinite pronoun); <b>illo tempore</b> = at that time (abl.); <b>regnabat</b> = was ruling (imperfect). Spanish: <i>reinar</i>"},
+{v:3,la:"Hic Neptunum, maris deum, olim offenderat; Neptunus autem monstrum saevissimum miserat.",en:"This man had once offended Neptune, god of the sea; Neptune, however, had sent a most savage monster.",n:"<b>offenderat</b> = had offended (pluperfect); <b>maris deum</b> = god of the sea (gen.); <b>saevissimum</b> = most savage (superlative). Spanish: <i>ofender</i>"},
+{v:4,la:"Hoc cottidie e mari veniebat et homines devorabat.",en:"This monster came from the sea daily and devoured people.",n:"<b>cottidie</b> = daily; <b>e mari</b> = from the sea (abl.); <b>devorabat</b> = was devouring (imperfect). Spanish: <i>devorar</i>"},
+{v:5,la:"Ob hanc causam pavor animos omnium occupaverat.",en:"Because of this, panic had seized the minds of all.",n:"<b>ob hanc causam</b> = because of this; <b>pavor</b> = panic/terror (m. nom.); <b>animos omnium</b> = the minds of all (acc. + gen.); <b>occupaverat</b> = had seized (pluperfect). Spanish: <i>pavor</i>, <i>ocupar</i>"},
+{v:6,la:"Cepheus igitur oraculum dei Hammonis consuluit, atque a deo iussus est filiam monstro tradere.",en:"Cepheus therefore consulted the oracle of the god Hammon, and was ordered by the god to hand over his daughter to the monster.",n:"<b>consuluit</b> = consulted (perfect); <b>iussus est</b> = was ordered (perfect passive); <b>filiam monstro tradere</b> = to hand over his daughter to the monster (acc. + dat. + infinitive). Spanish: <i>consultar</i>"},
+{v:7,la:"Eius autem filia, nomine Andromeda, virgo formosissima erat.",en:"His daughter, Andromeda by name, was a most beautiful maiden.",n:"<b>nomine</b> = by name (abl.); <b>virgo formosissima</b> = most beautiful maiden (superlative). Spanish: <i>virgen</i>"},
+{v:8,la:"Cepheus ubi haec audivit, magnum dolorem percepit.",en:"When Cepheus heard these things, he felt great grief.",n:"<b>dolorem percepit</b> = felt grief (perfect). Spanish: <i>dolor</i>, <i>percibir</i>"},
+{v:9,la:"Volebat tamen civis suos e tanto periculo extrahere, atque ob eam causam imperata Hammonis facere constituit.",en:"He wanted, however, to rescue his citizens from such great danger, and for this reason decided to carry out the commands of Hammon.",n:"<b>civis suos</b> = his citizens (acc. pl.); <b>e tanto periculo</b> = from such great danger (abl.); <b>extrahere</b> = to extract/rescue; <b>imperata</b> = commands (n. acc. pl. — perf. pass. participle used as noun). Spanish: <i>extraer</i>, <i>peligro</i>"}
+]},
+{ch:7,title:"VII. A Human Sacrifice",subtitle:"Sacrificium humanum",
+verses:[
+{v:1,la:"Tum rex diem certam dixit et omnia paravit.",en:"Then the king appointed a definite day and prepared everything.",n:"<b>diem certam</b> = a fixed day (acc. — dies is f. here); <b>dixit</b> = appointed/declared (perfect); <b>paravit</b> = prepared (perfect). Spanish: <i>preparar</i>"},
+{v:2,la:"Ubi ea dies venit, Andromeda ad litus deducta est, et in conspectu omnium ad rupem adligata est.",en:"When that day came, Andromeda was led down to the shore, and was tied to a rock in the sight of all.",n:"<b>deducta est</b> = was led down (perfect passive); <b>in conspectu omnium</b> = in the sight of all (abl.); <b>ad rupem</b> = to a rock (acc.); <b>adligata est</b> = was tied (perfect passive)"},
+{v:3,la:"Omnes fatum eius deplorabant, nec lacrimas tenebant.",en:"All were lamenting her fate, and could not hold back their tears.",n:"<b>fatum</b> = fate (acc.); <b>deplorabant</b> = were lamenting (imperfect); <b>lacrimas tenebant</b> = were holding back tears. Spanish: <i>deplorar</i>, <i>lágrimas</i>"},
+{v:4,la:"At subito, dum monstrum exspectant, Perseus accurrit; et ubi lacrimas vidit, causam doloris quaerit.",en:"But suddenly, while they were waiting for the monster, Perseus ran up; and when he saw the tears, he asked the cause of their grief.",n:"<b>subito</b> = suddenly; <b>dum exspectant</b> = while they wait (present with dum); <b>accurrit</b> = ran up (perfect); <b>causam doloris</b> = the cause of grief (acc. + gen.). Spanish: <i>súbito</i>"},
+{v:5,la:"Illi rem totam exponunt et puellam demonstrant.",en:"They explain the whole matter and point out the girl.",n:"<b>rem totam</b> = the whole matter (acc.); <b>exponunt</b> = they explain (historical present); <b>demonstrant</b> = they point out (historical present)"},
+{v:6,la:"Dum haec geruntur, fremitus terribilis auditur; simul monstrum horribili specie procul conspicitur.",en:"While these things were happening, a terrible roar was heard; at the same time a monster of horrible appearance was seen in the distance.",n:"<b>dum geruntur</b> = while these things are carried on; <b>fremitus</b> = roar (m. nom.); <b>auditur</b> = is heard (present passive); <b>procul</b> = in the distance; <b>conspicitur</b> = is seen (present passive). Spanish: <i>terrible</i>"},
+{v:7,la:"Eius conspectus timorem maximum omnibus iniecit.",en:"The sight of it cast the greatest fear upon all.",n:"<b>conspectus</b> = sight (m. nom.); <b>timorem maximum</b> = the greatest fear (acc. superlative); <b>iniecit</b> = threw upon/cast (perfect)"},
+{v:8,la:"Monstrum magna celeritate ad litus contendit, iamque ad locum appropinquabat ubi puella stabat.",en:"The monster rushed to the shore with great speed, and was already approaching the place where the girl was standing.",n:"<b>magna celeritate</b> = with great speed (abl. of manner); <b>contendit</b> = rushed (perfect); <b>appropinquabat</b> = was approaching (imperfect); <b>stabat</b> = was standing (imperfect). Spanish: <i>celeridad</i>"}
+]},
+{ch:8,title:"VIII. The Rescue",subtitle:"Perseus Andromedam liberat",
+verses:[
+{v:1,la:"At Perseus ubi haec vidit, gladium suum eduxit, et postquam talaria induit, in aera sublatus est.",en:"But Perseus, when he saw these things, drew his sword, and after he put on the sandals, was lifted into the air.",n:"<b>gladium eduxit</b> = drew his sword (perfect); <b>sublatus est</b> = was lifted up (perfect passive — from tollere, irregular). Spanish: <i>gladio</i> → <i>espada</i>"},
+{v:2,la:"Tum desuper in monstrum impetum subito fecit, et gladio suo collum eius graviter vulneravit.",en:"Then from above he suddenly made an attack on the monster, and with his sword seriously wounded its neck.",n:"<b>desuper</b> = from above; <b>impetum fecit</b> = made an attack (idiom); <b>graviter</b> = seriously; <b>vulneravit</b> = wounded (perfect). Spanish: <i>ímpetu</i>, <i>vulnerable</i>"},
+{v:3,la:"Monstrum ubi sensit vulnus, fremitum horribilem edidit, et sine mora totum corpus in aquam mersit.",en:"When the monster felt the wound, it let out a horrible roar, and without delay plunged its whole body into the water.",n:"<b>sensit</b> = felt (perfect); <b>vulnus</b> = wound (n. acc.); <b>fremitum edidit</b> = let out a roar; <b>sine mora</b> = without delay; <b>mersit</b> = plunged (perfect). Spanish: <i>sentir</i>, <i>sin mora</i>"},
+{v:4,la:"Perseus dum circum litus volat, reditum eius exspectabat.",en:"Perseus, while he flew around the shore, was waiting for its return.",n:"<b>circum litus</b> = around the shore (acc.); <b>volat</b> = flies (present with dum); <b>reditum</b> = return (acc.); <b>exspectabat</b> = was waiting (imperfect)"},
+{v:5,la:"Mare autem interea undique sanguine inficitur.",en:"Meanwhile the sea was being stained with blood on all sides.",n:"<b>interea</b> = meanwhile; <b>undique</b> = on all sides; <b>sanguine</b> = with blood (abl.); <b>inficitur</b> = is stained (present passive). Spanish: <i>sangre</i>, <i>infectar</i>"},
+{v:6,la:"Post breve tempus belua rursus caput sustulit; mox tamen a Perseo ictu graviore vulnerata est.",en:"After a short time the beast again raised its head; soon, however, it was wounded by Perseus with a heavier blow.",n:"<b>belua</b> = beast (f. nom.); <b>rursus</b> = again; <b>sustulit</b> = raised (perfect — irregular from tollere); <b>ictu graviore</b> = with a heavier blow (abl. comparative)"},
+{v:7,la:"Tum iterum se in undas mersit, neque postea visa est.",en:"Then again it plunged into the waves, and was not seen afterward.",n:"<b>iterum</b> = again; <b>se mersit</b> = plunged itself (reflexive); <b>in undas</b> = into the waves (acc.); <b>neque postea</b> = and not afterward; <b>visa est</b> = was seen (perfect passive)"}
+]},
+{ch:9,title:"IX. The Reward of Valor",subtitle:"Praemium virtutis",
+verses:[
+{v:1,la:"Perseus postquam ad litus descendit, primum talaria exuit; tum ad rupem venit ubi Andromeda vincta erat.",en:"After Perseus came down to the shore, he first took off the sandals; then he came to the rock where Andromeda was bound.",n:"<b>descendit</b> = came down (perfect); <b>exuit</b> = took off (perfect); <b>vincta erat</b> = was bound (pluperfect passive). Spanish: <i>descender</i>"},
+{v:2,la:"Ea autem omnem spem salutis deposuerat, et ubi Perseus adiit, terrore paene exanimata erat.",en:"She, however, had given up all hope of safety, and when Perseus approached, she was almost lifeless with terror.",n:"<b>omnem spem salutis</b> = all hope of safety (acc. + gen.); <b>deposuerat</b> = had laid down/given up (pluperfect); <b>terrore</b> = with terror (abl.); <b>paene exanimata</b> = almost lifeless. Spanish: <i>depositar</i>, <i>terror</i>"},
+{v:3,la:"Ille vincula statim solvit, et puellam patri reddidit.",en:"He immediately loosened the bonds, and restored the girl to her father.",n:"<b>vincula</b> = bonds (n. acc. pl.); <b>solvit</b> = loosened (perfect); <b>patri</b> = to her father (dat.); <b>reddidit</b> = gave back (perfect). Spanish: <i>soltar/solver</i>"},
+{v:4,la:"Cepheus ob hanc rem maximo gaudio adfectus est.",en:"Cepheus was affected with the greatest joy because of this.",n:"<b>ob hanc rem</b> = because of this; <b>maximo gaudio</b> = with the greatest joy (abl.); <b>adfectus est</b> = was affected (perfect passive). Spanish: <i>gozo/gaudio</i>"},
+{v:5,la:"Meritam gratiam pro tanto beneficio Perseo rettulit; praeterea Andromedam ipsam ei in matrimonium dedit.",en:"He rendered deserved thanks to Perseus for so great a service; moreover, he gave Andromeda herself to him in marriage.",n:"<b>meritam gratiam</b> = deserved thanks (acc.); <b>rettulit</b> = rendered/gave back (perfect of referre); <b>praeterea</b> = moreover; <b>in matrimonium dedit</b> = gave in marriage. Spanish: <i>mérito</i>, <i>gratitud</i>"},
+{v:6,la:"Ille libenter hoc donum accepit et puellam duxit.",en:"He gladly accepted this gift and married the girl.",n:"<b>libenter</b> = gladly; <b>duxit</b> = married (literally: led — idiom for marriage)"},
+{v:7,la:"Paucos annos cum uxore sua in ea regione habitabat, et in magno honore erat apud omnis Aethiopes.",en:"For a few years he lived with his wife in that region, and was in great honor among all the Ethiopians.",n:"<b>paucos annos</b> = for a few years (acc. of duration); <b>cum uxore sua</b> = with his wife (abl.); <b>in magno honore</b> = in great honor (abl.); <b>apud omnis</b> = among all (+ acc.). Spanish: <i>honor</i>"},
+{v:8,la:"Magnopere tamen matrem suam rursus videre cupiebat.",en:"He greatly desired, however, to see his mother again.",n:"<b>magnopere</b> = greatly; <b>rursus</b> = again; <b>videre</b> = to see (infinitive); <b>cupiebat</b> = was desiring (imperfect)"},
+{v:9,la:"Tandem igitur cum uxore sua e regno Cephei discessit.",en:"At last, therefore, he departed with his wife from the kingdom of Cepheus.",n:"<b>tandem</b> = at last; <b>e regno Cephei</b> = from the kingdom of Cepheus (abl. + gen.); <b>discessit</b> = departed (perfect)"}
+]},
+{ch:10,title:"X. Polydectes Is Turned to Stone",subtitle:"Polydectes in saxum vertitur",
+verses:[
+{v:1,la:"Postquam Perseus ad insulam navem appulit, se ad locum contulit ubi mater olim habitaverat, sed domum invenit vacuam et omnino desertam.",en:"After Perseus brought his ship to the island, he made his way to the place where his mother had once lived, but found the house empty and completely deserted.",n:"<b>navem appulit</b> = brought the ship to shore (perfect); <b>se contulit</b> = betook himself (idiom: went); <b>habitaverat</b> = had lived (pluperfect); <b>vacuam et desertam</b> = empty and deserted (acc. adj.). Spanish: <i>desertado</i>"},
+{v:2,la:"Tris dies per totam insulam matrem quaerebat; tandem quarto die ad templum Dianae pervenit.",en:"For three days he searched for his mother throughout the whole island; at last on the fourth day he reached the temple of Diana.",n:"<b>tris dies</b> = for three days (acc. of duration); <b>per totam insulam</b> = through the whole island; <b>quarto die</b> = on the fourth day (abl.)"},
+{v:3,la:"Huc Danae refugerat, quod Polydectem timebat.",en:"Danae had fled here, because she feared Polydectes.",n:"<b>huc</b> = to here; <b>refugerat</b> = had fled (pluperfect); <b>quod</b> = because"},
+{v:4,la:"Perseus ubi haec cognovit, ira magna commotus est; ad regiam Polydectis sine mora contendit, et ubi eo venit, statim in atrium inrupit.",en:"When Perseus learned these things, he was moved with great anger; he rushed to the palace of Polydectes without delay, and when he arrived there, burst into the hall at once.",n:"<b>cognovit</b> = learned (perfect); <b>ira magna commotus est</b> = was moved by great anger (abl.); <b>regiam</b> = palace (acc.); <b>inrupit</b> = burst in (perfect). Spanish: <i>irrumpir</i>"},
+{v:5,la:"Polydectes magno timore adfectus est et fugere volebat.",en:"Polydectes was seized with great fear and wanted to flee.",n:"<b>magno timore adfectus est</b> = was affected with great fear (abl.)"},
+{v:6,la:"Dum tamen ille fugit, Perseus caput Medusae monstravit; ille autem simul atque hoc vidit, in saxum versus est.",en:"While he was fleeing, however, Perseus showed the head of Medusa; and as soon as he saw it, he was turned to stone.",n:"<b>monstravit</b> = showed (perfect); <b>simul atque</b> = as soon as; <b>in saxum versus est</b> = was turned into stone (perfect passive). Spanish: <i>monstrar/mostrar</i>"}
+]},
+{ch:11,title:"XI. The Oracle Fulfilled",subtitle:"Oraculum impletur",
+verses:[
+{v:1,la:"Post haec Perseus cum uxore sua ad urbem Acrisii rediit.",en:"After these things Perseus returned with his wife to the city of Acrisius.",n:"<b>ad urbem Acrisii</b> = to the city of Acrisius (acc. + gen.); <b>rediit</b> = returned (perfect of redire)"},
+{v:2,la:"Ille autem ubi Perseum vidit, magno terrore adfectus est; nam propter oraculum istud nepotem suum adhuc timebat.",en:"He, however, when he saw Perseus, was seized with great terror; for on account of that oracle he still feared his grandson.",n:"<b>istud</b> = that (slightly contemptuous demonstrative); <b>adhuc</b> = still. Spanish: <i>terror</i>"},
+{v:3,la:"In Thessaliam igitur ad urbem Larisam statim refugit, frustra tamen; neque enim fatum suum vitavit.",en:"He therefore fled immediately to the city of Larisa in Thessaly, but in vain; for he did not escape his fate.",n:"<b>frustra</b> = in vain; <b>neque enim</b> = for... not; <b>fatum suum</b> = his fate (acc.); <b>vitavit</b> = avoided/escaped (perfect). Spanish: <i>fatum → hado/fato</i>, <i>evitar</i>"},
+{v:4,la:"Post paucos annos rex Larisae ludos magnos fecit; nuntios in omnis partis dimiserat et diem edixerat.",en:"After a few years the king of Larisa held great games; he had sent messengers in all directions and had proclaimed the day.",n:"<b>ludos magnos fecit</b> = held great games (perfect); <b>nuntios dimiserat</b> = had sent out messengers (pluperfect); <b>diem edixerat</b> = had proclaimed the day (pluperfect)"},
+{v:5,la:"Multi ex omnibus urbibus Graeciae ad ludos convenerunt.",en:"Many came together from all the cities of Greece for the games.",n:"<b>ex omnibus urbibus</b> = from all the cities (abl.); <b>Graeciae</b> = of Greece (gen.); <b>convenerunt</b> = came together (perfect). Spanish: <i>convenir</i>"},
+{v:6,la:"Ipse Perseus inter alios certamen discorum iniit.",en:"Perseus himself entered the discus-throwing contest among the others.",n:"<b>ipse</b> = himself (intensive pronoun); <b>certamen discorum</b> = the contest of discuses (acc. + gen.); <b>iniit</b> = entered (perfect of inire)"},
+{v:7,la:"At dum discum conicit, avum suum casu occidit; Acrisius enim inter spectatores eius certaminis forte stabat.",en:"But while he was throwing the discus, he killed his grandfather by accident; for Acrisius happened to be standing among the spectators of that contest.",n:"<b>dum conicit</b> = while he throws (present with dum); <b>casu</b> = by chance/accident (abl.); <b>occidit</b> = killed (perfect); <b>spectatores</b> = spectators (acc. pl.); <b>forte</b> = by chance (adverb). Spanish: <i>caso</i>, <i>espectadores</i>"}
+]}
+]}
+];
+
+// FABULAE dictionary entries — inflected forms appearing in Perseus
+const FABULAE_FORMS={
+"haec":"pron. n. nom./acc. pl. or f. nom. sg.: these things / this",
+"narrantur":"narrare: they are told (3rd pl. present passive)",
+"poetis":"m. dat./abl. pl.: poets",
+"perseo":"m. dat./abl.: Perseus",
+"perseus":"m. nom.: Perseus",
+"filius":"m. nom.: son",
+"erat":"esse: he/she/it was (imperfect)",
+"iovis":"m. gen.: of Jupiter (gen. of Iuppiter)",
+"maximi":"adj. m. gen./nom. pl.: greatest (superlative of magnus)",
+"deorum":"m. gen. pl.: of the gods",
+"avus":"m. nom.: grandfather",
+"eius":"pron. gen.: his/her/its",
+"acrisius":"m. nom.: Acrisius",
+"appellabatur":"appellare: was called (imperfect passive)",
+"volebat":"velle: he wanted (imperfect)",
+"perseum":"m. acc.: Perseus",
+"nepotem":"m. acc.: grandson",
+"suum":"adj. m. acc.: his own",
+"necare":"necare: to kill (infinitive)",
+"nam":"conj.: for (introducing explanation)",
+"propter":"prep. + acc.: on account of, because of",
+"oraculum":"n. nom./acc.: oracle",
+"puerum":"m. acc.: boy, child",
+"timebat":"timere: he was fearing (imperfect)",
+"comprehendit":"comprehendere: he seized (perfect)",
+"igitur":"conj.: therefore",
+"adhuc":"adv.: still, up to this point",
+"infantem":"m./f. acc.: infant",
+"cum":"prep. + abl.: with / conj.: when, since",
+"matre":"f. abl.: mother (3rd decl.)",
+"arca":"f. abl.: chest, ark",
+"lignea":"adj. f. abl.: wooden",
+"inclusit":"includere: he shut in (perfect)",
+"tum":"adv.: then",
+"arcam":"f. acc.: chest, ark",
+"ipsam":"pron. f. acc.: itself, herself (intensive)",
+"mare":"n. nom./acc.: sea",
+"coniecit":"conicere: he threw (perfect)",
+"danae":"f. nom./gen./dat./voc.: Danae",
+"persei":"m. gen.: of Perseus",
+"mater":"f. nom.: mother",
+"magnopere":"adv.: greatly",
+"territa":"terrere: terrified (perf. pass. participle f.)",
+"est":"esse: is / (with participle) was",
+"tempestas":"f. nom.: storm, tempest",
+"enim":"conj.: for (postpositive)",
+"magna":"adj. f. nom.: great",
+"turbabat":"turbare: was disturbing (imperfect)",
+"autem":"conj.: however, but (postpositive)",
+"sinu":"m. abl.: bosom, lap (4th decl.)",
+"matris":"f. gen.: of the mother",
+"dormiebat":"dormire: was sleeping (imperfect)",
+"iuppiter":"m. nom.: Jupiter",
+"tamen":"adv.: however, nevertheless",
+"omnia":"adj. n. nom./acc. pl.: all things",
+"vidit":"videre: he saw (perfect)",
+"filium":"m. acc.: son",
+"servare":"servare: to save, preserve (infinitive)",
+"constituit":"constituere: he decided (perfect)",
+"tranquillum":"adj. n. acc./m. acc.: calm, tranquil",
+"fecit":"facere: he made/did (perfect)",
+"insulam":"f. acc.: island",
+"perduxit":"perducere: he led through, brought (perfect)",
+"huius":"pron. gen.: of this",
+"insulae":"f. gen./dat.: of/to the island",
+"rex":"m. nom.: king",
+"postquam":"conj.: after",
+"litus":"n. nom./acc.: shore, beach (3rd decl.)",
+"appulsa":"appellere: driven (perf. pass. participle f.)",
+"harena":"f. abl.: sand",
+"quietem":"f. acc.: rest, quiet",
+"capiebat":"capere: was taking (imperfect)",
+"post":"prep. + acc.: after",
+"breve":"adj. n. nom./acc.: short, brief",
+"tempus":"n. nom./acc.: time (3rd decl.)",
+"piscatore":"m. abl.: fisherman",
+"quodam":"pron. m. abl.: a certain (indefinite)",
+"reperta":"reperire: found (perf. pass. participle f.)",
+"domum":"f. acc.: house, home",
+"regis":"m. gen.: of the king",
+"adducta":"adducere: led (perf. pass. participle f.)",
+"ille":"pron. m. nom.: that one, he",
+"matrem":"f. acc.: mother",
+"benigne":"adv.: kindly",
+"excepit":"excipere: he received (perfect)",
+"iis":"pron. dat./abl. pl.: to/for them",
+"sedem":"f. acc.: seat, dwelling",
+"tutam":"adj. f. acc.: safe",
+"finibus":"m. dat./abl. pl.: in/to the territory/borders",
+"suis":"adj. dat./abl. pl.: his/her own",
+"dedit":"dare: he gave (perfect)",
+"hoc":"pron. n. nom./acc.: this",
+"donum":"n. nom./acc.: gift",
+"libenter":"adv.: gladly, willingly",
+"accepit":"accipere: he/she received (perfect)",
+"pro":"prep. + abl.: for, on behalf of",
+"tanto":"adj. m./n. abl.: so great",
+"beneficio":"n. abl.: benefit, kindness",
+"regi":"m. dat.: to the king",
+"gratias":"f. acc. pl.: thanks (gratias agere = to give thanks)",
+"egit":"agere: drove / gave (perfect; gratias egit = gave thanks)",
+"multos":"adj. m. acc. pl.: many",
+"annos":"m. acc. pl.: years",
+"ibi":"adv.: there",
+"habitabat":"habitare: was living (imperfect)",
+"sua":"adj. f. abl./nom.: his/her own",
+"vitam":"f. acc.: life",
+"beatam":"adj. f. acc.: happy, blessed",
+"agebat":"agere: was leading/living (imperfect)",
+"at":"conj.: but",
+"amabat":"amare: was loving (imperfect)",
+"atque":"conj.: and, and also",
+"eam":"pron. f. acc.: her",
+"matrimonium":"n. acc.: marriage",
+"ducere":"ducere: to lead / to marry (infinitive)",
+"consilium":"n. nom./acc.: plan, counsel",
+"minime":"adv.: least, not at all, by no means",
+"gratum":"adj. n. nom./acc.: pleasing, welcome",
+"dimittere":"dimittere: to send away (infinitive)",
+"iuvenem":"m./f. acc.: young man",
+"vocavit":"vocare: he called (perfect)",
+"dixit":"dicere: he said/declared (perfect)",
+"turpe":"adj. n. nom./acc.: shameful, base",
+"hanc":"pron. f. acc.: this",
+"ignavam":"adj. f. acc.: lazy, idle",
+"agere":"agere: to do, lead, live (infinitive)",
+"iam":"adv.: now, already",
+"dudum":"adv.: for a long time; iam dudum = for some time now",
+"adulescens":"m./f. nom.: young man/woman",
+"quo":"adv./pron.: where, how far",
+"usque":"adv.: all the way, continuously",
+"hic":"adv./pron.: here / this",
+"manebis":"manere: you will stay (future 2nd sg.)",
+"arma":"n. nom./acc. pl.: weapons, arms",
+"capere":"capere: to take, seize (infinitive)",
+"virtutem":"f. acc.: courage, virtue, excellence",
+"praestare":"praestare: to show, display, excel (infinitive)",
+"hinc":"adv.: from here",
+"abi":"abire: go away! (sg. imperative)",
+"caput":"n. nom./acc.: head",
+"medusae":"f. gen./dat.: of/to Medusa",
+"mihi":"pron. dat.: to me",
+"refer":"referre: bring back! (sg. imperative)",
+"ubi":"conj./adv.: when / where",
+"audivit":"audire: he heard (perfect)",
+"insula":"f. abl.: from the island",
+"discessit":"discedere: he departed (perfect)",
+"continentem":"f. acc.: mainland",
+"venit":"venire: he came (perfect)",
+"medusam":"f. acc.: Medusa",
+"quaesivit":"quaerere: he sought (perfect)",
+"diu":"adv.: for a long time",
+"frustra":"adv.: in vain",
+"quaerebat":"quaerere: was seeking (imperfect)",
+"namque":"conj.: for indeed",
+"naturam":"f. acc.: nature",
+"loci":"m. gen.: of the place",
+"ignorabat":"ignorare: did not know (imperfect)",
+"tandem":"adv.: at last, finally",
+"viam":"f. acc.: way, road",
+"demonstraverunt":"demonstrare: they showed (perfect)",
+"primum":"adv.: first / adj. n. acc.: first",
+"sorores":"f. acc./nom. pl.: sisters",
+"pervenit":"pervenire: he arrived (perfect)",
+"his":"pron. dat./abl. pl.: from/to these",
+"talaria":"n. nom./acc. pl.: winged sandals",
+"galeam":"f. acc.: helmet",
+"magicam":"adj. f. acc.: magic",
+"falcem":"f. acc.: sickle, curved blade",
+"speculum":"n. nom./acc.: mirror",
+"dederunt":"dare: they gave (perfect)",
+"pedibus":"m. dat./abl. pl.: feet / to the feet",
+"induit":"induere: he put on (perfect)",
+"aera":"m. acc.: air (Greek acc.)",
+"ascendit":"ascendere: he ascended (perfect)",
+"per":"prep. + acc.: through",
+"volabat":"volare: was flying (imperfect)",
+"eum":"pron. m. acc.: that, him",
+"locum":"m. acc.: place",
+"ceteris":"adj. dat./abl. pl.: the other, remaining",
+"monstra":"n. nom./acc. pl.: monsters",
+"erant":"esse: they were (imperfect)",
+"specie":"f. abl.: appearance, sight (5th decl.)",
+"horribili":"adj. abl.: horrible",
+"capita":"n. nom./acc. pl.: heads",
+"earum":"pron. f. gen. pl.: of them, their",
+"anguibus":"m. dat./abl. pl.: snakes",
+"omnino":"adv.: entirely, completely",
+"contecta":"contegere: covered (perf. pass. part. n. pl.)",
+"manus":"f. nom./acc. pl.: hands (4th decl.)",
+"etiam":"adv.: also, even",
+"aere":"n. abl.: bronze / air",
+"factae":"facere: made (perf. pass. part. f. nom. pl.)",
+"res":"f. nom./acc.: thing, matter, affair (5th decl.)",
+"difficillima":"adj. f. nom.: most difficult (superlative)",
+"abscidere":"abscidere: to cut off (infinitive)",
+"conspectu":"m. abl.: sight, view (4th decl.)",
+"homines":"m. nom./acc. pl.: people, men",
+"saxum":"n. acc.: stone, rock",
+"vertebantur":"vertere: were being turned (imperfect passive)",
+"causam":"f. acc.: cause, reason",
+"dederat":"dare: had given (pluperfect)",
+"tergum":"n. nom./acc.: back",
+"vertit":"vertere: he turned (perfect)",
+"inspiciebat":"inspicere: was looking into (imperfect)",
+"modo":"m. abl.: way, manner; hoc modo = in this way",
+"falce":"f. abl.: with a sickle/curved blade",
+"uno":"adj. m./n. abl.: one",
+"ictu":"m. abl.: blow, stroke (4th decl.)",
+"abscidit":"abscidere: he cut off (perfect)",
+"ceterae":"adj. f. nom. pl.: the other",
+"statim":"adv.: immediately",
+"somno":"m. abl.: sleep",
+"excitatae":"excitare: awakened (perf. pass. part. f. nom. pl.)",
+"sunt":"esse: they are / (with participle) they were",
+"rem":"f. acc.: thing, matter, deed",
+"viderunt":"videre: they saw (perfect)",
+"ira":"f. abl./nom.: anger, wrath",
+"commotae":"commovere: moved, stirred (perf. pass. part. f. nom. pl.)",
+"rapuerunt":"rapere: they seized (perfect)",
+"occidere":"occidere: to kill (infinitive)",
+"volebant":"velle: they wanted (imperfect)",
+"fugit":"fugere: he flees (present) / he fled (perfect)",
+"in":"prep. + abl.: in / + acc.: into",
+"conspectu":"m. abl.: sight (4th decl.)",
+"evasit":"evadere: he escaped (perfect)",
+"finis":"m. acc. pl.: territories, borders",
+"quidam":"pron. m. nom.: a certain one",
+"illo":"adj. m./n. abl.: that",
+"tempore":"n. abl.: at the time",
+"regnabat":"regnare: was ruling (imperfect)",
+"neptunum":"m. acc.: Neptune",
+"maris":"n. gen.: of the sea (3rd decl.)",
+"deum":"m. acc.: god",
+"olim":"adv.: once, formerly",
+"offenderat":"offendere: had offended (pluperfect)",
+"monstrum":"n. nom./acc.: monster",
+"saevissimum":"adj. n. acc.: most savage (superlative)",
+"miserat":"mittere: had sent (pluperfect)",
+"cottidie":"adv.: daily, every day",
+"mari":"n. abl.: from the sea",
+"veniebat":"venire: was coming (imperfect)",
+"devorabat":"devorare: was devouring (imperfect)",
+"ob":"prep. + acc.: because of, on account of",
+"pavor":"m. nom.: panic, terror",
+"animos":"m. acc. pl.: minds, spirits",
+"omnium":"pron. gen. pl.: of all",
+"occupaverat":"occupare: had seized (pluperfect)",
+"consuluit":"consulere: he consulted (perfect)",
+"deo":"m. dat./abl.: god / to/by the god",
+"iussus":"iubere: ordered (perf. pass. part. m. nom.)",
+"filiam":"f. acc.: daughter",
+"monstro":"n. dat.: to the monster",
+"tradere":"tradere: to hand over (infinitive)",
+"filia":"f. nom.: daughter",
+"nomine":"n. abl.: by name",
+"virgo":"f. nom.: maiden, virgin",
+"formosissima":"adj. f. nom.: most beautiful (superlative)",
+"dolorem":"m. acc.: grief, pain",
+"percepit":"percipere: he felt, perceived (perfect)",
+"civis":"m. acc. pl.: citizens",
+"suos":"adj. m. acc. pl.: his/her own",
+"periculo":"n. abl.: danger",
+"extrahere":"extrahere: to extract, rescue (infinitive)",
+"imperata":"n. acc. pl.: commands (perf. pass. part. used as noun)",
+"facere":"facere: to do, make (infinitive)",
+"diem":"f./m. acc.: day (5th decl.)",
+"certam":"adj. f. acc.: fixed, definite",
+"paravit":"parare: he prepared (perfect)",
+"ea":"pron. f. nom./n. nom. pl.: that / those",
+"dies":"f./m. nom.: day (5th decl.)",
+"deducta":"deducere: led down (perf. pass. part. f.)",
+"rupem":"f. acc.: rock, cliff",
+"adligata":"adligare: tied (perf. pass. part. f.)",
+"omnes":"adj. m./f. nom./acc. pl.: all",
+"fatum":"n. nom./acc.: fate",
+"deplorabant":"deplorare: were lamenting (imperfect)",
+"nec":"conj.: and not, nor",
+"lacrimas":"f. acc. pl.: tears",
+"tenebant":"tenere: were holding (imperfect)",
+"subito":"adv.: suddenly",
+"exspectant":"exspectare: they wait for (present)",
+"accurrit":"accurrere: he ran up (perfect)",
+"doloris":"m. gen.: of grief/pain",
+"quaerit":"quaerere: he asks/seeks (present)",
+"illi":"pron. m. nom. pl.: they, those men",
+"totam":"adj. f. acc.: whole, entire",
+"exponunt":"exponere: they explain (present)",
+"puellam":"f. acc.: girl",
+"demonstrant":"demonstrare: they show (present)",
+"dum":"conj.: while",
+"geruntur":"gerere: are being carried on (present passive)",
+"fremitus":"m. nom.: roar, noise (4th decl.)",
+"terribilis":"adj. m./f. nom.: terrible",
+"auditur":"audire: is heard (present passive)",
+"simul":"adv.: at the same time",
+"procul":"adv.: far off, in the distance",
+"conspicitur":"conspicere: is seen (present passive)",
+"conspectus":"m. nom.: sight, view",
+"timorem":"m. acc.: fear",
+"maximum":"adj. m. acc.: greatest (superlative)",
+"omnibus":"adj. dat./abl. pl.: to/for all",
+"iniecit":"inicere: he threw upon, cast (perfect)",
+"celeritate":"f. abl.: speed, swiftness",
+"contendit":"contendere: he rushed, hastened (perfect)",
+"iamque":"adv.: and now, and already",
+"appropinquabat":"appropinquare: was approaching (imperfect)",
+"puella":"f. nom.: girl",
+"stabat":"stare: was standing (imperfect)",
+"gladium":"m. acc.: sword",
+"eduxit":"educere: he drew out (perfect)",
+"sublatus":"tollere: lifted up (perf. pass. part. m. nom.)",
+"desuper":"adv.: from above",
+"impetum":"m. acc.: attack",
+"gladio":"m. abl.: with a sword",
+"suo":"adj. m./n. abl.: his own",
+"collum":"n. nom./acc.: neck",
+"graviter":"adv.: seriously, heavily",
+"vulneravit":"vulnerare: he wounded (perfect)",
+"sensit":"sentire: he/it felt (perfect)",
+"vulnus":"n. nom./acc.: wound",
+"horribilem":"adj. m./f. acc.: horrible",
+"edidit":"edere: he let out, produced (perfect)",
+"sine":"prep. + abl.: without",
+"mora":"f. abl.: delay",
+"totum":"adj. n. acc.: whole, entire",
+"corpus":"n. nom./acc.: body (3rd decl.)",
+"aquam":"f. acc.: water",
+"mersit":"mergere: he plunged (perfect)",
+"circum":"prep. + acc.: around",
+"volat":"volare: he flies (present)",
+"reditum":"m. acc.: return (4th decl.)",
+"exspectabat":"exspectare: was waiting for (imperfect)",
+"interea":"adv.: meanwhile",
+"undique":"adv.: on all sides",
+"sanguine":"m. abl.: with blood",
+"inficitur":"inficere: is stained (present passive)",
+"belua":"f. nom.: beast, monster",
+"rursus":"adv.: again",
+"sustulit":"tollere: he raised (perfect — irregular)",
+"mox":"adv.: soon",
+"ictu":"m. abl.: with a blow",
+"graviore":"adj. comp. abl.: heavier, more serious",
+"vulnerata":"vulnerare: wounded (perf. pass. part. f.)",
+"iterum":"adv.: again",
+"undas":"f. acc. pl.: waves",
+"neque":"conj.: and not, neither",
+"postea":"adv.: afterward",
+"visa":"videre: seen (perf. pass. part. f.)",
+"descendit":"descendere: he came down (perfect)",
+"exuit":"exuere: he took off (perfect)",
+"vincta":"vincire: bound (perf. pass. part. f.)",
+"omnem":"adj. f./m. acc.: all, every",
+"spem":"f. acc.: hope (5th decl.)",
+"salutis":"f. gen.: of safety, salvation",
+"deposuerat":"deponere: had laid down/given up (pluperfect)",
+"adiit":"adire: he approached (perfect)",
+"terrore":"m. abl.: with terror",
+"paene":"adv.: almost",
+"exanimata":"exanimare: lifeless, exhausted (perf. pass. part. f.)",
+"vincula":"n. nom./acc. pl.: bonds, chains",
+"solvit":"solvere: he loosened (perfect)",
+"patri":"m. dat.: to the father",
+"reddidit":"reddere: he gave back (perfect)",
+"maximo":"adj. m./n. abl./dat.: greatest (superlative)",
+"gaudio":"n. abl.: with joy",
+"adfectus":"adficere: affected (perf. pass. part. m. nom.)",
+"meritam":"adj. f. acc.: deserved",
+"gratiam":"f. acc.: thanks, favor",
+"rettulit":"referre: he brought back / rendered (perfect)",
+"praeterea":"adv.: moreover, besides",
+"ipsam":"pron. f. acc.: herself (intensive)",
+"ei":"pron. dat.: to him/her",
+"puellam":"f. acc.: girl",
+"duxit":"ducere: he led / married (perfect)",
+"paucos":"adj. m. acc. pl.: few",
+"uxore":"f. abl.: wife",
+"regione":"f. abl.: region",
+"magno":"adj. m./n. abl.: great",
+"honore":"m. abl.: honor",
+"apud":"prep. + acc.: among, at the house of",
+"omnis":"adj. m./f. acc. pl.: all",
+"cupiebat":"cupere: was desiring (imperfect)",
+"videre":"videre: to see (infinitive)",
+"regno":"n. abl.: kingdom",
+"navem":"f. acc.: ship (3rd decl.)",
+"appulit":"appellere: he brought to shore (perfect)",
+"contulit":"conferre: he brought/betook (perfect)",
+"habitaverat":"habitare: had lived (pluperfect)",
+"domum":"f. acc.: house, home",
+"invenit":"invenire: he found (perfect)",
+"vacuam":"adj. f. acc.: empty",
+"desertam":"adj. f. acc.: deserted",
+"tris":"adj. acc. pl.: three (= tres)",
+"per":"prep. + acc.: through",
+"quarto":"adj. m./n. abl.: fourth",
+"die":"f./m. abl.: day",
+"templum":"n. acc.: temple",
+"huc":"adv.: to here, hither",
+"refugerat":"refugere: had fled (pluperfect)",
+"quod":"conj.: because",
+"cognovit":"cognoscere: he learned (perfect)",
+"commotus":"commovere: moved, stirred (perf. pass. part. m. nom.)",
+"regiam":"f. acc.: palace",
+"eo":"adv.: to there / pron. m. abl.: by him",
+"atrium":"n. acc.: hall, atrium",
+"inrupit":"irrumpere: he burst in (perfect)",
+"timore":"m. abl.: with fear",
+"fugere":"fugere: to flee (infinitive)",
+"monstravit":"monstrare: he showed (perfect)",
+"simul":"adv.: at the same time; simul atque = as soon as",
+"versus":"vertere: turned (perf. pass. part. m. nom.)",
+"urbem":"f. acc.: city",
+"rediit":"redire: he returned (perfect)",
+"terrore":"m. abl.: with terror",
+"istud":"pron. n. nom./acc.: that (contemptuous)",
+"thessaliam":"f. acc.: Thessaly",
+"larisam":"f. acc.: Larisa",
+"refugit":"refugere: he fled (perfect)",
+"vitavit":"vitare: he avoided (perfect)",
+"ludos":"m. acc. pl.: games",
+"magnos":"adj. m. acc. pl.: great",
+"nuntios":"m. acc. pl.: messengers",
+"partis":"f. acc. pl.: parts, directions",
+"dimiserat":"dimittere: had sent out (pluperfect)",
+"edixerat":"edicere: had proclaimed (pluperfect)",
+"multi":"adj. m. nom. pl.: many",
+"urbibus":"f. dat./abl. pl.: from/to cities",
+"convenerunt":"convenire: they came together (perfect)",
+"ipse":"pron. m. nom.: himself (intensive)",
+"inter":"prep. + acc.: among, between",
+"alios":"adj. m. acc. pl.: others",
+"certamen":"n. nom./acc.: contest (3rd decl.)",
+"discorum":"m. gen. pl.: of discuses",
+"iniit":"inire: he entered (perfect)",
+"discum":"m. acc.: discus",
+"conicit":"conicere: he throws (present)",
+"avum":"m. acc.: grandfather",
+"casu":"m. abl.: by chance, accident",
+"occidit":"occidere: he killed (perfect)",
+"spectatores":"m. acc. pl.: spectators",
+"certaminis":"n. gen.: of the contest",
+"forte":"adv.: by chance"
+};
+
+function renderFabulae(){
+  const story=FABULAE_STORIES[S.fabStory];
+  const ch=story.chapters[S.fabChapter];
+  const fz=S.fabFontSize||1;
+  const fontStyle="font-size:"+(fz)+"em";
+
+  const storySelector=FABULAE_STORIES.length>1?
+    '<div class="toggle-row">'+FABULAE_STORIES.map((s,i)=>'<button class="toggle-btn '+(S.fabStory===i?'active':'')+'" data-fabstory="'+i+'">'+s.title+'</button>').join('')+'</div>':'';
+
+  const introHtml='<div style="background:var(--gold-08);border:1px solid var(--gold-border);border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:0.88rem;color:var(--brown-soft);line-height:1.6"><b>Background:</b> '+story.intro+'</div>';
+
+  const chapterNav='<div class="scripture-nav">'+story.chapters.map((c,i)=>'<button class="scripture-nav-btn fab-ch-btn '+(S.fabChapter===i?'active':'')+'" data-fabch="'+i+'">'+c.ch+'</button>').join('')+'</div>';
+
+  const verses=ch.verses.map(v=>{
+    const words=v.la.split(/\b/).map(w=>/[a-zA-ZāēīōūÀ-ÿ]{2,}/.test(w)?'<span class="word-tap" data-word="'+w+'">'+w+'</span>':w).join('');
+    return '<div class="il-line"><div class="il-latin"><span class="verse-num">'+v.v+'</span>'+words+'</div><div class="il-english">'+v.en+'</div>'+(v.n?'<div class="il-note">'+v.n+'</div>':'')+'</div>';
+  }).join('');
+
+  const prevNext='<div style="display:flex;justify-content:space-between;margin-top:20px">'
+    +(S.fabChapter>0?'<button class="next-btn" id="fab-prev">\u2190 '+story.chapters[S.fabChapter-1].title.split('.')[0]+'.</button>':'<div></div>')
+    +(S.fabChapter<story.chapters.length-1?'<button class="next-btn" id="fab-next">'+story.chapters[S.fabChapter+1].title.split('.')[0]+'. \u2192</button>':'<div></div>')
+    +'</div>';
+
+  $("view-fabulae").innerHTML=
+    ST("Fabulae Faciles \u2014 Easy Stories")+
+    storySelector+
+    introHtml+
+    '<div class="font-controls"><button class="font-btn" id="fab-font-down">A\u2212</button><span class="font-label">Text Size</span><button class="font-btn" id="fab-font-up">A+</button></div>'+
+    chapterNav+
+    '<div class="chapter-title">'+ch.title+'</div>'+
+    '<div class="chapter-subtitle">'+ch.subtitle+'</div>'+
+    '<p class="instructions">Tap any Latin word to see its definition. Grammar notes appear below each verse.</p>'+
+    '<div class="interlinear" style="'+fontStyle+'">'+verses+'</div>'+
+    prevNext+
+    '<div style="margin-top:28px;padding:14px;background:var(--gold-08);border-radius:10px;font-size:0.8rem;color:var(--brown-muted);text-align:center">Source: <i>Fabulae Faciles</i> by Francis Ritchie (1903) \u2014 Public Domain via Project Gutenberg</div>';
+
+  // Event listeners
+  document.querySelectorAll("[data-fabstory]").forEach(b=>b.addEventListener("click",()=>{S.fabStory=parseInt(b.dataset.fabstory);S.fabChapter=0;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});}));
+  document.querySelectorAll(".fab-ch-btn").forEach(b=>b.addEventListener("click",()=>{S.fabChapter=parseInt(b.dataset.fabch);saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});}));
+  document.querySelectorAll("#view-fabulae .word-tap").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();showWordPanel(el.dataset.word,e);}));
+  const fu=document.getElementById("fab-font-up"),fd=document.getElementById("fab-font-down");
+  if(fu)fu.addEventListener("click",()=>{S.fabFontSize=Math.min((S.fabFontSize||1)+0.1,1.5);saveState();renderFabulae();});
+  if(fd)fd.addEventListener("click",()=>{S.fabFontSize=Math.max((S.fabFontSize||1)-0.1,0.7);saveState();renderFabulae();});
+  const fp=document.getElementById("fab-prev"),fn_btn=document.getElementById("fab-next");
+  if(fp)fp.addEventListener("click",()=>{S.fabChapter--;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});});
+  if(fn_btn)fn_btn.addEventListener("click",()=>{S.fabChapter++;saveState();renderFabulae();window.scrollTo({top:0,behavior:"smooth"});});
+}
+
+// Merge FABULAE_FORMS into LATIN_FORMS
+Object.assign(LATIN_FORMS, FABULAE_FORMS);
 
 renderNav();renderHome();
 </script>
