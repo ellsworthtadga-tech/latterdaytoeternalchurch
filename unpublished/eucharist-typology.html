@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Eucharist Through the Old Testament — A Typological Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crimson: #8B0000;
+  --crimson-light: #A52A2A;
+  --gold: #C5A55A;
+  --gold-light: #D4B96E;
+  --gold-dim: rgba(197, 165, 90, 0.15);
+  --parchment: #F5F0E8;
+  --parchment-dark: #E8E0D0;
+  --ink: #2C2416;
+  --ink-light: #5C4F3A;
+  --ink-faint: #8A7D6B;
+  --white: #FFFDF7;
+  --shadow: rgba(44, 36, 22, 0.12);
+  --shadow-deep: rgba(44, 36, 22, 0.25);
+}
+
+[data-theme="dark"] {
+  --parchment: #1A1612;
+  --parchment-dark: #231E18;
+  --ink: #E8E0D0;
+  --ink-light: #B8AD9C;
+  --ink-faint: #7A6F5E;
+  --white: #2A2420;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-deep: rgba(0, 0, 0, 0.5);
+  --gold-dim: rgba(197, 165, 90, 0.1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--parchment);
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: 17px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ── Progress Bar ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 1000;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* ── Dark Mode Toggle ── */
+.theme-toggle {
+  position: fixed; top: 20px; right: 20px; z-index: 999;
+  background: var(--white); border: 1px solid var(--gold);
+  color: var(--ink); cursor: pointer; border-radius: 50%;
+  width: 42px; height: 42px; display: flex; align-items: center;
+  justify-content: center; font-size: 18px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: all 0.3s;
+}
+.theme-toggle:hover { background: var(--gold); color: var(--white); }
+
+/* ── Hero Header ── */
+.hero {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2d0f0f 30%, #1a0a0a 60%, #0d0805 100%);
+  position: relative; padding: 100px 40px 80px; text-align: center;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(197,165,90,0.03) 2px, rgba(197,165,90,0.03) 4px);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(139,0,0,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-ornament {
+  color: var(--gold); font-size: 28px; letter-spacing: 16px;
+  margin-bottom: 24px; opacity: 0.7;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: clamp(2.2rem, 5vw, 3.6rem); color: var(--parchment);
+  line-height: 1.15; margin-bottom: 16px;
+  text-shadow: 0 2px 20px rgba(139,0,0,0.4);
+}
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero-subtitle {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
+  color: var(--gold-light); font-style: italic; max-width: 600px;
+  margin: 0 auto 30px; line-height: 1.5; opacity: 0.9;
+}
+.hero-verse {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  color: rgba(245,240,232,0.6); max-width: 560px; margin: 0 auto;
+  border-top: 1px solid rgba(197,165,90,0.25); padding-top: 20px;
+  line-height: 1.6;
+}
+.hero-verse .ref {
+  display: block; margin-top: 8px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
+}
+
+/* ── Floating Navigator ── */
+.navigator {
+  position: fixed; left: 16px; top: 50%; transform: translateY(-50%);
+  z-index: 998; display: flex; flex-direction: column; gap: 6px;
+}
+.nav-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink-faint); cursor: pointer; transition: all 0.3s;
+  border: none; position: relative;
+}
+.nav-dot:hover, .nav-dot.active {
+  background: var(--gold); transform: scale(1.4);
+}
+.nav-dot .nav-tooltip {
+  position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+  background: var(--ink); color: var(--parchment); padding: 4px 10px;
+  border-radius: 4px; font-size: 0.7rem; white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.nav-dot:hover .nav-tooltip { opacity: 1; }
+
+/* ── Main Content ── */
+.content { max-width: 800px; margin: 0 auto; padding: 60px 24px 100px; }
+
+/* ── Introduction ── */
+.intro {
+  font-size: 1.05rem; color: var(--ink-light); margin-bottom: 50px;
+  text-align: center; max-width: 680px; margin-left: auto; margin-right: auto;
+}
+.intro p { margin-bottom: 16px; }
+.intro strong { color: var(--ink); }
+
+/* ── Section Dividers ── */
+.section-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 60px 0 40px; padding-top: 20px;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--gold);
+  opacity: 0.4;
+}
+.section-number {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 3px; text-transform: uppercase;
+  background: var(--parchment); padding: 0 4px;
+}
+
+/* ── Type Cards ── */
+.type-card {
+  background: var(--white);
+  border: 1px solid rgba(197,165,90,0.2);
+  border-radius: 6px;
+  padding: 36px 32px;
+  margin-bottom: 36px;
+  box-shadow: 0 2px 12px var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+}
+.type-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--crimson), var(--gold));
+  border-radius: 6px 0 0 6px;
+}
+.type-card:hover {
+  box-shadow: 0 4px 20px var(--shadow-deep);
+  transform: translateY(-1px);
+}
+.type-header {
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 8px; flex-wrap: wrap;
+}
+.type-title {
+  font-family: 'Playfair Display', serif; font-size: 1.45rem;
+  font-weight: 700; color: var(--crimson);
+  line-height: 1.3;
+}
+[data-theme="dark"] .type-title { color: var(--gold-light); }
+
+.type-ref {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: var(--gold); letter-spacing: 1px; white-space: nowrap;
+}
+.type-card h4 {
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  font-weight: 700; color: var(--ink); margin: 20px 0 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.type-card h4 .label-type { color: var(--crimson); }
+.type-card h4 .label-anti { color: var(--gold); }
+[data-theme="dark"] .type-card h4 .label-type { color: #E07070; }
+
+.type-card p { margin-bottom: 12px; color: var(--ink-light); }
+.type-card p:last-child { margin-bottom: 0; }
+
+/* ── Verse Block ── */
+.verse-block {
+  background: var(--gold-dim);
+  border-left: 3px solid var(--gold);
+  padding: 14px 18px; margin: 14px 0;
+  border-radius: 0 4px 4px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; line-height: 1.6;
+  color: var(--ink); font-style: italic;
+}
+.verse-block .vref {
+  display: block; margin-top: 6px; font-style: normal;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  color: var(--gold); letter-spacing: 1.5px;
+}
+
+/* ── Fulfillment Block ── */
+.fulfillment {
+  background: linear-gradient(135deg, rgba(139,0,0,0.06), rgba(197,165,90,0.06));
+  border: 1px solid rgba(139,0,0,0.12);
+  padding: 16px 18px; margin: 14px 0;
+  border-radius: 4px;
+}
+[data-theme="dark"] .fulfillment {
+  background: linear-gradient(135deg, rgba(139,0,0,0.12), rgba(197,165,90,0.08));
+  border-color: rgba(197,165,90,0.15);
+}
+
+/* ── Key Point ── */
+.key-point {
+  border-left: 3px solid var(--gold);
+  padding: 14px 18px; margin: 20px 0;
+  background: var(--gold-dim); border-radius: 0 4px 4px 0;
+}
+.key-point strong { color: var(--ink); }
+
+/* ── Summary Table ── */
+.summary-section {
+  margin-top: 80px;
+}
+.summary-section h2 {
+  font-family: 'Playfair Display', serif; font-size: 1.8rem;
+  color: var(--crimson); text-align: center; margin-bottom: 30px;
+}
+[data-theme="dark"] .summary-section h2 { color: var(--gold); }
+
+.summary-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.9rem; background: var(--white);
+  box-shadow: 0 2px 12px var(--shadow);
+  border-radius: 6px; overflow: hidden;
+}
+.summary-table thead {
+  background: linear-gradient(135deg, #1a0a0a, #2d0f0f);
+}
+.summary-table th {
+  padding: 14px 16px; color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 2px;
+  text-transform: uppercase; text-align: left;
+  font-weight: 500;
+}
+.summary-table td {
+  padding: 12px 16px; border-bottom: 1px solid rgba(197,165,90,0.12);
+  vertical-align: top;
+}
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table tr:hover td { background: var(--gold-dim); }
+.summary-table .col-type {
+  font-family: 'Playfair Display', serif; font-weight: 600;
+  color: var(--crimson); font-size: 0.92rem;
+}
+[data-theme="dark"] .summary-table .col-type { color: var(--gold-light); }
+.summary-table .col-ref {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: var(--gold); white-space: nowrap;
+}
+
+/* ── Closing ── */
+.closing {
+  text-align: center; margin-top: 70px; padding-top: 40px;
+  border-top: 1px solid rgba(197,165,90,0.3);
+}
+.closing-ornament { color: var(--gold); font-size: 20px; letter-spacing: 12px; margin-bottom: 20px; }
+.closing blockquote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-style: italic;
+  color: var(--ink-light); max-width: 550px;
+  margin: 0 auto 10px; line-height: 1.6;
+}
+.closing .ref {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 2px;
+}
+
+/* ── Drop Cap ── */
+.drop-cap::first-letter {
+  float: left; font-family: 'Playfair Display', serif;
+  font-size: 3.2rem; line-height: 0.8; font-weight: 900;
+  color: var(--crimson); margin: 4px 8px 0 0;
+}
+[data-theme="dark"] .drop-cap::first-letter { color: var(--gold); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .navigator { display: none; }
+  .hero { padding: 70px 20px 50px; }
+  .content { padding: 40px 16px 80px; }
+  .type-card { padding: 24px 20px; }
+  .summary-table { font-size: 0.8rem; }
+  .summary-table th, .summary-table td { padding: 8px 10px; }
+}
+
+/* ── Animations ── */
+.type-card { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+.type-card.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">☽</button>
+
+<!-- Navigator dots -->
+<nav class="navigator" id="navigator"></nav>
+
+<!-- ═══════ HERO ═══════ -->
+<header class="hero">
+  <div class="hero-ornament">✦ ✦ ✦</div>
+  <h1>The Eucharist Through<br>the <em>Old Testament</em></h1>
+  <p class="hero-subtitle">A Typological Study of How Every Shadow<br>Finds Its Substance in the Body &amp; Blood of Christ</p>
+  <p class="hero-verse">
+    "Search the scriptures… the same are they that give testimony of me."
+    <span class="ref">John 5:39 — Douay-Rheims</span>
+  </p>
+</header>
+
+<!-- ═══════ CONTENT ═══════ -->
+<main class="content">
+
+  <div class="intro">
+    <p class="drop-cap">The Eucharist does not appear out of nowhere at the Last Supper. From the opening chapters of Genesis to the final prophetic oracle in Malachi, God progressively unveils a single, breathtaking plan: He will give His own flesh as true food and His own blood as true drink, and this sacrificial meal will unite heaven and earth.</p>
+    <p>What follows is a study of the Old Testament <strong>types</strong> — the divinely ordained prefigurements — and how each finds its <strong>antitype</strong>, its completion and perfection, in the Holy Eucharist.</p>
+  </div>
+
+  <!-- ═══════ 1. TREE OF LIFE ═══════ -->
+  <div class="section-divider" id="sec1"><span class="section-number">Type I</span></div>
+  <article class="type-card" data-section="sec1">
+    <div class="type-header">
+      <span class="type-title">The Tree of Life</span>
+      <span class="type-ref">GENESIS 2:9; 3:22–24</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>In the center of Eden stood a tree whose fruit communicated divine life. To eat of it was to live forever. After the Fall, God stationed cherubim and a flaming sword to guard access — not to destroy the tree, but to guard it until the proper time.</p>
+    <div class="verse-block">
+      "And the Lord God brought forth of the ground all manner of trees, fair to behold, and pleasant to eat of: the tree of life also in the midst of paradise."
+      <span class="vref">Genesis 2:9</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Cross is the true Tree of Life — and the Eucharist is its fruit. What Adam forfeited by eating, Christ restores by offering His own Body to be eaten. The cherubim no longer bar the way; instead, they are embroidered on the veil of the Temple, which is torn open at Calvary. Access to the Tree is restored — and its fruit is placed on every altar.</p>
+      <p>The Church Fathers saw this clearly. Saint Ambrose writes that the Tree of Life is a figure of Christ, whose sacramental Body is the food of immortality. The Eucharist does exactly what the Tree of Life was meant to do: communicate divine life to those who eat.</p>
+    </div>
+    <div class="verse-block">
+      "He that hath an ear, let him hear what the Spirit saith to the churches: To him that overcometh, I will give to eat of the tree of life, which is in the paradise of my God."
+      <span class="vref">Apocalypse 2:7</span>
+    </div>
+  </article>
+
+  <!-- ═══════ 2. MELCHIZEDEK ═══════ -->
+  <div class="section-divider" id="sec2"><span class="section-number">Type II</span></div>
+  <article class="type-card" data-section="sec2">
+    <div class="type-header">
+      <span class="type-title">The Offering of Melchizedek</span>
+      <span class="type-ref">GENESIS 14:18–20</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>After Abram's victory over the kings, a mysterious figure appears: Melchizedek, king of Salem, priest of the Most High God. He offers no animal sacrifice. He brings <em>bread and wine</em> — and blesses Abram. He has no recorded genealogy, no beginning of days nor end of life. He simply appears, offers bread and wine, and vanishes from the narrative.</p>
+    <div class="verse-block">
+      "But Melchisedech the king of Salem, bringing forth bread and wine, for he was the priest of the most high God, blessed him."
+      <span class="vref">Genesis 14:18–19</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>Psalm 109 declares the Messiah "a priest forever according to the order of Melchizedek" — <em>not</em> according to Aaron. The Epistle to the Hebrews devotes three full chapters to this point: Christ's priesthood is not Levitical. It is of a different order entirely — an eternal priesthood whose sacrifice is offered under the signs of bread and wine.</p>
+      <p>This is devastating to any theology that reduces the Last Supper to a mere symbolic meal. Melchizedek's offering was not a butchered animal; it was bread and wine. Christ's offering at the Last Supper was bread and wine — but He declared them to be His Body and Blood. The type dictates the form of the antitype. The Eucharist is the sacrifice of the New Melchizedek.</p>
+    </div>
+    <div class="key-point">
+      <strong>Why this matters:</strong> If Christ is priest "according to the order of Melchizedek," then His definitive sacrifice must involve bread and wine — not merely a bloody death on a cross. The Cross is the <em>reality</em> of the sacrifice; the Eucharist is its sacramental perpetuation under the signs that Melchizedek's priesthood demands.
+    </div>
+  </article>
+
+  <!-- ═══════ 3. BINDING OF ISAAC ═══════ -->
+  <div class="section-divider" id="sec3"><span class="section-number">Type III</span></div>
+  <article class="type-card" data-section="sec3">
+    <div class="type-header">
+      <span class="type-title">The Binding of Isaac</span>
+      <span class="type-ref">GENESIS 22:1–18</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Abraham is commanded to offer his "only-begotten son" — the son of the promise — as a holocaust on Mount Moriah. Isaac carries the wood for his own sacrifice up the mountain. Abraham tells the servants, "I and the boy will go… and return" — expressing faith that God will raise Isaac even from the dead (cf. Heb. 11:19). At the last moment, a ram is substituted.</p>
+    <div class="verse-block">
+      "Take thy only begotten son Isaac, whom thou lovest, and go into the land of vision: and there thou shalt offer him for a holocaust upon one of the mountains which I will shew thee."
+      <span class="vref">Genesis 22:2</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Father offers His only-begotten Son on the same mountain — for Jewish tradition identifies Moriah with the Temple Mount and, by extension, with Golgotha. Christ carries the wood of His own Cross up the hill. But unlike Isaac, no substitute is provided. The Son <em>is</em> the sacrifice. And like Abraham's faith, the Father raises Him from the dead.</p>
+      <p>The Eucharist re-presents this sacrifice — the Lamb of God, slain and risen, offered to the Father. The altar is Moriah. The priest acts in the person of both Abraham and Christ. And the faithful who receive are drawn into the covenant blessing that Abraham was promised: "In thy seed shall all the nations of the earth be blessed."</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 4. THE PASSOVER ═══════ -->
+  <div class="section-divider" id="sec4"><span class="section-number">Type IV</span></div>
+  <article class="type-card" data-section="sec4">
+    <div class="type-header">
+      <span class="type-title">The Passover Lamb</span>
+      <span class="type-ref">EXODUS 12:1–28</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>God commands each household to select a lamb without blemish, slaughter it at twilight, mark the doorposts with its blood, and <em>eat its flesh</em> — roasted, with unleavened bread and bitter herbs. No bone shall be broken. The blood protects from the destroyer; the meal sustains for the journey. Both are required. A lamb slain but uneaten would not fulfill the command.</p>
+    <div class="verse-block">
+      "And they shall eat the flesh that night roasted at the fire, and unleavened bread with wild lettuce… neither shall you break a bone thereof."
+      <span class="vref">Exodus 12:8, 46</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>John the Baptist identifies Jesus as "the Lamb of God, who taketh away the sin of the world." John's Gospel places the Crucifixion at the very hour when the Passover lambs were being slaughtered in the Temple. Not a bone of Him was broken. His blood, applied to the wood of the Cross, delivers from eternal death.</p>
+      <p>But here is the point Protestant and LDS theology struggles to absorb: <em>the Passover lamb had to be eaten.</em> A lamb that was slain but not consumed did not complete the rite. Christ Himself institutes the Eucharist at a Passover meal, takes bread, and says, "This is my body." He takes the cup: "This is my blood of the new testament." The Eucharist is the eating of the Paschal Lamb. Without it, the New Passover is incomplete.</p>
+    </div>
+    <div class="key-point">
+      <strong>The Fourth Cup:</strong> At the Last Supper, Jesus drinks three cups of wine according to the Passover Seder — but stops before the fourth, saying He will not drink again of the fruit of the vine until the Kingdom. On the Cross, He is offered wine on hyssop (the same plant used to apply the Passover blood). He drinks it and says, "It is consummated." The fourth cup — the Cup of Consummation — is drunk on the Cross. The Last Supper and Calvary are a single liturgical action, which is re-presented at every Mass.
+    </div>
+  </article>
+
+  <!-- ═══════ 5. MANNA ═══════ -->
+  <div class="section-divider" id="sec5"><span class="section-number">Type V</span></div>
+  <article class="type-card" data-section="sec5">
+    <div class="type-header">
+      <span class="type-title">The Manna from Heaven</span>
+      <span class="type-ref">EXODUS 16:4–35</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>In the wilderness, God rains bread from heaven — mysterious, white, sweet, sufficient for each day. The people ask, <em>"Man hu?"</em> — "What is this?" A golden pot of manna is placed inside the Ark of the Covenant, in the Holy of Holies, before the presence of God. It sustained Israel for forty years in the desert.</p>
+    <div class="verse-block">
+      "I will rain bread from heaven for you… And the house of Israel called the name thereof manna: and it was like coriander seed white, and the taste thereof like to flour with honey."
+      <span class="vref">Exodus 16:4, 31</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>Jesus makes the connection explicit in John 6 — the most sustained Eucharistic discourse in all of Scripture. The crowd invokes the manna: "Our fathers did eat manna in the desert." Jesus answers: "Moses gave you not bread from heaven, but my Father giveth you the true bread from heaven." And then the shocking declaration: "I am the living bread which came down from heaven. If any man eat of this bread, he shall live for ever; and <em>the bread that I will give, is my flesh, for the life of the world.</em>"</p>
+      <p>The manna sustained temporal life in the desert. The Eucharist gives eternal life. The manna was stored in the Ark of the Covenant; Christ dwelt in the womb of Mary, whom the Church calls the Ark of the New Covenant. The typology is seamless.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 6. WATER FROM THE ROCK ═══════ -->
+  <div class="section-divider" id="sec6"><span class="section-number">Type VI</span></div>
+  <article class="type-card" data-section="sec6">
+    <div class="type-header">
+      <span class="type-title">Water from the Rock</span>
+      <span class="type-ref">EXODUS 17:1–7; NUMBERS 20:1–13</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>At Horeb, Moses strikes the rock and water flows to quench the thirst of Israel. Paul does not leave the interpretation to guesswork: "They drank of the spiritual rock that followed them, and the rock was Christ" (1 Cor. 10:4). The rock is struck — wounded — and from the wound flows life-giving water.</p>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>On the Cross, the side of Christ is pierced, and out flows blood and water — the sacraments of Eucharist and Baptism. John emphasizes the eyewitness testimony: "He that saw it, hath given testimony" (Jn. 19:35). The Fathers consistently interpret blood and water as the Eucharist and Baptism flowing from the wounded side of Christ, just as water flowed from the wounded rock.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 7. COVENANT MEAL AT SINAI ═══════ -->
+  <div class="section-divider" id="sec7"><span class="section-number">Type VII</span></div>
+  <article class="type-card" data-section="sec7">
+    <div class="type-header">
+      <span class="type-title">The Covenant Meal at Sinai</span>
+      <span class="type-ref">EXODUS 24:1–11</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>After Moses sprinkles the people with the blood of the covenant, he ascends Sinai with Aaron, Nadab, Abihu, and seventy elders. There, in the presence of God, "they saw God, and they did eat and drink." A sacrificial meal in the visible presence of the Almighty — ratifying the covenant with blood, then sealed with a shared feast.</p>
+    <div class="verse-block">
+      "And he said: Behold the blood of the covenant which the Lord hath made with you… And they saw the God of Israel… and they did eat and drink."
+      <span class="vref">Exodus 24:8, 10–11</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>At the Last Supper, Christ takes the cup and says: "This is my blood of the <em>new</em> testament, which shall be shed for many." The precise language of Exodus 24 — "the blood of the covenant" — is deliberately echoed. But the antitype surpasses the type: the blood is not sprinkled <em>on</em> the people but given to them <em>to drink</em>. The covenant meal is no longer beside the presence of God; it <em>is</em> the Body and Blood of God Himself.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 8. SHOWBREAD ═══════ -->
+  <div class="section-divider" id="sec8"><span class="section-number">Type VIII</span></div>
+  <article class="type-card" data-section="sec8">
+    <div class="type-header">
+      <span class="type-title">The Bread of the Presence</span>
+      <span class="type-ref">EXODUS 25:30; LEVITICUS 24:5–9</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Twelve loaves of fine flour — one for each tribe — were placed on a golden table inside the Tabernacle, perpetually before the face of God. The Hebrew is <em>lechem ha-panim</em>: "bread of the Face," or "bread of the Presence." It was replaced every Sabbath and eaten by the priests in a holy place. Bread set before God's presence, bread that became sacred by that proximity, bread consumed in a sacral meal.</p>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Eucharist is the true Bread of the Presence — not merely set <em>before</em> God's face, but the Face itself made bread. Christ, the presence of God incarnate, gives Himself under the form of bread. The tabernacle on every Catholic altar is the direct descendant of the golden table in the Tabernacle of Moses. The reserved Eucharist is the perpetual Bread of the Presence, placed before the faithful for adoration and communion.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 9. TODAH / THANK OFFERING ═══════ -->
+  <div class="section-divider" id="sec9"><span class="section-number">Type IX</span></div>
+  <article class="type-card" data-section="sec9">
+    <div class="type-header">
+      <span class="type-title">The Todah — The Thanksgiving Sacrifice</span>
+      <span class="type-ref">LEVITICUS 7:11–15; PSALM 49:14, 23</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>The <em>todah</em> (תּוֹדָה) was a particular kind of peace offering — a sacrifice of thanksgiving. It was offered by someone who had been delivered from mortal danger: illness, war, false accusation. It included an animal sacrifice, but also <em>leavened bread and unleavened cakes</em>, eaten in a communal meal with family and friends. The offering was accompanied by psalms of praise. Rabbinic tradition held that in the Messianic age, all sacrifices would cease <em>except</em> the todah.</p>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Greek word <em>eucharistia</em> (εὐχαριστία) means "thanksgiving" — it is the direct Greek translation of the Hebrew <em>todah</em>. Jesus "gave thanks" (<em>eucharistēsas</em>) before breaking the bread. The Mass is the todah of the New Covenant: Christ, delivered from death through Resurrection, offers the sacrifice of thanksgiving — bread and wine become His Body and Blood — in a communal meal accompanied by psalms. Every other sacrifice has ceased. The todah alone remains, exactly as the rabbis predicted.</p>
+    </div>
+    <div class="key-point">
+      <strong>The Eucharist is not named randomly.</strong> It is called "Eucharist" because it <em>is</em> the todah — the thanksgiving sacrifice that Jewish tradition said would outlast every other offering.
+    </div>
+  </article>
+
+  <!-- ═══════ 10. DAY OF ATONEMENT ═══════ -->
+  <div class="section-divider" id="sec10"><span class="section-number">Type X</span></div>
+  <article class="type-card" data-section="sec10">
+    <div class="type-header">
+      <span class="type-title">The Day of Atonement</span>
+      <span class="type-ref">LEVITICUS 16</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Once a year, the High Priest — and he alone — entered the Holy of Holies with sacrificial blood, sprinkling it on the mercy seat above the Ark. The blood was carried <em>through</em> the veil into the inner sanctum. Without this annual rite, Israel's sins remained unatoned.</p>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>Hebrews 9 makes the typology explicit: Christ, the eternal High Priest, enters not a man-made sanctuary but heaven itself, carrying not the blood of goats and calves but His own Blood. He enters once for all. The veil of the Temple tears at His death — the barrier is destroyed. And the Eucharist is how the faithful participate in this once-for-all sacrifice: the same Blood that was carried into the heavenly Holy of Holies is given to them to drink.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 11. ELIJAH'S BREAD ═══════ -->
+  <div class="section-divider" id="sec11"><span class="section-number">Type XI</span></div>
+  <article class="type-card" data-section="sec11">
+    <div class="type-header">
+      <span class="type-title">Elijah's Miraculous Bread</span>
+      <span class="type-ref">3 KINGS 19:4–8</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Elijah, fleeing Jezebel, collapses in the desert and asks to die. An angel touches him, and there beside him is a hearth cake and a vessel of water. He eats, sleeps, and the angel rouses him again: "Arise, eat: for thou hast yet a great way to go." He eats a second time, and in the strength of that food walks <em>forty days and forty nights</em> to Horeb, the mountain of God.</p>
+    <div class="verse-block">
+      "And he… walked in the strength of that food forty days and forty nights, unto the mount of God, Horeb."
+      <span class="vref">3 Kings 19:8</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Eucharist is the viaticum — the "food for the journey." Like Elijah's bread, it sustains the pilgrim Church on the long road to the Mountain of God. It is angelic food — or rather, food that exceeds what angels can offer, because it is God Himself. The one who eats this bread will not collapse in the desert. "He that eateth my flesh, and drinketh my blood, hath everlasting life: and I will raise him up in the last day" (Jn. 6:55).</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 12. WISDOM'S BANQUET ═══════ -->
+  <div class="section-divider" id="sec12"><span class="section-number">Type XII</span></div>
+  <article class="type-card" data-section="sec12">
+    <div class="type-header">
+      <span class="type-title">Wisdom's Banquet</span>
+      <span class="type-ref">PROVERBS 9:1–6</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Divine Wisdom — personified as a woman, but understood by the Fathers as a figure of the Logos — builds her house, sets her table, mixes her wine, slaughters her beasts, and sends her maidens to cry from the heights of the city: "Come, eat of my bread, and drink the wine which I have mingled for you. Forsake childishness, and live."</p>
+    <div class="verse-block">
+      "Wisdom hath built herself a house, she hath hewn her out seven pillars. She hath slain her victims, mingled her wine, and set forth her table."
+      <span class="vref">Proverbs 9:1–2</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>Christ — the Wisdom of God (1 Cor. 1:24) — builds His Church (the "house" with "seven pillars," which the Fathers identify with the seven sacraments). He slays the victim — Himself — and sets forth the table: bread and wine that are His Body and Blood. The Eucharistic banquet is Wisdom's feast made real. The invitation goes out to the whole world: "Come, eat… and live."</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 13. ISAIAH'S MESSIANIC BANQUET ═══════ -->
+  <div class="section-divider" id="sec13"><span class="section-number">Type XIII</span></div>
+  <article class="type-card" data-section="sec13">
+    <div class="type-header">
+      <span class="type-title">The Messianic Banquet</span>
+      <span class="type-ref">ISAIAS 25:6–9</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>Isaiah prophesies a day when God Himself will prepare a feast "for all peoples" on His holy mountain — a banquet of rich food and aged wine. On that day, He will "destroy the veil that is cast over all peoples" and "swallow up death for ever." The feast and the abolition of death are linked.</p>
+    <div class="verse-block">
+      "And the Lord of hosts shall make unto all people in this mountain, a feast of fat things, a feast of wine… and he shall cast death down headlong for ever."
+      <span class="vref">Isaias 25:6, 8</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Eucharist <em>is</em> the Messianic Banquet — not merely a foretaste, but the real presence of the eschatological feast breaking into time. The veil is destroyed (the Temple veil torn, the veil between God and man removed). Death is swallowed up in the Resurrection. And the feast is prepared for all peoples — the Mass is offered in every nation, on every continent, "from the rising of the sun even to the going down" (Mal. 1:11).</p>
+    </div>
+  </article>
+
+  <!-- ═══════ 14. MALACHI'S PURE OFFERING ═══════ -->
+  <div class="section-divider" id="sec14"><span class="section-number">Type XIV</span></div>
+  <article class="type-card" data-section="sec14">
+    <div class="type-header">
+      <span class="type-title">The Pure Offering Among the Nations</span>
+      <span class="type-ref">MALACHIAS 1:11</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type/Prophecy</span></h4>
+    <p>In the last book of the Old Testament, God rebukes the corrupt priests of Israel and then announces something astonishing: He will be worshipped not just in Jerusalem, but among <em>all the Gentile nations</em>, and a "clean oblation" will be offered to His name in every place.</p>
+    <div class="verse-block">
+      "For from the rising of the sun even to the going down, my name is great among the Gentiles, and in every place there is sacrifice, and there is offered to my name a clean oblation."
+      <span class="vref">Malachias 1:11</span>
+    </div>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>The Didache — a first-century Christian document — already identifies this verse with the Eucharist. Justin Martyr does the same in the second century. Irenaeus, in the third. The identification is unanimous in the early Church: the "clean oblation" offered in every place among the nations is the Holy Sacrifice of the Mass. No other candidate exists. Protestant worship services do not claim to offer a sacrifice. The Eucharist is the only Christian act that fulfills this prophecy — a single, pure sacrifice offered universally, from the rising of the sun to its setting.</p>
+    </div>
+    <div class="key-point">
+      <strong>The patristic consensus on this point is unbroken.</strong> There is no early Church Father who interprets Malachi 1:11 as referring to anything other than the Eucharist. This is a significant problem for any theology that denies the sacrificial nature of the Mass.
+    </div>
+  </article>
+
+  <!-- ═══════ 15. EZEKIEL'S SCROLL ═══════ -->
+  <div class="section-divider" id="sec15"><span class="section-number">Type XV</span></div>
+  <article class="type-card" data-section="sec15">
+    <div class="type-header">
+      <span class="type-title">Ezekiel Eats the Scroll</span>
+      <span class="type-ref">EZECHIEL 2:8–3:3</span>
+    </div>
+    <h4><span class="label-type">⬥ The Type</span></h4>
+    <p>God commands the prophet to open his mouth and eat a scroll — the Word of God made physically consumable. Ezekiel obeys: "And I did eat it: and it was sweet as honey in my mouth." The Word is not merely heard or read; it is ingested, made part of the prophet's body.</p>
+    <h4><span class="label-anti">✦ The Fulfillment</span></h4>
+    <div class="fulfillment">
+      <p>"And the Word was made flesh, and dwelt among us" (Jn. 1:14). The Logos — the Word of God — becomes not a scroll to be eaten, but flesh and blood to be consumed. In the Eucharist, the faithful do what Ezekiel did: they eat the Word of God. But the antitype infinitely surpasses the type. Ezekiel ate parchment and ink. The Christian eats the Body, Blood, Soul, and Divinity of the eternal Word Himself.</p>
+    </div>
+  </article>
+
+  <!-- ═══════ SUMMARY TABLE ═══════ -->
+  <section class="summary-section" id="summary">
+    <h2>Summary of Types &amp; Antitypes</h2>
+    <div style="overflow-x:auto;">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Old Testament Type</th>
+          <th>Reference</th>
+          <th>Eucharistic Fulfillment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="col-type">Tree of Life</td><td class="col-ref">Gen 2–3</td><td>The Cross is the Tree; the Eucharist is its fruit of immortality</td></tr>
+        <tr><td class="col-type">Melchizedek's Offering</td><td class="col-ref">Gen 14:18–20</td><td>Christ, priest of the same order, offers bread &amp; wine — His Body &amp; Blood</td></tr>
+        <tr><td class="col-type">Binding of Isaac</td><td class="col-ref">Gen 22</td><td>The Father's only-begotten Son offered on Moriah; re-presented on the altar</td></tr>
+        <tr><td class="col-type">Passover Lamb</td><td class="col-ref">Ex 12</td><td>Christ the Lamb — slain and <em>eaten</em>; the fourth cup completed at Calvary</td></tr>
+        <tr><td class="col-type">Manna</td><td class="col-ref">Ex 16</td><td>"I am the living bread come down from heaven" (Jn 6:51)</td></tr>
+        <tr><td class="col-type">Water from the Rock</td><td class="col-ref">Ex 17; Num 20</td><td>Blood &amp; water from Christ's side — Eucharist &amp; Baptism</td></tr>
+        <tr><td class="col-type">Covenant Meal at Sinai</td><td class="col-ref">Ex 24</td><td>"This is my blood of the new covenant" — the blood now drunk, not sprinkled</td></tr>
+        <tr><td class="col-type">Bread of the Presence</td><td class="col-ref">Ex 25; Lev 24</td><td>Christ is the true Bread of the Presence, reserved in the tabernacle</td></tr>
+        <tr><td class="col-type">The Todah</td><td class="col-ref">Lev 7; Ps 49</td><td>The Eucharist ("thanksgiving") is the todah sacrifice that outlasts all others</td></tr>
+        <tr><td class="col-type">Day of Atonement</td><td class="col-ref">Lev 16</td><td>Christ enters heaven with His own Blood; we drink that Blood in the Eucharist</td></tr>
+        <tr><td class="col-type">Elijah's Bread</td><td class="col-ref">3 Kgs 19:4–8</td><td>Viaticum — supernatural food for the pilgrim journey to the Mountain of God</td></tr>
+        <tr><td class="col-type">Wisdom's Banquet</td><td class="col-ref">Prov 9:1–6</td><td>Christ the Wisdom of God sets His Eucharistic table and invites all to live</td></tr>
+        <tr><td class="col-type">Messianic Banquet</td><td class="col-ref">Is 25:6–9</td><td>The Eucharist is the eschatological feast breaking into time</td></tr>
+        <tr><td class="col-type">Pure Offering</td><td class="col-ref">Mal 1:11</td><td>The Mass — the one clean oblation offered in every place among all nations</td></tr>
+        <tr><td class="col-type">Ezekiel's Scroll</td><td class="col-ref">Ez 2–3</td><td>The Word made flesh is consumed — not parchment, but God Himself</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ═══════ CLOSING ═══════ -->
+  <div class="closing">
+    <div class="closing-ornament">✦ ✦ ✦</div>
+    <blockquote>"Amen, amen I say unto you: Except you eat the flesh of the Son of man, and drink his blood, you shall not have life in you."</blockquote>
+    <span class="ref">John 6:54 — Douay-Rheims</span>
+  </div>
+
+</main>
+
+<script>
+// ── Progress Bar ──
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ── Dark Mode ──
+const toggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme');
+if (saved === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); toggle.textContent = '☀'; }
+toggle.addEventListener('click', () => {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  toggle.textContent = dark ? '☽' : '☀';
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
+});
+
+// ── Navigator Dots ──
+const sections = document.querySelectorAll('[id^="sec"]');
+const nav = document.getElementById('navigator');
+const labels = [
+  'Tree of Life','Melchizedek','Isaac','Passover','Manna',
+  'Rock','Sinai Meal','Showbread','Todah','Atonement',
+  'Elijah','Wisdom','Banquet','Malachi','Ezekiel','Summary'
+];
+sections.forEach((s, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.innerHTML = `<span class="nav-tooltip">${labels[i] || s.id}</span>`;
+  dot.addEventListener('click', () => s.scrollIntoView({ behavior: 'smooth' }));
+  nav.appendChild(dot);
+});
+// Summary dot
+const summaryDot = document.createElement('button');
+summaryDot.className = 'nav-dot';
+summaryDot.innerHTML = '<span class="nav-tooltip">Summary</span>';
+summaryDot.addEventListener('click', () => document.getElementById('summary').scrollIntoView({ behavior: 'smooth' }));
+nav.appendChild(summaryDot);
+
+// Active dot on scroll
+const allTargets = [...sections, document.getElementById('summary')];
+const dots = nav.querySelectorAll('.nav-dot');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = allTargets.indexOf(e.target);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.3 });
+allTargets.forEach(t => { if (t) obs.observe(t); });
+
+// ── Scroll Reveal ──
+const cards = document.querySelectorAll('.type-card');
+const cardObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); cardObs.unobserve(e.target); }});
+}, { threshold: 0.1 });
+cards.forEach(c => cardObs.observe(c));
+</script>
+
+</body>
+</html>
