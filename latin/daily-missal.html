@@ -985,7 +985,6 @@ const READINGS_API = 'https://cpbjr.github.io/catholic-readings-api';
 let currentDate = new Date();
 let readingsCache = {};
 let calendarCache = {};
-let universalisCache = {};
 
 // ─── Helpers ───
 function dateKey(d) {
@@ -1022,90 +1021,104 @@ function setStore(key, val) {
   localStorage.setItem('missal_' + key, JSON.stringify(val));
 }
 
-// ─── Reading Accordion Toggle ───
-function toggleReading(headerEl) {
-  const card = headerEl.parentElement;
+// ─── Reading Accordion: Expand with on-demand text fetch ───
+function toggleCard(card) {
   const body = card.querySelector('.reading-body');
   if (!body) return;
 
   if (card.classList.contains('expanded')) {
-    // Collapse: set explicit height first, then animate to 0
     body.style.maxHeight = body.scrollHeight + 'px';
-    requestAnimationFrame(() => {
-      body.style.maxHeight = '0px';
-    });
+    requestAnimationFrame(() => { body.style.maxHeight = '0px'; });
     card.classList.remove('expanded');
   } else {
-    // Expand: animate to scrollHeight, then remove cap
     card.classList.add('expanded');
     body.style.maxHeight = body.scrollHeight + 'px';
     body.addEventListener('transitionend', function handler() {
-      if (card.classList.contains('expanded')) {
-        body.style.maxHeight = 'none';
-      }
+      if (card.classList.contains('expanded')) body.style.maxHeight = 'none';
       body.removeEventListener('transitionend', handler);
     });
   }
 }
 
-// ─── Universalis JSONP ───
-// Universalis provides full reading text via JSONP - bypasses CORS
-function fetchUniversalis(d) {
-  return new Promise((resolve) => {
-    const key = dateKey(d);
-    if (universalisCache[key]) { resolve(universalisCache[key]); return; }
+async function expandReading(cardId, label, reference, dateStr) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const textEl = document.getElementById(cardId + '-text');
 
-    // Build universalis date path: YYYYMMDD
-    const ymd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  // If already expanded, just toggle closed
+  if (card.classList.contains('expanded')) {
+    toggleCard(card);
+    return;
+  }
 
-    // Set up callback
-    const cbName = 'universalisCallback';
-    window[cbName] = function(data) {
-      universalisCache[key] = data;
-      resolve(data);
-      // Clean up script tag
-      const el = document.getElementById('universalis-jsonp');
-      if (el) el.remove();
-    };
+  // Expand the card
+  toggleCard(card);
 
-    // Remove any existing script
-    const old = document.getElementById('universalis-jsonp');
-    if (old) old.remove();
+  // If already loaded, done
+  if (card.dataset.loaded === 'true') return;
 
-    // Inject JSONP script - Universalis endpoint for mass readings
-    // Region: USA (for NAB translation). Format: jsonpmass/USA/today.js or jsonpmass/USA/YYYYMMDD.js
-    const script = document.createElement('script');
-    script.id = 'universalis-jsonp';
+  // Fetch the full reading text via Claude API + web search
+  const text = await fetchReadingText(label, reference, dateStr);
 
-    if (isToday(d)) {
-      script.src = `https://universalis.com/jsonpmass/USA/today.js`;
-    } else {
-      script.src = `https://universalis.com/jsonpmass/USA/${ymd}.js`;
+  if (text) {
+    // Convert line breaks to paragraphs
+    const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
+    textEl.innerHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  } else {
+    const mm = String(currentDate.getMonth()+1).padStart(2,'0');
+    const dd = String(currentDate.getDate()).padStart(2,'0');
+    const yy = String(currentDate.getFullYear()).slice(-2);
+    textEl.innerHTML = `<p style="text-align:center;font-style:italic;color:var(--ink-faded);">Could not load reading text.<br><a href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener" style="color:var(--crimson);">Read on USCCB.org &rarr;</a></p>`;
+  }
+
+  card.dataset.loaded = 'true';
+
+  // Re-measure height after content loaded
+  const body = card.querySelector('.reading-body');
+  if (body && card.classList.contains('expanded')) {
+    body.style.maxHeight = 'none';
+  }
+}
+
+// ─── On-Demand Reading Text via Claude API + Web Search ───
+let readingTextCache = {};
+
+async function fetchReadingText(label, reference, dateStr) {
+  const cacheKey = dateStr + ':' + reference;
+  if (readingTextCache[cacheKey]) return readingTextCache[cacheKey];
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{
+          role: "user",
+          content: `Look up the Catholic Mass reading for "${reference}" as used in the lectionary for ${dateStr}. Return ONLY the scripture text itself — no introductions, no commentary, no headers. If it is a Psalm, include the response/antiphon. Output plain text with paragraph breaks. Do not include the reference citation in your output.`
+        }]
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const text = data.content
+      .filter(c => c.type === 'text')
+      .map(c => c.text)
+      .join('')
+      .trim();
+
+    if (text) {
+      readingTextCache[cacheKey] = text;
+      return text;
     }
-
-    script.onerror = function() {
-      resolve(null);
-      const el = document.getElementById('universalis-jsonp');
-      if (el) el.remove();
-    };
-
-    // Timeout fallback
-    const timeout = setTimeout(() => {
-      if (!universalisCache[key]) {
-        resolve(null);
-        const el = document.getElementById('universalis-jsonp');
-        if (el) el.remove();
-      }
-    }, 8000);
-
-    const origCb = window[cbName];
-    window[cbName] = function(data) {
-      clearTimeout(timeout);
-      origCb(data);
-    };
-
-    document.head.appendChild(script);
-  });
+    return null;
+  } catch (e) {
+    console.warn('Reading text fetch failed:', e);
+    return null;
+  }
 }
 
 // ─── Catholic Readings API (references + liturgical info) ───
@@ -1158,75 +1171,27 @@ function celebrationSeasonClass(type) {
   return 'season-green';
 }
 
-// ─── Parse Universalis Data ───
-function extractUniversalisReadings(data) {
-  if (!data) return null;
-  // Universalis JSONP returns an object with keys like:
-  // Mass_R1.source, Mass_R1.text, Mass_PS.source, Mass_PS.text,
-  // Mass_R2.source, Mass_R2.text, Mass_GA.text, Mass_G.source, Mass_G.text
-  // Also: Mass_date, Mass_title, Universalis_copyright.text
-  const result = { sections: [], date: null, title: null, copyright: null };
 
-  // Extract each field safely
-  function getField(prefix, field) {
-    const key = prefix + '.' + field;
-    return data[key] || null;
-  }
-
-  result.date = data['Mass_date'] || null;
-  result.title = data['Mass_title'] || null;
-  result.copyright = getField('Universalis_copyright', 'text');
-
-  // First Reading
-  const r1text = getField('Mass_R1', 'text');
-  const r1src = getField('Mass_R1', 'source');
-  if (r1text) result.sections.push({ label: 'First Reading', source: r1src, text: r1text });
-
-  // Psalm
-  const pstext = getField('Mass_PS', 'text');
-  const pssrc = getField('Mass_PS', 'source');
-  if (pstext) result.sections.push({ label: 'Responsorial Psalm', source: pssrc, text: pstext });
-
-  // Second Reading (may not exist on weekdays)
-  const r2text = getField('Mass_R2', 'text');
-  const r2src = getField('Mass_R2', 'source');
-  if (r2text) result.sections.push({ label: 'Second Reading', source: r2src, text: r2text });
-
-  // Gospel Acclamation
-  const gatext = getField('Mass_GA', 'text');
-  if (gatext) result.sections.push({ label: 'Gospel Acclamation', source: null, text: gatext });
-
-  // Gospel
-  const gtext = getField('Mass_G', 'text');
-  const gsrc = getField('Mass_G', 'source');
-  if (gtext) result.sections.push({ label: 'Gospel', source: gsrc, text: gtext });
-
-  return result.sections.length > 0 ? result : null;
-}
 
 // ─── Render Readings ───
 async function renderReadings() {
   const container = document.getElementById('readings-content');
   container.innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><p>Preparing the readings\u2026</p></div>`;
 
-  // Fetch all data sources in parallel
-  const [universalisData, readings, calendar] = await Promise.all([
-    fetchUniversalis(currentDate),
+  // Fetch references and calendar info
+  const [readings, calendar] = await Promise.all([
     fetchReadings(currentDate),
     fetchCalendar(currentDate)
   ]);
 
-  const uniReadings = extractUniversalisReadings(universalisData);
-
-  if (!uniReadings && !readings && !calendar) {
-    // Build USCCB link from date
+  if (!readings && !calendar) {
     const mm = String(currentDate.getMonth()+1).padStart(2,'0');
     const dd = String(currentDate.getDate()).padStart(2,'0');
     const yy = String(currentDate.getFullYear()).slice(-2);
     container.innerHTML = `
       <div class="error-state">
         <div class="error-icon">\u{1F4D6}</div>
-        <p>Readings could not be loaded for this date. Check your internet connection or try again.</p>
+        <p>Readings could not be loaded for this date. Check your internet connection and try again.</p>
         <a class="usccb-link" href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener">\u271F Read on USCCB.org</a>
         <br><button class="retry-btn" onclick="renderReadings()">Try Again</button>
       </div>`;
@@ -1246,84 +1211,54 @@ async function renderReadings() {
       if (cel.type) html += `<div class="celebration-type">${cel.type}</div>`;
     }
     html += `</div>`;
-  } else if (uniReadings && uniReadings.title) {
-    html += `<div class="liturgical-banner season-violet">`;
-    html += `<div class="celebration-name">${uniReadings.title}</div>`;
-    html += `</div>`;
   } else if (readings && readings.season) {
     html += `<div class="liturgical-banner ${seasonClass(readings.season)}">`;
     html += `<div class="season-label">${readings.season}</div>`;
     html += `</div>`;
   }
 
-  // Helper to build an accordion reading card
-  function buildCard(label, source, text) {
-    let card = `<div class="reading-card">`;
-    card += `<div class="reading-header" onclick="toggleReading(this)">`;
-    card += `<div class="reading-header-left">`;
-    card += `<div class="reading-label">${label}</div>`;
-    if (source) card += `<div class="reading-reference">${source}</div>`;
-    card += `</div>`;
-    if (text) {
-      card += `<div class="reading-chevron">\u25BE</div>`;
-    }
-    card += `</div>`;
-    card += `<div class="reading-body">`;
-    if (text) {
-      card += `<div class="reading-text">${text}</div>`;
-    } else {
-      // No full text available - show link to USCCB
-      const mm = String(currentDate.getMonth()+1).padStart(2,'0');
-      const dd = String(currentDate.getDate()).padStart(2,'0');
-      const yy = String(currentDate.getFullYear()).slice(-2);
-      card += `<div class="reading-text" style="text-align:center;font-style:italic;color:var(--ink-faded);">Full text not available from API.<br><a href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener" style="color:var(--crimson);">Read on USCCB.org \u2192</a></div>`;
-    }
-    card += `</div>`;
-    card += `</div>`;
-    return card;
-  }
-
-  // If we have Universalis full text, show accordion cards
-  if (uniReadings && uniReadings.sections.length > 0) {
-    uniReadings.sections.forEach((section) => {
-      html += buildCard(section.label, section.source, section.text);
-    });
-
-    // Copyright notice (required by Universalis)
-    if (uniReadings.copyright) {
-      html += `<div style="font-size:11px;color:var(--ink-faded);text-align:center;margin:16px 0 8px;line-height:1.5;font-style:italic;">${uniReadings.copyright}</div>`;
-    }
-
-    html += `<a class="usccb-link" href="https://universalis.com/mass.htm" target="_blank" rel="noopener">Readings provided by Universalis</a>`;
-
-  } else if (readings) {
-    // Fallback: show references from Catholic Readings API (no full text)
+  if (readings) {
     const r = readings.readings || {};
+    const dStr = formatDate(currentDate).fullDate;
+    let cardIndex = 0;
 
-    if (r.firstReading) html += buildCard('First Reading', r.firstReading, null);
-    if (r.psalm) html += buildCard('Responsorial Psalm', r.psalm, null);
-    if (r.secondReading) html += buildCard('Second Reading', r.secondReading, null);
-    if (r.gospel) html += buildCard('Gospel', r.gospel, null);
+    function buildCard(label, reference) {
+      const id = 'reading-card-' + (cardIndex++);
+      let card = `<div class="reading-card" id="${id}">`;
+      card += `<div class="reading-header" onclick="expandReading('${id}', '${label.replace(/'/g,"\\'")}', '${(reference||'').replace(/'/g,"\\'")}', '${dStr.replace(/'/g,"\\'")}')">`;
+      card += `<div class="reading-header-left">`;
+      card += `<div class="reading-label">${label}</div>`;
+      if (reference) card += `<div class="reading-reference">${reference}</div>`;
+      card += `</div>`;
+      card += `<div class="reading-chevron">\u25BE</div>`;
+      card += `</div>`;
+      card += `<div class="reading-body">`;
+      card += `<div class="reading-text" id="${id}-text"><div class="summary-loading"><div class="loading-spinner"></div>Loading reading\u2026</div></div>`;
+      card += `</div>`;
+      card += `</div>`;
+      return card;
+    }
+
+    if (r.firstReading) html += buildCard('First Reading', r.firstReading);
+    if (r.psalm) html += buildCard('Responsorial Psalm', r.psalm);
+    if (r.secondReading) html += buildCard('Second Reading', r.secondReading);
+    if (r.gospel) html += buildCard('Gospel', r.gospel);
 
     // USCCB Link
     if (readings.usccbLink) {
-      html += `<a class="usccb-link" href="${readings.usccbLink}" target="_blank" rel="noopener">\u271F Read Full Text on USCCB.org</a>`;
+      html += `<a class="usccb-link" href="${readings.usccbLink}" target="_blank" rel="noopener">\u271F View on USCCB.org</a>`;
     } else {
       const mm = String(currentDate.getMonth()+1).padStart(2,'0');
       const dd = String(currentDate.getDate()).padStart(2,'0');
       const yy = String(currentDate.getFullYear()).slice(-2);
-      html += `<a class="usccb-link" href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener">\u271F Read Full Text on USCCB.org</a>`;
+      html += `<a class="usccb-link" href="https://bible.usccb.org/bible/readings/${mm}${dd}${yy}.cfm" target="_blank" rel="noopener">\u271F View on USCCB.org</a>`;
     }
   }
 
   // ── Summary Box (on-demand, at the bottom) ──
   // Build a data blob the summary generator can use
   const summaryData = [];
-  if (uniReadings && uniReadings.sections.length > 0) {
-    uniReadings.sections.forEach(s => {
-      summaryData.push(`${s.label}${s.source ? ' (' + s.source + ')' : ''}: ${s.text ? s.text.replace(/<[^>]*>/g, '').substring(0, 600) : ''}`);
-    });
-  } else if (readings && readings.readings) {
+  if (readings && readings.readings) {
     const r = readings.readings;
     if (r.firstReading) summaryData.push('First Reading: ' + r.firstReading);
     if (r.psalm) summaryData.push('Psalm: ' + r.psalm);
@@ -1379,14 +1314,15 @@ async function generateReadingsSummary(readingsText, containerEl) {
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: [{
           role: "user",
           content: `You are a warm, faithful Catholic commentator helping a father understand and explain today's Mass readings to his young children.
 
-Here are today's readings:
+Here are today's Mass reading references:
 ${readingsText}
 
-Write a summary in two parts:
+First, look up what these readings say. Then write a summary in two parts:
 1. THEME: A single sentence capturing the overarching theme that connects all of today's readings.
 2. REFLECTION: A short paragraph (3-5 sentences) explaining what these readings mean for daily life, written so a parent could read it aloud or paraphrase it for kids ages 5-12. Use simple, concrete language. If helpful, include a brief analogy a child would understand.
 
@@ -1397,7 +1333,11 @@ Do not use markdown formatting, headers, or bullet points. Start with the theme 
 
     if (!response.ok) throw new Error('API error');
     const data = await response.json();
-    const text = data.content.map(c => c.text || '').join('');
+    const text = data.content
+      .filter(c => c.type === 'text')
+      .map(c => c.text)
+      .join('')
+      .trim();
     summaryCache[cacheKey] = text;
     renderSummaryResult(text, containerEl);
   } catch (e) {
