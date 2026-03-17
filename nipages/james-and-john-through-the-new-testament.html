@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James &amp; John Through the New Testament — One Faith Delivered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #8B0000;
+            --crimson-light: #a01010;
+            --gold: #C5A55A;
+            --gold-light: #d4ba7a;
+            --parchment: #F5F0E8;
+            --parchment-dark: #e8e0d0;
+            --ink: #2c2420;
+            --ink-light: #5a4e44;
+            --ink-faint: #8a7e74;
+        }
+
+        [data-theme="dark"] {
+            --crimson: #c44040;
+            --crimson-light: #d45555;
+            --gold: #d4b96a;
+            --gold-light: #c5a55a;
+            --parchment: #1a1714;
+            --parchment-dark: #141210;
+            --ink: #d8d0c4;
+            --ink-light: #b0a898;
+            --ink-faint: #8a7e74;
+        }
+        [data-theme="dark"] .page-header {
+            background: linear-gradient(135deg, #0d0606 0%, #1a0c0c 40%, #221212 100%);
+        }
+        [data-theme="dark"] .toc {
+            background: #221e1a;
+            border-color: #3a332a;
+        }
+        [data-theme="dark"] .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.06), rgba(197, 165, 90, 0.02));
+        }
+        [data-theme="dark"] .editorial-note {
+            background: #221e1a;
+        }
+        [data-theme="dark"] .section-header {
+            border-bottom-color: var(--crimson);
+        }
+        [data-theme="dark"] .passage-text .verse-num {
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .toc a {
+            color: var(--ink);
+        }
+        [data-theme="dark"] .toc a:hover {
+            color: var(--crimson);
+        }
+
+        /* ── Dark Mode Toggle ── */
+        .dark-toggle {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .dark-toggle:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .dark-toggle {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .dark-toggle:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .dark-toggle .toggle-icon {
+            font-size: 16px;
+            line-height: 1;
+            color: var(--gold-light);
+            transition: transform 0.4s ease, color 0.3s ease;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-icon {
+            color: #f0d060;
+        }
+        .dark-toggle:hover .toggle-icon {
+            transform: rotate(20deg);
+        }
+        .dark-toggle .toggle-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.95);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .dark-toggle .toggle-label {
+            color: rgba(240, 208, 96, 0.9);
+        }
+
+        /* ── Back Button ── */
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 20px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(44, 36, 32, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 165, 90, 0.25);
+            border-radius: 24px;
+            padding: 6px 14px 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            user-select: none;
+        }
+        .back-btn:hover {
+            background: rgba(44, 36, 32, 0.95);
+            border-color: rgba(197, 165, 90, 0.45);
+        }
+        [data-theme="dark"] .back-btn {
+            background: rgba(245, 240, 232, 0.1);
+            border-color: rgba(197, 165, 90, 0.3);
+        }
+        [data-theme="dark"] .back-btn:hover {
+            background: rgba(245, 240, 232, 0.15);
+            border-color: rgba(197, 165, 90, 0.5);
+        }
+        .back-btn .back-arrow {
+            font-size: 14px;
+            line-height: 1;
+            color: rgba(245, 240, 232, 0.8);
+            transition: transform 0.3s ease;
+        }
+        .back-btn:hover .back-arrow {
+            transform: translateX(-2px);
+        }
+        .back-btn .back-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(245, 240, 232, 0.8);
+            transition: color 0.3s;
+        }
+        [data-theme="dark"] .back-btn .back-arrow,
+        [data-theme="dark"] .back-btn .back-label {
+            color: rgba(212, 185, 106, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--crimson), var(--gold));
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--parchment);
+            color: var(--ink);
+            line-height: 1.75;
+            font-size: 17px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a0a0a 0%, #2c1010 40%, #3a1818 100%);
+            color: #fff;
+            padding: 80px 40px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C5A55A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 12px;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+        .page-header .subtitle {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 1.15em;
+            font-weight: 300;
+            color: var(--gold-light);
+            font-style: italic;
+            position: relative;
+        }
+        .page-header .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* Navigation / Table of Contents */
+        .toc-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px 20px;
+        }
+        .toc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--ink-faint);
+            margin-bottom: 16px;
+        }
+        .toc {
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 24px 28px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+        .toc ol li {
+            counter-increment: toc-counter;
+            margin-bottom: 8px;
+        }
+        .toc ol li::before {
+            content: counter(toc-counter, upper-roman) ".";
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .toc a {
+            color: var(--ink);
+            text-decoration: none;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.95em;
+            border-bottom: 1px dotted var(--gold);
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .toc a:hover {
+            color: var(--crimson);
+            border-bottom-color: var(--crimson);
+        }
+
+        .toc-part-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            padding-top: 12px;
+            border-top: 1px solid var(--parchment-dark);
+        }
+        .toc-part-label:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+        [data-theme="dark"] .toc-part-label {
+            border-top-color: #3a332a;
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+        }
+
+        /* Part Headers */
+        .part-header {
+            margin-top: 70px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .part-header h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.2em;
+            font-weight: 900;
+            color: var(--crimson);
+            margin-bottom: 6px;
+        }
+        .part-header .part-desc {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 1.1em;
+        }
+        .part-header .part-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--crimson);
+            scroll-margin-top: 24px;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 4px;
+        }
+        .section-header .section-desc {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.95em;
+        }
+
+        /* Passage Blocks */
+        .passage {
+            margin-bottom: 36px;
+            padding: 0;
+        }
+        .passage-ref {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .passage-ref::before {
+            content: '✦';
+            color: var(--crimson);
+            font-size: 0.8em;
+        }
+        .passage-context {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-style: italic;
+            color: var(--ink-light);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            padding-left: 16px;
+            border-left: 2px solid var(--gold-light);
+        }
+        .passage-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            line-height: 1.85;
+            color: var(--ink);
+        }
+        .passage-text .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            color: var(--crimson);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+        }
+        .passage-text p {
+            margin-bottom: 8px;
+            text-indent: 0;
+        }
+
+        /* Key passages — gold highlight */
+        .key-passage {
+            background: linear-gradient(135deg, rgba(197, 165, 90, 0.08), rgba(197, 165, 90, 0.04));
+            border-left: 4px solid var(--gold);
+            padding: 20px 24px;
+            border-radius: 0 4px 4px 0;
+            margin: 20px 0 36px;
+            transition: background 0.4s ease;
+        }
+
+        /* Pinnacle Verse */
+        .pinnacle-verse {
+            display: block;
+            font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.25em;
+            line-height: 2;
+            color: var(--crimson);
+            text-align: center;
+            margin: 28px 0;
+            padding: 32px 28px;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+        .pinnacle-verse::before,
+        .pinnacle-verse::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+        .pinnacle-verse::before { margin-bottom: 24px; }
+        .pinnacle-verse::after { margin-top: 24px; }
+        .pinnacle-verse .pinnacle-ornament {
+            display: block;
+            text-align: center;
+            font-style: normal;
+            font-size: 0.55em;
+            letter-spacing: 10px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .pinnacle-verse .verse-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55em;
+            color: var(--gold);
+            font-weight: 600;
+            vertical-align: super;
+            margin-right: 2px;
+            font-style: normal;
+        }
+        [data-theme="dark"] .pinnacle-verse {
+            color: #e8a0a0;
+        }
+
+        /* Editorial / comment blocks */
+        .editorial-note {
+            background: #fff;
+            border-left: 4px solid var(--crimson);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            transition: background-color 0.4s ease;
+        }
+        .editorial-note .note-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--crimson);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .editorial-note p {
+            font-size: 0.92em;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+
+        /* Separator */
+        .section-divider {
+            text-align: center;
+            margin: 50px 0 10px;
+            color: var(--gold);
+            letter-spacing: 12px;
+            font-size: 0.8em;
+        }
+
+        /* Part Divider — larger decorative break between parts */
+        .part-divider {
+            text-align: center;
+            margin: 70px 0 20px;
+            color: var(--gold);
+            letter-spacing: 8px;
+            font-size: 1em;
+            position: relative;
+        }
+        .part-divider::before,
+        .part-divider::after {
+            content: '';
+            display: inline-block;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            vertical-align: middle;
+            margin: 0 16px;
+        }
+
+        /* ── Floating Section Navigator ── */
+        .section-nav-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 998;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--crimson);
+            border: 2px solid rgba(197, 165, 90, 0.4);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .section-nav-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+            border-color: var(--gold);
+        }
+        .section-nav-btn.open {
+            background: var(--ink);
+        }
+        [data-theme="dark"] .section-nav-btn {
+            background: #4a1515;
+            border-color: rgba(197, 165, 90, 0.35);
+        }
+        [data-theme="dark"] .section-nav-btn.open {
+            background: #2a2420;
+        }
+
+        .section-nav-panel {
+            position: fixed;
+            bottom: 84px;
+            right: 24px;
+            z-index: 997;
+            width: 320px;
+            max-height: 70vh;
+            background: #fff;
+            border: 1px solid var(--parchment-dark);
+            border-radius: 8px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .section-nav-panel.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        [data-theme="dark"] .section-nav-panel {
+            background: #221e1a;
+            border-color: #3a332a;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.45);
+        }
+
+        .section-nav-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-faint);
+            padding: 14px 18px 10px;
+            border-bottom: 1px solid var(--parchment-dark);
+        }
+        [data-theme="dark"] .section-nav-header {
+            border-bottom-color: #3a332a;
+        }
+
+        .section-nav-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: calc(70vh - 44px);
+            padding: 6px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--parchment-dark) transparent;
+        }
+        .section-nav-list::-webkit-scrollbar { width: 5px; }
+        .section-nav-list::-webkit-scrollbar-track { background: transparent; }
+        .section-nav-list::-webkit-scrollbar-thumb { background: var(--parchment-dark); border-radius: 3px; }
+
+        .section-nav-list li { margin: 0; }
+        .section-nav-list a {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 18px;
+            text-decoration: none;
+            color: var(--ink);
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.85em;
+            line-height: 1.35;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .section-nav-list a:hover {
+            background: var(--parchment);
+            border-left-color: var(--gold);
+            color: var(--crimson);
+        }
+        [data-theme="dark"] .section-nav-list a:hover {
+            background: rgba(197, 165, 90, 0.06);
+        }
+        .section-nav-list a.active {
+            background: rgba(197, 165, 90, 0.08);
+            border-left-color: var(--crimson);
+            font-weight: 600;
+        }
+        .section-nav-list .nav-numeral {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7em;
+            color: var(--crimson);
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+        .nav-part-label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+            padding: 10px 18px 4px;
+            margin-top: 4px;
+            border-top: 1px solid var(--parchment-dark);
+        }
+        .nav-part-label:first-child {
+            border-top: none;
+            margin-top: 0;
+        }
+        [data-theme="dark"] .nav-part-label {
+            border-top-color: #3a332a;
+        }
+
+        /* Print Styles */
+        @media print {
+            .reading-progress, .toc-wrapper, .section-nav-btn, .section-nav-panel, .back-btn, .dark-toggle { display: none; }
+            .page-header { padding: 40px 20px 30px; }
+            .content { padding: 10px 20px; }
+            .passage { page-break-inside: avoid; }
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            .page-header { padding: 50px 20px 40px; }
+            .page-header h1 { font-size: 1.9em; }
+            .content { padding: 16px 16px 60px; }
+            .section-header h2 { font-size: 1.5em; }
+            .part-header h2 { font-size: 1.7em; }
+            .key-passage { padding: 16px 18px; }
+            .dark-toggle { top: 10px; right: 12px; padding: 5px 10px 5px 9px; }
+            .dark-toggle .toggle-label { display: none; }
+            .back-btn { top: 10px; left: 12px; padding: 5px 10px 5px 9px; }
+            .back-btn .back-label { display: none; }
+            .section-nav-btn { bottom: 18px; right: 16px; width: 44px; height: 44px; }
+            .section-nav-panel { right: 16px; bottom: 74px; width: calc(100vw - 32px); max-height: 60vh; }
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    // Apply saved theme immediately to prevent flash
+    (function() {
+        var saved = localStorage.getItem('ofd-jamesjohn-theme');
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    })();
+</script>
+
+<a href="../biblical-reference-charts.html" class="back-btn" aria-label="Back to Biblical Reference Charts">
+    <span class="back-arrow">←</span>
+    <span class="back-label">Charts</span>
+</a>
+
+<div class="dark-toggle" id="darkToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+    <span class="toggle-icon" id="toggleIcon">☽</span>
+    <span class="toggle-label" id="toggleLabel">Night</span>
+</div>
+
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- ========== PAGE HEADER ========== -->
+<header class="page-header">
+    <div class="tagline">One Faith Delivered</div>
+    <h1>James &amp; John Through the New Testament</h1>
+    <p class="subtitle">The Sons of Thunder — A Chronological Compilation from the Douay-Rheims Bible</p>
+</header>
+
+<!-- ========== TABLE OF CONTENTS ========== -->
+<nav class="toc-wrapper">
+    <div class="toc-label">Contents</div>
+    <div class="toc">
+        <div class="toc-part-label" style="margin-top: 0; padding-top: 0; border-top: none;">Part One — St. James the Great</div>
+        <ol>
+            <li><a href="#sec-1">The Call of the Sons of Zebedee</a></li>
+            <li><a href="#sec-2">Among the Twelve — Sons of Thunder</a></li>
+            <li><a href="#sec-3">Fire from Heaven</a></li>
+            <li><a href="#sec-4">The Ambitious Request — "Can You Drink This Cup?"</a></li>
+            <li><a href="#sec-5">The First Apostolic Martyr</a></li>
+        </ol>
+        <div class="toc-part-label">Part Two — St. John the Beloved</div>
+        <ol start="6">
+            <li><a href="#sec-6">The Other Disciple at the Jordan</a></li>
+            <li><a href="#sec-7">Forbidding the Exorcist</a></li>
+            <li><a href="#sec-8">Preparing the Passover</a></li>
+            <li><a href="#sec-9">The Beloved Disciple at the Last Supper</a></li>
+            <li><a href="#sec-10">In the High Priest's Courtyard</a></li>
+            <li><a href="#sec-11">At the Foot of the Cross</a></li>
+            <li><a href="#sec-12">The Empty Tomb — He Saw, and Believed</a></li>
+            <li><a href="#sec-13">Recognition at the Sea of Tiberias</a></li>
+            <li><a href="#sec-14">"If I Will That He Remain"</a></li>
+            <li><a href="#sec-15">Peter &amp; John in the Early Church</a></li>
+            <li><a href="#sec-16">Pillar of the Church</a></li>
+            <li><a href="#sec-17">The First Epistle of St. John</a></li>
+            <li><a href="#sec-18">The Revelation to St. John</a></li>
+            <li><a href="#sec-19">Epilogue: Ephesus &amp; the Last Apostle</a></li>
+        </ol>
+        <div class="toc-part-label">Part Three — The Inner Circle</div>
+        <ol start="20">
+            <li><a href="#sec-20">The Three Witnesses — Peter, James &amp; John</a></li>
+        </ol>
+    </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="content">
+
+    <div class="editorial-note">
+        <div class="note-label">About This Compilation</div>
+        <p>This document gathers every significant New Testament passage featuring the Apostles James and John — the sons of Zebedee, surnamed by Christ "Boanerges," Sons of Thunder. The passages are arranged in approximate chronological order through their lives: James from his calling to his martyrdom under Herod Agrippa I, and John from the banks of the Jordan to his final years at Ephesus. A concluding section examines the inner circle of Peter, James, and John — the three whom Christ repeatedly singled out as witnesses to His most intimate revelations — and the typological connections that illuminate why. The text is the Douay-Rheims translation. Contextual notes are provided in italics.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--              PART ONE: ST. JAMES THE GREAT          -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <div class="part-divider">✦ ✦ ✦ ✦ ✦</div>
+    <div class="part-header">
+        <div class="part-label">Part One</div>
+        <h2>St. James the Great</h2>
+        <p class="part-desc">The elder brother — first of the Twelve to drink the cup of martyrdom.</p>
+    </div>
+
+    <!-- ===== I. THE CALL ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-1">
+        <h2>I. The Call of the Sons of Zebedee</h2>
+        <p class="section-desc">Two brothers leave their father in the boat and follow a stranger. They will not return.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 1:19–20</div>
+        <p class="passage-context">Jesus has just called Simon and Andrew. He walks further along the shore and finds a second pair of brothers.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">19</span>And going on from thence a little farther, he saw James the son of Zebedee, and John his brother, who also were mending their nets in the ship: <span class="verse-num">20</span>And forthwith he called them. And leaving their father Zebedee in the ship with his hired men, they followed him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 4:21–22</div>
+        <p class="passage-context">Matthew's parallel account. The same immediacy, the same totality of response — and the same detail: they left not only their nets but their father.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">21</span>And going on from thence, he saw other two brethren, James the son of Zebedee, and John his brother, in a ship with Zebedee their father, mending their nets: and he called them. <span class="verse-num">22</span>And they immediately leaving their nets and father, followed him.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 5:10–11</div>
+        <p class="passage-context">Luke's account sets the call within the miraculous catch of fish. Here we learn that James and John were partners with Simon — a detail that explains much about their later closeness.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">10</span>And so were also James and John, the sons of Zebedee, who were Simon's partners. And Jesus saith to Simon: Fear not: from henceforth thou shalt catch men. <span class="verse-num">11</span>And having brought their ships to land, leaving all things, they followed him.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Context</div>
+        <p>Mark's note that Zebedee was left in the boat "with his hired men" (Mark 1:20) is a quiet but telling detail. The family fishing business was not a subsistence operation — they employed workers. James and John were not destitute men with nothing to lose. They left a viable livelihood, a father, and hired servants behind. The cost of discipleship was real and immediate.</p>
+    </div>
+
+    <!-- ===== II. SONS OF THUNDER ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-2">
+        <h2>II. Among the Twelve — Sons of Thunder</h2>
+        <p class="section-desc">Jesus names the Twelve and gives James and John a surname that reveals something about their temperament — or their destiny.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Mark 3:13–19</div>
+        <p class="passage-context">Mark alone preserves the surname Boanerges. Just as Simon received a new name — Cephas, the Rock — so the sons of Zebedee receive a new identity: Sons of Thunder.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">13</span>And he goeth up into a mountain, and calleth unto him whom he would himself: and they came to him. <span class="verse-num">14</span>And he made that twelve should be with him, and that he might send them to preach. <span class="verse-num">15</span>And he gave them power to heal sicknesses, and to cast out devils. <span class="verse-num">16</span>And to Simon he gave the name Peter: <span class="verse-num">17</span>And James the son of Zebedee, and John the brother of James; and he named them Boanerges, which is, The sons of thunder: <span class="verse-num">18</span>And Andrew and Philip, and Bartholomew and Matthew, and Thomas and James of Alpheus, and Thaddeus, and Simon the Cananean: <span class="verse-num">19</span>And Judas Iscariot, who also betrayed him.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Word Study — Boanerges</div>
+        <p>The Aramaic behind "Boanerges" (βοανηργές) is debated. The standard reconstruction is <em>bənê rəgēš</em> or <em>bənê raʿam</em> — "sons of thunder" or "sons of commotion." The Gospels give us glimpses of why: these brothers wanted to call fire from heaven on the Samaritans (Luke 9:54) and jockeyed for the highest seats in the Kingdom (Mark 10:35–37). They were fierce, ambitious, and unafraid to overstep. Yet Christ did not rebuke the temperament itself — He named it. He gave it an identity. Thunder is not a defect; it is power that needs direction. James would channel that intensity into the earliest apostolic martyrdom. John would channel it into a Gospel, three epistles, and the Apocalypse — the most theologically profound body of writing in the New Testament.</p>
+    </div>
+
+    <!-- ===== III. FIRE FROM HEAVEN ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-3">
+        <h2>III. Fire from Heaven</h2>
+        <p class="section-desc">The Sons of Thunder earn their name — and receive a correction that will reshape everything.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 9:51–56</div>
+        <p class="passage-context">Jesus has "set his face" toward Jerusalem — a phrase loaded with resolve and foreshadowing. A Samaritan village refuses Him hospitality. James and John react with the fierceness that prompted their surname.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">51</span>And it came to pass, when the days of his assumption were accomplishing, that he steadfastly set his face to go to Jerusalem. <span class="verse-num">52</span>And he sent messengers before his face; and going, they entered into a city of the Samaritans, to prepare for him. <span class="verse-num">53</span>And they received him not, because his face was of one going to Jerusalem. <span class="verse-num">54</span>And when his disciples James and John had seen this, they said: Lord, wilt thou that we command fire to come down from heaven, and consume them? <span class="verse-num">55</span>And turning, he rebuked them, saying: You know not of what spirit you are. <span class="verse-num">56</span>The Son of man came not to destroy souls, but to save. And they went into another town.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>James and John are consciously imitating Elijah, who called down fire from heaven on soldiers sent by King Ahaziah (4 Kings 1:10–12 / 2 Kings 1:10–12). They see themselves as prophetic enforcers. Christ's rebuke does not condemn their zeal but its direction: "You know not of what spirit you are." The spirit of the New Covenant is not destruction but salvation. The same John who wanted fire on Samaria will later write: "God is love; and he that abideth in love, abideth in God, and God in him" (1 John 4:16). The transformation is total — and it began here.</p>
+    </div>
+
+    <!-- ===== IV. THE AMBITIOUS REQUEST ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-4">
+        <h2>IV. The Ambitious Request — "Can You Drink This Cup?"</h2>
+        <p class="section-desc">The brothers ask for glory. Christ answers with a question about suffering. Both will answer it with their lives.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Mark 10:35–45</div>
+        <p class="passage-context">Jesus has just predicted His passion for the third time. James and John approach Him with a request that reveals how little — and how much — they have understood.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">35</span>And James and John the sons of Zebedee come to him, saying: Master, we desire that whatsoever we shall ask, thou wouldest do it for us. <span class="verse-num">36</span>But he said to them: What would you that I should do for you? <span class="verse-num">37</span>And they said: Grant to us, that we may sit, one on thy right hand, and the other on thy left hand, in thy glory.</p>
+            <p><span class="verse-num">38</span>And Jesus said to them: You know not what you ask. Can you drink of the chalice that I drink of: or be baptized with the baptism wherewith I am baptized? <span class="verse-num">39</span>But they said to him: We can. And Jesus saith to them: You shall indeed drink of the chalice that I drink of: and with the baptism wherewith I am baptized, you shall be baptized. <span class="verse-num">40</span>But to sit on my right hand, or on my left, is not mine to give to you, but to them for whom it is prepared.</p>
+            <p><span class="verse-num">41</span>And the ten hearing it, began to be much displeased at James and John. <span class="verse-num">42</span>But Jesus calling them, saith to them: You know that they who seem to rule over the Gentiles, lord it over them: and their princes have power over them. <span class="verse-num">43</span>But it is not so among you: but whosoever will be greater, shall be your minister. <span class="verse-num">44</span>And whosoever will be first among you, shall be the servant of all. <span class="verse-num">45</span>For the Son of man also is not come to be ministered unto, but to minister, and to give his life a redemption for many.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 20:20–23</div>
+        <p class="passage-context">Matthew's parallel places the request in the mouth of their mother — traditionally identified as Salome, and possibly a sister of the Blessed Virgin Mary (cf. Mark 15:40 with John 19:25). This does not soften the ambition; it deepens the family's involvement in it.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">20</span>Then came to him the mother of the sons of Zebedee with her sons, adoring and asking something of him. <span class="verse-num">21</span>Who said to her: What wilt thou? She saith to him: Say that these my two sons may sit, the one on thy right hand, and the other on thy left, in thy kingdom. <span class="verse-num">22</span>And Jesus answering, said: You know not what you ask. Can you drink the chalice that I shall drink? They say to him: We can. <span class="verse-num">23</span>He saith to them: My chalice indeed you shall drink; but to sit on my right hand or left, is not mine to give to you, but to them for whom it is prepared by my Father.</p>
+        </div>
+    </div>
+
+    <span class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        "You shall indeed drink of the chalice that I drink of: and with the baptism wherewith I am baptized, you shall be baptized."
+        <br>— Mark 10:39
+    </span>
+
+    <div class="editorial-note">
+        <div class="note-label">Fulfillment</div>
+        <p>Christ's prophecy to the brothers is precise and double-edged. "You shall indeed drink of the chalice" — this is not a mere metaphor. James drank it first among the Twelve: beheaded under Herod Agrippa I around A.D. 44 (Acts 12:2). John drank it last, not through a swift death but through decades of suffering: exile on Patmos, tradition's testimony of torture by boiling oil, and the long endurance of being the sole surviving apostle in a world that had killed all the others. Both drank the cup. Both were baptized in the baptism of suffering. Neither sat at the right or left — because the Kingdom Christ was establishing was not the one they imagined.</p>
+    </div>
+
+    <!-- ===== V. THE FIRST APOSTOLIC MARTYR ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-5">
+        <h2>V. The First Apostolic Martyr</h2>
+        <p class="section-desc">Two verses. The entire earthly ministry of St. James the Great ends here — in a single, devastating sentence from Luke.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Acts 12:1–2</div>
+        <p class="passage-context">Herod Agrippa I — grandson of Herod the Great, and a politically shrewd operator who cultivated Jewish support — turns his attention to the leaders of the Church.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And at the same time, Herod the king stretched forth his hands, to afflict some of the church. <span class="verse-num">2</span>And he killed James, the brother of John, with the sword.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Weight of Brevity</div>
+        <p>Luke gives James's death two verses. No speech. No trial scene. No deathbed words. This is not editorial indifference — it is the starkness of early Christian experience. James was the first of the Twelve to be martyred, around A.D. 44. Eusebius, citing Clement of Alexandria, preserves a remarkable tradition: the man who led James to his execution was so moved by the apostle's testimony that he confessed himself a Christian on the spot. He asked James's forgiveness. James looked at him, said "Peace be with you," and kissed him. Both were beheaded together. The Son of Thunder died with a word of peace on his lips.</p>
+        <p style="margin-top: 10px;">James's martyrdom also confirms Christ's prophecy in Mark 10:39 with literal precision. He had said he could drink the cup. He did. And the sequel in Acts 12 is instructive: Herod, seeing that James's execution "pleased the Jews," immediately arrested Peter as well (Acts 12:3). The persecution of the Church has a logic — it begins with one and reaches for the rest. Peter was delivered by an angel. James was not. Both outcomes are providential; neither is accidental.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Santiago de Compostela</div>
+        <p>An ancient tradition holds that James preached in Hispania (modern Spain) before returning to Judaea, where he was martyred. According to this account, his relics were translated to Galicia in northwestern Spain, where they were rediscovered in the ninth century, giving rise to the great pilgrimage shrine of Santiago de Compostela — <em>Santiago</em> being the Spanish form of <em>Sanctus Iacobus</em>, St. James. The Camino de Santiago remains one of the most traveled pilgrimage routes in the world. Whether or not the historical details of the translation can be verified in every particular, the cult of St. James at Compostela witnesses to the enduring veneration of the first apostle to seal his testimony with blood.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--              PART TWO: ST. JOHN THE BELOVED          -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <div class="part-divider">✦ ✦ ✦ ✦ ✦</div>
+    <div class="part-header">
+        <div class="part-label">Part Two</div>
+        <h2>St. John the Beloved</h2>
+        <p class="part-desc">The last apostle — the one who leaned on the Lord's breast and outlived them all.</p>
+    </div>
+
+    <!-- ===== VI. THE OTHER DISCIPLE AT THE JORDAN ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-6">
+        <h2>VI. The Other Disciple at the Jordan</h2>
+        <p class="section-desc">An unnamed disciple hears the Baptist's testimony and follows Jesus to where He stays. Tradition identifies him as John himself — the first chapter of a Gospel that will never name its own author.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 1:35–40</div>
+        <p class="passage-context">John the Baptist points to Jesus. Two of his disciples follow. One is named — Andrew. The other is not. The Fourth Gospel's pattern of self-effacement begins here.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">35</span>The next day again John stood, and two of his disciples. <span class="verse-num">36</span>And beholding Jesus walking, he saith: Behold the Lamb of God. <span class="verse-num">37</span>And the two disciples heard him speak, and they followed Jesus. <span class="verse-num">38</span>And Jesus turning, and seeing them following him, saith to them: What seek you? Who said to him: Rabbi, (which is to say, being interpreted, Master,) where dwellest thou? <span class="verse-num">39</span>He saith to them: Come and see. They came, and saw where he abode, and they stayed with him that day: now it was about the tenth hour. <span class="verse-num">40</span>And Andrew, the brother of Simon Peter, was one of the two who had heard of John, and followed him.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">A Pattern of Anonymity</div>
+        <p>The Fourth Gospel names Andrew but leaves the other disciple unidentified. This is characteristic of the entire work: the author never names himself, never refers to "John," and systematically identifies himself only as "the disciple whom Jesus loved" or "the other disciple." The early Church unanimously identified this figure as John the son of Zebedee. The pattern is not accident but humility — or more precisely, a theological claim: John's most important identity is not his name but his relationship to Christ. He is the one whom Jesus loved. Everything else follows from that.</p>
+    </div>
+
+    <!-- ===== VII. FORBIDDING THE EXORCIST ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-7">
+        <h2>VII. Forbidding the Exorcist</h2>
+        <p class="section-desc">John's zeal for Jesus takes a possessive turn — and Christ widens the circle.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 9:38–40</div>
+        <p class="passage-context">An unknown man is casting out devils in Jesus' name. John, protective of the group's exclusive authority, reports this to the Master. The answer surprises.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">38</span>John answered him, saying: Master, we saw one casting out devils in thy name, who followeth not us, and we forbade him. <span class="verse-num">39</span>But Jesus said: Do not forbid him. For there is no man that doth a miracle in my name, and can soon after speak ill of me. <span class="verse-num">40</span>For he that is not against you, is for you.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>This is one of the only passages in the Synoptic Gospels where John speaks individually, apart from James. It reveals the same fierce temperament visible in the fire-from-heaven episode — a desire to protect Christ's authority by restricting it. Christ's correction is gentle but firm: the Kingdom's boundaries are wider than the Twelve suppose. The man who will later write "God is love" had first to learn that love does not hoard.</p>
+    </div>
+
+    <!-- ===== VIII. PREPARING THE PASSOVER ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-8">
+        <h2>VIII. Preparing the Passover</h2>
+        <p class="section-desc">Jesus entrusts the preparation of His final Passover — the meal at which He will institute the Eucharist — to Peter and John.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Luke 22:8–13</div>
+        <p class="passage-context">Of all the disciples, Jesus chooses Peter and John to prepare the most consequential meal in human history.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">8</span>And he sent Peter and John, saying: Go and prepare for us the pasch, that we may eat. <span class="verse-num">9</span>But they said: Where wilt thou that we prepare? <span class="verse-num">10</span>And he said to them: Behold, as you go into the city, there shall meet you a man carrying a pitcher of water: follow him into the house where he entereth in. <span class="verse-num">11</span>And you shall say to the goodman of the house: The master saith to thee, Where is the guest chamber, where I may eat the pasch with my disciples? <span class="verse-num">12</span>And he will shew you a large dining room, furnished; and there prepare. <span class="verse-num">13</span>And they going, found as he had said to them, and made ready the pasch.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Context</div>
+        <p>The pairing of Peter and John here anticipates their pairing throughout Acts. These two will heal together at the Temple gate, stand before the Sanhedrin together, and be sent together to confirm the Samaritan converts. The pattern begins at the Last Supper — the meal where Peter will ask John to ask Jesus a question (John 13:24), where John will lean on the Lord's breast, and where both will receive, along with the other ten, the body and blood of the New Covenant.</p>
+    </div>
+
+    <!-- ===== IX. BELOVED DISCIPLE AT THE LAST SUPPER ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-9">
+        <h2>IX. The Beloved Disciple at the Last Supper</h2>
+        <p class="section-desc">At the meal that will become the Eucharist, one disciple reclines at the place of highest intimacy — leaning on the breast of the Lord.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 13:21–26</div>
+        <p class="passage-context">Jesus announces His betrayal. Peter, characteristically, acts — but he acts through John, who occupies the position closest to Christ.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">21</span>When Jesus had said these things, he was troubled in spirit; and he testified, and said: Amen, amen I say to you, one of you shall betray me. <span class="verse-num">22</span>The disciples therefore looked one upon another, doubting of whom he spoke. <span class="verse-num">23</span>Now there was leaning on Jesus' bosom one of his disciples, whom Jesus loved. <span class="verse-num">24</span>Simon Peter therefore beckoned to him, and said to him: Who is it of whom he speaketh? <span class="verse-num">25</span>He therefore, leaning on the breast of Jesus, saith to him: Lord, who is it? <span class="verse-num">26</span>Jesus answered: He it is to whom I shall reach bread dipped. And when he had dipped the bread, he gave it to Judas Iscariot, the son of Simon.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Theological Note — Bosom of Jesus, Bosom of the Father</div>
+        <p>The Greek word for John's position — <em>en tō kolpō</em>, "in the bosom" — is the same word used in John 1:18 to describe the Son's relationship to the Father: "The only begotten Son who is in the bosom of the Father, he hath declared him." The parallel is deliberate and profound. Just as the Son rests in the bosom of the Father and makes the Father known to the world, so the Beloved Disciple rests in the bosom of Jesus and makes Jesus known through his Gospel. John is being presented as a living icon of intimacy with Christ — and the Gospel he will write is the fruit of that intimacy.</p>
+    </div>
+
+    <!-- ===== X. HIGH PRIEST'S COURTYARD ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-10">
+        <h2>X. In the High Priest's Courtyard</h2>
+        <p class="section-desc">After the arrest in Gethsemane, most of the disciples flee. Two do not — and one has connections that open a dangerous door.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 18:15–16</div>
+        <p class="passage-context">Peter and "another disciple" follow Jesus to the house of the high priest. Tradition universally identifies the unnamed disciple as John.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">15</span>And Simon Peter followed Jesus, and so did another disciple. And that disciple was known to the high priest, and went in with Jesus into the court of the high priest. <span class="verse-num">16</span>But Peter stood at the door without. The other disciple therefore, who was known to the high priest, went out, and spoke to her that kept the door, and brought in Peter.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>That John "was known to the high priest" has generated centuries of speculation. Was the Zebedee family connected to the priestly aristocracy through fish supply contracts? Was Salome related to priestly families? The detail remains enigmatic, but its narrative function is clear: John is present where no one else dares to be. He enters the courtyard with Jesus. He brings Peter in. And it is in this courtyard that Peter will deny Christ three times — while John, apparently, does not. The Fourth Gospel does not narrate John's own response; it simply records his presence. Sometimes presence is the whole point.</p>
+    </div>
+
+    <!-- ===== XI. AT THE FOOT OF THE CROSS ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-11">
+        <h2>XI. At the Foot of the Cross</h2>
+        <p class="section-desc">Of the Twelve, only one stands at Calvary. Christ entrusts His mother to him — and him to His mother.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 19:25–27</div>
+        <p class="passage-context">Jesus, dying, looks down and sees His mother and the disciple whom He loved. His words from the cross are not merely personal — they are an act of new creation.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">25</span>Now there stood by the cross of Jesus, his mother, and his mother's sister, Mary of Cleophas, and Mary Magdalen. <span class="verse-num">26</span>When Jesus therefore had seen his mother and the disciple standing whom he loved, he saith to his mother: Woman, behold thy son. <span class="verse-num">27</span>After that, he saith to the disciple: Behold thy mother. And from that hour, the disciple took her to his own.</p>
+        </div>
+    </div>
+
+    <span class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        "Woman, behold thy son." … "Behold thy mother."
+        <br>— John 19:26–27
+    </span>
+
+    <div class="editorial-note">
+        <div class="note-label">Marian Significance</div>
+        <p>Catholic tradition has always read this passage on two levels. On the personal level, Jesus provides for His mother's care by entrusting her to the beloved disciple. On the ecclesiological level, something far larger is happening. Jesus addresses Mary as "Woman" — the same title He used at Cana (John 2:4), echoing the "Woman" of Genesis 3:15. The Beloved Disciple, standing at the foot of the cross, represents the faithful Church. When Jesus says "Behold thy mother," He is giving Mary to John not merely as an individual but as a type of all believers. And when He says "Behold thy son," He is giving John — and through John, the whole Church — to Mary as her spiritual children.</p>
+        <p style="margin-top: 10px;">This is one of the foundational biblical texts for the Catholic doctrine of Mary as Mother of the Church. It is not an afterthought; it is spoken from the cross, in the hour of the New Covenant's ratification in blood. And it is entrusted specifically to John — the one disciple present, the one who stayed.</p>
+    </div>
+
+    <!-- ===== XII. THE EMPTY TOMB ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-12">
+        <h2>XII. The Empty Tomb — He Saw, and Believed</h2>
+        <p class="section-desc">Mary Magdalene brings the news. Two men run. One arrives first but waits. One enters first but understands second. The other sees — and believes.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 20:1–10</div>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And on the first day of the week, Mary Magdalen cometh early, when it was yet dark, unto the sepulchre; and she saw the stone taken away from the sepulchre. <span class="verse-num">2</span>She ran, therefore, and cometh to Simon Peter, and to the other disciple whom Jesus loved, and saith to them: They have taken away the Lord out of the sepulchre, and we know not where they have laid him.</p>
+            <p><span class="verse-num">3</span>Peter therefore went out, and that other disciple, and they came to the sepulchre. <span class="verse-num">4</span>And they both ran together, and that other disciple did outrun Peter, and came first to the sepulchre. <span class="verse-num">5</span>And when he stooped down, he saw the linen cloths lying; but yet he went not in. <span class="verse-num">6</span>Then cometh Simon Peter, following him, and went into the sepulchre, and saw the linen cloths lying, <span class="verse-num">7</span>And the napkin that had been about his head, not lying with the linen cloths, but apart, wrapped up into one place. <span class="verse-num">8</span>Then that other disciple also went in, who came first to the sepulchre: and he saw, and believed. <span class="verse-num">9</span>For as yet they knew not the scripture, that he must rise again from the dead. <span class="verse-num">10</span>The disciples therefore departed again to their home.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Peter &amp; John — Authority and Insight</div>
+        <p>The interplay between Peter and John in this scene is revealing. John outruns Peter — he is traditionally regarded as the younger man — but he does not enter first. He waits. Peter arrives and enters immediately, exercising the priority that belongs to him by Christ's appointment. Only then does John enter. And when he does: "he saw, and believed." This is the first recorded act of resurrection faith among the Twelve. John sees the empty cloths, the folded napkin, the absence — and he understands. Peter sees the same evidence but the text does not yet say he believed. The Fourth Gospel is not diminishing Peter; it is distinguishing between the authority to lead and the gift of spiritual perception. Peter is the rock. John is the one who sees.</p>
+    </div>
+
+    <!-- ===== XIII. RECOGNITION AT THE SEA ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-13">
+        <h2>XIII. Recognition at the Sea of Tiberias</h2>
+        <p class="section-desc">The disciples return to fishing. A figure stands on the shore. It is John who recognizes Him first — and Peter who leaps into the water.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">John 21:1–7</div>
+        <p class="passage-context">Seven disciples — including "the sons of Zebedee," the only explicit mention of the Zebedee brothers in the Fourth Gospel — fish all night and catch nothing. At dawn, a stranger calls from the shore.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>After this, Jesus shewed himself again to the disciples at the sea of Tiberias. And he shewed himself after this manner. <span class="verse-num">2</span>There were together Simon Peter, and Thomas, who is called Didymus, and Nathanael, who was of Cana of Galilee, and the sons of Zebedee, and two other of his disciples. <span class="verse-num">3</span>Simon Peter saith to them: I go a fishing. They say to him: We also come with thee. And they went forth, and entered into the ship: and that night they caught nothing.</p>
+            <p><span class="verse-num">4</span>But when the morning was come, Jesus stood on the shore: yet the disciples knew not that it was Jesus. <span class="verse-num">5</span>Jesus therefore said to them: Children, have you any meat? They answered him: No. <span class="verse-num">6</span>He saith to them: Cast the net on the right side of the ship, and you shall find. They cast therefore; and now they were not able to draw it, for the multitude of fishes. <span class="verse-num">7</span>That disciple therefore whom Jesus loved, said to Peter: It is the Lord. Simon Peter, when he heard that it was the Lord, girt his coat about him, (for he was naked,) and cast himself into the sea.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>The dynamic between Peter and John appears again in its characteristic form: John perceives, Peter acts. John recognizes Jesus from a distance; Peter throws himself into the water to reach Him. This is not competition — it is complementarity. The Church needs both: the contemplative who sees, and the leader who moves. John's quiet word — "It is the Lord" — is the spark. Peter's headlong plunge is the fire. Note also the detail that this time the net does not break (John 21:11), unlike the first miraculous catch (Luke 5:6). The net is the Church. After the Resurrection, it holds.</p>
+    </div>
+
+    <!-- ===== XIV. "IF I WILL THAT HE REMAIN" ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-14">
+        <h2>XIV. "If I Will That He Remain"</h2>
+        <p class="section-desc">Jesus restores Peter, prophesies his death, and speaks mysterious words about the destiny of John — words that the Church will puzzle over for decades.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">John 21:18–24</div>
+        <p class="passage-context">After the threefold restoration ("Feed my sheep"), Jesus tells Peter how he will die. Peter turns, sees John following, and asks the most human of questions.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">18</span>Amen, amen I say to thee, when thou wast younger, thou didst gird thyself, and didst walk where thou wouldest. But when thou shalt be old, thou shalt stretch forth thy hands, and another shall gird thee, and lead thee whither thou wouldest not. <span class="verse-num">19</span>And this he said, signifying by what death he should glorify God. And when he had said this, he saith to him: Follow me.</p>
+            <p><span class="verse-num">20</span>Peter turning about, saw that disciple whom Jesus loved following, who also leaned on his breast at supper, and said: Lord, who is he that shall betray thee? <span class="verse-num">21</span>Him therefore when Peter had seen, he saith to Jesus: Lord, and what shall this man do? <span class="verse-num">22</span>Jesus saith to him: So I will have him to remain till I come, what is it to thee? follow thou me. <span class="verse-num">23</span>This saying therefore went abroad among the brethren, that that disciple should not die. And Jesus did not say to him: He should not die; but, So I will have him to remain till I come, what is it to thee?</p>
+            <p><span class="verse-num">24</span>This is that disciple who giveth testimony of these things, and hath written these things; and we know that his testimony is true.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>Verse 23 is the earliest recorded instance of the Church correcting a misinterpretation. A rumor spread among the early Christians that John would not die — based on a misreading of Christ's words. The Gospel itself steps in to clarify: Jesus did not say John would not die, but "So I will have him to remain till I come, what is it to thee?" The clarification suggests this passage was written — or finalized — while John was still alive, or shortly after his death, when the rumor needed addressing.</p>
+        <p style="margin-top: 10px;">Verse 24 is the Gospel's signature: "This is that disciple who giveth testimony of these things, and hath written these things." The Beloved Disciple is the author. His testimony is true. The Fourth Gospel closes by identifying its source — not by name, but by relationship. He is the one whom Jesus loved.</p>
+    </div>
+
+    <!-- ===== XV. PETER & JOHN IN THE EARLY CHURCH ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-15">
+        <h2>XV. Peter &amp; John in the Early Church</h2>
+        <p class="section-desc">After Pentecost, Peter and John appear together repeatedly in Acts — healing, preaching, suffering, and confirming new believers.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 3:1–8</div>
+        <p class="passage-context">Peter and John go up to the Temple together. A lame man asks for alms. He receives something altogether different.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>Now Peter and John went up into the temple at the ninth hour of prayer. <span class="verse-num">2</span>And a certain man who was lame from his mother's womb, was carried: whom they laid every day at the gate of the temple, which is called Beautiful, that he might ask alms of them that went into the temple. <span class="verse-num">3</span>He, when he had seen Peter and John about to go into the temple, asked to receive an alms. <span class="verse-num">4</span>But Peter with John fastening his eyes upon him, said: Look upon us. <span class="verse-num">5</span>But he looked upon them, hoping that he should receive something of them. <span class="verse-num">6</span>But Peter said: Silver and gold I have none; but what I have, I give thee: In the name of Jesus Christ of Nazareth, arise, and walk. <span class="verse-num">7</span>And taking him by the right hand, he lifted him up, and forthwith his feet and soles received strength. <span class="verse-num">8</span>And he leaping up, stood, and walked, and went in with them into the temple, walking, and leaping, and praising God.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 4:1–3, 13, 18–21</div>
+        <p class="passage-context">The healing provokes a confrontation. Peter and John are arrested, jailed, and brought before the Sanhedrin. The rulers recognize something about them.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And as they were speaking to the people, the priests, and the officer of the temple, and the Sadducees, came upon them, <span class="verse-num">2</span>Being grieved that they taught the people, and preached in Jesus the resurrection from the dead. <span class="verse-num">3</span>And they laid hands on them, and put them in hold till the next day; for it was now evening.</p>
+            <p><span class="verse-num">13</span>Now seeing the constancy of Peter and of John, understanding that they were illiterate and ignorant men, they wondered; and they knew them that they had been with Jesus.</p>
+            <p><span class="verse-num">18</span>And calling them, they charged them not to speak at all, nor teach in the name of Jesus. <span class="verse-num">19</span>But Peter and John answering, said to them: If it be just in the sight of God, to hear you rather than God, judge ye. <span class="verse-num">20</span>For we cannot but speak the things which we have seen and heard. <span class="verse-num">21</span>But they threatening, sent them away, not finding how they might punish them, because of the people: for all men glorified that which had been done, in that which had come to pass.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Acts 8:14–17</div>
+        <p class="passage-context">After Philip evangelizes Samaria, the apostles in Jerusalem send Peter and John to confirm the new believers — the same Samaritans upon whom John once wanted to rain fire.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">14</span>Now when the apostles, who were in Jerusalem, had heard that Samaria had received the word of God, they sent unto them Peter and John. <span class="verse-num">15</span>Who, when they were come, prayed for them, that they might receive the Holy Ghost. <span class="verse-num">16</span>For he was not as yet come upon any of them; but they were only baptized in the name of the Lord Jesus. <span class="verse-num">17</span>Then they laid their hands upon them, and they received the Holy Ghost.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Irony of Samaria</div>
+        <p>The transformation could hardly be more complete. The same John who wanted to incinerate a Samaritan village (Luke 9:54) now lays hands on Samaritan converts so that they may receive the Holy Spirit. Fire does come down from heaven — but it is the fire of Pentecost, not of judgment. The Son of Thunder has become an instrument of the very mercy he once resisted. This is what discipleship does: it does not destroy the temperament; it transfigures it.</p>
+        <p style="margin-top: 10px;">Note also the ecclesiological significance: Philip, the deacon, has evangelized and baptized — but the apostles must come from Jerusalem to lay hands and confer the Spirit. This passage is one of the strongest biblical foundations for the sacrament of Confirmation as distinct from Baptism, and for the Catholic understanding that certain acts — the conferral of the Spirit through the laying on of hands — are reserved to the apostolic office. Peter and John are not merely visiting. They are exercising apostolic authority.</p>
+    </div>
+
+    <!-- ===== XVI. PILLAR OF THE CHURCH ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-16">
+        <h2>XVI. Pillar of the Church</h2>
+        <p class="section-desc">Paul names the three men who anchor the Church in Jerusalem — and one of them is John.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Galatians 2:9</div>
+        <p class="passage-context">Paul recounts his visit to Jerusalem, where the leaders of the mother Church extend to him the right hand of fellowship. He names them.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">9</span>And when they had known the grace that was given to me, James and Cephas and John, who seemed to be pillars, gave to me and Barnabas the right hands of fellowship: that we should go unto the Gentiles, and they unto the circumcision.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Note</div>
+        <p>The "James" named here is not James the son of Zebedee — who was already martyred by this point — but James "the brother of the Lord" (Galatians 1:19), the leader of the Jerusalem church. What matters for our purposes is the third name: John. Paul identifies him, alongside Cephas (Peter) and James, as one of the "pillars" (στύλοι, <em>styloi</em>) of the Church. The word is architectural and deliberate. Pillars hold up the structure. John is not merely a respected elder; he is one of the three load-bearing supports of the apostolic Church. And Paul — apostle to the Gentiles, author of thirteen epistles, converter of the Mediterranean world — defers to them.</p>
+    </div>
+
+    <!-- ===== XVII. FIRST EPISTLE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-17">
+        <h2>XVII. The First Epistle of St. John</h2>
+        <p class="section-desc">The Son of Thunder writes about love. The man who wanted fire preaches light. The youngest apostle speaks as the oldest Christian alive.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">1 John 1:1–4</div>
+        <p class="passage-context">The opening of John's first epistle — a prologue that deliberately echoes the opening of his Gospel, grounding everything in what he has personally witnessed.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>That which was from the beginning, which we have heard, which we have seen with our eyes, which we have looked upon, and our hands have handled, of the word of life: <span class="verse-num">2</span>For the life was manifested; and we have seen and do bear witness, and declare unto you the life eternal, which was with the Father, and hath appeared to us: <span class="verse-num">3</span>That which we have seen and heard, we declare unto you, that you also may have fellowship with us, and our fellowship may be with the Father, and with his Son Jesus Christ. <span class="verse-num">4</span>And these things we write to you, that you may rejoice, and your joy may be full.</p>
+        </div>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">1 John 4:7–8, 16</div>
+        <p class="passage-context">The theological summit of the epistle — and arguably the most concentrated statement of Christian theology in all of Scripture.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">7</span>Dearly beloved, let us love one another, for charity is of God. And every one that loveth, is born of God, and knoweth God. <span class="verse-num">8</span>He that loveth not, knoweth not God: for God is charity.</p>
+            <p><span class="verse-num">16</span>And we have known, and have believed the charity, which God hath to us. God is charity: and he that abideth in charity, abideth in God, and God in him.</p>
+        </div>
+    </div>
+
+    <span class="pinnacle-verse">
+        <span class="pinnacle-ornament">✦ ✦ ✦</span>
+        "God is charity: and he that abideth in charity, abideth in God, and God in him."
+        <br>— 1 John 4:16
+    </span>
+
+    <div class="editorial-note">
+        <div class="note-label">Observation</div>
+        <p>Jerome preserves a tradition that in John's extreme old age, when he could no longer walk to the assembly, he would be carried into the church at Ephesus by his disciples. And every time, he would say the same thing: <em>"Little children, love one another."</em> When his listeners grew weary of the repetition and asked him why he always said the same words, he replied: "Because it is the Lord's commandment, and if this alone is done, it is enough." The trajectory from Boanerges to this moment is the entire arc of sanctification compressed into a single life.</p>
+    </div>
+
+    <!-- ===== XVIII. THE REVELATION ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-18">
+        <h2>XVIII. The Revelation to St. John</h2>
+        <p class="section-desc">Exiled on Patmos, the last living apostle receives a vision of the glorified Christ and the consummation of all things.</p>
+    </div>
+
+    <div class="passage key-passage">
+        <div class="passage-ref">Apocalypse 1:1–2, 9–18</div>
+        <p class="passage-context">The opening of the Apocalypse. John identifies himself and the circumstances of his vision — and then the risen Christ appears to him in terrifying glory.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>The Revelation of Jesus Christ, which God gave unto him, to make known to his servants the things which must shortly come to pass: and signified, sending by his angel to his servant John, <span class="verse-num">2</span>Who hath given testimony to the word of God, and the testimony of Jesus Christ, what things soever he hath seen.</p>
+            <p><span class="verse-num">9</span>I John, your brother and your partner in tribulation, and in the kingdom, and patience in Christ Jesus, was in the island, which is called Patmos, for the word of God, and for the testimony of Jesus. <span class="verse-num">10</span>I was in the spirit on the Lord's day, and heard behind me a great voice, as of a trumpet, <span class="verse-num">11</span>Saying: What thou seest, write in a book: and send to the seven churches which are in Asia: to Ephesus, and to Smyrna, and to Pergamus, and to Thyatira, and to Sardis, and to Philadelphia, and to Laodicea.</p>
+            <p><span class="verse-num">12</span>And I turned to see the voice that spoke with me. And being turned, I saw seven golden candlesticks: <span class="verse-num">13</span>And in the midst of the seven golden candlesticks, one like to the Son of man, clothed with a garment down to the feet, and girt about the paps with a golden girdle. <span class="verse-num">14</span>And his head and his hairs were white, as white wool, and as snow, and his eyes were as a flame of fire, <span class="verse-num">15</span>And his feet like unto fine brass, as in a burning furnace. And his voice as the sound of many waters. <span class="verse-num">16</span>And he had in his right hand seven stars. And from his mouth came out a sharp two edged sword: and his face was as the sun shineth in his power.</p>
+            <p><span class="verse-num">17</span>And when I had seen him, I fell at his feet as dead. And he laid his right hand upon me, saying: Fear not. I am the First and the Last, <span class="verse-num">18</span>And alive, and was dead, and behold I am living for ever and ever, and have the keys of death and of hell.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Context</div>
+        <p>John had leaned on the breast of this man at supper. He had followed Him into the high priest's courtyard. He had stood at the foot of His cross. He had seen the empty tomb. He had recognized Him from a boat on the Sea of Tiberias. And now — decades later, exiled, the last of the Twelve still breathing — he sees Him again. But this time the carpenter from Nazareth appears as the cosmic Lord: eyes like fire, voice like many waters, face like the sun at full strength. And John falls at His feet as though dead. The intimacy has not been diminished. But the glory has been unveiled.</p>
+    </div>
+
+    <!-- ===== XIX. EPILOGUE ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-19">
+        <h2>XIX. Epilogue: Ephesus &amp; the Last Apostle</h2>
+        <p class="section-desc">John outlives them all — the first called, the last to die, the one whose testimony endures.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Historical Tradition</div>
+        <p>The universal testimony of the early Church places John's final years in Ephesus. Irenaeus of Lyon (c. 130–202), who was a disciple of Polycarp, who was himself a disciple of John, provides the most direct chain of testimony: John lived at Ephesus until the reign of Trajan (A.D. 98–117). Polycrates of Ephesus, writing to Pope Victor I around A.D. 190, identifies John as the one "who reclined upon the bosom of the Lord" and confirms that he was buried at Ephesus.</p>
+        <p style="margin-top: 10px;">Tertullian records a tradition that John was plunged into boiling oil at Rome — possibly during the persecution under Domitian — and emerged unharmed. Whether the detail is historical or hagiographic, it witnesses to the early Church's conviction that John's endurance was extraordinary. He drank the cup Christ promised (Mark 10:39), not through a swift death like his brother James, but through a lifetime of suffering, service, exile, and testimony. The youngest of the Twelve became the last of the Twelve.</p>
+        <p style="margin-top: 10px;">From Ephesus he guided the churches of Asia Minor through the crises of the late first century — Gnostic infiltration, the Cerinthian heresy, the persecutions of Nero and Domitian. His Gospel, his three epistles, and the Apocalypse form the theological capstone of the New Testament canon. He had seen Christ in the flesh, leaned on His breast, stood beneath His cross, and encountered His risen glory. And when the last apostle finally closed his eyes in Ephesus, the apostolic age ended. What followed — what had to follow — was the Church he and his brothers had built, carrying forward their testimony through bishops, councils, and an unbroken succession of faith.</p>
+    </div>
+
+    <div class="key-passage" style="margin-top: 30px; text-align: center;">
+        <p style="font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; font-style: italic; font-size: 1.15em; line-height: 1.9; color: var(--ink-light);">
+            The first of the Twelve to die was James — beheaded by Herod's sword around A.D. 44, twelve years after the Ascension. The last of the Twelve to die was his brother John — passing quietly at Ephesus sometime after A.D. 98, nearly seventy years after Easter morning. Between those two deaths lies the entire founding generation of the Church. One brother sealed his testimony in blood within a decade of the Resurrection. The other carried that testimony into a new century, guiding churches, combating heresies, and writing the words that would echo across two thousand years: <em>"In the beginning was the Word."</em>
+        </p>
+        <p style="font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; font-style: italic; font-size: 1.15em; line-height: 1.9; color: var(--ink-light); margin-top: 14px;">
+            Both drank the cup. Both were sons of thunder. And the God who named them transformed them — one into the Church's first martyr among the Twelve, the other into its last living witness to the Incarnation.
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--              PART THREE: THE INNER CIRCLE            -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <div class="part-divider">✦ ✦ ✦ ✦ ✦</div>
+    <div class="part-header">
+        <div class="part-label">Part Three</div>
+        <h2>The Inner Circle</h2>
+        <p class="part-desc">Peter, James &amp; John — the three whom Christ chose to witness what no one else was allowed to see.</p>
+    </div>
+
+    <!-- ===== XX. THE THREE WITNESSES ===== -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="section-header" id="sec-20">
+        <h2>XX. The Three Witnesses — Peter, James &amp; John</h2>
+        <p class="section-desc">Three times in the Gospels, Jesus separates Peter, James, and John from the rest of the Twelve and brings them alone into moments of extraordinary revelation. This pattern is not accidental.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Pattern</div>
+        <p>Peter, James, and John are singled out as an inner circle on three unmistakable occasions: the raising of Jairus's daughter (Mark 5:37), the Transfiguration (Matthew 17:1, Mark 9:2, Luke 9:28), and the Agony in Gethsemane (Matthew 26:37, Mark 14:33). A fourth occasion — the Olivet Discourse (Mark 13:3) — includes Andrew as well. In every case, the three are brought into a space of extraordinary intimacy: a room where death is reversed, a mountaintop where glory is unveiled, a garden where divine anguish is exposed. They see what the other nine do not. They are, in the deepest sense, witnesses — and the number is not accidental.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 5:37–43</div>
+        <p class="passage-context">Jairus, a ruler of the synagogue, begs Jesus to heal his dying daughter. Word comes that the child has died. Jesus takes only Peter, James, and John into the house.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">37</span>And he admitted not any man to follow him, but Peter, and James, and John the brother of James. <span class="verse-num">38</span>And they come to the house of the ruler of the synagogue; and he seeth a tumult, and people weeping and wailing much. <span class="verse-num">39</span>And going in, he saith to them: Why make you this ado, and weep? the damsel is not dead, but sleepeth. <span class="verse-num">40</span>And they laughed him to scorn. But he having put them all out, taketh the father and the mother of the damsel, and them that were with him, and entereth in where the damsel was lying. <span class="verse-num">41</span>And taking the damsel by the hand, he saith to her: Talitha cumi, which is, being interpreted: Damsel (I say to thee) arise. <span class="verse-num">42</span>And immediately the damsel rose up, and walked: and she was twelve years old: and they were astonished with a great astonishment. <span class="verse-num">43</span>And he charged them strictly that no man should know it; and commanded that something should be given her to eat.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Matthew 17:1–8</div>
+        <p class="passage-context">The Transfiguration. Jesus takes Peter, James, and John up a high mountain. The veil between heaven and earth thins — and they see Him as He truly is.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">1</span>And after six days Jesus taketh unto him Peter and James, and John his brother, and bringeth them up into a high mountain apart: <span class="verse-num">2</span>And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow. <span class="verse-num">3</span>And behold there appeared to them Moses and Elias talking with him. <span class="verse-num">4</span>And Peter answering, said to Jesus: Lord, it is good for us to be here: if thou wilt, let us make here three tabernacles, one for thee, and one for Moses, and one for Elias. <span class="verse-num">5</span>And as he was yet speaking, behold a bright cloud overshadowed them. And lo, a voice out of the cloud, saying: This is my beloved Son, in whom I am well pleased: hear ye him. <span class="verse-num">6</span>And the disciples hearing, fell upon their face, and were very much afraid. <span class="verse-num">7</span>And Jesus came and touched them: and said to them, Arise, and fear not. <span class="verse-num">8</span>And they lifting up their eyes saw no one but only Jesus.</p>
+        </div>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 14:32–42</div>
+        <p class="passage-context">Gethsemane. Jesus brings all the disciples to the garden but separates Peter, James, and John to go further with Him. They are brought into His agony — and they fail to stay awake.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">32</span>And they came to a farm called Gethsemani. And he saith to his disciples: Sit you here, while I pray. <span class="verse-num">33</span>And he taketh Peter and James and John with him; and he began to fear and to be heavy. <span class="verse-num">34</span>And he saith to them: My soul is sorrowful even unto death; stay you here, and watch. <span class="verse-num">35</span>And when he was gone forward a little, he fell flat on the ground; and he prayed, that if it might be, the hour might pass from him. <span class="verse-num">36</span>And he saith: Abba, Father, all things are possible to thee: remove this chalice from me; but not what I will, but what thou wilt.</p>
+            <p><span class="verse-num">37</span>And he cometh, and findeth them sleeping. And he saith to Peter: Simon, sleepest thou? couldest not thou watch one hour? <span class="verse-num">38</span>Watch ye, and pray that you enter not into temptation. The spirit indeed is willing, but the flesh is weak.</p>
+            <p><span class="verse-num">39</span>And going away again, he prayed, saying the same words. <span class="verse-num">40</span>And when he returned, he found them again asleep, (for their eyes were heavy,) and they knew not what to answer him. <span class="verse-num">41</span>And he cometh the third time, and saith to them: Sleep ye now, and take your rest. It is enough: the hour is come: behold the Son of man shall be betrayed into the hands of sinners. <span class="verse-num">42</span>Rise up, let us go. Behold, he that will betray me is at hand.</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Typological Note — Moses, Aaron, Nadab &amp; Abihu on the Mountain</div>
+        <p>The inner circle of three has an Old Testament precedent that is precise and illuminating. In Exodus 24:1, God summons Moses to bring three men with him up Mount Sinai: "Come up to the Lord, thou, and Aaron, Nadab, and Abiu, and seventy of the ancients of Israel." And in Exodus 24:9–10: "Then Moses and Aaron, Nadab and Abiu, and seventy of the ancients of Israel went up. And they saw the God of Israel."</p>
+        <p style="margin-top: 10px;">The structural parallel is exact:</p>
+        <p style="margin-top: 8px; padding-left: 16px; border-left: 2px solid var(--gold-light); font-size: 0.92em; color: var(--ink-light);">
+            <strong>Old Covenant:</strong> Moses brings seventy elders (Exodus 24:1, Numbers 11:16), twelve tribal chiefs (Numbers 1:4–16), and three intimate companions — Aaron, Nadab, and Abihu — up the mountain to see the glory of God.<br><br>
+            <strong>New Covenant:</strong> Christ sends seventy(-two) disciples (Luke 10:1), appoints twelve apostles (Mark 3:13–19), and brings three intimate companions — Peter, James, and John — up the mountain to see His transfigured glory.
+        </p>
+        <p style="margin-top: 10px;">Christ is reconstituting Israel. The seventy, the twelve, and the three all have their Old Testament counterparts. Jesus is not merely choosing favorites — He is fulfilling a typological pattern laid down at Sinai. And just as Aaron was the high priest among Moses's three, so Peter holds the primacy among Christ's three. The parallel reinforces the Catholic claim: the structure of the New Covenant Church is not an invention — it is a fulfillment of the structure God established in the Old.</p>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">The Law of Witnesses</div>
+        <p>Deuteronomy 19:15 establishes a principle embedded in the entire fabric of Israelite and early Christian life: "In the mouth of two or three witnesses every word shall stand." The selection of three witnesses to accompany Christ at the most pivotal moments — the reversal of death, the unveiling of divine glory, the agony of sacrificial love — is not arbitrary. These are the events that require formal testimony. Peter, James, and John are juridical witnesses in the biblical sense: men chosen to see, so that they can later testify. Peter's second epistle makes this explicit: "For we have not by following artificial fables, made known to you the power, and presence of our Lord Jesus Christ; but we were eyewitnesses of his majesty" (2 Peter 1:16). He is speaking of the Transfiguration — the event he witnessed alongside James and John. The inner circle was not a social club. It was a witness panel, chosen by the Lawgiver who knew the law of witnesses.</p>
+    </div>
+
+    <div class="passage">
+        <div class="passage-ref">Mark 13:3–4</div>
+        <p class="passage-context">A fourth gathering of the inner circle — this time with Andrew added — for the Olivet Discourse, Christ's extended prophecy of the destruction of Jerusalem and the end of the age.</p>
+        <div class="passage-text">
+            <p><span class="verse-num">3</span>And as he sat on the mount of Olives over against the temple, Peter and James and John and Andrew asked him apart: <span class="verse-num">4</span>Tell us, when shall these things be? and what shall be the sign when all these things shall begin to be fulfilled?</p>
+        </div>
+    </div>
+
+    <div class="editorial-note">
+        <div class="note-label">Three Destinies</div>
+        <p>The three men of the inner circle received three radically different endings — and the differences are themselves instructive. James was the first of the Twelve to die: beheaded by the sword under Herod Agrippa I, around A.D. 44. Peter was crucified in Rome under Nero, around A.D. 64–67, reportedly upside down at his own request, considering himself unworthy to die in the same manner as his Lord. John alone died of natural causes at Ephesus, sometime after A.D. 98 — the last of the Twelve, the sole surviving witness to the Incarnation.</p>
+        <p style="margin-top: 10px;">Together, their lives embody three modes of Christian faithfulness. James models the swift, total gift of martyrdom — the cup drained in a single draught. Peter models the long obedience of leadership, burdened with governance, failure, restoration, and finally a death that mirrors Christ's own. John models the endurance of witness — the man who stays, who sees, who writes, who outlasts everything and everyone, and whose last words to his churches are simply: <em>"Little children, love one another."</em></p>
+        <p style="margin-top: 10px;">The Son of Thunder who wanted fire became the apostle of love. The fisherman who denied Christ became the rock of the Church. The brother who asked for the highest seat became the first to lay down his life. Christ took three rough men from a lakeshore in Galilee and made them the pillars of an institution that has outlasted every empire since.</p>
+    </div>
+
+    <div class="key-passage" style="margin-top: 30px; text-align: center;">
+        <p style="font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; font-style: italic; font-size: 1.15em; line-height: 1.9; color: var(--ink-light);">
+            They saw death reversed in the house of Jairus. They saw glory unveiled on the mountaintop. They saw anguish laid bare in the garden. And they were changed — not instantly, not painlessly, but completely.
+        </p>
+        <p style="font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; font-style: italic; font-size: 1.15em; line-height: 1.9; color: var(--ink-light); margin-top: 14px;">
+            Two thousand years later, the Church they founded still stands. The testimony they gave still echoes. The cup they drank is still offered. And the love they learned still burns.
+        </p>
+    </div>
+
+    <!-- COLOPHON -->
+    <div class="section-divider">✦ ✦ ✦</div>
+    <div class="editorial-note" style="margin-top: 40px;">
+        <div class="note-label">Colophon</div>
+        <p>Text: Douay-Rheims Bible (Challoner Revision). Passages selected and arranged chronologically according to the lives of St. James the Great and St. John the Beloved, sons of Zebedee. Contextual notes and apologetic commentary by the editors of One Faith Delivered. This compilation is intended for private study and is not a replacement for reading each book of the New Testament in its full canonical context.</p>
+    </div>
+
+</main>
+
+<!-- Floating Section Navigator -->
+<button class="section-nav-btn" id="sectionNavBtn" aria-label="Jump to section" title="Jump to section">
+    ☰
+</button>
+<div class="section-nav-panel" id="sectionNavPanel">
+    <div class="section-nav-header">Jump to Section</div>
+    <ul class="section-nav-list" id="sectionNavList">
+        <li><span class="nav-part-label">St. James the Great</span></li>
+        <li><a href="#sec-1"><span class="nav-numeral">I</span> The Call of the Sons of Zebedee</a></li>
+        <li><a href="#sec-2"><span class="nav-numeral">II</span> Among the Twelve — Sons of Thunder</a></li>
+        <li><a href="#sec-3"><span class="nav-numeral">III</span> Fire from Heaven</a></li>
+        <li><a href="#sec-4"><span class="nav-numeral">IV</span> The Ambitious Request</a></li>
+        <li><a href="#sec-5"><span class="nav-numeral">V</span> The First Apostolic Martyr</a></li>
+        <li><span class="nav-part-label">St. John the Beloved</span></li>
+        <li><a href="#sec-6"><span class="nav-numeral">VI</span> The Other Disciple at the Jordan</a></li>
+        <li><a href="#sec-7"><span class="nav-numeral">VII</span> Forbidding the Exorcist</a></li>
+        <li><a href="#sec-8"><span class="nav-numeral">VIII</span> Preparing the Passover</a></li>
+        <li><a href="#sec-9"><span class="nav-numeral">IX</span> Beloved Disciple at the Last Supper</a></li>
+        <li><a href="#sec-10"><span class="nav-numeral">X</span> In the High Priest's Courtyard</a></li>
+        <li><a href="#sec-11"><span class="nav-numeral">XI</span> At the Foot of the Cross</a></li>
+        <li><a href="#sec-12"><span class="nav-numeral">XII</span> The Empty Tomb</a></li>
+        <li><a href="#sec-13"><span class="nav-numeral">XIII</span> Recognition at the Sea of Tiberias</a></li>
+        <li><a href="#sec-14"><span class="nav-numeral">XIV</span> "If I Will That He Remain"</a></li>
+        <li><a href="#sec-15"><span class="nav-numeral">XV</span> Peter &amp; John in the Early Church</a></li>
+        <li><a href="#sec-16"><span class="nav-numeral">XVI</span> Pillar of the Church</a></li>
+        <li><a href="#sec-17"><span class="nav-numeral">XVII</span> The First Epistle of St. John</a></li>
+        <li><a href="#sec-18"><span class="nav-numeral">XVIII</span> The Revelation to St. John</a></li>
+        <li><a href="#sec-19"><span class="nav-numeral">XIX</span> Epilogue: Ephesus &amp; the Last Apostle</a></li>
+        <li><span class="nav-part-label">The Inner Circle</span></li>
+        <li><a href="#sec-20"><span class="nav-numeral">XX</span> The Three Witnesses</a></li>
+    </ul>
+</div>
+
+<script>
+    // Reading progress bar
+    window.addEventListener('scroll', function() {
+        var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (window.scrollY / docHeight) * 100;
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+    });
+
+    // Dark mode toggle
+    (function() {
+        var toggle = document.getElementById('darkToggle');
+        var icon = document.getElementById('toggleIcon');
+        var label = document.getElementById('toggleLabel');
+
+        function updateUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            icon.textContent = isDark ? '☀' : '☽';
+            label.textContent = isDark ? 'Day' : 'Night';
+        }
+
+        function flipTheme() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('ofd-jamesjohn-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('ofd-jamesjohn-theme', 'dark');
+            }
+            updateUI();
+        }
+
+        toggle.addEventListener('click', flipTheme);
+        toggle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipTheme(); }
+        });
+
+        updateUI();
+    })();
+
+    // Section navigator
+    (function() {
+        var btn = document.getElementById('sectionNavBtn');
+        var panel = document.getElementById('sectionNavPanel');
+        var navLinks = document.querySelectorAll('#sectionNavList a');
+        var sectionIds = [];
+        var isOpen = false;
+
+        navLinks.forEach(function(link) {
+            sectionIds.push(link.getAttribute('href').substring(1));
+        });
+
+        function togglePanel() {
+            isOpen = !isOpen;
+            btn.classList.toggle('open', isOpen);
+            panel.classList.toggle('open', isOpen);
+            btn.textContent = isOpen ? '✕' : '☰';
+            if (isOpen) highlightCurrent();
+        }
+
+        btn.addEventListener('click', togglePanel);
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(function() {
+                    isOpen = false;
+                    btn.classList.remove('open');
+                    panel.classList.remove('open');
+                    btn.textContent = '☰';
+                }, 150);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (isOpen && !panel.contains(e.target) && e.target !== btn) {
+                isOpen = false;
+                btn.classList.remove('open');
+                panel.classList.remove('open');
+                btn.textContent = '☰';
+            }
+        });
+
+        function highlightCurrent() {
+            var scrollPos = window.scrollY + 120;
+            var currentId = sectionIds[0];
+
+            for (var i = 0; i < sectionIds.length; i++) {
+                var el = document.getElementById(sectionIds[i]);
+                if (el && el.offsetTop <= scrollPos) {
+                    currentId = sectionIds[i];
+                }
+            }
+
+            navLinks.forEach(function(link) {
+                var href = link.getAttribute('href').substring(1);
+                link.classList.toggle('active', href === currentId);
+            });
+
+            var activeLink = panel.querySelector('a.active');
+            if (activeLink) {
+                var list = document.getElementById('sectionNavList');
+                var linkTop = activeLink.offsetTop - list.offsetTop;
+                var listHeight = list.clientHeight;
+                if (linkTop < list.scrollTop || linkTop > list.scrollTop + listHeight - 40) {
+                    list.scrollTop = linkTop - listHeight / 3;
+                }
+            }
+        }
+
+        var scrollTimer;
+        window.addEventListener('scroll', function() {
+            if (isOpen) {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(highlightCurrent, 80);
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>
