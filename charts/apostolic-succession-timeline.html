@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Christ to the Bishops — A Timeline of Apostolic Succession</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #F5F0E8;
+    --parchment-dark: #E8E0D0;
+    --crimson: #8B0000;
+    --crimson-light: #A52A2A;
+    --gold: #C5A55A;
+    --gold-dark: #8B7332;
+    --ink: #2C1810;
+    --ink-light: #4A3728;
+    --ink-muted: #6B5B4F;
+    --bone: #FAF8F4;
+    --shadow: rgba(44, 24, 16, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* === HEADER === */
+  .page-header {
+    background: linear-gradient(135deg, #1a0a0a 0%, #2C1810 40%, #1a0a0a 100%);
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 0, 0, 0.03) 2px,
+      rgba(139, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+  }
+
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .header-ornament {
+    color: var(--gold);
+    font-size: 1.4rem;
+    letter-spacing: 0.6em;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    color: var(--bone);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header h1 span {
+    color: var(--gold);
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--gold);
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0.8rem auto 0;
+  }
+
+  /* === INTRO === */
+  .intro-section {
+    max-width: 780px;
+    margin: 2.5rem auto 1rem;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .intro-section p {
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+  }
+
+  .intro-section .key-claim {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--crimson);
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid var(--gold);
+    background: linear-gradient(135deg, rgba(197, 165, 90, 0.06), transparent);
+    text-align: left;
+  }
+
+  /* === LEGEND === */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    flex-wrap: wrap;
+    max-width: 780px;
+    margin: 2rem auto 1rem;
+    padding: 0 2rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+  }
+
+  .legend-dot.founding { background: var(--crimson); border-color: var(--crimson); }
+  .legend-dot.martyrdom { background: transparent; border-color: var(--crimson-light); }
+  .legend-dot.scripture { background: var(--gold); border-color: var(--gold-dark); }
+  .legend-dot.patristic { background: var(--ink-light); border-color: var(--ink); }
+
+  /* === TIMELINE === */
+  .timeline-container {
+    max-width: 880px;
+    margin: 2rem auto 4rem;
+    padding: 0 2rem;
+    position: relative;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(
+      to bottom,
+      var(--crimson),
+      var(--crimson) 30%,
+      var(--gold) 70%,
+      var(--ink-light) 100%
+    );
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+
+  @media (max-width: 768px) {
+    .timeline-line {
+      left: 28px;
+    }
+  }
+
+  .timeline-entry {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-bottom: 0;
+    padding: 1.5rem 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideIn 0.5s ease forwards;
+  }
+
+  .timeline-entry:nth-child(1) { animation-delay: 0.1s; }
+  .timeline-entry:nth-child(2) { animation-delay: 0.2s; }
+  .timeline-entry:nth-child(3) { animation-delay: 0.3s; }
+  .timeline-entry:nth-child(4) { animation-delay: 0.4s; }
+  .timeline-entry:nth-child(5) { animation-delay: 0.5s; }
+  .timeline-entry:nth-child(6) { animation-delay: 0.6s; }
+  .timeline-entry:nth-child(7) { animation-delay: 0.7s; }
+  .timeline-entry:nth-child(8) { animation-delay: 0.75s; }
+  .timeline-entry:nth-child(9) { animation-delay: 0.8s; }
+  .timeline-entry:nth-child(10) { animation-delay: 0.85s; }
+  .timeline-entry:nth-child(11) { animation-delay: 0.9s; }
+  .timeline-entry:nth-child(12) { animation-delay: 0.95s; }
+  .timeline-entry:nth-child(13) { animation-delay: 1.0s; }
+
+  @keyframes fadeSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .timeline-entry:nth-child(odd) { flex-direction: row; }
+  .timeline-entry:nth-child(even) { flex-direction: row-reverse; }
+
+  .entry-content {
+    width: calc(50% - 40px);
+    position: relative;
+  }
+
+  .timeline-entry:nth-child(odd) .entry-content { text-align: right; padding-right: 1.5rem; }
+  .timeline-entry:nth-child(even) .entry-content { text-align: left; padding-left: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .timeline-entry,
+    .timeline-entry:nth-child(odd),
+    .timeline-entry:nth-child(even) {
+      flex-direction: row !important;
+    }
+    .entry-content {
+      width: calc(100% - 60px) !important;
+      text-align: left !important;
+      padding-left: 1.5rem !important;
+      padding-right: 0 !important;
+    }
+    .entry-spacer { display: none; }
+  }
+
+  .entry-spacer {
+    width: calc(50% - 40px);
+  }
+
+  /* Center node */
+  .entry-node {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .entry-node {
+      width: 56px;
+    }
+  }
+
+  .node-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+  }
+
+  .timeline-entry:hover .node-dot {
+    transform: scale(1.3);
+  }
+
+  .node-dot.founding { background: var(--crimson); border-color: var(--crimson); box-shadow: 0 0 12px rgba(139, 0, 0, 0.4); }
+  .node-dot.martyrdom { background: var(--parchment); border-color: var(--crimson-light); }
+  .node-dot.scripture { background: var(--gold); border-color: var(--gold-dark); box-shadow: 0 0 8px rgba(197, 165, 90, 0.3); }
+  .node-dot.patristic { background: var(--ink-light); border-color: var(--ink); }
+
+  .entry-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+    white-space: nowrap;
+  }
+
+  /* Card styling */
+  .entry-card {
+    background: var(--bone);
+    border: 1px solid rgba(139, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .timeline-entry:hover .entry-card {
+    box-shadow: 0 4px 16px rgba(44, 24, 16, 0.18);
+    border-color: rgba(139, 0, 0, 0.2);
+  }
+
+  .entry-card.has-quote {
+    border-left: 3px solid var(--gold);
+  }
+
+  .timeline-entry:nth-child(odd) .entry-card.has-quote {
+    border-left: none;
+    border-right: 3px solid var(--gold);
+  }
+
+  @media (max-width: 768px) {
+    .timeline-entry:nth-child(odd) .entry-card.has-quote {
+      border-right: none;
+      border-left: 3px solid var(--gold);
+    }
+  }
+
+  .entry-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--crimson);
+    margin-bottom: 0.4rem;
+    line-height: 1.35;
+  }
+
+  .entry-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .entry-body {
+    font-size: 0.92rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  .entry-quote {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+    margin-top: 0.7rem;
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, rgba(197, 165, 90, 0.07), rgba(197, 165, 90, 0.02));
+    border-radius: 3px;
+    line-height: 1.65;
+  }
+
+  .entry-quote .attribution {
+    display: block;
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold-dark);
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .entry-note {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* Apostle death cluster */
+  .apostle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .apostle-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px dotted rgba(139, 0, 0, 0.1);
+  }
+
+  .apostle-row:last-child { border-bottom: none; }
+
+  .apostle-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .apostle-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+  }
+
+  /* Highlight card for major entries */
+  .entry-card.highlight {
+    background: linear-gradient(135deg, var(--bone), rgba(197, 165, 90, 0.05));
+    border-color: rgba(197, 165, 90, 0.25);
+  }
+
+  /* === CONCLUSION === */
+  .conclusion {
+    max-width: 780px;
+    margin: 0 auto 4rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .conclusion-ornament {
+    color: var(--gold);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin-bottom: 1.2rem;
+  }
+
+  .conclusion p {
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .conclusion .final-line {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--crimson);
+    margin-top: 1.5rem;
+  }
+
+  /* === FOOTER === */
+  .page-footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid rgba(139, 0, 0, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Print */
+  @media print {
+    .timeline-entry { opacity: 1 !important; transform: none !important; animation: none !important; }
+    .page-header { background: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="header-ornament">✦ ✦ ✦</div>
+  <h1>From Christ <span>to the Bishops</span></h1>
+  <p class="subtitle">A Timeline of Apostolic Succession &amp; the Emergence of the Episcopate</p>
+</header>
+
+<!-- INTRO -->
+<section class="intro-section">
+  <p>
+    The Catholic claim is not that bishops appeared centuries later as a bureaucratic convenience.
+    The claim is that Christ appointed apostles, the apostles appointed successors, and the
+    earliest Christian writers — many of whom personally knew the apostles — testified to this
+    as normative, intentional, and essential.
+  </p>
+  <div class="key-claim">
+    What follows is the documentary trail, laid out chronologically, showing that apostolic
+    succession was not a later invention but the original design.
+  </div>
+</section>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot founding"></span>Founding Event</div>
+  <div class="legend-item"><span class="legend-dot martyrdom"></span>Apostolic Martyrdom</div>
+  <div class="legend-item"><span class="legend-dot scripture"></span>Scripture / Pauline Witness</div>
+  <div class="legend-item"><span class="legend-dot patristic"></span>Patristic Witness</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-container">
+  <div class="timeline-line"></div>
+
+  <!-- 1. ASCENSION -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">The Ascension of Jesus Christ</div>
+        <div class="entry-subtitle">Founding Event</div>
+        <div class="entry-body">
+          Christ commissions the Eleven: <em>"All authority in heaven and on earth has been given to me.
+          Go therefore and make disciples of all nations"</em> (Matt 28:18–19). He ascends from the
+          Mount of Olives, leaving behind not a book, but men with authority.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot founding"></div>
+      <div class="entry-date">c. A.D. 33</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 2. PENTECOST -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">Pentecost — The Church Is Born</div>
+        <div class="entry-subtitle">Founding Event</div>
+        <div class="entry-body">
+          Fifty days after the Resurrection, the Holy Spirit descends upon the apostles (Acts 2).
+          Peter — the Rock — stands and preaches the first public proclamation of the Gospel.
+          Three thousand are baptized. The Church begins not as an idea, but as a visible,
+          hierarchical community led by the Twelve.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot founding"></div>
+      <div class="entry-date">c. A.D. 33</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 3. DEATH OF ST JAMES -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">Martyrdom of St. James, Son of Zebedee</div>
+        <div class="entry-subtitle">First Apostolic Martyrdom</div>
+        <div class="entry-body">
+          Herod Agrippa I executes James by the sword (Acts 12:1–2) — the first of the Twelve
+          to be martyred. The Church does not collapse. The apostolic office continues, because
+          the authority was never one man's possession.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot martyrdom"></div>
+      <div class="entry-date">A.D. 44</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 4. PHILIPPIANS 4:3 -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card has-quote highlight">
+        <div class="entry-title">Paul Names Clement as a Fellow Worker</div>
+        <div class="entry-subtitle">Pauline Witness — Philippians 4:3</div>
+        <div class="entry-body">
+          Writing from prison, Paul identifies Clement among his co-laborers in the Gospel — the
+          same Clement who would later become the third Bishop of Rome after Peter, Linus, and
+          Cletus. The man is already active in apostolic ministry.
+        </div>
+        <div class="entry-quote">
+          "Yes, I ask you also, true companion, help these women, who have labored side by side
+          with me in the gospel together with Clement and the rest of my fellow workers, whose
+          names are in the book of life."
+          <span class="attribution">— Philippians 4:3</span>
+        </div>
+        <div class="entry-note">
+          Note: The traditional identification of this Clement with Pope St. Clement I is attested
+          by Origen (Commentary on John I.29) and broadly accepted in the patristic tradition.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot scripture"></div>
+      <div class="entry-date">c. A.D. 61–62</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 5. DEATH OF ST JAMES THE LESS -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">Martyrdom of St. James the Less</div>
+        <div class="entry-subtitle">Bishop of Jerusalem</div>
+        <div class="entry-body">
+          James, "the brother of the Lord," the first bishop of Jerusalem and president of the
+          Council of Jerusalem (Acts 15), is martyred — thrown from the Temple and beaten.
+          Reported by Josephus (<em>Antiquities</em> 20.9.1) and Hegesippus (preserved in
+          Eusebius, <em>Church History</em> II.23). He is succeeded in the episcopal office
+          by Simeon, son of Clopas.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot martyrdom"></div>
+      <div class="entry-date">c. A.D. 62</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 6. 2 TIMOTHY 2:2 -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card has-quote highlight">
+        <div class="entry-title">Paul's Chain of Succession — In His Own Words</div>
+        <div class="entry-subtitle">Pauline Witness — 2 Timothy 2:2</div>
+        <div class="entry-body">
+          Paul's final letter, written from a Roman prison shortly before his execution.
+          He explicitly describes a four-generation chain of authority: Christ → Paul → Timothy →
+          faithful men → others. This is not informal mentorship. This is the deliberate
+          entrustment of apostolic teaching to successors.
+        </div>
+        <div class="entry-quote">
+          "And what you have heard from me before many witnesses entrust to faithful men who will
+          be able to teach others also."
+          <span class="attribution">— 2 Timothy 2:2</span>
+        </div>
+        <div class="entry-note">
+          Four generations of transmission in a single sentence: Paul → Timothy → faithful men → others.
+          The pattern of succession is built into the apostolic era itself, not grafted on later.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot scripture"></div>
+      <div class="entry-date">c. A.D. 64–67</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 7. PETER & PAUL -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">Martyrdom of Sts. Peter &amp; Paul</div>
+        <div class="entry-subtitle">The Pillars Fall — The Church Stands</div>
+        <div class="entry-body">
+          Peter is crucified upside down and Paul is beheaded in Rome under Nero. The two
+          chief apostles die, and the Church does not miss a beat. Linus succeeds Peter as
+          Bishop of Rome (Irenaeus, <em>Against Heresies</em> III.3.3). The mechanism of
+          succession was already in place because it had been designed from the beginning.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot martyrdom"></div>
+      <div class="entry-date">c. A.D. 64–68</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 8. OTHER APOSTLES -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">The Remaining Apostles</div>
+        <div class="entry-subtitle">Approximate Martyrdom Dates (Tradition)</div>
+        <div class="entry-body">
+          One by one, the apostles lay down their lives across the known world. Each leaves
+          behind not silence, but successors — bishops whom they personally appointed to carry
+          the deposit of faith.
+        </div>
+        <div class="apostle-grid">
+          <div class="apostle-row"><span class="apostle-name">St. Andrew</span><span class="apostle-date">c. 60–70</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Bartholomew</span><span class="apostle-date">c. 70</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Matthew</span><span class="apostle-date">c. 70</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Thomas</span><span class="apostle-date">c. 72</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Simon</span><span class="apostle-date">c. 65–107</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Jude</span><span class="apostle-date">c. 65</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Philip</span><span class="apostle-date">c. 80</span></div>
+          <div class="apostle-row"><span class="apostle-name">St. Matthias</span><span class="apostle-date">c. 80</span></div>
+        </div>
+        <div class="entry-note">
+          Dates are approximate, drawn from various hagiographic and patristic traditions.
+          Precision is elusive, but the pattern is consistent: every apostle served until death,
+          and every apostle passed on his authority.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot martyrdom"></div>
+      <div class="entry-date">c. A.D. 60–107</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 9. 1 CLEMENT -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card has-quote highlight">
+        <div class="entry-title">St. Clement of Rome — The Apostolic Blueprint</div>
+        <div class="entry-subtitle">Patristic Witness — 1 Clement, Chapter 44</div>
+        <div class="entry-body">
+          The same Clement Paul named in Philippians now writes as Bishop of Rome to the
+          Corinthians. This is the earliest extra-biblical Christian document we possess, and it
+          makes the case for apostolic succession explicitly and without ambiguity. Note: John
+          is still alive when this is written. The episcopal structure is not a post-apostolic
+          invention — it is described as the apostles' own design while an apostle still lives.
+        </div>
+        <div class="entry-quote">
+          "Our apostles also knew, through our Lord Jesus Christ, that there would be strife on
+          account of the office of the episcopate. For this reason, therefore, inasmuch as they had
+          obtained a perfect fore-knowledge of this, they appointed those already mentioned, and
+          afterwards gave instructions, that when these should fall asleep, other approved men
+          should succeed them in their ministry."
+          <span class="attribution">— 1 Clement 44 (c. A.D. 95–96)</span>
+        </div>
+        <div class="entry-note">
+          The Paul → Clement connection (Phil 4:3 → 1 Clement) is one of the strongest documentary
+          chains in early Christianity. A named fellow-worker of Paul becomes bishop and teaches
+          apostolic succession as received doctrine.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot patristic"></div>
+      <div class="entry-date">c. A.D. 95–96</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 10. DEATH OF ST JOHN -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card">
+        <div class="entry-title">Death of St. John — The Last Apostle</div>
+        <div class="entry-subtitle">End of the Apostolic Age</div>
+        <div class="entry-body">
+          John, the beloved disciple, dies of natural causes at Ephesus — the only apostle not
+          martyred. With his death, the apostolic age closes. But the Church does not grope
+          in the dark for what to do next. The bishops are already in place. The succession
+          mechanism is already operating. The next generation of witnesses is already writing.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot martyrdom"></div>
+      <div class="entry-date">c. A.D. 100</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+  <!-- 11. IGNATIUS -->
+  <div class="timeline-entry">
+    <div class="entry-content">
+      <div class="entry-card has-quote highlight">
+        <div class="entry-title">St. Ignatius of Antioch — The Word "Catholic"</div>
+        <div class="entry-subtitle">Patristic Witness — Letter to the Smyrnaeans, Ch. 8</div>
+        <div class="entry-body">
+          Ignatius — a direct disciple of the Apostle John and the third Bishop of Antioch —
+          writes this letter while being transported to Rome for execution. He provides the
+          earliest surviving use of the phrase "the Catholic Church" and explicitly links
+          the visible, bishop-led community with Christ Himself. This is not a later theological
+          construction. This is a man who sat at the feet of the apostles, writing what they taught him.
+        </div>
+        <div class="entry-quote">
+          "Wherever the bishop shall appear, there let the multitude of the people also be; even
+          as, wherever Jesus Christ is, there is the Catholic Church."
+          <span class="attribution">— St. Ignatius of Antioch, Letter to the Smyrnaeans, Ch. 8 (c. A.D. 107–110)</span>
+        </div>
+        <div class="entry-note">
+          Ignatius wrote seven letters en route to martyrdom. Every single one insists on obedience
+          to the bishop. This was not his personal innovation — it was the universal order he had
+          received from the apostles themselves.
+        </div>
+      </div>
+    </div>
+    <div class="entry-node">
+      <div class="node-dot patristic"></div>
+      <div class="entry-date">c. A.D. 107–110</div>
+    </div>
+    <div class="entry-spacer"></div>
+  </div>
+
+</div>
+
+<!-- CONCLUSION -->
+<section class="conclusion">
+  <div class="conclusion-ornament">✦ ✦ ✦</div>
+  <p>
+    In fewer than eighty years — within living memory of the apostles themselves — the
+    documentary record shows Christ commissioning the Twelve, the Twelve appointing successors,
+    Paul describing a four-generation chain of authority, a named co-worker of Paul writing as
+    Bishop of Rome to enforce apostolic order, and a personal disciple of John using the phrase
+    "the Catholic Church" as if everyone already knew what it meant.
+  </p>
+  <p>
+    This is not a gap to be explained away. It is a chain with no missing links.
+  </p>
+  <p class="final-line">
+    The question is not whether apostolic succession was the practice of the early Church.
+    The question is when — and why — anyone decided to abandon it.
+  </p>
+</section>
+
+<footer class="page-footer">
+  One Faith Delivered &nbsp;·&nbsp; onefaithdelivered.org
+</footer>
+
+</body>
+</html>
