@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Confiteor">
+<meta name="theme-color" content="#1a1423">
+<title>Confiteor — Confession Journal</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ29uZml0ZW9yIiwic2hvcnRfbmFtZSI6IkNvbmZpdGVvciIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWExNDIzIiwidGhlbWVfY29sb3IiOiIjMWExNDIzIn0=">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Alegreya+Sans:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg-deep: #1a1423;
+  --bg-card: #231c2e;
+  --bg-surface: #2c2438;
+  --bg-input: #342c40;
+  --gold: #c9a84c;
+  --gold-light: #dfc36e;
+  --gold-dim: #8a7234;
+  --text: #e8e0f0;
+  --text-dim: #9a8faa;
+  --text-faint: #6b607a;
+  --accent-red: #a3424a;
+  --accent-green: #4a8a5c;
+  --accent-blue: #4a6a9a;
+  --border: rgba(201,168,76,0.15);
+  --border-strong: rgba(201,168,76,0.3);
+  --radius: 12px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-height: 64px;
+  --liturgical: var(--accent-green);
+}
+
+[data-theme="light"] {
+  --bg-deep: #f5f0e8;
+  --bg-card: #fff;
+  --bg-surface: #ede7db;
+  --bg-input: #e8e2d6;
+  --gold: #8a6d1b;
+  --gold-light: #a3841e;
+  --gold-dim: #c4a54e;
+  --text: #2c2418;
+  --text-dim: #6b5d4a;
+  --text-faint: #9a8d7a;
+  --accent-red: #a3424a;
+  --accent-green: #3a7a4c;
+  --accent-blue: #3a5a8a;
+  --border: rgba(100,80,40,0.15);
+  --border-strong: rgba(100,80,40,0.3);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  height:100%;
+  background:var(--bg-deep);
+  color:var(--text);
+  font-family:'Alegreya Sans',sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;
+}
+body { padding-bottom:calc(var(--nav-height) + var(--safe-bottom) + 16px); }
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--gold-dim); border-radius:2px; }
+
+/* ── Header ── */
+.app-header {
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg-deep) 80%,transparent 100%);
+  padding:env(safe-area-inset-top,16px) 20px 20px 20px;
+  text-align:center;
+}
+.app-title {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600; font-size:26px;
+  color:var(--gold); letter-spacing:2px;
+  text-transform:uppercase;
+}
+.cross-ornament {
+  display:flex; align-items:center; justify-content:center;
+  gap:12px; margin:2px 0 0; color:var(--gold-dim);
+  font-size:11px; letter-spacing:4px;
+}
+.cross-ornament::before,.cross-ornament::after {
+  content:''; width:40px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
+}
+.liturgical-bar {
+  height:3px; margin-top:8px; border-radius:2px;
+  background:var(--liturgical); opacity:0.6;
+}
+
+/* ── Pages ── */
+.page { display:none; padding:0 16px 24px; animation:fadeIn 0.3s ease; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Cards ── */
+.card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px; margin-bottom:16px;
+}
+.card-header {
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px; font-weight:600; color:var(--gold);
+  margin-bottom:12px; display:flex; align-items:center; gap:10px;
+}
+.card-header .icon { font-size:16px; opacity:0.8; }
+
+/* ── Buttons ── */
+.btn {
+  font-family:'Alegreya Sans',sans-serif;
+  font-size:14px; font-weight:500;
+  padding:10px 20px; border:1px solid var(--border-strong);
+  border-radius:8px; background:var(--bg-surface);
+  color:var(--text); cursor:pointer; transition:all 0.2s;
+}
+.btn:active { transform:scale(0.97); }
+.btn.primary {
+  background:linear-gradient(135deg,var(--gold-dim),var(--gold));
+  color:var(--bg-deep); border:none; font-weight:700;
+}
+.btn.small { padding:6px 14px; font-size:12px; }
+.btn.danger { background:var(--accent-red); color:#fff; border:none; }
+.btn.outline { background:transparent; border:1px solid var(--gold-dim); color:var(--gold); }
+
+/* ── Tracker ── */
+.confession-tracker {
+  text-align:center; padding:24px 20px;
+  background:linear-gradient(135deg,var(--bg-card),var(--bg-surface));
+  border:1px solid var(--border-strong);
+}
+.tracker-label { font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:6px; }
+.tracker-days {
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px; font-weight:700; color:var(--gold); line-height:1;
+}
+.tracker-days-label { font-size:13px; color:var(--text-dim); margin-top:2px; }
+.tracker-date { font-size:12px; color:var(--text-faint); margin-top:10px; }
+.tracker-actions { display:flex; gap:10px; margin-top:14px; justify-content:center; }
+
+/* ── Quick Links ── */
+.quick-links { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+.quick-link {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:14px 12px;
+  text-align:center; cursor:pointer; transition:all 0.2s;
+}
+.quick-link:active { transform:scale(0.97); background:var(--bg-surface); }
+.quick-link .ql-icon { font-size:22px; margin-bottom:4px; }
+.quick-link .ql-label {
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px; font-weight:600; color:var(--text);
+}
+.quick-link .ql-desc { font-size:10px; color:var(--text-faint); margin-top:1px; }
+
+/* ── Scripture / Resolution / Liturgical ── */
+.verse-card {
+  background:linear-gradient(135deg,var(--bg-card),var(--bg-surface));
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px; margin-bottom:14px; text-align:center;
+}
+.verse-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; font-style:italic; line-height:1.6;
+  color:var(--text); margin-bottom:6px;
+}
+.verse-ref { font-size:12px; color:var(--gold-dim); }
+.liturgical-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:14px 16px; margin-bottom:14px;
+  display:flex; align-items:center; gap:12px;
+}
+.liturgical-dot {
+  width:12px; height:12px; min-width:12px;
+  border-radius:50%; background:var(--liturgical);
+}
+.liturgical-info { flex:1; }
+.liturgical-season {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:600; color:var(--text);
+}
+.liturgical-detail { font-size:11px; color:var(--text-dim); }
+
+.resolution-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:16px; margin-bottom:14px;
+}
+.resolution-card .res-header {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;
+}
+.resolution-card .res-label {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:600; color:var(--gold);
+}
+.resolution-text {
+  font-size:14px; color:var(--text); line-height:1.5;
+  font-style:italic;
+}
+.resolution-input {
+  width:100%; padding:10px 12px;
+  background:var(--bg-input); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:'Alegreya Sans',sans-serif; font-size:14px;
+  outline:none; resize:none;
+}
+.resolution-input:focus { border-color:var(--gold-dim); }
+.resolution-input::placeholder { color:var(--text-faint); }
+
+/* ── Examine ── */
+.examine-summary {
+  background:linear-gradient(135deg,var(--bg-card),var(--bg-surface));
+  border:1px solid var(--border-strong); border-radius:var(--radius);
+  padding:18px; margin-bottom:16px; text-align:center;
+}
+.examine-summary-count {
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px; font-weight:700; color:var(--gold);
+}
+.examine-summary-label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; }
+.examine-actions { display:flex; gap:8px; margin-top:12px; justify-content:center; flex-wrap:wrap; }
+
+.commandment-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; font-weight:600; color:var(--gold);
+  padding:12px 14px; background:var(--bg-surface);
+  border:1px solid var(--border); border-radius:var(--radius);
+  cursor:pointer; display:flex; justify-content:space-between;
+  align-items:center; transition:all 0.2s; margin-bottom:2px;
+}
+.commandment-title:active { background:var(--bg-input); }
+.count-badge {
+  background:var(--accent-red); color:#fff;
+  font-family:'Alegreya Sans',sans-serif; font-size:11px;
+  font-weight:700; padding:2px 8px; border-radius:10px; display:none;
+}
+.count-badge.visible { display:inline-block; }
+.chevron { color:var(--text-faint); transition:transform 0.3s; font-size:12px; }
+.commandment-title.open .chevron { transform:rotate(180deg); }
+
+.commandment-items { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+.commandment-items.open { max-height:3000px; }
+
+.examine-item {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:12px 14px; border-bottom:1px solid var(--border);
+  cursor:pointer; transition:background 0.15s;
+}
+.examine-item:last-child { border-bottom:none; }
+.examine-item:active { background:var(--bg-surface); }
+.examine-check {
+  width:22px; height:22px; min-width:22px;
+  border:2px solid var(--text-faint); border-radius:6px;
+  margin-top:1px; display:flex; align-items:center;
+  justify-content:center; transition:all 0.2s;
+  font-size:13px; color:transparent;
+}
+.examine-item.checked .examine-check {
+  background:var(--accent-red); border-color:var(--accent-red); color:#fff;
+}
+.examine-text { font-size:14px; color:var(--text); line-height:1.5; }
+
+/* ── Tab Switcher (inline) ── */
+.tab-bar {
+  display:flex; gap:0; margin-bottom:16px;
+  background:var(--bg-surface); border-radius:10px;
+  padding:3px; border:1px solid var(--border);
+}
+.tab-btn {
+  flex:1; padding:8px 4px;
+  font-family:'Alegreya Sans',sans-serif;
+  font-size:12px; font-weight:500;
+  background:transparent; border:none;
+  color:var(--text-dim); cursor:pointer;
+  border-radius:8px; transition:all 0.2s;
+}
+.tab-btn.active { background:var(--bg-card); color:var(--gold); font-weight:700; }
+
+/* ── Frequent Sins ── */
+.freq-item {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px; border-bottom:1px solid var(--border);
+}
+.freq-item:last-child { border-bottom:none; }
+.freq-bar-wrap { flex:1; }
+.freq-label { font-size:13px; color:var(--text); margin-bottom:4px; line-height:1.4; }
+.freq-bar { height:4px; background:var(--bg-input); border-radius:2px; overflow:hidden; }
+.freq-bar-fill { height:100%; background:var(--accent-red); border-radius:2px; transition:width 0.5s ease; }
+.freq-count { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--gold); min-width:32px; text-align:center; }
+
+/* ── Examen ── */
+.examen-step {
+  padding:16px; margin-bottom:10px;
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+.examen-step-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px; font-weight:600; color:var(--gold);
+  text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;
+}
+.examen-step-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px; font-weight:600; color:var(--text); margin-bottom:6px;
+}
+.examen-step-text { font-size:13px; color:var(--text-dim); line-height:1.5; }
+.examen-textarea {
+  width:100%; margin-top:10px; padding:10px;
+  background:var(--bg-input); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:'Alegreya Sans',sans-serif; font-size:13px;
+  outline:none; resize:none; min-height:60px;
+}
+.examen-textarea:focus { border-color:var(--gold-dim); }
+.examen-textarea::placeholder { color:var(--text-faint); }
+
+/* ── Notes / History ── */
+.notes-input-area { display:flex; gap:10px; margin-bottom:14px; }
+.notes-input-area textarea {
+  flex:1; background:var(--bg-input); border:1px solid var(--border);
+  border-radius:10px; color:var(--text);
+  font-family:'Alegreya Sans',sans-serif; font-size:14px;
+  padding:12px; resize:none; min-height:48px; max-height:120px; outline:none;
+}
+.notes-input-area textarea:focus { border-color:var(--gold-dim); }
+.notes-input-area textarea::placeholder { color:var(--text-faint); }
+
+.note-item,.history-item {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:14px 16px;
+  margin-bottom:10px; position:relative; animation:fadeIn 0.3s ease;
+}
+.note-text,.history-text { font-size:14px; line-height:1.5; color:var(--text); white-space:pre-wrap; }
+.note-date,.history-date { font-size:11px; color:var(--text-faint); margin-top:6px; }
+.note-delete {
+  position:absolute; top:10px; right:12px;
+  background:none; border:none; color:var(--text-faint);
+  font-size:16px; cursor:pointer; padding:4px;
+}
+.note-delete:active { color:var(--accent-red); }
+
+.history-item { border-left:3px solid var(--gold-dim); }
+.history-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; }
+.history-title { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:600; color:var(--text); }
+.history-penance { font-size:13px; color:var(--text-dim); margin-top:4px; }
+.history-resolution { font-size:13px; color:var(--accent-green); font-style:italic; margin-top:4px; }
+.penance-badge {
+  font-size:10px; padding:2px 8px; border-radius:10px;
+  font-weight:600; text-transform:uppercase; letter-spacing:0.5px;
+}
+.penance-badge.done { background:var(--accent-green); color:#fff; }
+.penance-badge.pending { background:var(--accent-red); color:#fff; }
+
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-faint); }
+.empty-state .empty-icon { font-size:36px; margin-bottom:10px; opacity:0.5; }
+.empty-state .empty-text { font-size:13px; line-height:1.5; }
+
+/* ── Guide ── */
+.guide-step { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+.guide-step:last-child { border-bottom:none; }
+.guide-number {
+  width:30px; height:30px; min-width:30px;
+  background:linear-gradient(135deg,var(--gold-dim),var(--gold));
+  color:var(--bg-deep); font-family:'Cormorant Garamond',serif;
+  font-weight:700; font-size:15px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.guide-content h4 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:600; color:var(--text); margin-bottom:3px;
+}
+.guide-content p { font-size:13px; color:var(--text-dim); line-height:1.5; }
+
+.dialogue-block {
+  background:var(--bg-surface); border-radius:var(--radius);
+  padding:12px 14px; margin-bottom:8px;
+}
+.dialogue-speaker {
+  font-family:'Cormorant Garamond',serif; font-weight:600;
+  font-size:12px; color:var(--gold); text-transform:uppercase;
+  letter-spacing:1px; margin-bottom:3px;
+}
+.dialogue-text { font-size:14px; color:var(--text); line-height:1.5; font-style:italic; }
+
+/* ── Prepare Mode (overlay) ── */
+.prepare-overlay {
+  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+  background:var(--bg-deep); z-index:400; overflow-y:auto;
+  padding:0 0 40px;
+}
+.prepare-overlay.active { display:block; animation:fadeIn 0.3s ease; }
+.prepare-header {
+  position:sticky; top:0; z-index:10;
+  background:var(--bg-deep); padding:env(safe-area-inset-top,16px) 16px 12px;
+  display:flex; justify-content:space-between; align-items:center;
+  border-bottom:1px solid var(--border);
+}
+.prepare-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:600; color:var(--gold);
+}
+.prepare-close { background:none; border:none; color:var(--text-dim); font-size:24px; cursor:pointer; padding:4px 8px; }
+.prepare-body { padding:16px; max-width:480px; margin:0 auto; }
+.prepare-step-indicator {
+  display:flex; gap:6px; justify-content:center; margin-bottom:20px;
+}
+.prepare-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--text-faint); transition:all 0.3s;
+}
+.prepare-dot.active { background:var(--gold); width:24px; border-radius:4px; }
+.prepare-dot.done { background:var(--accent-green); }
+.prepare-nav { display:flex; gap:10px; margin-top:24px; justify-content:center; }
+
+/* ── Prayers ── */
+.prayer-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); margin-bottom:12px; overflow:hidden;
+}
+.prayer-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; font-weight:600; color:var(--gold);
+  padding:14px 16px; cursor:pointer;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.prayer-title:active { background:var(--bg-surface); }
+.prayer-title .chevron { color:var(--text-faint); transition:transform 0.3s; font-size:12px; }
+.prayer-title.open .chevron { transform:rotate(180deg); }
+.prayer-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+.prayer-body.open { max-height:8000px; }
+.prayer-text {
+  padding:0 16px 16px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:400; line-height:1.7;
+  color:var(--text); font-style:italic;
+}
+.prayer-text .prayer-red {
+  color:var(--accent-red); font-style:normal; font-weight:500;
+  font-size:11px; display:block; margin:8px 0 4px;
+  text-transform:uppercase; letter-spacing:1px;
+  font-family:'Alegreya Sans',sans-serif;
+}
+
+/* ── Settings ── */
+.section-intro { text-align:center; padding:8px 12px 16px; }
+.section-intro h2 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:600; color:var(--gold); margin-bottom:4px;
+}
+.section-intro p { font-size:12px; color:var(--text-dim); line-height:1.5; }
+
+.settings-group { margin-bottom:20px; }
+.settings-group-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px; font-weight:600; color:var(--gold-dim);
+  text-transform:uppercase; letter-spacing:1px;
+  margin-bottom:10px; padding:0 4px;
+}
+.settings-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 16px; background:var(--bg-card);
+  border:1px solid var(--border); border-radius:var(--radius);
+  margin-bottom:8px; cursor:pointer;
+}
+.settings-row:active { background:var(--bg-surface); }
+.settings-row-left { display:flex; align-items:center; gap:12px; }
+.settings-row-icon { font-size:18px; }
+.settings-row-label { font-size:14px; color:var(--text); }
+.settings-row-detail { font-size:12px; color:var(--text-dim); margin-top:1px; }
+.settings-row-right { font-size:12px; color:var(--text-faint); }
+
+.toggle-switch {
+  width:46px; height:26px; border-radius:13px;
+  background:var(--bg-input); border:1px solid var(--border);
+  position:relative; cursor:pointer; transition:all 0.3s;
+}
+.toggle-switch.on { background:var(--accent-green); border-color:var(--accent-green); }
+.toggle-switch::after {
+  content:''; position:absolute;
+  width:20px; height:20px; border-radius:50%;
+  background:#fff; top:2px; left:2px; transition:transform 0.3s;
+}
+.toggle-switch.on::after { transform:translateX(20px); }
+
+/* ── Parish Schedule ── */
+.parish-day {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 0; border-bottom:1px solid var(--border);
+}
+.parish-day:last-child { border-bottom:none; }
+.parish-day-name { width:80px; font-size:13px; color:var(--text-dim); }
+.parish-day-input {
+  flex:1; padding:8px 10px; background:var(--bg-input);
+  border:1px solid var(--border); border-radius:6px;
+  color:var(--text); font-family:'Alegreya Sans',sans-serif;
+  font-size:13px; outline:none;
+}
+.parish-day-input:focus { border-color:var(--gold-dim); }
+.parish-day-input::placeholder { color:var(--text-faint); }
+
+/* ── Lock Screen ── */
+.lock-screen {
+  position:fixed; top:0; left:0; right:0; bottom:0;
+  background:var(--bg-deep); z-index:500;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:20px;
+}
+.lock-screen.hidden { display:none; }
+.lock-icon { font-size:44px; margin-bottom:12px; opacity:0.8; }
+.lock-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px; font-weight:600; color:var(--gold);
+  letter-spacing:2px; text-transform:uppercase; margin-bottom:2px;
+}
+.lock-subtitle { font-size:13px; color:var(--text-dim); margin-bottom:28px; }
+.pin-dots { display:flex; gap:16px; margin-bottom:28px; }
+.pin-dot {
+  width:14px; height:14px; border:2px solid var(--gold-dim);
+  border-radius:50%; transition:all 0.2s;
+}
+.pin-dot.filled { background:var(--gold); border-color:var(--gold); }
+.pin-dot.error { border-color:var(--accent-red); background:var(--accent-red); animation:shake 0.4s ease; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)}
+}
+.pin-pad { display:grid; grid-template-columns:repeat(3,68px); gap:10px; }
+.pin-key {
+  width:68px; height:68px; border-radius:50%;
+  border:1px solid var(--border-strong); background:var(--bg-card);
+  color:var(--text); font-family:'Cormorant Garamond',serif;
+  font-size:26px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.15s; user-select:none; -webkit-user-select:none;
+}
+.pin-key:active { background:var(--gold-dim); color:var(--bg-deep); transform:scale(0.93); }
+.pin-key.empty { visibility:hidden; }
+.pin-key.backspace {
+  font-size:18px; font-family:'Alegreya Sans',sans-serif;
+  font-weight:400; color:var(--text-dim);
+  border-color:transparent; background:transparent;
+}
+.pin-key.backspace:active { color:var(--gold); background:transparent; }
+.lock-message { font-size:13px; color:var(--text-faint); margin-top:16px; min-height:18px; text-align:center; }
+.lock-message.error { color:var(--accent-red); }
+.lock-setup-hint {
+  font-size:12px; color:var(--text-faint); margin-top:20px;
+  text-align:center; max-width:260px; line-height:1.5;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.6); z-index:300;
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.active { display:flex; animation:fadeIn 0.2s ease; }
+.modal {
+  background:var(--bg-card); border:1px solid var(--border-strong);
+  border-radius:16px; padding:24px 20px; width:100%; max-width:340px;
+}
+.modal.wide { max-width:400px; }
+.modal h3 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:600; color:var(--gold);
+  margin-bottom:6px; text-align:center;
+}
+.modal p { font-size:13px; color:var(--text-dim); line-height:1.5; margin-bottom:16px; text-align:center; }
+.modal input[type="date"],.modal input[type="text"],.modal textarea {
+  width:100%; padding:10px 12px; background:var(--bg-input);
+  border:1px solid var(--border); border-radius:8px;
+  color:var(--text); font-family:'Alegreya Sans',sans-serif;
+  font-size:14px; margin-bottom:12px; outline:none; -webkit-appearance:none;
+}
+.modal textarea { resize:none; min-height:60px; }
+.modal input:focus,.modal textarea:focus { border-color:var(--gold-dim); }
+.modal-buttons { display:flex; gap:10px; }
+.modal-buttons .btn { flex:1; }
+.modal label { display:block; font-size:12px; color:var(--text-dim); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* ── Bottom Nav ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  height:calc(var(--nav-height) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:var(--bg-deep); border-top:1px solid var(--border);
+  display:flex; z-index:200;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px;
+  cursor:pointer; color:var(--text-faint); transition:color 0.2s;
+  padding:8px 0; border:none; background:none;
+  font-family:'Alegreya Sans',sans-serif;
+}
+.nav-item.active { color:var(--gold); }
+.nav-item .nav-icon { font-size:18px; }
+.nav-item .nav-label { font-size:9px; letter-spacing:0.5px; }
+
+/* ── Responsive ── */
+@media (min-width:480px) {
+  .page { max-width:480px; margin:0 auto; }
+  .app-header { max-width:480px; margin:0 auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOCK SCREEN ═══════════════ -->
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-icon">&#x1F512;</div>
+  <div class="lock-title">Confiteor</div>
+  <div class="lock-subtitle" id="lock-subtitle">Enter your PIN</div>
+  <div class="pin-dots">
+    <div class="pin-dot" id="dot-0"></div>
+    <div class="pin-dot" id="dot-1"></div>
+    <div class="pin-dot" id="dot-2"></div>
+    <div class="pin-dot" id="dot-3"></div>
+  </div>
+  <div class="pin-pad">
+    <div class="pin-key" onclick="pinInput('1')">1</div>
+    <div class="pin-key" onclick="pinInput('2')">2</div>
+    <div class="pin-key" onclick="pinInput('3')">3</div>
+    <div class="pin-key" onclick="pinInput('4')">4</div>
+    <div class="pin-key" onclick="pinInput('5')">5</div>
+    <div class="pin-key" onclick="pinInput('6')">6</div>
+    <div class="pin-key" onclick="pinInput('7')">7</div>
+    <div class="pin-key" onclick="pinInput('8')">8</div>
+    <div class="pin-key" onclick="pinInput('9')">9</div>
+    <div class="pin-key empty"></div>
+    <div class="pin-key" onclick="pinInput('0')">0</div>
+    <div class="pin-key backspace" onclick="pinBackspace()">&#x232B;</div>
+  </div>
+  <div class="lock-message" id="lock-message"></div>
+  <div class="lock-setup-hint" id="lock-setup-hint"></div>
+</div>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<div class="app-header">
+  <div class="app-title">Confiteor</div>
+  <div class="cross-ornament">&#x2627;</div>
+  <div class="liturgical-bar" id="liturgical-bar"></div>
+</div>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="page active" id="page-home">
+  <div class="liturgical-card" id="liturgical-card">
+    <div class="liturgical-dot"></div>
+    <div class="liturgical-info">
+      <div class="liturgical-season" id="lit-season">Ordinary Time</div>
+      <div class="liturgical-detail" id="lit-detail"></div>
+    </div>
+  </div>
+
+  <div class="confession-tracker card" id="tracker-card">
+    <div class="tracker-label">Days Since Last Confession</div>
+    <div class="tracker-days" id="tracker-days">&mdash;</div>
+    <div class="tracker-days-label">days</div>
+    <div class="tracker-date" id="tracker-date">No confession recorded</div>
+    <div class="tracker-actions">
+      <button class="btn primary" onclick="showConfessionModal()">Record Confession</button>
+      <button class="btn outline" onclick="startPrepare()">Prepare Now</button>
+    </div>
+  </div>
+
+  <div class="verse-card" id="verse-card">
+    <div class="verse-text" id="verse-text"></div>
+    <div class="verse-ref" id="verse-ref"></div>
+  </div>
+
+  <div class="resolution-card" id="resolution-card">
+    <div class="res-header">
+      <div class="res-label">&#x1F3AF; Resolution of the Week</div>
+      <button class="btn small" onclick="editResolution()" id="res-edit-btn">Edit</button>
+    </div>
+    <div class="resolution-text" id="resolution-display">Tap "Edit" to set a weekly resolution.</div>
+    <textarea class="resolution-input" id="resolution-input" placeholder="My resolution this week..." style="display:none" rows="2"></textarea>
+  </div>
+
+  <div class="quick-links">
+    <div class="quick-link" onclick="navigateTo('examine')">
+      <div class="ql-icon">&#x1FA9E;</div>
+      <div class="ql-label">Examine</div>
+      <div class="ql-desc">Conscience review</div>
+    </div>
+    <div class="quick-link" onclick="navigateTo('journal')">
+      <div class="ql-icon">&#x1F4DD;</div>
+      <div class="ql-label">Journal</div>
+      <div class="ql-desc">Notes &amp; history</div>
+    </div>
+    <div class="quick-link" onclick="navigateTo('prayers')">
+      <div class="ql-icon">&#x1F56F;&#xFE0F;</div>
+      <div class="ql-label">Prayers</div>
+      <div class="ql-desc">Act of Contrition +</div>
+    </div>
+    <div class="quick-link" onclick="navigateTo('more')">
+      <div class="ql-icon">&#x2699;&#xFE0F;</div>
+      <div class="ql-label">More</div>
+      <div class="ql-desc">Guide &amp; settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ EXAMINE ═══════════════ -->
+<div class="page" id="page-examine">
+  <div class="section-intro">
+    <h2>Examination of Conscience</h2>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchExTab('conscience')" id="extab-conscience">Conscience</button>
+    <button class="tab-btn" onclick="switchExTab('frequent')" id="extab-frequent">Frequent</button>
+    <button class="tab-btn" onclick="switchExTab('examen')" id="extab-examen">Nightly Examen</button>
+  </div>
+
+  <!-- Conscience sub-tab -->
+  <div id="ex-conscience">
+    <div class="examine-summary">
+      <div class="examine-summary-count" id="examine-total">0</div>
+      <div class="examine-summary-label">Items Marked</div>
+      <div class="examine-actions">
+        <button class="btn small" onclick="clearAllExamine()">Clear All</button>
+        <button class="btn small primary" onclick="copyExamineSummary()">Copy to Notes</button>
+      </div>
+    </div>
+    <div id="examine-list"></div>
+  </div>
+
+  <!-- Frequent sub-tab -->
+  <div id="ex-frequent" style="display:none">
+    <div class="card">
+      <div class="card-header"><span class="icon">&#x1F4CA;</span> Most Frequent Sins</div>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Items you've checked most often across all examinations.</p>
+      <div id="frequent-list"></div>
+    </div>
+  </div>
+
+  <!-- Nightly Examen sub-tab -->
+  <div id="ex-examen" style="display:none">
+    <div style="text-align:center;margin-bottom:16px;">
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.5;">The Ignatian Daily Examen &mdash; a brief evening review of your day in God's presence.</p>
+    </div>
+    <div class="examen-step">
+      <div class="examen-step-num">Step 1</div>
+      <div class="examen-step-title">Gratitude</div>
+      <div class="examen-step-text">Place yourself in God's presence. Review your day and give thanks for the gifts you received.</div>
+      <textarea class="examen-textarea" id="examen-1" placeholder="What am I grateful for today?"></textarea>
+    </div>
+    <div class="examen-step">
+      <div class="examen-step-num">Step 2</div>
+      <div class="examen-step-title">Petition</div>
+      <div class="examen-step-text">Ask the Holy Spirit to help you see your day clearly and honestly.</div>
+    </div>
+    <div class="examen-step">
+      <div class="examen-step-num">Step 3</div>
+      <div class="examen-step-title">Review</div>
+      <div class="examen-step-text">Walk through your day hour by hour. Where did you feel God's presence? Where did you turn away?</div>
+      <textarea class="examen-textarea" id="examen-3" placeholder="What moments stand out?"></textarea>
+    </div>
+    <div class="examen-step">
+      <div class="examen-step-num">Step 4</div>
+      <div class="examen-step-title">Respond</div>
+      <div class="examen-step-text">Speak to God about what arose. Ask forgiveness where needed. Give thanks where grace was given.</div>
+      <textarea class="examen-textarea" id="examen-4" placeholder="What do I want to say to God?"></textarea>
+    </div>
+    <div class="examen-step">
+      <div class="examen-step-num">Step 5</div>
+      <div class="examen-step-title">Resolve</div>
+      <div class="examen-step-text">Look ahead to tomorrow. Ask for God's help with one specific intention.</div>
+      <textarea class="examen-textarea" id="examen-5" placeholder="What is my intention for tomorrow?"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:center;">
+      <button class="btn primary" onclick="saveExamen()">Save to Journal</button>
+      <button class="btn" onclick="clearExamen()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ JOURNAL ═══════════════ -->
+<div class="page" id="page-journal">
+  <div class="section-intro">
+    <h2>Journal</h2>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchJnlTab('notes')" id="jnltab-notes">Notes</button>
+    <button class="tab-btn" onclick="switchJnlTab('history')" id="jnltab-history">Confession History</button>
+  </div>
+
+  <div id="jnl-notes">
+    <div class="notes-input-area">
+      <textarea id="note-input" placeholder="Write a note..." rows="2"></textarea>
+      <button class="btn primary" onclick="addNote()" style="align-self:flex-end;padding:10px 16px;">+</button>
+    </div>
+    <div id="notes-list"></div>
+  </div>
+
+  <div id="jnl-history" style="display:none">
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PRAYERS ═══════════════ -->
+<div class="page" id="page-prayers">
+  <div class="section-intro">
+    <h2>Prayers</h2>
+  </div>
+  <div id="prayers-container"></div>
+</div>
+
+<!-- ═══════════════ MORE ═══════════════ -->
+<div class="page" id="page-more">
+  <div class="section-intro">
+    <h2>More</h2>
+  </div>
+
+  <!-- Guide section -->
+  <div class="settings-group">
+    <div class="settings-group-title">Guide to Confession</div>
+    <div class="settings-row" onclick="toggleMoreSection('guide-section')">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x1F4D6;</span>
+        <div><div class="settings-row-label">Step-by-Step Guide</div><div class="settings-row-detail">How to go to confession</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+    <div id="guide-section" style="display:none;margin-top:8px;">
+      <div class="card">
+        <div class="card-header"><span class="icon">&#x1F4CB;</span> Before You Go</div>
+        <div class="guide-step"><div class="guide-number">1</div><div class="guide-content"><h4>Examine Your Conscience</h4><p>Prayerfully review your actions since your last confession. Use the Examine tab.</p></div></div>
+        <div class="guide-step"><div class="guide-number">2</div><div class="guide-content"><h4>Pray for Grace</h4><p>Ask the Holy Spirit for clarity and true contrition.</p></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="icon">&#x26EA;</span> During Confession</div>
+        <div class="guide-step"><div class="guide-number">3</div><div class="guide-content"><h4>Greeting</h4><p>The priest greets you. Both make the Sign of the Cross.</p></div></div>
+        <div class="guide-step"><div class="guide-number">4</div><div class="guide-content"><h4>Confess Your Sins</h4><p>Begin: "Bless me, Father, for I have sinned. It has been [time] since my last confession."</p></div></div>
+        <div class="guide-step"><div class="guide-number">5</div><div class="guide-content"><h4>Listen to the Priest</h4><p>He may offer counsel and will assign a penance.</p></div></div>
+        <div class="guide-step"><div class="guide-number">6</div><div class="guide-content"><h4>Act of Contrition</h4><p>Pray the Act of Contrition when prompted.</p></div></div>
+        <div class="guide-step"><div class="guide-number">7</div><div class="guide-content"><h4>Absolution</h4><p>The priest prays absolution. You respond: "Amen."</p></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="icon">&#x1F64F;</span> After Confession</div>
+        <div class="guide-step"><div class="guide-number">8</div><div class="guide-content"><h4>Complete Your Penance</h4><p>Do the assigned penance as soon as possible.</p></div></div>
+        <div class="guide-step"><div class="guide-number">9</div><div class="guide-content"><h4>Give Thanks</h4><p>Thank God for His mercy and resolve to amend your life.</p></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="icon">&#x1F4AC;</span> Quick Reference Dialogue</div>
+        <div class="dialogue-block"><div class="dialogue-speaker">You</div><div class="dialogue-text">"Bless me, Father, for I have sinned. It has been [time] since my last confession. These are my sins..."</div></div>
+        <div class="dialogue-block"><div class="dialogue-speaker">After confessing</div><div class="dialogue-text">"For these and all my sins, I am truly sorry."</div></div>
+        <div class="dialogue-block"><div class="dialogue-speaker">After absolution</div><div class="dialogue-text">"Amen."</div></div>
+        <div class="dialogue-block"><div class="dialogue-speaker">Priest may say</div><div class="dialogue-text">"Give thanks to the Lord, for He is good."</div></div>
+        <div class="dialogue-block"><div class="dialogue-speaker">You respond</div><div class="dialogue-text">"His mercy endures forever."</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parish Schedule -->
+  <div class="settings-group">
+    <div class="settings-group-title">Parish</div>
+    <div class="settings-row" onclick="toggleMoreSection('parish-section')">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x26EA;</span>
+        <div><div class="settings-row-label">Confession Schedule</div><div class="settings-row-detail">Set your parish's confession times</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+    <div id="parish-section" style="display:none;margin-top:8px;">
+      <div class="card">
+        <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;">PARISH NAME</label>
+        <input type="text" id="parish-name" class="resolution-input" placeholder="e.g. St. Mary's Catholic Church" style="margin-bottom:14px;">
+        <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;">CONFESSION TIMES</label>
+        <div id="parish-schedule"></div>
+        <button class="btn small primary" style="margin-top:12px;" onclick="saveParish()">Save Parish Info</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appearance -->
+  <div class="settings-group">
+    <div class="settings-group-title">Appearance</div>
+    <div class="settings-row" onclick="toggleTheme()">
+      <div class="settings-row-left">
+        <span class="settings-row-icon" id="theme-icon">&#x1F319;</span>
+        <div><div class="settings-row-label">Theme</div><div class="settings-row-detail" id="theme-label">Dark mode</div></div>
+      </div>
+      <div class="toggle-switch" id="theme-toggle"></div>
+    </div>
+  </div>
+
+  <!-- Security -->
+  <div class="settings-group">
+    <div class="settings-group-title">Security</div>
+    <div class="settings-row" onclick="resetPIN()">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x1F511;</span>
+        <div><div class="settings-row-label">Change PIN</div><div class="settings-row-detail">Set a new 4-digit PIN</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+  </div>
+
+  <!-- Data -->
+  <div class="settings-group">
+    <div class="settings-group-title">Data</div>
+    <div class="settings-row" onclick="toggleMoreSection('sync-section')">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x2601;&#xFE0F;</span>
+        <div><div class="settings-row-label">Cloud Sync</div><div class="settings-row-detail" id="sync-status">Not connected</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+    <div id="sync-section" style="display:none;margin-top:8px;">
+      <div class="card">
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Sync your journal across devices using a PIN code.</p>
+        <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:4px;">SYNC PIN</label>
+        <input type="text" id="sync-pin" class="resolution-input" placeholder="Enter sync PIN" maxlength="10" style="margin-bottom:12px;">
+        <div style="display:flex;gap:8px;">
+          <button class="btn small primary" onclick="cloudSync('push')">Upload</button>
+          <button class="btn small" onclick="cloudSync('pull')">Download</button>
+          <button class="btn small outline" onclick="disconnectSync()">Disconnect</button>
+        </div>
+        <div id="sync-msg" style="font-size:12px;color:var(--text-dim);margin-top:8px;min-height:16px;"></div>
+      </div>
+    </div>
+    <div class="settings-row" onclick="exportData()">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x1F4E4;</span>
+        <div><div class="settings-row-label">Export Data</div><div class="settings-row-detail">Download a backup of all data</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+    <div class="settings-row" onclick="importData()">
+      <div class="settings-row-left">
+        <span class="settings-row-icon">&#x1F4E5;</span>
+        <div><div class="settings-row-label">Import Data</div><div class="settings-row-detail">Restore from a backup file</div></div>
+      </div>
+      <span class="settings-row-right">&#x25B6;</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RECORD CONFESSION MODAL ═══════════════ -->
+<div class="modal-overlay" id="confession-modal">
+  <div class="modal wide">
+    <h3>Record Confession</h3>
+    <p>Log your confession with optional details.</p>
+    <label>Date</label>
+    <input type="date" id="conf-date">
+    <label>Penance Assigned</label>
+    <textarea id="conf-penance" placeholder="e.g. 3 Hail Marys, 1 Our Father" rows="2"></textarea>
+    <label>Resolution</label>
+    <textarea id="conf-resolution" placeholder="What will I work on?" rows="2"></textarea>
+    <div class="modal-buttons">
+      <button class="btn" onclick="closeModal('confession-modal')">Cancel</button>
+      <button class="btn primary" onclick="saveConfession()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PREPARE MODE OVERLAY ═══════════════ -->
+<div class="prepare-overlay" id="prepare-overlay">
+  <div class="prepare-header">
+    <div class="prepare-title">Prepare for Confession</div>
+    <button class="prepare-close" onclick="closePrepare()">&times;</button>
+  </div>
+  <div class="prepare-body">
+    <div class="prepare-step-indicator" id="prepare-dots"></div>
+    <div id="prepare-content"></div>
+    <div class="prepare-nav">
+      <button class="btn" id="prep-prev" onclick="prepareNav(-1)">Back</button>
+      <button class="btn primary" id="prep-next" onclick="prepareNav(1)">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<!-- ═══════════════ BOTTOM NAV ═══════════════ -->
+<div class="bottom-nav">
+  <button class="nav-item active" onclick="navigateTo('home')" data-page="home">
+    <span class="nav-icon">&#x1F3E0;</span><span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('examine')" data-page="examine">
+    <span class="nav-icon">&#x1FA9E;</span><span class="nav-label">Examine</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('journal')" data-page="journal">
+    <span class="nav-icon">&#x1F4DD;</span><span class="nav-label">Journal</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('prayers')" data-page="prayers">
+    <span class="nav-icon">&#x1F56F;&#xFE0F;</span><span class="nav-label">Prayers</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('more')" data-page="more">
+    <span class="nav-icon">&#x2699;&#xFE0F;</span><span class="nav-label">More</span>
+  </button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+const COMMANDMENTS = [
+  { title:"1st \u2014 I am the Lord your God", items:[
+    "Have I doubted or denied the existence of God?",
+    "Have I failed to pray daily?",
+    "Have I put anything (money, career, hobbies) before God?",
+    "Have I been involved in superstition, the occult, or New Age practices?",
+    "Have I received Holy Communion in a state of mortal sin?",
+    "Have I despaired of God\u2019s mercy or been presumptuous about salvation?"
+  ]},
+  { title:"2nd \u2014 Do not take God\u2019s name in vain", items:[
+    "Have I used God\u2019s name carelessly or irreverently?",
+    "Have I cursed or used profanity?",
+    "Have I broken a solemn oath or vow made before God?",
+    "Have I spoken disrespectfully about holy things or the Church?"
+  ]},
+  { title:"3rd \u2014 Keep holy the Lord\u2019s Day", items:[
+    "Have I deliberately missed Mass on Sundays or Holy Days?",
+    "Have I arrived late or left early without good reason?",
+    "Have I been inattentive or disrespectful during Mass?",
+    "Have I done unnecessary work on Sundays?",
+    "Have I failed to rest and spend time with God and family?"
+  ]},
+  { title:"4th \u2014 Honor your father and mother", items:[
+    "Have I disobeyed or disrespected my parents or authorities?",
+    "Have I neglected my duties to my spouse or children?",
+    "Have I failed to care for aging family members?",
+    "Have I been ungrateful for others\u2019 sacrifices?",
+    "Have I been a source of family division?",
+    "Have I given my children a bad example?"
+  ]},
+  { title:"5th \u2014 You shall not kill", items:[
+    "Have I physically harmed anyone?",
+    "Have I harbored hatred, anger, or revenge?",
+    "Have I refused to forgive someone?",
+    "Have I participated in or encouraged abortion?",
+    "Have I abused alcohol, drugs, or other substances?",
+    "Have I neglected my own health?",
+    "Have I led others into sin?",
+    "Have I been cruel to animals?",
+    "Have I harbored racist or prejudiced thoughts?"
+  ]},
+  { title:"6th \u2014 You shall not commit adultery", items:[
+    "Have I been unfaithful in thought or action?",
+    "Have I engaged in sexual activity outside of marriage?",
+    "Have I viewed pornography or impure material?",
+    "Have I deliberately entertained impure thoughts?",
+    "Have I used artificial contraception?",
+    "Have I failed to be a loving and generous spouse?"
+  ]},
+  { title:"7th \u2014 You shall not steal", items:[
+    "Have I stolen anything?",
+    "Have I been dishonest in business dealings?",
+    "Have I cheated on taxes or exams?",
+    "Have I damaged someone\u2019s property?",
+    "Have I been wasteful with money or possessions?",
+    "Have I failed to pay debts or obligations?",
+    "Have I failed to give to those in need?"
+  ]},
+  { title:"8th \u2014 You shall not bear false witness", items:[
+    "Have I lied?",
+    "Have I gossiped or revealed others\u2019 faults?",
+    "Have I damaged someone\u2019s reputation?",
+    "Have I been deceitful or two-faced?",
+    "Have I judged others harshly?",
+    "Have I failed to speak up against injustice?"
+  ]},
+  { title:"9th \u2014 Do not covet your neighbor\u2019s spouse", items:[
+    "Have I allowed lustful thoughts about another?",
+    "Have I sought occasions of impurity?",
+    "Have I failed to guard my eyes, mind, and heart?",
+    "Have I engaged in inappropriate emotional intimacy?"
+  ]},
+  { title:"10th \u2014 Do not covet your neighbor\u2019s goods", items:[
+    "Have I been envious of what others have?",
+    "Have I been consumed by greed or materialism?",
+    "Have I been ungrateful for God\u2019s blessings?",
+    "Have I been jealous of another\u2019s success?",
+    "Have I been discontent with my state in life?"
+  ]}
+];
+
+const VERSES = [
+  {text:"If we confess our sins, He is faithful and just to forgive us our sins and to cleanse us from all unrighteousness.",ref:"1 John 1:9"},
+  {text:"Come now, let us settle the matter. Though your sins are like scarlet, they shall be as white as snow.",ref:"Isaiah 1:18"},
+  {text:"The Lord is compassionate and gracious, slow to anger, abounding in love.",ref:"Psalm 103:8"},
+  {text:"For I will forgive their wickedness and will remember their sins no more.",ref:"Hebrews 8:12"},
+  {text:"Have mercy on me, O God, according to your unfailing love; according to your great compassion blot out my transgressions.",ref:"Psalm 51:1"},
+  {text:"As far as the east is from the west, so far has He removed our transgressions from us.",ref:"Psalm 103:12"},
+  {text:"The sacrifice acceptable to God is a broken spirit; a broken and contrite heart, O God, you will not despise.",ref:"Psalm 51:17"},
+  {text:"Who is a God like you, pardoning iniquity? He does not retain his anger forever, because he delights in steadfast love.",ref:"Micah 7:18"},
+  {text:"Blessed is the one whose transgressions are forgiven, whose sins are covered.",ref:"Psalm 32:1"},
+  {text:"Return to me with all your heart, with fasting, with weeping, and with mourning; rend your hearts and not your garments.",ref:"Joel 2:12-13"},
+  {text:"I have swept away your offenses like a cloud, your sins like the morning mist. Return to me, for I have redeemed you.",ref:"Isaiah 44:22"},
+  {text:"Create in me a clean heart, O God, and renew a right spirit within me.",ref:"Psalm 51:10"},
+  {text:"In him we have redemption through his blood, the forgiveness of sins, in accordance with the riches of God\u2019s grace.",ref:"Ephesians 1:7"},
+  {text:"There is therefore now no condemnation for those who are in Christ Jesus.",ref:"Romans 8:1"},
+  {text:"Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",ref:"Ephesians 4:32"},
+  {text:"He himself bore our sins in his body on the cross, so that we might die to sins and live for righteousness.",ref:"1 Peter 2:24"},
+  {text:"Repent, then, and turn to God, so that your sins may be wiped out, that times of refreshing may come from the Lord.",ref:"Acts 3:19"},
+  {text:"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",ref:"John 3:16"},
+  {text:"The Lord is near to the brokenhearted and saves the crushed in spirit.",ref:"Psalm 34:18"},
+  {text:"But you, Lord, are a compassionate and gracious God, slow to anger, abounding in love and faithfulness.",ref:"Psalm 86:15"},
+  {text:"Whoever conceals their sins does not prosper, but the one who confesses and renounces them finds mercy.",ref:"Proverbs 28:13"},
+  {text:"I, even I, am he who blots out your transgressions, for my own sake, and remembers your sins no more.",ref:"Isaiah 43:25"},
+  {text:"Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled.",ref:"John 14:27"},
+  {text:"Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",ref:"2 Corinthians 5:17"},
+  {text:"Let us then approach God\u2019s throne of grace with confidence, so that we may receive mercy and find grace.",ref:"Hebrews 4:16"},
+  {text:"The steadfast love of the Lord never ceases; his mercies never come to an end; they are new every morning.",ref:"Lamentations 3:22-23"},
+  {text:"Bless the Lord, O my soul, and forget not all his benefits \u2014 who forgives all your iniquity, who heals all your diseases.",ref:"Psalm 103:2-3"},
+  {text:"For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",ref:"Jeremiah 29:11"},
+  {text:"I acknowledged my sin to you, and I did not cover my iniquity; I said, \u2018I will confess,\u2019 and you forgave the iniquity of my sin.",ref:"Psalm 32:5"},
+  {text:"He has delivered us from the domain of darkness and transferred us to the kingdom of his beloved Son, in whom we have redemption.",ref:"Colossians 1:13-14"}
+];
+
+const PRAYERS = [
+  {title:"Act of Contrition (Traditional)", text:"O my God, I am heartily sorry for having offended Thee, and I detest all my sins because I dread the loss of Heaven and the pains of Hell; but most of all because they offend Thee, my God, Who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to confess my sins, to do penance, and to amend my life. Amen."},
+  {title:"Act of Contrition (Contemporary)", text:"My God, I am sorry for my sins with all my heart. In choosing to do wrong and failing to do good, I have sinned against You whom I should love above all things. I firmly intend, with Your help, to do penance, to sin no more, and to avoid whatever leads me to sin. Our Savior Jesus Christ suffered and died for us. In His name, my God, have mercy. Amen."},
+  {title:"Prayer Before Confession", text:"Come, Holy Spirit, enlighten my mind that I may clearly know my sins. Move my heart that I may be sincerely sorry for them, honestly confess them, and firmly resolve to amend my life. O Blessed Virgin Mary, Mother of mercy, pray for me. My guardian angel, saints of God, intercede for me. Amen."},
+  {title:"Prayer After Confession", text:"Almighty and merciful God, I give You thanks for the grace of this sacrament. I praise You for Your boundless patience and compassion. Help me now to begin again, strengthened by Your love and grace, to live as a faithful disciple of Your Son. Through Christ our Lord. Amen."},
+  {title:"The Confiteor", text:"I confess to almighty God<br>and to you, my brothers and sisters,<br>that I have greatly sinned,<br>in my thoughts and in my words,<br>in what I have done and in what I have failed to do,<br><span class='prayer-red'>Strike breast three times:</span>through my fault, through my fault,<br>through my most grievous fault;<br>therefore I ask blessed Mary ever-Virgin,<br>all the Angels and Saints,<br>and you, my brothers and sisters,<br>to pray for me to the Lord our God."},
+  {title:"Anima Christi", text:"Soul of Christ, sanctify me.<br>Body of Christ, save me.<br>Blood of Christ, inebriate me.<br>Water from the side of Christ, wash me.<br>Passion of Christ, strengthen me.<br>O good Jesus, hear me.<br>Within Thy wounds hide me.<br>Permit me not to be separated from Thee.<br>From the wicked foe defend me.<br>At the hour of my death call me<br>and bid me come to Thee,<br>that with Thy saints I may praise Thee<br>for ever and ever. Amen."},
+  {title:"Psalm 51 (Miserere)", text:"Have mercy on me, O God,<br>according to Your great mercy;<br>and according to the multitude of Your tender mercies,<br>blot out my transgressions.<br><br>Wash me thoroughly from my iniquity,<br>and cleanse me from my sin.<br>For I acknowledge my transgressions,<br>and my sin is always before me.<br><br>Against You, You only, have I sinned,<br>and done this evil in Your sight.<br>Create in me a clean heart, O God,<br>and renew a right spirit within me.<br><br>Cast me not away from Your presence,<br>and take not Your Holy Spirit from me.<br>Restore to me the joy of Your salvation,<br>and uphold me with Your generous Spirit."},
+  {title:"Chaplet of Divine Mercy", text:"<span class='prayer-red'>Using a rosary:</span><br><br><span class='prayer-red'>Opening: Our Father, Hail Mary, Apostles\u2019 Creed</span><br><br><span class='prayer-red'>On each Our Father bead:</span><br>Eternal Father, I offer You the Body and Blood, Soul and Divinity of Your dearly beloved Son, Our Lord Jesus Christ, in atonement for our sins and those of the whole world.<br><br><span class='prayer-red'>On each Hail Mary bead (10 times):</span><br>For the sake of His sorrowful Passion, have mercy on us and on the whole world.<br><br><span class='prayer-red'>Repeat for all five decades.</span><br><br><span class='prayer-red'>Closing (3 times):</span><br>Holy God, Holy Mighty One, Holy Immortal One, have mercy on us and on the whole world."},
+  {title:"Stations of the Cross", text:"<span class='prayer-red'>At each station, genuflect and pray:</span><br>We adore Thee, O Christ, and we bless Thee, because by Thy Holy Cross Thou hast redeemed the world.<br><br><b>I.</b> Jesus is condemned to death<br><b>II.</b> Jesus carries His Cross<br><b>III.</b> Jesus falls the first time<br><b>IV.</b> Jesus meets His Mother<br><b>V.</b> Simon of Cyrene helps carry the Cross<br><b>VI.</b> Veronica wipes the face of Jesus<br><b>VII.</b> Jesus falls the second time<br><b>VIII.</b> Jesus meets the women of Jerusalem<br><b>IX.</b> Jesus falls the third time<br><b>X.</b> Jesus is stripped of His garments<br><b>XI.</b> Jesus is nailed to the Cross<br><b>XII.</b> Jesus dies on the Cross<br><b>XIII.</b> Jesus is taken down from the Cross<br><b>XIV.</b> Jesus is laid in the tomb<br><br><span class='prayer-red'>At each station, reflect on the scene and pray an Our Father, Hail Mary, and Glory Be.</span>"},
+  {title:"How to Pray the Rosary", text:"<span class='prayer-red'>1. Make the Sign of the Cross</span><br><span class='prayer-red'>2. Apostles\u2019 Creed (crucifix)</span><br><span class='prayer-red'>3. Our Father (first bead)</span><br><span class='prayer-red'>4. Three Hail Marys (next 3 beads)</span><br><span class='prayer-red'>5. Glory Be</span><br><span class='prayer-red'>6. Announce the Mystery, then Our Father</span><br><span class='prayer-red'>7. Ten Hail Marys (decade)</span><br><span class='prayer-red'>8. Glory Be + Fatima Prayer</span><br><span class='prayer-red'>9. Repeat steps 6-8 for five decades</span><br><span class='prayer-red'>10. Hail Holy Queen + closing prayer</span><br><br><b>Joyful Mysteries</b> (Mon/Sat):<br>Annunciation, Visitation, Nativity, Presentation, Finding in the Temple<br><br><b>Sorrowful Mysteries</b> (Tue/Fri):<br>Agony in the Garden, Scourging, Crowning with Thorns, Carrying the Cross, Crucifixion<br><br><b>Glorious Mysteries</b> (Wed/Sun):<br>Resurrection, Ascension, Descent of the Holy Spirit, Assumption, Coronation of Mary<br><br><b>Luminous Mysteries</b> (Thu):<br>Baptism of Jesus, Wedding at Cana, Proclamation of the Kingdom, Transfiguration, Institution of the Eucharist"}
+];
+
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const STORAGE_KEY = 'confiteor-app';
+const PIN_KEY = 'confiteor-pin';
+const FIREBASE_URL = 'https://languageapps-da8a8-default-rtdb.firebaseio.com';
+
+function defaultState() {
+  return {
+    lastConfession:null,
+    checkedItems:{},
+    notes:[],
+    confessionHistory:[],
+    resolution:{text:'',weekStart:''},
+    parish:{name:'',schedule:{}},
+    theme:'dark',
+    syncPin:'',
+    frequencyLog:{}, // key -> count (cumulative)
+  };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return Object.assign(defaultState(), s);
+    }
+  } catch(e) {}
+  return defaultState();
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function navigateTo(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const nav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+  if (nav) nav.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// LITURGICAL CALENDAR
+// ═══════════════════════════════════════════════════════════
+function computeEaster(year) {
+  const a=year%19, b=Math.floor(year/100), c=year%100;
+  const d=Math.floor(b/4), e=b%4, f=Math.floor((b+8)/25);
+  const g=Math.floor((b-f+1)/3), h=(19*a+b-d-g+15)%30;
+  const i=Math.floor(c/4), k=c%4, l=(32+2*e+2*i-h-k)%7;
+  const m=Math.floor((a+11*h+22*l)/451);
+  const month=Math.floor((h+l-7*m+114)/31);
+  const day=((h+l-7*m+114)%31)+1;
+  return new Date(year, month-1, day);
+}
+
+function getLiturgicalInfo(date) {
+  const y = date.getFullYear();
+  const easter = computeEaster(y);
+  const ms = date.getTime();
+  const easterMs = easter.getTime();
+  const DAY = 86400000;
+
+  // Key dates
+  const ashWed = new Date(easterMs - 46*DAY);
+  const palmSun = new Date(easterMs - 7*DAY);
+  const holyThurs = new Date(easterMs - 3*DAY);
+  const pentecost = new Date(easterMs + 49*DAY);
+
+  // Advent: 4th Sunday before Christmas
+  const christmas = new Date(y, 11, 25);
+  const christmasDay = christmas.getDay();
+  const advent1 = new Date(christmas.getTime() - ((christmasDay===0?7:christmasDay) + 21)*DAY);
+  const christmasNext = new Date(y+1, 11, 25);
+  const nextChristmasDay = christmasNext.getDay();
+  const nextAdvent = new Date(christmasNext.getTime() - ((nextChristmasDay===0?7:nextChristmasDay) + 21)*DAY);
+
+  // Baptism of the Lord (Sunday after Jan 6, or Jan 7 if Jan 6 is Sunday)
+  const epiphany = new Date(y, 0, 6);
+  let baptism = new Date(y, 0, 6 + (7 - epiphany.getDay()));
+  if (epiphany.getDay() === 0) baptism = new Date(y, 0, 7);
+
+  if (ms >= holyThurs.getTime() && ms < easterMs + DAY) {
+    return {season:"Sacred Triduum", color:"#a3424a", detail:"The holiest days of the Church year"};
+  }
+  if (ms >= palmSun.getTime() && ms < holyThurs.getTime()) {
+    return {season:"Holy Week", color:"#a3424a", detail:"Walk with Christ to Calvary"};
+  }
+  if (ms >= ashWed.getTime() && ms < palmSun.getTime()) {
+    const daysIn = Math.floor((ms - ashWed.getTime()) / DAY);
+    return {season:"Lent", color:"#7a4a8a", detail:`Day ${daysIn + 1} of Lent \u2014 prayer, fasting, almsgiving`};
+  }
+  if (ms >= easterMs && ms < pentecost.getTime() + DAY) {
+    const week = Math.floor((ms - easterMs) / (7*DAY)) + 1;
+    if (ms >= pentecost.getTime() && ms < pentecost.getTime() + DAY) {
+      return {season:"Pentecost", color:"#a3424a", detail:"Come, Holy Spirit!"};
+    }
+    return {season:"Easter Season", color:"#c9a84c", detail:`Week ${week} of Easter \u2014 Alleluia!`};
+  }
+  if (ms >= nextAdvent.getTime() || ms >= advent1.getTime() && ms < new Date(y, 11, 25).getTime()) {
+    if (ms >= advent1.getTime()) {
+      const week = Math.floor((ms - advent1.getTime()) / (7*DAY)) + 1;
+      return {season:"Advent", color:"#4a4a8a", detail:`Week ${Math.min(week,4)} of Advent \u2014 prepare the way`};
+    }
+  }
+  if ((date.getMonth() === 11 && date.getDate() >= 25) || (date.getMonth() === 0 && ms <= baptism.getTime())) {
+    return {season:"Christmas Season", color:"#c9a84c", detail:"The Word became flesh"};
+  }
+
+  return {season:"Ordinary Time", color:"#4a8a5c", detail:"Growing in faith, day by day"};
+}
+
+function updateLiturgical() {
+  const info = getLiturgicalInfo(new Date());
+  document.getElementById('lit-season').textContent = info.season;
+  document.getElementById('lit-detail').textContent = info.detail;
+  document.documentElement.style.setProperty('--liturgical', info.color);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DAILY VERSE
+// ═══════════════════════════════════════════════════════════
+function updateVerse() {
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0)) / 86400000);
+  const v = VERSES[dayOfYear % VERSES.length];
+  document.getElementById('verse-text').textContent = '\u201C' + v.text + '\u201D';
+  document.getElementById('verse-ref').textContent = '\u2014 ' + v.ref;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RESOLUTION
+// ═══════════════════════════════════════════════════════════
+function updateResolution() {
+  const display = document.getElementById('resolution-display');
+  const input = document.getElementById('resolution-input');
+  if (state.resolution.text) {
+    display.textContent = state.resolution.text;
+    display.style.fontStyle = 'italic';
+  } else {
+    display.textContent = 'Tap "Edit" to set a weekly resolution.';
+    display.style.fontStyle = 'normal';
+  }
+  input.value = state.resolution.text || '';
+}
+
+let resEditing = false;
+function editResolution() {
+  const display = document.getElementById('resolution-display');
+  const input = document.getElementById('resolution-input');
+  const btn = document.getElementById('res-edit-btn');
+  if (!resEditing) {
+    display.style.display = 'none';
+    input.style.display = 'block';
+    input.focus();
+    btn.textContent = 'Save';
+    resEditing = true;
+  } else {
+    state.resolution.text = input.value.trim();
+    state.resolution.weekStart = getWeekStart();
+    saveState();
+    display.style.display = 'block';
+    input.style.display = 'none';
+    btn.textContent = 'Edit';
+    resEditing = false;
+    updateResolution();
+  }
+}
+
+function getWeekStart() {
+  const d = new Date(); d.setDate(d.getDate() - d.getDay());
+  return d.toISOString().split('T')[0];
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRACKER
+// ═══════════════════════════════════════════════════════════
+function updateTracker() {
+  const daysEl = document.getElementById('tracker-days');
+  const dateEl = document.getElementById('tracker-date');
+  if (!state.lastConfession) {
+    daysEl.innerHTML = '&mdash;';
+    dateEl.textContent = 'No confession recorded';
+    return;
+  }
+  const last = new Date(state.lastConfession + 'T00:00:00');
+  const now = new Date(); now.setHours(0,0,0,0);
+  const diff = Math.floor((now - last) / 86400000);
+  daysEl.textContent = diff;
+  dateEl.textContent = 'Last: ' + last.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+function showConfessionModal() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('conf-date').value = state.lastConfession || today;
+  document.getElementById('conf-date').max = today;
+  document.getElementById('conf-penance').value = '';
+  document.getElementById('conf-resolution').value = '';
+  document.getElementById('confession-modal').classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+document.getElementById('confession-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal('confession-modal');
+});
+
+function saveConfession() {
+  const date = document.getElementById('conf-date').value;
+  if (!date) return;
+  const penance = document.getElementById('conf-penance').value.trim();
+  const resolution = document.getElementById('conf-resolution').value.trim();
+
+  // Log frequency of checked items before clearing
+  Object.keys(state.checkedItems).forEach(k => {
+    if (state.checkedItems[k]) {
+      state.frequencyLog[k] = (state.frequencyLog[k] || 0) + 1;
+    }
+  });
+
+  state.confessionHistory.unshift({
+    date: date,
+    penance: penance,
+    penanceDone: false,
+    resolution: resolution,
+    timestamp: new Date().toISOString()
+  });
+
+  state.lastConfession = date;
+  state.checkedItems = {};
+  saveState();
+  updateTracker();
+  renderExamine();
+  renderHistory();
+  closeModal('confession-modal');
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXAMINATION OF CONSCIENCE
+// ═══════════════════════════════════════════════════════════
+let openSections = new Set();
+
+function renderExamine() {
+  const container = document.getElementById('examine-list');
+  container.innerHTML = '';
+
+  COMMANDMENTS.forEach((cmd, ci) => {
+    const section = document.createElement('div');
+    section.style.marginBottom = '8px';
+    const checkedCount = cmd.items.filter((_,ii) => state.checkedItems[ci+'-'+ii]).length;
+    const isOpen = openSections.has(ci);
+
+    const title = document.createElement('div');
+    title.className = 'commandment-title' + (isOpen ? ' open' : '');
+    title.innerHTML = `<span>${cmd.title}</span><span style="display:flex;align-items:center;gap:8px;"><span class="count-badge ${checkedCount>0?'visible':''}" id="badge-${ci}">${checkedCount}</span><span class="chevron">\u25BC</span></span>`;
+
+    const items = document.createElement('div');
+    items.className = 'commandment-items' + (isOpen ? ' open' : '');
+
+    cmd.items.forEach((text, ii) => {
+      const key = ci + '-' + ii;
+      const item = document.createElement('div');
+      item.className = 'examine-item' + (state.checkedItems[key] ? ' checked' : '');
+      item.innerHTML = `<div class="examine-check">\u2713</div><div class="examine-text">${text}</div>`;
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.checkedItems[key] = !state.checkedItems[key];
+        if (!state.checkedItems[key]) delete state.checkedItems[key];
+        saveState();
+        item.classList.toggle('checked');
+        const cnt = cmd.items.filter((_,j) => state.checkedItems[ci+'-'+j]).length;
+        const badge = document.getElementById('badge-'+ci);
+        if(badge){badge.textContent=cnt;badge.classList.toggle('visible',cnt>0);}
+        updateExamineTotal();
+      });
+      items.appendChild(item);
+    });
+
+    title.addEventListener('click', () => {
+      if(openSections.has(ci)) openSections.delete(ci); else openSections.add(ci);
+      title.classList.toggle('open');
+      items.classList.toggle('open');
+    });
+
+    section.appendChild(title);
+    section.appendChild(items);
+    container.appendChild(section);
+  });
+  updateExamineTotal();
+}
+
+function updateExamineTotal() {
+  const total = Object.keys(state.checkedItems).filter(k=>state.checkedItems[k]).length;
+  document.getElementById('examine-total').textContent = total;
+}
+
+function clearAllExamine() {
+  if (!Object.keys(state.checkedItems).length) return;
+  if (!confirm('Clear all marked items?')) return;
+  state.checkedItems = {};
+  saveState();
+  renderExamine();
+}
+
+function copyExamineSummary() {
+  const checked = [];
+  COMMANDMENTS.forEach((cmd,ci)=>{
+    cmd.items.forEach((text,ii)=>{
+      if(state.checkedItems[ci+'-'+ii]) checked.push(text);
+    });
+  });
+  if(!checked.length){ alert('No items marked.'); return; }
+  const noteText = 'Examination ('+new Date().toLocaleDateString()+'):\n\u2022 '+checked.join('\n\u2022 ');
+  state.notes.unshift({text:noteText, date:new Date().toISOString()});
+  saveState();
+  renderNotes();
+  navigateTo('journal');
+  switchJnlTab('notes');
+}
+
+// ── Examine sub-tabs ──
+function switchExTab(tab) {
+  ['conscience','frequent','examen'].forEach(t => {
+    document.getElementById('ex-'+t).style.display = t===tab ? 'block' : 'none';
+    document.getElementById('extab-'+t).className = 'tab-btn' + (t===tab?' active':'');
+  });
+  if(tab==='frequent') renderFrequent();
+}
+
+// ── Frequent Sins ──
+function renderFrequent() {
+  const container = document.getElementById('frequent-list');
+  const entries = Object.entries(state.frequencyLog).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  if(!entries.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4CA}</div><div class="empty-text">No data yet. Patterns will appear<br>after your first recorded confession.</div></div>';
+    return;
+  }
+  const max = entries[0][1];
+  container.innerHTML = '';
+  entries.forEach(([key,count]) => {
+    const [ci,ii] = key.split('-').map(Number);
+    const text = COMMANDMENTS[ci]?.items[ii] || 'Unknown';
+    const pct = Math.round((count/max)*100);
+    const el = document.createElement('div');
+    el.className = 'freq-item';
+    el.innerHTML = `<div class="freq-bar-wrap"><div class="freq-label">${text}</div><div class="freq-bar"><div class="freq-bar-fill" style="width:${pct}%"></div></div></div><div class="freq-count">${count}</div>`;
+    container.appendChild(el);
+  });
+}
+
+// ── Nightly Examen ──
+function saveExamen() {
+  const parts = [];
+  [1,3,4,5].forEach(n => {
+    const el = document.getElementById('examen-'+n);
+    if(el && el.value.trim()) {
+      const labels = {1:'Gratitude',3:'Review',4:'Response',5:'Resolve'};
+      parts.push(labels[n]+': '+el.value.trim());
+    }
+  });
+  if(!parts.length){ alert('Write something first.'); return; }
+  const noteText = 'Nightly Examen ('+new Date().toLocaleDateString()+'):\n'+parts.join('\n');
+  state.notes.unshift({text:noteText, date:new Date().toISOString()});
+  saveState();
+  clearExamen();
+  renderNotes();
+  navigateTo('journal');
+  switchJnlTab('notes');
+}
+
+function clearExamen() {
+  [1,3,4,5].forEach(n => {
+    const el = document.getElementById('examen-'+n);
+    if(el) el.value = '';
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// JOURNAL (NOTES + HISTORY)
+// ═══════════════════════════════════════════════════════════
+function switchJnlTab(tab) {
+  ['notes','history'].forEach(t => {
+    document.getElementById('jnl-'+t).style.display = t===tab ? 'block' : 'none';
+    document.getElementById('jnltab-'+t).className = 'tab-btn' + (t===tab?' active':'');
+  });
+}
+
+function renderNotes() {
+  const container = document.getElementById('notes-list');
+  container.innerHTML = '';
+  if(!state.notes.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4DD}</div><div class="empty-text">No notes yet.<br>Add something for your next confession.</div></div>';
+    return;
+  }
+  state.notes.forEach((note,i) => {
+    const el = document.createElement('div');
+    el.className = 'note-item';
+    const d = new Date(note.date);
+    el.innerHTML = `<div class="note-text">${escapeHtml(note.text)}</div><div class="note-date">${d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</div><button class="note-delete" onclick="deleteNote(${i})">\u2715</button>`;
+    container.appendChild(el);
+  });
+}
+
+function addNote() {
+  const input = document.getElementById('note-input');
+  const text = input.value.trim();
+  if(!text) return;
+  state.notes.unshift({text, date:new Date().toISOString()});
+  saveState(); renderNotes();
+  input.value = ''; input.style.height = 'auto';
+}
+
+function deleteNote(i) {
+  state.notes.splice(i,1);
+  saveState(); renderNotes();
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function renderHistory() {
+  const container = document.getElementById('history-list');
+  container.innerHTML = '';
+  if(!state.confessionHistory.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4C5}</div><div class="empty-text">No confessions recorded yet.</div></div>';
+    return;
+  }
+  state.confessionHistory.forEach((h,i) => {
+    const d = new Date(h.date + 'T00:00:00');
+    const el = document.createElement('div');
+    el.className = 'history-item';
+    let html = `<div class="history-header"><div class="history-title">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</div>`;
+    html += `<span class="penance-badge ${h.penanceDone?'done':'pending'}" onclick="togglePenance(${i})">${h.penanceDone?'Done':'Pending'}</span></div>`;
+    if(h.penance) html += `<div class="history-penance">\u{1F4FF} ${escapeHtml(h.penance)}</div>`;
+    if(h.resolution) html += `<div class="history-resolution">\u{1F3AF} ${escapeHtml(h.resolution)}</div>`;
+    el.innerHTML = html;
+    container.appendChild(el);
+  });
+}
+
+function togglePenance(i) {
+  state.confessionHistory[i].penanceDone = !state.confessionHistory[i].penanceDone;
+  saveState(); renderHistory();
+}
+
+// Note input handlers
+document.getElementById('note-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight,120)+'px';
+});
+document.getElementById('note-input').addEventListener('keydown', function(e) {
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); addNote(); }
+});
+
+// ═══════════════════════════════════════════════════════════
+// PRAYERS
+// ═══════════════════════════════════════════════════════════
+function renderPrayers() {
+  const container = document.getElementById('prayers-container');
+  container.innerHTML = '';
+  PRAYERS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'prayer-card';
+    card.innerHTML = `<div class="prayer-title" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">${p.title}<span class="chevron">\u25BC</span></div><div class="prayer-body"><div class="prayer-text">${p.text}</div></div>`;
+    container.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREPARE MODE
+// ═══════════════════════════════════════════════════════════
+let prepareStep = 0;
+const PREPARE_STEPS = [
+  {title:'Opening Prayer', render:()=>'<div class="examen-step"><div class="examen-step-title">Begin with a Prayer</div><div class="prayer-text" style="padding:0;">"Come, Holy Spirit, enlighten my mind that I may clearly know my sins. Move my heart that I may be sincerely sorry for them, honestly confess them, and firmly resolve to amend my life. Amen."</div></div>'},
+  {title:'Examine', render:()=>{
+    const checked = [];
+    COMMANDMENTS.forEach((cmd,ci)=>{
+      cmd.items.forEach((text,ii)=>{
+        if(state.checkedItems[ci+'-'+ii]) checked.push(text);
+      });
+    });
+    if(!checked.length) return '<div class="empty-state"><div class="empty-text">No items marked.<br>Go to the Examine tab to review your conscience first, then return here.</div></div>';
+    let html = '<div class="card"><div class="card-header"><span class="icon">\u{1FA9E}</span> Your Marked Items</div>';
+    checked.forEach(t => { html += `<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text);">\u2022 ${t}</div>`; });
+    html += '</div>';
+    return html;
+  }},
+  {title:'Your Opening Line', render:()=>{
+    let days = '';
+    if(state.lastConfession) {
+      const last = new Date(state.lastConfession+'T00:00:00');
+      const now = new Date(); now.setHours(0,0,0,0);
+      const d = Math.floor((now-last)/86400000);
+      if(d<7) days = d + ' days';
+      else if(d<60) days = Math.round(d/7) + ' weeks';
+      else if(d<365) days = Math.round(d/30) + ' months';
+      else days = Math.round(d/365) + ' years';
+    } else { days = '[time]'; }
+    return `<div class="dialogue-block"><div class="dialogue-speaker">Say</div><div class="dialogue-text">"Bless me, Father, for I have sinned. It has been <strong>${days}</strong> since my last confession. These are my sins..."</div></div>`;
+  }},
+  {title:'Act of Contrition', render:()=>'<div class="card"><div class="card-header"><span class="icon">\u{1F56F}\u{FE0F}</span> Act of Contrition</div><div class="prayer-text" style="padding:0;">O my God, I am heartily sorry for having offended Thee, and I detest all my sins because I dread the loss of Heaven and the pains of Hell; but most of all because they offend Thee, my God, Who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to confess my sins, to do penance, and to amend my life. Amen.</div></div>'},
+  {title:'Go in Peace', render:()=>'<div style="text-align:center;padding:20px;"><div style="font-size:48px;margin-bottom:16px;">\u{1F54A}\u{FE0F}</div><div class="examen-step-title" style="margin-bottom:8px;">You are ready.</div><div style="font-size:14px;color:var(--text-dim);line-height:1.6;">After absolution, respond <strong>"Amen."</strong><br><br>If the priest says "Give thanks to the Lord, for He is good," respond: <strong>"His mercy endures forever."</strong><br><br>Complete your penance. Go in peace.</div></div>'}
+];
+
+function startPrepare() {
+  prepareStep = 0;
+  document.getElementById('prepare-overlay').classList.add('active');
+  renderPrepareStep();
+}
+
+function closePrepare() {
+  document.getElementById('prepare-overlay').classList.remove('active');
+}
+
+function prepareNav(dir) {
+  prepareStep = Math.max(0, Math.min(PREPARE_STEPS.length-1, prepareStep+dir));
+  renderPrepareStep();
+}
+
+function renderPrepareStep() {
+  const dots = document.getElementById('prepare-dots');
+  dots.innerHTML = '';
+  PREPARE_STEPS.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'prepare-dot' + (i===prepareStep?' active':i<prepareStep?' done':'');
+    dots.appendChild(d);
+  });
+  document.getElementById('prepare-content').innerHTML = '<h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);margin-bottom:16px;text-align:center;">'+PREPARE_STEPS[prepareStep].title+'</h3>' + PREPARE_STEPS[prepareStep].render();
+  document.getElementById('prep-prev').style.visibility = prepareStep===0 ? 'hidden' : 'visible';
+  document.getElementById('prep-next').textContent = prepareStep===PREPARE_STEPS.length-1 ? 'Done' : 'Next';
+  if(prepareStep===PREPARE_STEPS.length-1) {
+    document.getElementById('prep-next').onclick = closePrepare;
+  } else {
+    document.getElementById('prep-next').onclick = ()=>prepareNav(1);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MORE PAGE
+// ═══════════════════════════════════════════════════════════
+function toggleMoreSection(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+// ── Parish Schedule ──
+function renderParish() {
+  const container = document.getElementById('parish-schedule');
+  container.innerHTML = '';
+  document.getElementById('parish-name').value = state.parish.name || '';
+  DAYS.forEach(day => {
+    const row = document.createElement('div');
+    row.className = 'parish-day';
+    row.innerHTML = `<div class="parish-day-name">${day}</div><input type="text" class="parish-day-input" placeholder="e.g. 3:30 - 4:30 PM" value="${state.parish.schedule[day]||''}" data-day="${day}">`;
+    container.appendChild(row);
+  });
+}
+
+function saveParish() {
+  state.parish.name = document.getElementById('parish-name').value.trim();
+  state.parish.schedule = {};
+  document.querySelectorAll('.parish-day-input').forEach(input => {
+    if(input.value.trim()) state.parish.schedule[input.dataset.day] = input.value.trim();
+  });
+  saveState();
+  alert('Parish info saved!');
+}
+
+// ── Theme ──
+function applyTheme() {
+  if(state.theme==='light') {
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('theme-toggle').classList.add('on');
+    document.getElementById('theme-icon').innerHTML = '\u{2600}\u{FE0F}';
+    document.getElementById('theme-label').textContent = 'Light mode';
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('theme-toggle').classList.remove('on');
+    document.getElementById('theme-icon').innerHTML = '\u{1F319}';
+    document.getElementById('theme-label').textContent = 'Dark mode';
+  }
+}
+
+function toggleTheme() {
+  state.theme = state.theme==='dark' ? 'light' : 'dark';
+  saveState(); applyTheme();
+}
+
+// ── PIN Reset ──
+function resetPIN() {
+  if(!confirm('Reset your PIN? You will need to create a new one.')) return;
+  localStorage.removeItem(PIN_KEY);
+  location.reload();
+}
+
+// ═══════════════════════════════════════════════════════════
+// FIREBASE SYNC
+// ═══════════════════════════════════════════════════════════
+function updateSyncStatus() {
+  const el = document.getElementById('sync-status');
+  const pin = document.getElementById('sync-pin');
+  if(state.syncPin) {
+    el.textContent = 'Connected (PIN: '+state.syncPin+')';
+    if(pin) pin.value = state.syncPin;
+  } else {
+    el.textContent = 'Not connected';
+  }
+}
+
+async function cloudSync(direction) {
+  const pin = document.getElementById('sync-pin').value.trim();
+  if(!pin){ alert('Enter a sync PIN.'); return; }
+  const msg = document.getElementById('sync-msg');
+  msg.textContent = direction==='push' ? 'Uploading...' : 'Downloading...';
+
+  const url = `${FIREBASE_URL}/users/${pin}/confiteor.json`;
+  try {
+    if(direction==='push') {
+      const resp = await fetch(url, {method:'PUT', body:JSON.stringify(state)});
+      if(!resp.ok) throw new Error('Upload failed');
+      state.syncPin = pin; saveState();
+      msg.textContent = 'Uploaded successfully!';
+    } else {
+      const resp = await fetch(url);
+      if(!resp.ok) throw new Error('Download failed');
+      const data = await resp.json();
+      if(!data){ msg.textContent = 'No data found for this PIN.'; return; }
+      Object.assign(state, data);
+      state.syncPin = pin;
+      saveState();
+      msg.textContent = 'Downloaded successfully! Refreshing...';
+      setTimeout(()=>location.reload(), 800);
+    }
+    updateSyncStatus();
+  } catch(e) {
+    msg.textContent = 'Error: ' + e.message;
+  }
+}
+
+function disconnectSync() {
+  state.syncPin = '';
+  document.getElementById('sync-pin').value = '';
+  saveState(); updateSyncStatus();
+  document.getElementById('sync-msg').textContent = 'Disconnected.';
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════════
+function exportData() {
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'confiteor-backup-'+new Date().toISOString().split('T')[0]+'.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function importData() {
+  document.getElementById('import-file').click();
+}
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if(!confirm('This will replace all current data. Continue?')) return;
+      Object.assign(state, data);
+      saveState();
+      location.reload();
+    } catch(err) {
+      alert('Invalid backup file.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// PIN LOCK
+// ═══════════════════════════════════════════════════════════
+let pinBuffer = '';
+let pinMode = 'unlock';
+let pinSetupValue = '';
+
+function initLock() {
+  const stored = localStorage.getItem(PIN_KEY);
+  if(!stored) {
+    pinMode = 'setup';
+    document.getElementById('lock-subtitle').textContent = 'Create a 4-digit PIN';
+    document.getElementById('lock-setup-hint').textContent = 'This PIN protects your journal.';
+  } else {
+    pinMode = 'unlock';
+    document.getElementById('lock-subtitle').textContent = 'Enter your PIN';
+    document.getElementById('lock-setup-hint').textContent = '';
+  }
+  pinBuffer = ''; updateDots();
+}
+
+function pinInput(d) {
+  if(pinBuffer.length>=4) return;
+  pinBuffer += d; updateDots();
+  if(pinBuffer.length===4) setTimeout(handlePinComplete,150);
+}
+function pinBackspace() {
+  if(!pinBuffer.length) return;
+  pinBuffer = pinBuffer.slice(0,-1); updateDots();
+  document.getElementById('lock-message').textContent = '';
+}
+function updateDots() {
+  for(let i=0;i<4;i++){
+    document.getElementById('dot-'+i).className = 'pin-dot'+(i<pinBuffer.length?' filled':'');
+  }
+}
+function showPinError() {
+  for(let i=0;i<4;i++) document.getElementById('dot-'+i).className='pin-dot error';
+  setTimeout(()=>{pinBuffer='';updateDots();},500);
+}
+
+async function hashPin(pin) {
+  const data = new TextEncoder().encode(pin+'confiteor-salt');
+  const hash = await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function handlePinComplete() {
+  const hashed = await hashPin(pinBuffer);
+  if(pinMode==='setup') {
+    pinSetupValue = hashed; pinMode = 'confirm'; pinBuffer = ''; updateDots();
+    document.getElementById('lock-subtitle').textContent = 'Confirm your PIN';
+    document.getElementById('lock-setup-hint').textContent = 'Enter the same PIN again.';
+    return;
+  }
+  if(pinMode==='confirm') {
+    if(hashed===pinSetupValue) {
+      localStorage.setItem(PIN_KEY,hashed); unlockApp();
+    } else {
+      showPinError();
+      document.getElementById('lock-message').textContent = "PINs didn't match. Try again.";
+      document.getElementById('lock-message').className = 'lock-message error';
+      pinMode = 'setup'; pinSetupValue = '';
+      document.getElementById('lock-subtitle').textContent = 'Create a 4-digit PIN';
+      document.getElementById('lock-setup-hint').textContent = 'This PIN protects your journal.';
+    }
+    return;
+  }
+  if(hashed===localStorage.getItem(PIN_KEY)) {
+    unlockApp();
+  } else {
+    showPinError();
+    document.getElementById('lock-message').textContent = 'Incorrect PIN';
+    document.getElementById('lock-message').className = 'lock-message error';
+  }
+}
+
+function unlockApp() {
+  const lock = document.getElementById('lock-screen');
+  lock.style.transition = 'opacity 0.3s ease';
+  lock.style.opacity = '0';
+  setTimeout(()=>{lock.classList.add('hidden');lock.style.opacity='';},300);
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+initLock();
+applyTheme();
+updateLiturgical();
+updateVerse();
+updateTracker();
+updateResolution();
+renderExamine();
+renderNotes();
+renderHistory();
+renderPrayers();
+renderParish();
+updateSyncStatus();
+</script>
+</body>
+</html>
