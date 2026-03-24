@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Mormon's World: Book of Mormon Internal Geography | One Faith Delivered</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --parchment: #F5F0E8;
+            --parchment-dark: #E8E0D0;
+            --crimson: #8B0000;
+            --gold: #C5A55A;
+            --gold-dark: #8B7332;
+            --text-primary: #2C2C2C;
+            --text-secondary: #555;
+            --header-bg: #1a1a1a;
+            --border-light: rgba(139,0,0,0.15);
+            --nephite-blue: #2B5B84;
+            --lamanite-red: #8B3A3A;
+            --wilderness-green: #4A6741;
+            --water-blue: #5B8FA8;
+            --highlight: #D4A843;
+        }
+        [data-theme="dark"] {
+            --parchment: #1a1a1a;
+            --parchment-dark: #252525;
+            --text-primary: #E8E0D0;
+            --text-secondary: #BBB;
+            --border-light: rgba(197,165,90,0.2);
+            --nephite-blue: #6BA3D6;
+            --lamanite-red: #C97070;
+            --wilderness-green: #7DA874;
+            --water-blue: #7BB8D4;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--parchment);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 17px;
+        }
+        .dark-mode-toggle {
+            position:fixed; top:16px; right:16px; z-index:999;
+            background:var(--parchment-dark); border:1px solid var(--border-light);
+            border-radius:50%; width:40px; height:40px; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; font-size:18px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s;
+        }
+        .dark-mode-toggle:hover { transform:scale(1.1); }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 50%, #1a1a1a 100%);
+            padding: 60px 20px 50px; text-align:center; position:relative;
+        }
+        .page-header::after {
+            content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .header-sub {
+            font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+            letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:16px;
+        }
+        .page-header h1 {
+            font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4.5vw,2.8rem);
+            font-weight:700; color:#F5F0E8; line-height:1.2; max-width:750px; margin:0 auto 12px;
+        }
+        .header-tag {
+            font-family:'Source Serif 4',serif; font-style:italic; font-size:1rem;
+            color:rgba(245,240,232,0.65); max-width:550px; margin:0 auto;
+        }
+
+        /* Main layout */
+        .main-container { max-width:1200px; margin:0 auto; padding:30px 20px 60px; }
+
+        /* Controls */
+        .controls {
+            display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+            margin:0 auto 30px; max-width:900px;
+        }
+        .control-btn {
+            font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+            letter-spacing:1px; text-transform:uppercase;
+            padding:8px 18px; border:1px solid var(--border-light);
+            background:var(--parchment-dark); color:var(--text-secondary);
+            border-radius:4px; cursor:pointer; transition:all 0.3s;
+        }
+        .control-btn:hover, .control-btn.active {
+            background:var(--crimson); color:#F5F0E8; border-color:var(--crimson);
+        }
+        .control-btn.overlay-btn.active {
+            background:var(--nephite-blue); border-color:var(--nephite-blue);
+        }
+
+        /* Map container */
+        .map-wrapper {
+            position:relative; width:100%; max-width:900px; margin:0 auto 40px;
+            background:var(--parchment-dark); border:1px solid var(--border-light);
+            border-radius:8px; overflow:hidden;
+            box-shadow:0 4px 20px rgba(0,0,0,0.08);
+        }
+        .map-svg { width:100%; height:auto; display:block; }
+
+        /* Info panel */
+        .info-panel {
+            max-width:900px; margin:0 auto;
+            display:grid; grid-template-columns:1fr 1fr; gap:24px;
+        }
+        @media(max-width:700px) {
+            .info-panel { grid-template-columns:1fr; }
+        }
+
+        .info-card {
+            background:var(--parchment-dark); border:1px solid var(--border-light);
+            border-radius:6px; padding:20px; transition:all 0.3s;
+        }
+        .info-card h3 {
+            font-family:'Playfair Display',serif; font-size:1.1rem;
+            color:var(--crimson); margin-bottom:8px;
+        }
+        .info-card .ref {
+            font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+            color:var(--gold-dark); letter-spacing:0.5px; margin-bottom:6px;
+        }
+        [data-theme="dark"] .info-card .ref { color:var(--gold); }
+        .info-card p { font-size:0.92em; color:var(--text-secondary); }
+
+        .detail-panel {
+            max-width:900px; margin:0 auto 30px;
+            background:var(--parchment-dark); border:1px solid var(--border-light);
+            border-radius:6px; padding:24px; min-height:80px;
+            transition:all 0.3s;
+        }
+        .detail-panel h3 {
+            font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--crimson);
+            margin-bottom:4px;
+        }
+        .detail-panel .ref {
+            font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+            color:var(--gold-dark); letter-spacing:0.5px; margin-bottom:10px;
+        }
+        [data-theme="dark"] .detail-panel .ref { color:var(--gold); }
+        .detail-panel p { font-size:0.95em; color:var(--text-secondary); }
+        .detail-panel .prompt {
+            font-style:italic; color:var(--text-secondary); opacity:0.7;
+        }
+
+        /* Legend */
+        .legend {
+            display:flex; flex-wrap:wrap; gap:16px; justify-content:center;
+            margin:0 auto 20px; max-width:900px;
+        }
+        .legend-item {
+            display:flex; align-items:center; gap:6px;
+            font-family:'JetBrains Mono',monospace; font-size:0.68rem;
+            letter-spacing:0.5px; text-transform:uppercase; color:var(--text-secondary);
+        }
+        .legend-swatch {
+            width:14px; height:14px; border-radius:3px;
+        }
+
+        /* Section text */
+        .section-text {
+            max-width:760px; margin:40px auto; padding:0 10px;
+        }
+        .section-text h2 {
+            font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700;
+            color:var(--crimson); margin-bottom:16px;
+        }
+        .section-text p {
+            margin-bottom:1.2em; text-align:justify;
+        }
+        .source-quote {
+            border-left:3px solid var(--gold); margin:24px 0; padding:16px 20px;
+            background:linear-gradient(135deg, rgba(197,165,90,0.06), rgba(197,165,90,0.02));
+            border-radius:0 6px 6px 0; font-size:0.94em;
+        }
+        .source-quote p { text-align:left; font-style:italic; margin-bottom:6px; }
+        .source-quote .attr {
+            font-family:'JetBrains Mono',monospace; font-size:0.75rem;
+            font-style:normal; color:var(--gold-dark);
+        }
+        [data-theme="dark"] .source-quote .attr { color:var(--gold); }
+
+        .key-point {
+            border-left:3px solid var(--gold); margin:24px 0; padding:16px 20px;
+            background:linear-gradient(135deg, rgba(197,165,90,0.08), rgba(197,165,90,0.02));
+            border-radius:0 6px 6px 0;
+        }
+        .key-point .label {
+            font-family:'JetBrains Mono',monospace; font-size:0.68rem;
+            letter-spacing:2px; text-transform:uppercase; color:var(--gold-dark);
+            margin-bottom:8px;
+        }
+        [data-theme="dark"] .key-point .label { color:var(--gold); }
+
+        /* SVG interactivity */
+        .city-dot { cursor:pointer; transition:all 0.2s; }
+        .city-dot:hover { filter:brightness(1.3); }
+        .city-label { pointer-events:none; }
+        .region-area { opacity:0.12; }
+
+        /* Overlay labels */
+        .overlay-label {
+            opacity:0; transition:opacity 0.4s;
+            font-family:'JetBrains Mono',monospace;
+        }
+        .show-overlay .overlay-label { opacity:1; }
+        .overlay-feature { opacity:0; transition:opacity 0.4s; }
+        .show-overlay .overlay-feature { opacity:0.25; }
+
+        @media print {
+            .dark-mode-toggle, .controls { display:none !important; }
+            .map-wrapper { box-shadow:none; border:1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="dark-mode-toggle" id="darkToggle" title="Toggle dark mode">🌙</button>
+
+<header class="page-header">
+    <div class="header-sub">Interactive Reference</div>
+    <h1>Mapping Mormon's World</h1>
+    <div class="header-tag">Every city, landmark, &amp; geographic feature in the Book of Mormon — reconstructed from the text's own internal clues</div>
+</header>
+
+<div class="main-container">
+
+    <div class="section-text">
+        <p>The Book of Mormon never provides a map. But it provides something almost as useful: dozens of relative spatial references — travel times, directional descriptions, and positional relationships between cities, rivers, seas, and landmarks. From these clues, scholars (both LDS and critical) have reconstructed the text's internal geography with reasonable confidence. The map below represents that reconstruction. Click any city or feature to see the textual evidence for its placement.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn active" onclick="showLayer('all')">All Locations</button>
+        <button class="control-btn" onclick="showLayer('nephite')">Nephite Cities</button>
+        <button class="control-btn" onclick="showLayer('lamanite')">Lamanite Cities</button>
+        <button class="control-btn" onclick="showLayer('geography')">Geography Only</button>
+        <button class="control-btn overlay-btn" onclick="toggleOverlay()">Great Lakes Overlay</button>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:#2B5B84;"></div>Nephite Cities</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#8B3A3A;"></div>Lamanite Cities</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#4A6741;"></div>Wilderness / Landmark</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#5B8FA8;"></div>Water Feature</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#D4A843;"></div>Strategic Feature</div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <p class="prompt">Click any city or feature on the map to see its textual evidence and placement rationale.</p>
+    </div>
+
+    <!-- SVG MAP -->
+    <div class="map-wrapper" id="mapWrapper">
+        <svg class="map-svg" id="mainMap" viewBox="0 0 900 1300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="waterPattern" width="6" height="6" patternUnits="userSpaceOnUse">
+                    <path d="M0 3 Q1.5 1, 3 3 T6 3" fill="none" stroke="#5B8FA8" stroke-width="0.5" opacity="0.3"/>
+                </pattern>
+                <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#5B8FA8" stop-opacity="0.15"/>
+                    <stop offset="100%" stop-color="#5B8FA8" stop-opacity="0.05"/>
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+
+            <!-- Background -->
+            <rect width="900" height="1300" fill="var(--parchment-dark)" opacity="0.5"/>
+
+            <!-- Sea West -->
+            <rect class="geo-feature" x="0" y="0" width="80" height="1300" fill="url(#seaGrad)" data-type="geography"/>
+            <rect x="0" y="0" width="80" height="1300" fill="url(#waterPattern)"/>
+            <text x="40" y="650" fill="#5B8FA8" font-family="JetBrains Mono" font-size="11" letter-spacing="3" text-anchor="middle" transform="rotate(-90,40,650)" opacity="0.6">SEA WEST</text>
+
+            <!-- Sea East -->
+            <rect class="geo-feature" x="820" y="0" width="80" height="1300" fill="url(#seaGrad)" data-type="geography"/>
+            <rect x="820" y="0" width="80" height="1300" fill="url(#waterPattern)"/>
+            <text x="860" y="650" fill="#5B8FA8" font-family="JetBrains Mono" font-size="11" letter-spacing="3" text-anchor="middle" transform="rotate(90,860,650)" opacity="0.6">SEA EAST</text>
+
+            <!-- Sea North -->
+            <rect class="geo-feature" x="0" y="0" width="900" height="60" fill="url(#seaGrad)" data-type="geography"/>
+            <text x="450" y="35" fill="#5B8FA8" font-family="JetBrains Mono" font-size="11" letter-spacing="3" text-anchor="middle" opacity="0.6">SEA NORTH</text>
+
+            <!-- Sea South -->
+            <rect class="geo-feature" x="0" y="1240" width="900" height="60" fill="url(#seaGrad)" data-type="geography"/>
+            <text x="450" y="1270" fill="#5B8FA8" font-family="JetBrains Mono" font-size="11" letter-spacing="3" text-anchor="middle" opacity="0.6">SEA SOUTH</text>
+
+            <!-- REGION SHADING -->
+            <!-- Land Northward -->
+            <rect class="region-area" x="80" y="60" width="740" height="280" fill="#5B8FA8" rx="4" data-type="geography"/>
+            <text x="450" y="110" fill="var(--text-secondary)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle" opacity="0.5">LAND NORTHWARD (DESOLATION)</text>
+            <text x="450" y="125" fill="var(--text-secondary)" font-family="Source Serif 4" font-size="10" font-style="italic" text-anchor="middle" opacity="0.4">Former Jaredite territory</text>
+
+            <!-- Narrow Neck -->
+            <rect x="280" y="340" width="340" height="45" fill="#D4A843" opacity="0.15" rx="4"/>
+            <line x1="280" y1="340" x2="620" y2="340" stroke="#D4A843" stroke-width="2" stroke-dasharray="6,3" opacity="0.5"/>
+            <line x1="280" y1="385" x2="620" y2="385" stroke="#D4A843" stroke-width="2" stroke-dasharray="6,3" opacity="0.5"/>
+            <text x="450" y="367" fill="#D4A843" font-family="JetBrains Mono" font-size="10" font-weight="bold" letter-spacing="2" text-anchor="middle">NARROW NECK OF LAND</text>
+
+            <!-- Land of Bountiful region -->
+            <rect class="region-area" x="80" y="385" width="740" height="200" fill="#2B5B84" rx="4" data-type="nephite"/>
+            <text x="450" y="415" fill="var(--text-secondary)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle" opacity="0.5">LAND OF BOUNTIFUL</text>
+
+            <!-- Land of Zarahemla region -->
+            <rect class="region-area" x="80" y="585" width="740" height="300" fill="#2B5B84" rx="4" data-type="nephite"/>
+            <text x="250" y="620" fill="var(--text-secondary)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle" opacity="0.5">LAND OF ZARAHEMLA</text>
+
+            <!-- Narrow Strip of Wilderness -->
+            <path d="M80,885 Q250,860 450,880 Q650,900 820,875" fill="none" stroke="#4A6741" stroke-width="30" opacity="0.12"/>
+            <path d="M80,885 Q250,860 450,880 Q650,900 820,875" fill="none" stroke="#4A6741" stroke-width="2" stroke-dasharray="8,4" opacity="0.6"/>
+            <text x="450" y="845" fill="#4A6741" font-family="JetBrains Mono" font-size="10" font-weight="bold" letter-spacing="2" text-anchor="middle">NARROW STRIP OF WILDERNESS</text>
+            <text x="450" y="860" fill="#4A6741" font-family="Source Serif 4" font-size="9" font-style="italic" text-anchor="middle" opacity="0.7">East-to-west border between Nephites &amp; Lamanites</text>
+
+            <!-- Land of Nephi region -->
+            <rect class="region-area" x="80" y="920" width="740" height="320" fill="#8B3A3A" rx="4" data-type="lamanite"/>
+            <text x="450" y="960" fill="var(--text-secondary)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle" opacity="0.5">LAND OF NEPHI (LAMANITE TERRITORY)</text>
+            <text x="450" y="975" fill="var(--text-secondary)" font-family="Source Serif 4" font-size="10" font-style="italic" text-anchor="middle" opacity="0.4">Higher elevation than Zarahemla — people always "go up" to Nephi, "go down" to Zarahemla</text>
+
+            <!-- RIVER SIDON -->
+            <path d="M420,820 Q430,780 440,730 Q445,680 450,640 Q455,590 460,540 Q465,500 450,460" fill="none" stroke="#5B8FA8" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+            <path d="M420,820 Q430,780 440,730 Q445,680 450,640 Q455,590 460,540 Q465,500 450,460" fill="none" stroke="#5B8FA8" stroke-width="8" opacity="0.1" stroke-linecap="round"/>
+            <text x="475" y="660" fill="#5B8FA8" font-family="JetBrains Mono" font-size="10" letter-spacing="1" transform="rotate(-80,475,660)" opacity="0.7">RIVER SIDON</text>
+
+            <!-- ═══ GREAT LAKES OVERLAY (hidden by default) ═══ -->
+            <g id="overlayGroup" style="display:none;">
+                <!-- Lake Ontario shape approximation -->
+                <ellipse class="overlay-feature" cx="450" cy="120" rx="280" ry="70" fill="#2B7BBB" opacity="0.25"/>
+                <text class="overlay-label" x="450" y="125" fill="#2B7BBB" font-family="JetBrains Mono" font-size="12" font-weight="bold" text-anchor="middle" opacity="0">Lake Ontario</text>
+
+                <!-- Lake Erie shape approximation -->
+                <ellipse class="overlay-feature" cx="250" cy="340" rx="200" ry="40" fill="#2B7BBB" opacity="0.25" transform="rotate(-15,250,340)"/>
+                <text class="overlay-label" x="250" y="345" fill="#2B7BBB" font-family="JetBrains Mono" font-size="12" font-weight="bold" text-anchor="middle" opacity="0">Lake Erie</text>
+
+                <!-- Niagara region -->
+                <text class="overlay-label" x="450" y="300" fill="#D4A843" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle" opacity="0">≈ Niagara Isthmus</text>
+
+                <!-- Finger Lakes -->
+                <text class="overlay-label" x="600" y="190" fill="#2B7BBB" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0">Finger Lakes region</text>
+                <text class="overlay-label" x="600" y="203" fill="#2B7BBB" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0">"land of many waters"</text>
+
+                <!-- Hill Cumorah real location indicator -->
+                <text class="overlay-label" x="630" y="235" fill="#D4A843" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0">★ Palmyra, NY</text>
+
+                <!-- Ohio River / Sidon -->
+                <text class="overlay-label" x="485" y="725" fill="#5B8FA8" font-family="JetBrains Mono" font-size="9" text-anchor="start" opacity="0">≈ Ohio / Mississippi River?</text>
+
+                <!-- Appalachian wilderness -->
+                <text class="overlay-label" x="450" y="910" fill="#4A6741" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0">≈ Appalachian highlands</text>
+
+                <!-- Tennessee / Southeast -->
+                <text class="overlay-label" x="450" y="1040" fill="#8B3A3A" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0">≈ Tennessee / Southeast</text>
+            </g>
+
+            <!-- ═══ CITIES & LANDMARKS ═══ -->
+
+            <!-- LAND NORTHWARD -->
+            <!-- Hill Cumorah -->
+            <g class="city-dot" data-type="geography" data-name="cumorah" onclick="showDetail('cumorah')">
+                <polygon points="620,200 640,170 660,200" fill="#4A6741" opacity="0.7"/>
+                <polygon points="620,200 640,170 660,200" fill="none" stroke="#4A6741" stroke-width="1.5"/>
+                <circle cx="640" cy="195" r="5" fill="#D4A843" stroke="#fff" stroke-width="1.5" filter="url(#glow)"/>
+                <text class="city-label" x="640" y="162" fill="#4A6741" font-family="Playfair Display" font-size="12" font-weight="bold" text-anchor="middle">Hill Cumorah</text>
+                <text class="city-label" x="640" y="150" fill="#4A6741" font-family="JetBrains Mono" font-size="8" text-anchor="middle" opacity="0.6">(RAMAH)</text>
+            </g>
+
+            <!-- Hill Shim -->
+            <g class="city-dot" data-type="geography" data-name="shim" onclick="showDetail('shim')">
+                <polygon points="500,250 515,228 530,250" fill="#4A6741" opacity="0.5"/>
+                <circle cx="515" cy="245" r="4" fill="#4A6741" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="515" y="222" fill="#4A6741" font-family="Source Serif 4" font-size="10" text-anchor="middle">Hill Shim</text>
+            </g>
+
+            <!-- Desolation city -->
+            <g class="city-dot" data-type="nephite" data-name="desolation" onclick="showDetail('desolation')">
+                <circle cx="400" cy="310" r="6" fill="#2B5B84" stroke="#fff" stroke-width="1.5"/>
+                <text class="city-label" x="400" y="300" fill="#2B5B84" font-family="Source Serif 4" font-size="11" text-anchor="middle">Desolation</text>
+            </g>
+
+            <!-- Teancum -->
+            <g class="city-dot" data-type="nephite" data-name="teancum" onclick="showDetail('teancum')">
+                <circle cx="500" cy="320" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="515" y="315" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Teancum</text>
+            </g>
+
+            <!-- Boaz -->
+            <g class="city-dot" data-type="nephite" data-name="boaz" onclick="showDetail('boaz')">
+                <circle cx="350" cy="270" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="365" y="268" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Boaz</text>
+            </g>
+
+            <!-- NEAR NARROW NECK / BOUNTIFUL -->
+            <!-- Bountiful -->
+            <g class="city-dot" data-type="nephite" data-name="bountiful" onclick="showDetail('bountiful')">
+                <circle cx="450" cy="430" r="8" fill="#2B5B84" stroke="#fff" stroke-width="2"/>
+                <text class="city-label" x="450" y="455" fill="#2B5B84" font-family="Playfair Display" font-size="13" font-weight="bold" text-anchor="middle">Bountiful</text>
+            </g>
+
+            <!-- Mulek -->
+            <g class="city-dot" data-type="nephite" data-name="mulek" onclick="showDetail('mulek')">
+                <circle cx="700" cy="480" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="715" y="478" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Mulek</text>
+            </g>
+
+            <!-- Omner -->
+            <g class="city-dot" data-type="nephite" data-name="omner" onclick="showDetail('omner')">
+                <circle cx="720" cy="520" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="735" y="518" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Omner</text>
+            </g>
+
+            <!-- Jershon -->
+            <g class="city-dot" data-type="nephite" data-name="jershon" onclick="showDetail('jershon')">
+                <circle cx="710" cy="560" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="725" y="558" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Jershon</text>
+            </g>
+
+            <!-- ZARAHEMLA HEARTLAND -->
+            <!-- Zarahemla -->
+            <g class="city-dot" data-type="nephite" data-name="zarahemla" onclick="showDetail('zarahemla')">
+                <circle cx="400" cy="680" r="10" fill="#2B5B84" stroke="#D4A843" stroke-width="2.5" filter="url(#glow)"/>
+                <text class="city-label" x="400" y="710" fill="#2B5B84" font-family="Playfair Display" font-size="15" font-weight="bold" text-anchor="middle">Zarahemla</text>
+                <text class="city-label" x="400" y="724" fill="#2B5B84" font-family="JetBrains Mono" font-size="8" text-anchor="middle" opacity="0.6">NEPHITE CAPITAL</text>
+            </g>
+
+            <!-- Gideon -->
+            <g class="city-dot" data-type="nephite" data-name="gideon" onclick="showDetail('gideon')">
+                <circle cx="510" cy="690" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="525" y="688" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Gideon</text>
+            </g>
+
+            <!-- Ammonihah -->
+            <g class="city-dot" data-type="nephite" data-name="ammonihah" onclick="showDetail('ammonihah')">
+                <circle cx="280" cy="630" r="6" fill="#2B5B84" stroke="#fff" stroke-width="1.5"/>
+                <text class="city-label" x="264" y="625" fill="#2B5B84" font-family="Source Serif 4" font-size="11" text-anchor="end">Ammonihah</text>
+            </g>
+
+            <!-- Noah -->
+            <g class="city-dot" data-type="nephite" data-name="noah" onclick="showDetail('noah')">
+                <circle cx="320" cy="650" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="307" y="660" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Noah</text>
+            </g>
+
+            <!-- Melek -->
+            <g class="city-dot" data-type="nephite" data-name="melek" onclick="showDetail('melek')">
+                <circle cx="190" cy="650" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="175" y="648" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Melek</text>
+            </g>
+
+            <!-- Sidom -->
+            <g class="city-dot" data-type="nephite" data-name="sidom" onclick="showDetail('sidom')">
+                <circle cx="330" cy="610" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="330" y="600" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="middle">Sidom</text>
+            </g>
+
+            <!-- Nephihah -->
+            <g class="city-dot" data-type="nephite" data-name="nephihah" onclick="showDetail('nephihah')">
+                <circle cx="620" cy="700" r="5" fill="#2B5B84" stroke="#fff" stroke-width="1.5"/>
+                <text class="city-label" x="635" y="698" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Nephihah</text>
+            </g>
+
+            <!-- Moroni -->
+            <g class="city-dot" data-type="nephite" data-name="moroni_city" onclick="showDetail('moroni_city')">
+                <circle cx="740" cy="750" r="6" fill="#2B5B84" stroke="#fff" stroke-width="1.5"/>
+                <text class="city-label" x="755" y="748" fill="#2B5B84" font-family="Source Serif 4" font-size="11" text-anchor="start">Moroni</text>
+            </g>
+
+            <!-- Lehi -->
+            <g class="city-dot" data-type="nephite" data-name="lehi_city" onclick="showDetail('lehi_city')">
+                <circle cx="720" cy="720" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="735" y="718" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="start">Lehi</text>
+            </g>
+
+            <!-- Aaron -->
+            <g class="city-dot" data-type="nephite" data-name="aaron" onclick="showDetail('aaron')">
+                <circle cx="640" cy="740" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="625" y="750" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Aaron</text>
+            </g>
+
+            <!-- Antionum (Zoramites) -->
+            <g class="city-dot" data-type="nephite" data-name="antionum" onclick="showDetail('antionum')">
+                <circle cx="690" cy="640" r="5" fill="#2B5B84" stroke="#8B3A3A" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text class="city-label" x="690" y="630" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="middle">Antionum</text>
+            </g>
+
+            <!-- SOUTHERN BORDER CITIES -->
+            <!-- Manti -->
+            <g class="city-dot" data-type="nephite" data-name="manti" onclick="showDetail('manti')">
+                <circle cx="420" cy="810" r="7" fill="#2B5B84" stroke="#fff" stroke-width="2"/>
+                <text class="city-label" x="420" y="835" fill="#2B5B84" font-family="Playfair Display" font-size="12" font-weight="bold" text-anchor="middle">Manti</text>
+            </g>
+
+            <!-- Zeezrom -->
+            <g class="city-dot" data-type="nephite" data-name="zeezrom" onclick="showDetail('zeezrom')">
+                <circle cx="340" cy="800" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="325" y="798" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Zeezrom</text>
+            </g>
+
+            <!-- Cumeni -->
+            <g class="city-dot" data-type="nephite" data-name="cumeni" onclick="showDetail('cumeni')">
+                <circle cx="300" cy="820" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="285" y="818" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Cumeni</text>
+            </g>
+
+            <!-- Antiparah -->
+            <g class="city-dot" data-type="nephite" data-name="antiparah" onclick="showDetail('antiparah')">
+                <circle cx="220" cy="830" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="205" y="828" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Antiparah</text>
+            </g>
+
+            <!-- Judea -->
+            <g class="city-dot" data-type="nephite" data-name="judea" onclick="showDetail('judea')">
+                <circle cx="170" cy="810" r="4" fill="#2B5B84" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="155" y="808" fill="#2B5B84" font-family="Source Serif 4" font-size="10" text-anchor="end">Judea</text>
+            </g>
+
+            <!-- LAND OF NEPHI (LAMANITE TERRITORY) -->
+            <!-- Nephi / Lehi-Nephi -->
+            <g class="city-dot" data-type="lamanite" data-name="nephi" onclick="showDetail('nephi')">
+                <circle cx="420" cy="1050" r="9" fill="#8B3A3A" stroke="#D4A843" stroke-width="2" filter="url(#glow)"/>
+                <text class="city-label" x="420" y="1078" fill="#8B3A3A" font-family="Playfair Display" font-size="14" font-weight="bold" text-anchor="middle">Nephi</text>
+                <text class="city-label" x="420" y="1092" fill="#8B3A3A" font-family="JetBrains Mono" font-size="8" text-anchor="middle" opacity="0.6">LAMANITE CAPITAL</text>
+            </g>
+
+            <!-- Shilom -->
+            <g class="city-dot" data-type="lamanite" data-name="shilom" onclick="showDetail('shilom')">
+                <circle cx="500" cy="1040" r="4" fill="#8B3A3A" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="515" y="1038" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="start">Shilom</text>
+            </g>
+
+            <!-- Shemlon -->
+            <g class="city-dot" data-type="lamanite" data-name="shemlon" onclick="showDetail('shemlon')">
+                <circle cx="530" cy="1070" r="4" fill="#8B3A3A" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="545" y="1068" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="start">Shemlon</text>
+            </g>
+
+            <!-- Jerusalem (Lamanite) -->
+            <g class="city-dot" data-type="lamanite" data-name="jerusalem_lam" onclick="showDetail('jerusalem_lam')">
+                <circle cx="350" cy="1020" r="5" fill="#8B3A3A" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="335" y="1018" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="end">Jerusalem</text>
+            </g>
+
+            <!-- Ishmael -->
+            <g class="city-dot" data-type="lamanite" data-name="ishmael" onclick="showDetail('ishmael')">
+                <circle cx="300" cy="1060" r="5" fill="#8B3A3A" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="285" y="1058" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="end">Ishmael</text>
+            </g>
+
+            <!-- Middoni -->
+            <g class="city-dot" data-type="lamanite" data-name="middoni" onclick="showDetail('middoni')">
+                <circle cx="260" cy="1030" r="4" fill="#8B3A3A" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="245" y="1028" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="end">Middoni</text>
+            </g>
+
+            <!-- Waters of Mormon -->
+            <g class="city-dot" data-type="geography" data-name="waters_mormon" onclick="showDetail('waters_mormon')">
+                <ellipse cx="560" cy="1010" rx="30" ry="15" fill="#5B8FA8" opacity="0.2" stroke="#5B8FA8" stroke-width="1"/>
+                <text class="city-label" x="560" y="995" fill="#5B8FA8" font-family="Source Serif 4" font-size="10" font-style="italic" text-anchor="middle">Waters of Mormon</text>
+            </g>
+
+            <!-- Helam (wilderness) -->
+            <g class="city-dot" data-type="geography" data-name="helam" onclick="showDetail('helam')">
+                <circle cx="480" cy="940" r="4" fill="#4A6741" stroke="#fff" stroke-width="1"/>
+                <text class="city-label" x="495" y="938" fill="#4A6741" font-family="Source Serif 4" font-size="10" text-anchor="start">Helam</text>
+            </g>
+
+            <!-- Land of First Inheritance -->
+            <g class="city-dot" data-type="lamanite" data-name="first_inheritance" onclick="showDetail('first_inheritance')">
+                <circle cx="130" cy="1200" r="5" fill="#8B3A3A" stroke="#D4A843" stroke-width="1.5"/>
+                <text class="city-label" x="150" y="1195" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="start">Land of First</text>
+                <text class="city-label" x="150" y="1208" fill="#8B3A3A" font-family="Source Serif 4" font-size="10" text-anchor="start">Inheritance</text>
+            </g>
+
+            <!-- Directional compass -->
+            <g transform="translate(840,1240)">
+                <line x1="0" y1="-20" x2="0" y2="20" stroke="var(--text-secondary)" stroke-width="1" opacity="0.4"/>
+                <line x1="-20" y1="0" x2="20" y2="0" stroke="var(--text-secondary)" stroke-width="1" opacity="0.4"/>
+                <text x="0" y="-25" fill="var(--text-secondary)" font-family="JetBrains Mono" font-size="10" text-anchor="middle" opacity="0.5">N</text>
+            </g>
+        </svg>
+    </div>
+
+    <!-- ANALYSIS SECTION -->
+    <div class="section-text">
+        <h2>The Master Geographic Passage: Alma 22:27–34</h2>
+        <p>Nearly everything we know about Book of Mormon geography comes from a single extended passage — Alma's overview description of the lands. This passage establishes the core spatial framework: Lamanites to the south in the elevated land of Nephi, Nephites to the north in Zarahemla, a narrow strip of wilderness running east to west between them, seas on both sides, a narrow neck of land connecting to territory further north, and the River Sidon flowing through the heart of Nephite territory.</p>
+
+        <div class="source-quote">
+            <p>"The Lamanites… were separated from the Nephites… by a narrow strip of wilderness, which ran from the sea east even to the sea west… the Nephites had taken possession of all the land northward… bordering even to the sea, on the east and on the west, and thus the Nephites… had hemmed in the Lamanites on the south… And thus the land of Nephi and the land of Zarahemla were nearly surrounded by water, there being a small neck of land between the land northward and the land southward."</p>
+            <div class="attr">— Alma 22:27, 29, 32 (selections)</div>
+        </div>
+
+        <h2>Why This Looks Like Joseph Smith's Backyard</h2>
+
+        <p>The parallels between the text's internal geography and the Great Lakes region of North America are difficult to dismiss — especially given the evidence (established in our companion essay, <em>The Clean Hill</em>) that Joseph Smith, Oliver Cowdery, and every early Church leader explicitly placed the Book of Mormon's events in this very area.</p>
+
+        <p>Consider the structural parallels. The text describes a land nearly surrounded by water, with a narrow neck connecting a northern territory to a southern one. The Great Lakes region features exactly this topology: the land between Lake Erie and Lake Ontario, with the Niagara Peninsula as a narrow neck connecting the territory north of the lakes to the territory south and east. The "land of many waters, rivers, and fountains" where Cumorah is located (Mormon 6:4) describes the Finger Lakes region of New York with uncanny precision.</p>
+
+        <p>The text's River Sidon flows from south to north through the heart of Nephite territory, with Zarahemla on its west bank and Gideon on its east. Depending on which "Heartland" model you follow, this could correspond to the Genesee River, the Susquehanna, or any number of northward-flowing rivers in the region Joseph Smith knew intimately.</p>
+
+        <p>The narrow strip of wilderness running east to west, separating the elevated Lamanite lands from the lower Nephite territory, maps well onto the Appalachian ridgeline. The text consistently describes travel to the land of Nephi as going "up" and travel to Zarahemla as going "down" — which matches the topographic reality of moving between the Appalachian highlands and the Great Lakes lowlands.</p>
+
+        <div class="key-point">
+            <div class="label">The Critical Observation</div>
+            <p>Joseph Smith did not need to invent a geography from scratch. He needed only to describe — in general, schematic terms — the landscape visible from his own front door. A land nearly surrounded by water. A narrow neck. Seas east and west. A major river. A prominent hill. An elevated wilderness to the south. All of this exists in the Great Lakes region. And all of it is described, in exactly those terms, in the Book of Mormon.</p>
+        </div>
+    </div>
+
+    <!-- REFERENCE GRID -->
+    <div class="section-text">
+        <h2>Complete City &amp; Feature Index</h2>
+        <p>The following cards catalogue every significant named location in the Book of Mormon with its placement evidence. Click any location on the map above for the full entry.</p>
+    </div>
+
+    <div class="info-panel" id="infoGrid">
+        <!-- Auto-filled by JS -->
+    </div>
+
+</div>
+
+<script>
+// ═══ LOCATION DATABASE ═══
+const locations = {
+    cumorah: {
+        name: "Hill Cumorah (Ramah)",
+        type: "geography",
+        refs: "Mormon 6:2–6; Ether 15:11",
+        desc: "The hill of the final Nephite battle and earlier Jaredite destruction. Located in the \"land of many waters, rivers, and fountains\" (Mormon 6:4) in the land northward. Mormon hid all the sacred records here except those given to his son Moroni. The Jaredites called it Ramah (Ether 15:11). 230,000+ Nephite soldiers died here. Joseph Smith and Oliver Cowdery identified it as the hill near Palmyra, New York — in the Finger Lakes region, which is literally a land of many waters, rivers, and fountains."
+    },
+    shim: {
+        name: "Hill Shim",
+        type: "geography",
+        refs: "Mormon 1:3; 4:23; Ether 9:3",
+        desc: "Located south of Cumorah in the land northward. Ammaron hid the sacred records here before Mormon later retrieved them (Mormon 1:3). The Jaredite king Omer passed by this hill on his way to the eastern seashore (Ether 9:3), placing it on an inland route through the land northward."
+    },
+    desolation: {
+        name: "Desolation (City)",
+        type: "nephite",
+        refs: "Mormon 3:5–7; 4:1–2, 13, 19",
+        desc: "A Nephite city near the narrow neck of land, in the land northward. Named after the wider \"land of Desolation\" — the former Jaredite territory so called because of the destruction found there (Alma 22:30–31). It was a key military position near the border between the lands northward and southward, and figured in the final Nephite retreats."
+    },
+    teancum: {
+        name: "Teancum",
+        type: "nephite",
+        refs: "Mormon 4:3",
+        desc: "A city near Desolation, on the borders of the seashore, in the land northward near the narrow neck. It fell to the Lamanites during the final wars and was later retaken by the Nephites temporarily (Mormon 4:3)."
+    },
+    boaz: {
+        name: "Boaz",
+        type: "nephite",
+        refs: "Mormon 4:20",
+        desc: "A city in the land northward to which the Nephites retreated after losing Desolation and Teancum. The Nephites made a stand here but were driven further north, continuing their retreat toward Cumorah."
+    },
+    bountiful: {
+        name: "Bountiful",
+        type: "nephite",
+        refs: "Alma 22:29–33; 3 Nephi 11:1",
+        desc: "A major Nephite city and the land bordering the narrow neck on its southern side. Described as stretching from sea east to sea west (Alma 22:33). After the destruction at Christ's death, the risen Christ appeared here to a gathering of 2,500 people at the temple in Bountiful (3 Nephi 11:1; 17:25). Its position as a buffer between the land northward and the Nephite heartland made it strategically critical."
+    },
+    mulek: {
+        name: "Mulek",
+        type: "nephite",
+        refs: "Alma 51:26; 52:2, 16–26",
+        desc: "An east-coast city north of the main Nephite heartland, near the land of Bountiful. It was captured by the Lamanite commander Amalickiah during his coastal campaign (Alma 51:26) and later retaken through a strategy involving Teancum, Lehi, and Moroni (Alma 52)."
+    },
+    omner: {
+        name: "Omner",
+        type: "nephite",
+        refs: "Alma 51:26",
+        desc: "An east-coast city captured by Amalickiah during his march up the eastern seaboard. Listed between the cities on the coast, placing it south of Mulek and north of the main Zarahemla territory."
+    },
+    jershon: {
+        name: "Jershon",
+        type: "nephite",
+        refs: "Alma 27:22–26; 35:13",
+        desc: "A land on the east coast, south of the land of Bountiful, given to the Anti-Nephi-Lehies (converted Lamanites) as a homeland. The Nephites stationed armies between Jershon and the land of Nephi to protect them (Alma 27:23). Its position on the eastern seaboard places it in the northern part of the Nephite east coast."
+    },
+    zarahemla: {
+        name: "Zarahemla",
+        type: "nephite",
+        refs: "Alma 2:15; 6:7; Helaman 1:18–27; 3 Nephi 8:8",
+        desc: "The Nephite capital and largest city, located on the west side of the River Sidon (Alma 2:15; 6:7). It was the political, religious, and military center of Nephite civilization for centuries. Burned at the time of Christ's death (3 Nephi 8:8). The Mulekites settled here before being discovered by the Nephites (Omni 1:13–16). Its central location made it the hub from which distances to other cities are implicitly measured."
+    },
+    gideon: {
+        name: "Gideon",
+        type: "nephite",
+        refs: "Alma 2:20; 6:7",
+        desc: "A city and valley east of Zarahemla, on the other side of the River Sidon (Alma 6:7). Named after a Nephite hero. It served as a secondary settlement near the capital. Alma preached here after his time in Zarahemla (Alma 7). Its position across the river from Zarahemla establishes that the river ran between the two."
+    },
+    ammonihah: {
+        name: "Ammonihah",
+        type: "nephite",
+        refs: "Alma 8:6–13; 16:2–3, 9–11; 25:2",
+        desc: "A significant city northwest of Zarahemla, three days' journey north of Melek (Alma 8:6). It was a center of Nehorite apostasy and rejected Alma's preaching. Later destroyed completely by a Lamanite invasion in a single day — the dead so numerous they were heaped and buried en masse. The site became known as the \"Desolation of Nehors\" (Alma 16:11). Later rebuilt."
+    },
+    noah: {
+        name: "Noah",
+        type: "nephite",
+        refs: "Alma 49:12–15",
+        desc: "A city near Ammonihah, between it and the east coast. Fortified by Captain Moroni with a ditch, bank of earth, and timber palisade (Alma 49:13–18). The Lamanites, who expected it to be an easy target, were repulsed here with heavy losses."
+    },
+    melek: {
+        name: "Melek",
+        type: "nephite",
+        refs: "Alma 8:3–6; 35:13",
+        desc: "A city west of Ammonihah and west of the River Sidon, on the western frontier of Nephite territory. Alma preached here before traveling three days north to Ammonihah (Alma 8:3–6). Its western location near the sea west makes it a border settlement."
+    },
+    sidom: {
+        name: "Sidom",
+        type: "nephite",
+        refs: "Alma 15:1",
+        desc: "A city in the land of Zarahemla where Alma and Amulek went after being expelled from Ammonihah. Converts from Ammonihah who had been cast out gathered here (Alma 15:1). Its proximity to Ammonihah suggests it was in the northwest quadrant of Nephite territory."
+    },
+    nephihah: {
+        name: "Nephihah",
+        type: "nephite",
+        refs: "Alma 50:14; 51:24; 59:5–11",
+        desc: "A city between Zarahemla and the east coast, established during the period of Nephite expansion under Captain Moroni (Alma 50:14). It fell to the Lamanites during the war chapters and its loss caused significant strategic problems for the Nephites (Alma 59)."
+    },
+    moroni_city: {
+        name: "Moroni (City)",
+        type: "nephite",
+        refs: "Alma 50:13; 3 Nephi 8:9",
+        desc: "A southeastern frontier city on the east coast, near the seashore and on the southern border of Nephite territory (Alma 50:13). It was among the first cities to fall during Amalickiah's coastal invasion. At the time of Christ's death, it \"did sink into the depths of the sea\" (3 Nephi 8:9)."
+    },
+    lehi_city: {
+        name: "Lehi (City)",
+        type: "nephite",
+        refs: "Alma 50:15; 51:26",
+        desc: "An east-coast city near the city of Moroni. Built during the period of Nephite expansion in the borderlands (Alma 50:15). Captured by Amalickiah during his east-coast campaign (Alma 51:26)."
+    },
+    aaron: {
+        name: "Aaron",
+        type: "nephite",
+        refs: "Alma 50:14",
+        desc: "A city between Nephihah and Moroni on the east side of Nephite territory. Established during Captain Moroni's fortification program. Its position helps establish the east-coast chain of cities that formed the Nephite defensive frontier."
+    },
+    antionum: {
+        name: "Antionum (Zoramite Land)",
+        type: "nephite",
+        refs: "Alma 31:3; 43:5, 22",
+        desc: "A land on the east, south of Jershon, inhabited by the Zoramites — a Nephite splinter group whose apostate worship centered on the Rameumptom (Alma 31). The Zoramites eventually defected to the Lamanites, threatening the Nephite eastern flank. Its border position made the Zoramite defection strategically dangerous."
+    },
+    manti: {
+        name: "Manti",
+        type: "nephite",
+        refs: "Alma 16:6–7; 43:22, 25–42; 56:14",
+        desc: "A key southern defense city near the headwaters of the River Sidon (Alma 22:27; 43:22). Its elevated position at the head of the river, near the narrow strip of wilderness, made it critical for defending the southern approach to Zarahemla. Major battles were fought here. The Sidon's headwaters being near Manti establishes the river's south-to-north flow through Nephite territory."
+    },
+    zeezrom: {
+        name: "Zeezrom",
+        type: "nephite",
+        refs: "Alma 56:14",
+        desc: "A city in the southwestern quadrant of Nephite territory, near Cumeni and the southern border. Part of the chain of cities that Helaman and the stripling warriors fought to recapture from the Lamanites during the war chapters (Alma 56)."
+    },
+    cumeni: {
+        name: "Cumeni",
+        type: "nephite",
+        refs: "Alma 56:14; 57:7–12, 23, 34",
+        desc: "A southwestern border city near the narrow strip of wilderness. Captured by the Lamanites and later retaken by Helaman and his stripling warriors through a siege (Alma 57:7–12). Its position near the southern border made it a frequent target."
+    },
+    antiparah: {
+        name: "Antiparah",
+        type: "nephite",
+        refs: "Alma 56:14, 31–34; 57:1–4",
+        desc: "A southwestern border city held by the Lamanites. Helaman used the stripling warriors as a decoy to draw the Antiparah garrison out, after which the city was abandoned by the Lamanites (Alma 56:31–34; 57:1–4). Located west of Manti and Cumeni, near the west sea."
+    },
+    judea: {
+        name: "Judea",
+        type: "nephite",
+        refs: "Alma 56:9, 15, 18, 57:11",
+        desc: "A city on the western frontier of Nephite territory, near the sea west and the southern border. Helaman brought his stripling warriors here to reinforce the garrison under Antipus (Alma 56:9). Its southwestern location near the sea west completes the chain of border fortifications."
+    },
+    nephi: {
+        name: "Nephi (Lehi-Nephi)",
+        type: "lamanite",
+        refs: "2 Nephi 5:8; Mosiah 7:1–6; 9:1–15; Alma 47:1, 20",
+        desc: "The original Nephite capital, built by Nephi after separating from his brothers. Later abandoned by the Nephites when they migrated to Zarahemla, it became the Lamanite capital. Located at a higher elevation than Zarahemla — the text consistently says people \"go up\" to Nephi and \"go down\" to Zarahemla. Nephi built a temple here \"after the manner of Solomon\" (2 Nephi 5:16). Zeniff's colony later attempted to reoccupy it (Mosiah 9)."
+    },
+    shilom: {
+        name: "Shilom",
+        type: "lamanite",
+        refs: "Mosiah 7:7, 21; 9:6, 8; 11:12–13",
+        desc: "A land and city near the city of Nephi. Part of Zeniff's colony territory. King Noah built a tower near the temple in Shilom that was tall enough to overlook the land of Shemlon (Mosiah 11:12). This establishes Shilom as adjacent to Nephi and elevated relative to Shemlon."
+    },
+    shemlon: {
+        name: "Shemlon",
+        type: "lamanite",
+        refs: "Mosiah 10:7; 11:12; 20:1",
+        desc: "A land near and apparently lower than Shilom, inhabited by Lamanites. Visible from the tower King Noah built in Shilom (Mosiah 11:12). The Lamanite armies gathered here before attacks on Zeniff's colony."
+    },
+    jerusalem_lam: {
+        name: "Jerusalem (Lamanite City)",
+        type: "lamanite",
+        refs: "Alma 21:1–2; 3 Nephi 9:7",
+        desc: "A Lamanite city in the land of Nephi, bordering the land of Mormon. Built by Lamanites, Amalekites, and Amulonites. Aaron (brother of Ammon) preached here during the Lamanite missions (Alma 21). Destroyed at the time of Christ's death — \"covered with water\" (3 Nephi 9:7)."
+    },
+    ishmael: {
+        name: "Ishmael",
+        type: "lamanite",
+        refs: "Alma 17:19–21; 20:2; 21:18",
+        desc: "A Lamanite city/land in the land of Nephi. King Lamoni ruled here. Ammon served Lamoni as a shepherd in Ishmael and performed his famous defense of the king's flocks at the waters of Sebus (Alma 17:26–39). The converted Lamanites from this area became the Anti-Nephi-Lehies."
+    },
+    middoni: {
+        name: "Middoni",
+        type: "lamanite",
+        refs: "Alma 20:2–7; 21:12–13",
+        desc: "A Lamanite city in the land of Nephi, ruled by a king named Antiomno. Ammon and King Lamoni traveled here to free Ammon's brothers who were imprisoned (Alma 20:2–7). Its relative proximity to Ishmael is established by the travel narrative."
+    },
+    waters_mormon: {
+        name: "Waters of Mormon",
+        type: "geography",
+        refs: "Mosiah 18:5–16, 30",
+        desc: "A body of water in the borderlands of the land of Nephi, \"in a thicket of small trees\" where Alma the Elder secretly baptized converts (Mosiah 18:5, 8). Called \"the most beautiful\" place by those who were baptized there. Located far enough from the city of Nephi to provide concealment from King Noah's searches but within reachable distance."
+    },
+    helam: {
+        name: "Helam",
+        type: "geography",
+        refs: "Mosiah 23:3–5, 19–20, 25–39",
+        desc: "A settlement in the wilderness between the land of Nephi and the land of Zarahemla, established by Alma the Elder and his followers after fleeing King Noah. They traveled eight days into the wilderness before settling here (Mosiah 23:3). Later discovered and briefly occupied by the Lamanites before Alma's people escaped to Zarahemla."
+    },
+    first_inheritance: {
+        name: "Land of First Inheritance",
+        type: "lamanite",
+        refs: "Alma 22:28; Mosiah 10:13",
+        desc: "The coastal land in the far south where Lehi's party first landed and settled. Described as being \"on the west in the land of Nephi, in the place of their fathers' first inheritance, and thus bordering along by the seashore\" (Alma 22:28). This establishes it as a southern coastal location on the west, the southernmost point of Book of Mormon geography."
+    }
+};
+
+// ═══ INTERACTION FUNCTIONS ═══
+function showDetail(key) {
+    const loc = locations[key];
+    if (!loc) return;
+    const panel = document.getElementById('detailPanel');
+    panel.innerHTML = `
+        <h3>${loc.name}</h3>
+        <div class="ref">${loc.refs}</div>
+        <p>${loc.desc}</p>
+    `;
+    // Highlight the dot
+    document.querySelectorAll('.city-dot').forEach(d => d.style.opacity = '0.4');
+    const target = document.querySelector(`.city-dot[data-name="${key}"]`);
+    if (target) target.style.opacity = '1';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showLayer(layer) {
+    document.querySelectorAll('.control-btn:not(.overlay-btn)').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.querySelectorAll('.city-dot').forEach(d => {
+        const type = d.getAttribute('data-type');
+        if (layer === 'all') { d.style.display = ''; d.style.opacity = '1'; }
+        else if (layer === 'geography') { d.style.display = (type === 'geography') ? '' : 'none'; }
+        else if (layer === 'nephite') { d.style.display = (type === 'nephite') ? '' : 'none'; }
+        else if (layer === 'lamanite') { d.style.display = (type === 'lamanite') ? '' : 'none'; }
+    });
+}
+
+function toggleOverlay() {
+    const btn = document.querySelector('.overlay-btn');
+    const wrapper = document.getElementById('mapWrapper');
+    const overlay = document.getElementById('overlayGroup');
+    btn.classList.toggle('active');
+    const show = btn.classList.contains('active');
+    wrapper.classList.toggle('show-overlay', show);
+    overlay.style.display = show ? '' : 'none';
+}
+
+// Build reference grid
+function buildGrid() {
+    const grid = document.getElementById('infoGrid');
+    const sorted = Object.entries(locations).sort((a, b) => a[1].name.localeCompare(b[1].name));
+    sorted.forEach(([key, loc]) => {
+        const card = document.createElement('div');
+        card.className = 'info-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => showDetail(key);
+        card.innerHTML = `
+            <h3>${loc.name}</h3>
+            <div class="ref">${loc.refs}</div>
+            <p>${loc.desc.substring(0, 140)}${loc.desc.length > 140 ? '…' : ''}</p>
+        `;
+        grid.appendChild(card);
+    });
+}
+buildGrid();
+
+// Dark mode
+const darkToggle = document.getElementById('darkToggle');
+if (localStorage.getItem('ofd-theme') === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    darkToggle.textContent = '☀️';
+}
+darkToggle.addEventListener('click', () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    document.body.toggleAttribute('data-theme');
+    if (isDark) { document.body.removeAttribute('data-theme'); darkToggle.textContent = '🌙'; localStorage.setItem('ofd-theme', 'light'); }
+    else { document.body.setAttribute('data-theme', 'dark'); darkToggle.textContent = '☀️'; localStorage.setItem('ofd-theme', 'dark'); }
+});
+</script>
+</body>
+</html>
