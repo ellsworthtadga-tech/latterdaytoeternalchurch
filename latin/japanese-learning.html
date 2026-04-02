@@ -246,6 +246,21 @@ body::before {
 @media (min-width:480px) { .content-area{padding:1.5rem 2rem 4rem} .kana-grid{gap:6px} .kana-char{font-size:1.6rem} }
 @media (min-width:768px) { .home-title{font-size:2.6rem} .home-nav{max-width:400px} .content-area{max-width:600px;margin:0 auto} }
 </style>
+<script>
+(function() {
+  var m = document.createElement('link');
+  m.rel = 'manifest';
+  m.href = 'data:application/json;base64,eyJuYW1lIjogIuaXpeacrOiqnumBkyDigJQgVGhlIFBhdGggb2YgSmFwYW5lc2UiLCAic2hvcnRfbmFtZSI6ICLml6XmnKzoqp7pgZMiLCAiZGVzY3JpcHRpb24iOiAiSmFwYW5lc2UgbGFuZ3VhZ2UgbGVhcm5pbmcgYXBwIiwgInN0YXJ0X3VybCI6ICIuL2phcGFuZXNlLWxlYXJuaW5nLmh0bWwiLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwgInRoZW1lX2NvbG9yIjogIiMxYTBhMGEiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjMWEwYTBhIiwgImljb25zIjogW3sic3JjIjogIi4vbmlob25nby1pY29uLTE5Mi5wbmciLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LCB7InNyYyI6ICIuL25paG9uZ28taWNvbi01MTIucG5nIiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJhbnkifSwgeyJzcmMiOiAiLi9uaWhvbmdvLWljb24tMTkyLnBuZyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAibWFza2FibGUifV19';
+  document.head.appendChild(m);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      console.log('SW registered:', reg.scope);
+    }).catch(function(err) {
+      console.log('SW reg skipped (app still works):', err);
+    });
+  }
+})();
+</script>
 </head>
 <body>
 
