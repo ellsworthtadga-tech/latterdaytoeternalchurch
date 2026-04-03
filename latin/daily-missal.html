@@ -38,6 +38,7 @@
 
 html, body {
   height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background: var(--parchment);
   color: var(--ink);
@@ -48,7 +49,6 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bottom);
   background-image:
     radial-gradient(ellipse at 20% 50%, rgba(180,150,100,0.15) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(160,130,80,0.1) 0%, transparent 40%),
@@ -102,7 +102,7 @@ body {
 /* ─── Navigation ─── */
 .bottom-nav {
   display: flex;
-  background: linear-gradient(0deg, #2C1810 0%, #3C2415 100%);
+  background: #2C1810;
   border-top: 2px solid var(--gold);
   flex-shrink: 0;
   padding-bottom: var(--safe-bottom);
@@ -140,13 +140,14 @@ body {
 /* ─── Main Content ─── */
 .main-content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
 
-.page { display: none; padding: 20px; padding-bottom: 40px; }
+.page { display: none; padding: 20px; padding-bottom: 20px; }
 .page.active { display: block; animation: fadeIn 0.4s ease; }
 
 @keyframes fadeIn {
