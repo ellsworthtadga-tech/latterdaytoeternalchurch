@@ -119,8 +119,8 @@ body {
   border: none;
   color: var(--ink-faded);
   font-family: 'Cinzel', serif;
-  font-size: 9px;
-  letter-spacing: 1px;
+  font-size: 8px;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: color 0.3s;
   position: relative;
@@ -135,7 +135,7 @@ body {
   background: var(--gold-light);
 }
 
-.nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
+.nav-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
 /* ─── Main Content ─── */
 .main-content {
@@ -873,6 +873,163 @@ body {
   margin-bottom: 16px;
 }
 
+
+/* ─── Hours Page ─── */
+.hours-intro {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hours-intro-title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.hours-intro-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-faded);
+}
+
+.hours-timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.hours-timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--parchment-deeper), var(--gold), var(--parchment-deeper));
+}
+
+.hour-card {
+  position: relative;
+  margin-bottom: 6px;
+  border: 1px solid var(--parchment-deeper);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.hour-card::before {
+  content: '';
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--parchment-deeper);
+  border: 2px solid var(--parchment);
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.hour-card.current {
+  border-color: var(--gold);
+  background: rgba(184,134,11,0.06);
+}
+
+.hour-card.current::before {
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(184,134,11,0.4);
+}
+
+.hour-card.past { opacity: 0.5; }
+
+.hour-link {
+  display: flex;
+  align-items: center;
+  padding: 14px 14px 14px 12px;
+  text-decoration: none;
+  color: inherit;
+  gap: 12px;
+}
+
+.hour-time {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--ink-faded);
+  min-width: 52px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.hour-info { flex: 1; }
+
+.hour-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
+
+.hour-card.current .hour-name { color: var(--gold); }
+
+.hour-latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-faded);
+  margin-top: 1px;
+}
+
+.hour-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--ink-light);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.hour-arrow {
+  color: var(--ink-faded);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.hour-card.current .hour-arrow { color: var(--gold); }
+
+.hour-current-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--gold);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+.hours-note {
+  text-align: center;
+  margin-top: 20px;
+  padding: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faded);
+  line-height: 1.5;
+  border-top: 1px solid var(--parchment-deeper);
+}
+
+.hours-note a {
+  color: var(--crimson);
+  text-decoration: none;
+}
+
 /* ─── Scrollbar ─── */
 .main-content::-webkit-scrollbar { width: 6px; }
 .main-content::-webkit-scrollbar-track { background: transparent; }
@@ -957,6 +1114,20 @@ body {
     <div class="calendar-grid" id="calendar-grid"></div>
   </div>
 
+
+  <!-- Hours Page -->
+  <div id="page-hours" class="page">
+    <div class="hours-intro">
+      <div class="hours-intro-title">Liturgy of the Hours</div>
+      <div class="hours-intro-sub">The prayer of the Church, sanctifying each hour of the day</div>
+    </div>
+    <div class="hours-timeline" id="hours-timeline"></div>
+    <div class="hours-note">
+      Full prayer texts provided by <a href="https://universalis.com" target="_blank" rel="noopener">Universalis.com</a><br>
+      Tap any hour to pray.
+    </div>
+  </div>
+
 </main>
 
 <!-- ─── Bottom Navigation ─── -->
@@ -972,6 +1143,10 @@ body {
   <button class="nav-btn" data-page="journal">
     <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
     JOURNAL
+  </button>
+  <button class="nav-btn" data-page="hours">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    HOURS
   </button>
   <button class="nav-btn" data-page="streak">
     <svg viewBox="0 0 24 24"><path d="M13.5 .67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
@@ -1681,6 +1856,105 @@ document.getElementById('checkin-btn').addEventListener('click', () => {
   renderStreak();
 });
 
+
+// ─── Liturgy of the Hours ───
+const HOURS_DATA = [
+  {
+    name: 'Office of Readings',
+    latin: 'Officium Lectionum',
+    time: 'Any time',
+    timeRange: [0, 24],
+    url: 'https://universalis.com/readings.htm',
+    desc: 'Psalms and extended readings from Scripture and the Church Fathers'
+  },
+  {
+    name: 'Morning Prayer',
+    latin: 'Lauds',
+    time: '6:00 AM',
+    timeRange: [5, 9],
+    url: 'https://universalis.com/lauds.htm',
+    desc: 'Praise at dawn \u2014 consecrating the new day to God'
+  },
+  {
+    name: 'Mid-Morning Prayer',
+    latin: 'Terce',
+    time: '9:00 AM',
+    timeRange: [9, 11],
+    url: 'https://universalis.com/terce.htm',
+    desc: 'The hour the Holy Spirit descended at Pentecost'
+  },
+  {
+    name: 'Midday Prayer',
+    latin: 'Sext',
+    time: '12:00 PM',
+    timeRange: [11, 14],
+    url: 'https://universalis.com/sext.htm',
+    desc: 'A pause at the summit of the day'
+  },
+  {
+    name: 'Afternoon Prayer',
+    latin: 'None',
+    time: '3:00 PM',
+    timeRange: [14, 17],
+    url: 'https://universalis.com/none.htm',
+    desc: 'The hour Christ gave up his spirit on the Cross'
+  },
+  {
+    name: 'Evening Prayer',
+    latin: 'Vespers',
+    time: '6:00 PM',
+    timeRange: [17, 21],
+    url: 'https://universalis.com/vespers.htm',
+    desc: 'Thanksgiving at the close of day, with the Magnificat'
+  },
+  {
+    name: 'Night Prayer',
+    latin: 'Compline',
+    time: '9:00 PM',
+    timeRange: [21, 24],
+    url: 'https://universalis.com/compline.htm',
+    desc: 'The Church\u2019s final prayer before sleep'
+  }
+];
+
+function renderHours() {
+  const container = document.getElementById('hours-timeline');
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  let html = '';
+  HOURS_DATA.forEach((hour, i) => {
+    // Determine if this is current, past, or future
+    let state = '';
+    const [start, end] = hour.timeRange;
+
+    // Office of Readings is special (any time) - don't mark it as current
+    if (i === 0) {
+      state = '';
+    } else if (currentHour >= start && currentHour < end) {
+      state = 'current';
+    } else if (currentHour >= end) {
+      state = 'past';
+    }
+
+    html += `<div class="hour-card ${state}">`;
+    html += `<a class="hour-link" href="${hour.url}" target="_blank" rel="noopener">`;
+    html += `<div class="hour-time">${hour.time}</div>`;
+    html += `<div class="hour-info">`;
+    html += `<div class="hour-name">${hour.name}</div>`;
+    html += `<div class="hour-latin">${hour.latin}</div>`;
+    html += `<div class="hour-desc">${hour.desc}</div>`;
+    if (state === 'current') {
+      html += `<div class="hour-current-label">Current Hour</div>`;
+    }
+    html += `</div>`;
+    html += `<div class="hour-arrow">\u203A</div>`;
+    html += `</a></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
 // ─── Navigation ───
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1690,7 +1964,9 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     document.getElementById('page-' + btn.dataset.page).classList.add('active');
     if (btn.dataset.page === 'journal') loadJournal();
     if (btn.dataset.page === 'streak') renderStreak();
+renderHours();
     if (btn.dataset.page === 'saint') renderSaint();
+    if (btn.dataset.page === 'hours') renderHours();
     document.querySelector('.main-content').scrollTop = 0;
   });
 });
@@ -1701,6 +1977,7 @@ renderReadings();
 renderSaint();
 loadJournal();
 renderStreak();
+renderHours();
 </script>
 </body>
 </html>
