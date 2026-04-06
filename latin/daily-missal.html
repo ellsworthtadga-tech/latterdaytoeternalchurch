@@ -34,7 +34,7 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
 html, body {
   height: 100%;
@@ -1662,13 +1662,13 @@ body {
     <button class="today-btn" id="today-btn" style="display:none">Return to Today</button>
     <div id="liturgical-countdown" style="margin-bottom:12px;"></div>
     <div id="pope-intention" style="margin-bottom:12px;"></div>
+    <div id="saint-inline"></div>
     <div id="readings-content">
       <div class="loading-state">
         <div class="loading-spinner"></div>
         <p>Preparing today's readings...</p>
       </div>
     </div>
-    <div id="saint-inline" style="margin-top:8px;"></div>
   </div>
 
   <!-- Prayers Page -->
@@ -1842,9 +1842,9 @@ body {
       </div>
     </div>
     <div class="rosary-footer">
-      <button class="rosary-nav-btn" id="rosary-prev" onclick="rosaryNav(-1)">&larr; Back</button>
+      <button class="rosary-nav-btn" id="rosary-prev">&larr; Back</button>
       <div class="rosary-bead-dots" id="rosary-dots"></div>
-      <button class="rosary-nav-btn rosary-next" id="rosary-next" onclick="rosaryNav(1)">Next &rarr;</button>
+      <button class="rosary-nav-btn rosary-next" id="rosary-next">Next &rarr;</button>
     </div>
   </div>
 
@@ -2865,7 +2865,8 @@ async function renderSaintInline() {
     return;
   }
   const cel = calendar.celebration;
-  let html = `<div class="saint-card" style="margin-top:12px;">`;
+  let html = `<div style="margin-bottom:16px;">`;
+  html += `<div class="saint-card">`;
   if (cel.image) {
     html += `<img src="${cel.image}" alt="${cel.name}" onerror="this.style.display='none'">`;
   }
@@ -2873,7 +2874,7 @@ async function renderSaintInline() {
   if (cel.type) html += `<div class="saint-type">${cel.type}</div>`;
   if (cel.description) html += `<div class="saint-desc">${cel.description}</div>`;
   if (cel.quote) html += `<div class="saint-quote">${cel.quote}</div>`;
-  html += `</div>`;
+  html += `</div></div>`;
   container.innerHTML = html;
 }
 
@@ -3170,6 +3171,7 @@ function getTodayMystery() { return ROSARY_SCHEDULE[new Date().getDay()]; }
 function openRosary() {
   rosaryMysterySet = getTodayMystery();
   rosaryStep = 0;
+  rosarySequenceCache = null;
   document.getElementById('rosary-overlay').classList.add('active');
   renderRosaryStep();
 }
@@ -3178,14 +3180,15 @@ function closeRosary() {
   document.getElementById('rosary-overlay').classList.remove('active');
 }
 
-function rosaryNav(dir) {
-  const seq = buildRosarySequence(rosaryMysterySet);
-  rosaryStep = Math.max(0, Math.min(seq.length - 1, rosaryStep + dir));
-  renderRosaryStep();
+let rosarySequenceCache = null;
+
+function getRosarySequence() {
+  if (!rosarySequenceCache) rosarySequenceCache = buildRosarySequence(rosaryMysterySet);
+  return rosarySequenceCache;
 }
 
 function renderRosaryStep() {
-  const seq = buildRosarySequence(rosaryMysterySet);
+  const seq = getRosarySequence();
   const bead = seq[rosaryStep];
   document.getElementById('rosary-mystery-label').textContent = rosaryMysterySet + ' Mysteries';
   document.getElementById('rosary-progress').textContent = `Step ${rosaryStep + 1} of ${seq.length}`;
@@ -3193,13 +3196,8 @@ function renderRosaryStep() {
   document.getElementById('rosary-mystery-title').textContent = bead.mystery || bead.note || '';
   document.getElementById('rosary-prayer-text').textContent = bead.text;
   document.getElementById('rosary-prev').style.visibility = rosaryStep === 0 ? 'hidden' : 'visible';
-  const nextBtn = document.getElementById('rosary-next');
-  nextBtn.textContent = rosaryStep === seq.length - 1 ? 'Finish' : 'Next \u2192';
-  if (rosaryStep === seq.length - 1) {
-    nextBtn.onclick = closeRosary;
-  } else {
-    nextBtn.onclick = () => rosaryNav(1);
-  }
+  document.getElementById('rosary-next').textContent = rosaryStep === seq.length - 1 ? 'Finish' : 'Next \u2192';
+
   // Mini dots showing decade progress
   const dots = document.getElementById('rosary-dots');
   if (bead.decade) {
@@ -3218,6 +3216,39 @@ function renderRosaryStep() {
     dots.innerHTML = '';
   }
 }
+
+// Attach event listeners (not inline onclick)
+document.getElementById('rosary-prev').addEventListener('click', function() {
+  if (rosaryStep > 0) {
+    rosaryStep--;
+    renderRosaryStep();
+  }
+});
+
+document.getElementById('rosary-next').addEventListener('click', function() {
+  const seq = getRosarySequence();
+  if (rosaryStep >= seq.length - 1) {
+    closeRosary();
+  } else {
+    rosaryStep++;
+    renderRosaryStep();
+  }
+});
+
+// Also support swipe gestures on the rosary body
+(function() {
+  const body = document.querySelector('.rosary-body');
+  let startX = 0;
+  body.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive: true});
+  body.addEventListener('touchend', function(e) {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 50) {
+      const seq = getRosarySequence();
+      if (diff < 0 && rosaryStep < seq.length - 1) { rosaryStep++; renderRosaryStep(); }
+      else if (diff > 0 && rosaryStep > 0) { rosaryStep--; renderRosaryStep(); }
+    }
+  }, {passive: true});
+})();
 
 // Set today's mystery label on prayers page
 function updateRosaryLabel() {
