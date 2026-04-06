@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FishEaters">
+<meta name="theme-color" content="#2c1810">
+<title>FishEaters Wiki</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjMmMxODEwIi8+PHRleHQgeD0iOTAiIHk9IjEyMCIgZm9udC1zaXplPSIxMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNkNGI4OTYiPuKZsDwvdGV4dD48L3N2Zz4=">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Alegreya+SC:wght@400;700&display=swap');
+
+:root {
+  --bg: #faf6f0;
+  --bg2: #f0e8dc;
+  --bg3: #e6dace;
+  --text: #2c1810;
+  --text2: #5a4030;
+  --text3: #8a7060;
+  --accent: #8b1a1a;
+  --accent2: #a0522d;
+  --gold: #b8860b;
+  --border: #d4c4b0;
+  --card: #fff;
+  --shadow: rgba(44,24,16,0.08);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+.dark {
+  --bg: #1a1412;
+  --bg2: #241c16;
+  --bg3: #2e241c;
+  --text: #e0d4c8;
+  --text2: #b0a090;
+  --text3: #807060;
+  --accent: #d4796a;
+  --accent2: #c8956a;
+  --gold: #d4a844;
+  --border: #3a2e24;
+  --card: #221a14;
+  --shadow: rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  transition: background .3s, color .3s;
+}
+
+/* === HEADER === */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: env(safe-area-inset-top, 0px) 16px 0;
+  transition: background .3s;
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+.header-title {
+  font-family: 'Alegreya SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.header-actions { display: flex; gap: 8px; }
+.header-btn {
+  background: none; border: none; color: var(--text2);
+  width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; transition: background .2s;
+}
+.header-btn:hover { background: var(--bg2); }
+.header-btn.active { color: var(--accent); }
+
+/* === SEARCH BAR === */
+.search-bar {
+  display: none; padding: 0 0 10px;
+}
+.search-bar.visible { display: block; }
+.search-input {
+  width: 100%; padding: 10px 14px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--text); font-family: inherit; font-size: 16px;
+  outline: none; transition: border .2s;
+}
+.search-input:focus { border-color: var(--accent); }
+
+/* === VIEWS === */
+.view { display: none; padding: 16px; padding-bottom: calc(80px + var(--safe-bottom)); }
+.view.active { display: block; }
+
+/* === HOME / CATEGORIES === */
+.category-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.category-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 16px;
+  cursor: pointer; transition: transform .15s, box-shadow .15s;
+  text-align: center;
+}
+.category-card:active { transform: scale(0.97); }
+.category-card:hover { box-shadow: 0 4px 16px var(--shadow); }
+.category-icon { font-size: 28px; margin-bottom: 8px; }
+.category-name {
+  font-family: 'Alegreya SC', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text); line-height: 1.3;
+}
+.category-count {
+  font-size: 12px; color: var(--text3); margin-top: 4px;
+}
+
+/* === ARTICLE LIST === */
+.list-header {
+  font-family: 'Alegreya SC', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--accent); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.back-btn {
+  background: none; border: none; color: var(--text2);
+  font-size: 22px; cursor: pointer; padding: 4px;
+}
+.article-item {
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .15s;
+}
+.article-item:active { background: var(--bg2); }
+.article-title {
+  font-size: 17px; font-weight: 400; color: var(--text);
+  line-height: 1.4;
+}
+.article-preview {
+  font-size: 14px; color: var(--text3); margin-top: 4px;
+  line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-item .bookmark-indicator {
+  color: var(--gold); font-size: 12px; margin-left: 6px;
+}
+
+/* === ARTICLE VIEW === */
+.article-meta {
+  font-family: 'Alegreya SC', serif;
+  font-size: 13px; color: var(--text3);
+  margin-bottom: 8px; letter-spacing: 0.5px;
+}
+.article-heading {
+  font-family: 'Alegreya SC', serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--accent); line-height: 1.3;
+  margin-bottom: 6px;
+}
+.article-actions {
+  display: flex; gap: 12px; margin-bottom: 20px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.article-action-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 14px;
+  font-family: inherit; font-size: 14px;
+  color: var(--text2); cursor: pointer; transition: all .2s;
+}
+.article-action-btn.bookmarked { color: var(--gold); border-color: var(--gold); }
+.article-body {
+  font-size: 18px; line-height: 1.75; color: var(--text);
+  max-width: 680px;
+}
+.article-body p { margin-bottom: 1em; }
+
+/* === BOOKMARKS VIEW === */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--text3);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 16px; }
+
+/* === LOADING === */
+.loading-screen {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity .4s;
+}
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-icon { font-size: 64px; margin-bottom: 20px; }
+.loading-title {
+  font-family: 'Alegreya SC', serif;
+  font-size: 28px; font-weight: 700; color: var(--accent);
+  margin-bottom: 8px;
+}
+.loading-sub { font-size: 16px; color: var(--text3); }
+.loading-bar {
+  width: 200px; height: 3px; background: var(--bg3);
+  border-radius: 2px; margin-top: 24px; overflow: hidden;
+}
+.loading-fill {
+  height: 100%; background: var(--accent);
+  border-radius: 2px; width: 0%; transition: width .3s;
+}
+
+/* === FONT SIZE CONTROLS === */
+.font-controls {
+  display: none; padding: 8px 0;
+  align-items: center; gap: 12px; justify-content: center;
+}
+.font-controls.visible { display: flex; }
+.font-btn {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 14px;
+  font-family: inherit; cursor: pointer; color: var(--text);
+}
+.font-label { font-size: 14px; color: var(--text3); }
+
+/* === SEARCH RESULTS === */
+.search-result-cat {
+  font-size: 12px; color: var(--accent2);
+  font-family: 'Alegreya SC', serif;
+}
+
+/* === BOTTOM NAV === */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 6px 0 var(--safe-bottom);
+  display: flex; justify-content: space-around;
+  z-index: 100; transition: background .3s;
+}
+.nav-btn {
+  background: none; border: none;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 6px 16px; cursor: pointer;
+  color: var(--text3); transition: color .2s;
+  font-family: 'Alegreya SC', serif; font-size: 11px; gap: 2px;
+}
+.nav-btn.active { color: var(--accent); }
+.nav-icon { font-size: 22px; }
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-icon">✠</div>
+  <div class="loading-title">FishEaters</div>
+  <div class="loading-sub" id="loadingSub">Loading articles...</div>
+  <div class="loading-bar"><div class="loading-fill" id="loadingFill"></div></div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title" onclick="goHome()">FishEaters</div>
+    <div class="header-actions">
+      <button class="header-btn" id="searchToggle" onclick="toggleSearch()" title="Search">🔍</button>
+      <button class="header-btn" id="fontToggle" onclick="toggleFontControls()" title="Text Size">Aa</button>
+      <button class="header-btn" id="darkToggle" onclick="toggleDark()" title="Dark Mode">🌙</button>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." oninput="handleSearch(this.value)">
+  </div>
+  <div class="font-controls" id="fontControls">
+    <button class="font-btn" onclick="changeFontSize(-1)">A-</button>
+    <span class="font-label" id="fontLabel">18px</span>
+    <button class="font-btn" onclick="changeFontSize(1)">A+</button>
+  </div>
+</div>
+
+<!-- Home View -->
+<div class="view active" id="homeView">
+  <div class="category-grid" id="categoryGrid"></div>
+</div>
+
+<!-- List View -->
+<div class="view" id="listView">
+  <div class="list-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span id="listTitle"></span>
+  </div>
+  <div id="articleList"></div>
+</div>
+
+<!-- Article View -->
+<div class="view" id="articleView">
+  <div>
+    <button class="back-btn" onclick="goBack()" style="margin-bottom:12px">← Back</button>
+  </div>
+  <div class="article-meta" id="articleCat"></div>
+  <div class="article-heading" id="articleTitle"></div>
+  <div class="article-actions">
+    <button class="article-action-btn" id="bookmarkBtn" onclick="toggleBookmark()">☆ Bookmark</button>
+    <button class="article-action-btn" onclick="shareArticle()">↗ Share</button>
+  </div>
+  <div class="article-body" id="articleBody"></div>
+</div>
+
+<!-- Bookmarks View -->
+<div class="view" id="bookmarksView">
+  <div class="list-header">★ Bookmarks</div>
+  <div id="bookmarksList"></div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="navHome" onclick="goHome()">
+    <span class="nav-icon">✠</span>Browse
+  </button>
+  <button class="nav-btn" id="navBookmarks" onclick="showBookmarks()">
+    <span class="nav-icon">★</span>Saved
+  </button>
+</div>
+
+<script>
+// === STATE ===
+let articles = [];
+let searchIndex = [];
+let bookmarks = JSON.parse(localStorage.getItem('fe-bookmarks') || '[]');
+let currentArticleId = null;
+let lastView = 'home';
+let fontSize = parseInt(localStorage.getItem('fe-fontsize') || '18');
+const DB_NAME = 'FishEatersDB';
+const DB_VERSION = 1;
+const STORE = 'articles';
+const DATA_URL = 'fisheaters-data.json';
+
+const CATEGORY_META = {
+  'Being Catholic':          { icon: '✝', order: 0 },
+  'Customs & Traditions':    { icon: '🕯', order: 1 },
+  'Prayers & Devotions':     { icon: '📿', order: 2 },
+  'For Catholics':           { icon: '⛪', order: 3 },
+  'For Protestants':         { icon: '🤝', order: 4 },
+  'Saints & Holy People':    { icon: '😇', order: 5 },
+  'Scripture & Commentary':  { icon: '📖', order: 6 },
+  'Papal Documents':         { icon: '📜', order: 7 },
+  'The Zodiac & Creation':   { icon: '✨', order: 8 },
+  'Jewish-Catholic Relations':{ icon: '✡', order: 9 },
+  'Culture & Society':       { icon: '🎭', order: 10 },
+  'Other':                   { icon: '📄', order: 11 }
+};
+
+// === INDEXED DB ===
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE)) {
+        db.createObjectStore(STORE, { keyPath: 'i' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function getCachedArticles() {
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const store = tx.objectStore(STORE);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  } catch { return []; }
+}
+
+async function cacheArticles(data) {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE, 'readwrite');
+    const store = tx.objectStore(STORE);
+    for (const a of data) store.put(a);
+    return new Promise((resolve, reject) => {
+      tx.oncomplete = resolve;
+      tx.onerror = reject;
+    });
+  } catch(e) { console.error('Cache error:', e); }
+}
+
+// === LOAD DATA ===
+async function loadData() {
+  const fill = document.getElementById('loadingFill');
+  const sub = document.getElementById('loadingSub');
+
+  // Try cache first
+  fill.style.width = '20%';
+  sub.textContent = 'Checking offline cache...';
+  let cached = await getCachedArticles();
+  
+  if (cached.length > 0) {
+    fill.style.width = '90%';
+    sub.textContent = `Loaded ${cached.length} articles from cache`;
+    articles = cached;
+  } else {
+    // Fetch from network
+    sub.textContent = 'Downloading articles (first time only)...';
+    fill.style.width = '30%';
+    try {
+      const resp = await fetch(DATA_URL);
+      if (!resp.ok) throw new Error('Fetch failed');
+      fill.style.width = '60%';
+      sub.textContent = 'Parsing articles...';
+      articles = await resp.json();
+      fill.style.width = '80%';
+      sub.textContent = 'Caching for offline use...';
+      await cacheArticles(articles);
+    } catch(e) {
+      sub.textContent = 'Error loading data. Check connection.';
+      console.error(e);
+      return;
+    }
+  }
+
+  // Build search index
+  fill.style.width = '95%';
+  sub.textContent = 'Building search index...';
+  searchIndex = articles.map(a => ({
+    id: a.i,
+    searchText: (a.t + ' ' + a.x.substring(0, 500)).toLowerCase()
+  }));
+
+  fill.style.width = '100%';
+  sub.textContent = `${articles.length} articles ready`;
+  setTimeout(() => {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    renderHome();
+  }, 400);
+}
+
+// === RENDER ===
+function renderHome() {
+  const cats = {};
+  articles.forEach(a => {
+    if (!cats[a.c]) cats[a.c] = 0;
+    cats[a.c]++;
+  });
+
+  const sorted = Object.keys(cats).sort((a, b) =>
+    (CATEGORY_META[a]?.order ?? 99) - (CATEGORY_META[b]?.order ?? 99)
+  );
+
+  document.getElementById('categoryGrid').innerHTML = sorted.map(c => `
+    <div class="category-card" onclick="showCategory('${c.replace(/'/g, "\\'")}')">
+      <div class="category-icon">${CATEGORY_META[c]?.icon || '📄'}</div>
+      <div class="category-name">${c}</div>
+      <div class="category-count">${cats[c]} articles</div>
+    </div>
+  `).join('');
+}
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (id === 'homeView') document.getElementById('navHome').classList.add('active');
+  if (id === 'bookmarksView') document.getElementById('navBookmarks').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showCategory(cat) {
+  lastView = 'category';
+  const list = articles.filter(a => a.c === cat).sort((a, b) => a.t.localeCompare(b.t));
+  document.getElementById('listTitle').textContent = cat;
+  renderArticleList(list, 'articleList');
+  showView('listView');
+}
+
+function renderArticleList(list, containerId) {
+  document.getElementById(containerId).innerHTML = list.map(a => `
+    <div class="article-item" onclick="showArticle('${a.i}')">
+      <div class="article-title">
+        ${a.t}${bookmarks.includes(a.i) ? '<span class="bookmark-indicator">★</span>' : ''}
+      </div>
+      <div class="article-preview">${a.x.substring(0, 120).replace(/</g, '&lt;')}...</div>
+      ${containerId === 'articleList' ? '' : `<div class="search-result-cat">${a.c}</div>`}
+    </div>
+  `).join('');
+}
+
+function showArticle(id) {
+  const a = articles.find(x => x.i === id);
+  if (!a) return;
+  currentArticleId = id;
+  document.getElementById('articleCat').textContent = a.c;
+  document.getElementById('articleTitle').textContent = a.t;
+  
+  // Convert text to paragraphs
+  const paragraphs = a.x.split(/\n\s*\n/).filter(p => p.trim());
+  document.getElementById('articleBody').innerHTML = paragraphs.map(p =>
+    '<p>' + p.replace(/\n/g, '<br>').replace(/</g, '&lt;').replace(/&lt;br>/g, '<br>') + '</p>'
+  ).join('');
+  document.getElementById('articleBody').style.fontSize = fontSize + 'px';
+  
+  updateBookmarkBtn();
+  showView('articleView');
+}
+
+function goHome() {
+  showView('homeView');
+  lastView = 'home';
+  closePanels();
+}
+
+function goBack() {
+  if (lastView === 'category') showView('listView');
+  else if (lastView === 'bookmarks') showBookmarks();
+  else goHome();
+}
+
+// === SEARCH ===
+function toggleSearch() {
+  const bar = document.getElementById('searchBar');
+  const vis = bar.classList.toggle('visible');
+  if (vis) document.getElementById('searchInput').focus();
+  else { document.getElementById('searchInput').value = ''; goHome(); }
+  document.getElementById('searchToggle').classList.toggle('active', vis);
+}
+
+function handleSearch(q) {
+  q = q.toLowerCase().trim();
+  if (q.length < 2) { if (lastView === 'home') goHome(); return; }
+  
+  const terms = q.split(/\s+/);
+  const results = [];
+  for (const si of searchIndex) {
+    if (terms.every(t => si.searchText.includes(t))) {
+      results.push(articles.find(a => a.i === si.id));
+    }
+    if (results.length >= 50) break;
+  }
+  
+  lastView = 'search';
+  document.getElementById('listTitle').textContent = `Results (${results.length})`;
+  renderArticleList(results, 'articleList');
+  showView('listView');
+}
+
+// === BOOKMARKS ===
+function toggleBookmark() {
+  if (!currentArticleId) return;
+  const idx = bookmarks.indexOf(currentArticleId);
+  if (idx >= 0) bookmarks.splice(idx, 1);
+  else bookmarks.push(currentArticleId);
+  localStorage.setItem('fe-bookmarks', JSON.stringify(bookmarks));
+  updateBookmarkBtn();
+}
+
+function updateBookmarkBtn() {
+  const btn = document.getElementById('bookmarkBtn');
+  const is = bookmarks.includes(currentArticleId);
+  btn.textContent = is ? '★ Bookmarked' : '☆ Bookmark';
+  btn.classList.toggle('bookmarked', is);
+}
+
+function showBookmarks() {
+  lastView = 'bookmarks';
+  const list = bookmarks.map(id => articles.find(a => a.i === id)).filter(Boolean);
+  const container = document.getElementById('bookmarksList');
+  if (list.length === 0) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">☆</div>
+      <div class="empty-state-text">No bookmarks yet.<br>Tap ☆ on any article to save it.</div>
+    </div>`;
+  } else {
+    renderArticleList(list, 'bookmarksList');
+  }
+  showView('bookmarksView');
+}
+
+function shareArticle() {
+  const a = articles.find(x => x.i === currentArticleId);
+  if (!a) return;
+  const url = `https://fisheaters.com/${a.i}.html`;
+  if (navigator.share) {
+    navigator.share({ title: a.t, url });
+  } else {
+    navigator.clipboard?.writeText(url);
+  }
+}
+
+// === FONT SIZE ===
+function toggleFontControls() {
+  document.getElementById('fontControls').classList.toggle('visible');
+  document.getElementById('fontToggle').classList.toggle('active');
+}
+
+function changeFontSize(delta) {
+  fontSize = Math.max(14, Math.min(28, fontSize + delta * 2));
+  localStorage.setItem('fe-fontsize', fontSize);
+  document.getElementById('fontLabel').textContent = fontSize + 'px';
+  const body = document.getElementById('articleBody');
+  if (body) body.style.fontSize = fontSize + 'px';
+}
+
+// === DARK MODE ===
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('fe-dark', isDark);
+  document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+}
+
+function closePanels() {
+  document.getElementById('searchBar').classList.remove('visible');
+  document.getElementById('fontControls').classList.remove('visible');
+  document.getElementById('searchToggle').classList.remove('active');
+  document.getElementById('fontToggle').classList.remove('active');
+}
+
+// === INIT ===
+if (localStorage.getItem('fe-dark') === 'true') {
+  document.body.classList.add('dark');
+  document.getElementById('darkToggle').textContent = '☀️';
+}
+document.getElementById('fontLabel').textContent = fontSize + 'px';
+loadData();
+
+// === SERVICE WORKER ===
+if ('serviceWorker' in navigator) {
+  const SW_CODE = `
+    const CACHE = 'fisheaters-v1';
+    const URLS = ['./', './fisheaters-wiki.html', './fisheaters-data.json'];
+    self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)).then(() => self.skipWaiting())));
+    self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+        const clone = resp.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return resp;
+      })));
+    });
+  `;
+  const blob = new Blob([SW_CODE], { type: 'application/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+}
+</script>
+</body>
+</html>
