@@ -3272,7 +3272,26 @@ const LATIN_PRAYERS = {
 
 function toggleLatin() {
   const on = document.getElementById('latin-toggle').checked;
-  document.getElementById('prayers-list').classList.toggle('show-latin', on);
+  const container = document.getElementById('prayers-list');
+  container.classList.toggle('show-latin', on);
+
+  // Auto-expand/collapse prayers that have Latin text for instant feedback
+  container.querySelectorAll('.prayer-item').forEach(item => {
+    const hasLatin = item.querySelector('.prayer-latin');
+    if (!hasLatin) return;
+    const body = item.querySelector('.prayer-body');
+
+    if (on && !item.classList.contains('expanded')) {
+      // Expand to show Latin
+      item.classList.add('expanded');
+      body.style.maxHeight = 'none';
+    } else if (!on && item.classList.contains('expanded')) {
+      // Collapse when turning off
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => { body.style.maxHeight = '0px'; });
+      item.classList.remove('expanded');
+    }
+  });
 }
 
 // ─── Catechism Quick Reference ───
