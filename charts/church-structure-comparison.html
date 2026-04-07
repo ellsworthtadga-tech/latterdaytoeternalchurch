@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Church Structure Compared | One Faith Delivered</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --crimson: #8B0000;
+    --gold: #C5A55A;
+    --parchment: #F5F0E8;
+    --dark-bg: #1a1410;
+    --text-primary: #2c2416;
+    --text-secondary: #5a4e3c;
+    --border-light: rgba(197,165,90,0.25);
+    --catholic-color: #4a2d7a;
+    --catholic-light: #f0ebf7;
+    --catholic-mid: #7b5daa;
+    --lds-color: #8B4513;
+    --lds-light: #faf0e6;
+    --lds-mid: #b5763b;
+}
+
+body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--parchment);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 17px;
+}
+
+/* ── Reading Progress Bar ── */
+.progress-bar {
+    position: fixed; top: 0; left: 0;
+    width: 0%; height: 3px;
+    background: linear-gradient(90deg, var(--crimson), var(--gold));
+    z-index: 1001;
+    transition: width 0.1s linear;
+}
+
+/* ── Sticky Nav ── */
+.sticky-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(26,20,16,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 0 2rem;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(197,165,90,0.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+}
+.sticky-nav a {
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+}
+.sticky-nav a:hover { color: #e8d5a0; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+.btn-print {
+    background: none; border: 1px solid var(--gold); color: var(--gold);
+    padding: 4px 14px; border-radius: 3px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+}
+.btn-print:hover { background: rgba(197,165,90,0.15); }
+
+/* ── Hamburger ── */
+.hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 28px; height: 20px; position: relative; z-index: 1002;
+}
+.hamburger span {
+    display: block; width: 100%; height: 2px; background: var(--gold);
+    position: absolute; left: 0; transition: all 0.3s;
+}
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 9px; }
+.hamburger span:nth-child(3) { top: 18px; }
+.hamburger.active span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+/* ── Sidebar ── */
+.sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 999;
+}
+.sidebar-overlay.active { display: block; }
+.sidebar {
+    position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+    background: var(--dark-bg); z-index: 1003;
+    padding: 80px 2rem 2rem; transition: right 0.3s;
+    border-left: 1px solid rgba(197,165,90,0.3);
+}
+.sidebar.active { right: 0; }
+.sidebar a {
+    display: block; color: #ccc; text-decoration: none;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    letter-spacing: 0.03em;
+}
+.sidebar a:hover { color: var(--gold); }
+
+/* ── Page Header ── */
+.page-header {
+    background: linear-gradient(135deg, #1a1410 0%, #2c1810 50%, #1a1410 100%);
+    padding: 120px 2rem 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.page-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(197,165,90,0.03) 2px, rgba(197,165,90,0.03) 4px
+    );
+    pointer-events: none;
+}
+.page-header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fff; font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; margin-bottom: 0.5rem;
+    position: relative;
+}
+.page-header .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold); font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-style: italic; position: relative;
+}
+.header-ornament {
+    color: var(--gold); font-size: 1.4rem;
+    margin-top: 1.2rem; position: relative;
+    letter-spacing: 0.5em;
+}
+
+/* ── Main Content ── */
+.content-wrapper {
+    max-width: 1100px; margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.intro-text {
+    max-width: 780px; margin: 0 auto 3rem;
+    text-align: center; font-size: 1.05rem;
+    color: var(--text-secondary);
+}
+
+/* ── Section Navigator ── */
+.section-nav {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+.section-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 6px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+}
+.section-nav a:hover {
+    border-color: var(--gold);
+    color: var(--crimson);
+    background: rgba(197,165,90,0.1);
+}
+
+/* ── Structure Diagrams ── */
+.diagram-section {
+    margin-bottom: 4rem;
+}
+.diagram-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; color: var(--crimson);
+    margin-bottom: 0.3rem;
+}
+.diagram-section .section-sub {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold); font-style: italic;
+    font-size: 1.05rem; margin-bottom: 1.5rem;
+}
+
+/* ── Side-by-side Columns ── */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.column-header {
+    text-align: center; padding-bottom: 1rem;
+    border-bottom: 2px solid;
+    margin-bottom: 1.5rem;
+}
+.column-header.catholic { border-color: var(--catholic-color); }
+.column-header.lds { border-color: var(--lds-color); }
+
+.column-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; margin-bottom: 0.2rem;
+}
+.column-header.catholic h3 { color: var(--catholic-color); }
+.column-header.lds h3 { color: var(--lds-color); }
+.column-header .tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-secondary);
+}
+
+/* ── Hierarchy Nodes ── */
+.hierarchy {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0;
+}
+.node-wrapper {
+    display: flex; flex-direction: column;
+    align-items: center; width: 100%;
+}
+.node {
+    width: 100%; max-width: 320px;
+    border-radius: 6px; padding: 14px 18px;
+    text-align: center; position: relative;
+}
+.node.catholic {
+    background: var(--catholic-light);
+    border: 1px solid rgba(74,45,122,0.25);
+}
+.node.lds {
+    background: var(--lds-light);
+    border: 1px solid rgba(139,69,19,0.25);
+}
+.node.divine {
+    background: linear-gradient(135deg, #fffbe6 0%, #fff8e0 100%);
+    border: 1px solid var(--gold);
+}
+.node .title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; font-size: 1.05rem;
+    margin-bottom: 2px;
+}
+.node.catholic .title { color: var(--catholic-color); }
+.node.lds .title { color: var(--lds-color); }
+.node.divine .title { color: var(--crimson); }
+.node .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+.node .desc {
+    font-size: 0.88rem; color: var(--text-secondary);
+    line-height: 1.5;
+}
+.connector {
+    width: 2px; height: 22px;
+    position: relative;
+}
+.connector.catholic { background: var(--catholic-mid); }
+.connector.lds { background: var(--lds-mid); }
+.connector.divine { background: var(--gold); }
+.connector::after {
+    content: '▾'; position: absolute;
+    bottom: -8px; left: 50%; transform: translateX(-50%);
+    font-size: 10px;
+}
+.connector.catholic::after { color: var(--catholic-mid); }
+.connector.lds::after { color: var(--lds-mid); }
+.connector.divine::after { color: var(--gold); }
+
+/* ── Sacramental vs Administrative badge ── */
+.badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 10px; border-radius: 3px;
+    margin-top: 6px;
+}
+.badge.ordained {
+    background: rgba(74,45,122,0.12);
+    color: var(--catholic-color);
+    border: 1px solid rgba(74,45,122,0.2);
+}
+.badge.admin {
+    background: rgba(139,69,19,0.1);
+    color: var(--lds-color);
+    border: 1px solid rgba(139,69,19,0.15);
+}
+.badge.lay {
+    background: rgba(90,78,60,0.1);
+    color: var(--text-secondary);
+    border: 1px solid rgba(90,78,60,0.15);
+}
+
+/* ── Contrast Table ── */
+.contrast-table {
+    width: 100%; border-collapse: separate;
+    border-spacing: 0; margin: 2rem 0;
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border-light);
+}
+.contrast-table thead th {
+    background: var(--dark-bg);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 16px; text-align: left;
+}
+.contrast-table tbody td {
+    padding: 14px 16px; font-size: 0.92rem;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+}
+.contrast-table tbody tr:last-child td { border-bottom: none; }
+.contrast-table tbody tr:nth-child(odd) { background: rgba(197,165,90,0.06); }
+.contrast-table .cat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+/* ── Key Point Box ── */
+.key-point {
+    border-left: 4px solid var(--gold);
+    background: rgba(197,165,90,0.08);
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 6px 6px 0;
+}
+.key-point .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--gold);
+    margin-bottom: 0.4rem;
+}
+
+/* ── Patristic Block ── */
+.patristic-block {
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    background: rgba(197,165,90,0.04);
+}
+.patristic-block::before {
+    content: '✦';
+    position: absolute; top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--parchment);
+    padding: 0 12px;
+    color: var(--gold); font-size: 1rem;
+}
+.patristic-block .source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gold);
+    margin-bottom: 0.5rem; text-align: center;
+}
+.patristic-block blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1.1rem;
+    text-align: center; color: var(--text-primary);
+    line-height: 1.6;
+}
+.patristic-block .citation {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-secondary);
+    text-align: center; margin-top: 0.5rem;
+}
+
+/* ── Critique Box ── */
+.critique-box {
+    border-left: 4px solid var(--crimson);
+    background: rgba(139,0,0,0.04);
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 6px 6px 0;
+}
+.critique-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--crimson);
+    margin-bottom: 0.4rem;
+}
+
+/* ── Timeline Markers ── */
+.timeline-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--gold);
+    min-width: 80px; padding-top: 2px;
+    font-weight: 500;
+}
+.timeline-content { flex: 1; }
+.timeline-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ── Footer ── */
+.page-footer {
+    background: var(--dark-bg);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border-top: 1px solid rgba(197,165,90,0.3);
+}
+.page-footer a { color: var(--gold); text-decoration: none; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .comparison-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+    .content-wrapper { padding: 2rem 1.2rem; }
+    .contrast-table { font-size: 0.85rem; }
+    .contrast-table thead th,
+    .contrast-table tbody td { padding: 10px 12px; }
+}
+
+@media print {
+    .sticky-nav, .progress-bar, .hamburger,
+    .sidebar, .sidebar-overlay, .section-nav { display: none !important; }
+    .page-header { padding: 40px 2rem 30px; }
+    body { font-size: 12pt; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Sticky Nav -->
+<nav class="sticky-nav">
+    <a href="../index.html">One Faith Delivered</a>
+    <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../articles.html">Articles</a>
+        <a href="../charts.html">Charts</a>
+        <a href="../glossary.html">Glossary</a>
+        <button class="btn-print" onclick="window.print()">Print</button>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
+    <a href="../index.html">Home</a>
+    <a href="../articles.html">Articles</a>
+    <a href="../charts.html">Charts</a>
+    <a href="../glossary.html">Glossary</a>
+    <a href="#" onclick="window.print(); return false;">Print This Page</a>
+</div>
+
+<!-- Page Header -->
+<header class="page-header">
+    <h1>Church Structure Compared</h1>
+    <div class="subtitle">Apostolic hierarchy vs. corporate bureaucracy</div>
+    <div class="header-ornament">✦ ✦ ✦</div>
+</header>
+
+<!-- Main Content -->
+<main class="content-wrapper">
+
+    <p class="intro-text">
+        The Catholic Church operates with the same threefold ordained ministry that the Apostles established in the first century: bishop, priest, and deacon. The LDS Church, founded in 1830, layers six or more administrative tiers between its president and its members&mdash;a structure that mirrors 19th-century American corporate organization far more than anything found in the New Testament or early Christian history.
+    </p>
+
+    <!-- Section Nav -->
+    <div class="section-nav">
+        <a href="#hierarchy">Hierarchy</a>
+        <a href="#contrasts">Key Contrasts</a>
+        <a href="#patristic">Patristic Witness</a>
+        <a href="#corporate">The Corporate Model</a>
+        <a href="#timeline">LDS Structural Changes</a>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: Side-by-Side Hierarchy -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="diagram-section" id="hierarchy">
+        <h2>Organizational Hierarchy</h2>
+        <div class="section-sub">Two very different ways to structure a church</div>
+
+        <div class="comparison-grid">
+            <!-- ── CATHOLIC COLUMN ── -->
+            <div>
+                <div class="column-header catholic">
+                    <h3>Catholic Church</h3>
+                    <div class="tagline">Sacramental &amp; apostolic</div>
+                </div>
+
+                <div class="hierarchy">
+                    <div class="node-wrapper">
+                        <div class="node divine">
+                            <div class="title">Jesus Christ</div>
+                            <div class="role">Invisible head</div>
+                            <div class="desc">Governs the Church through the Holy Spirit; exercises authority through the sacraments He instituted</div>
+                        </div>
+                        <div class="connector divine"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node catholic">
+                            <div class="title">The Pope</div>
+                            <div class="role">Bishop of Rome &bull; Vicar of Christ</div>
+                            <div class="desc">Successor of Peter; holds primacy of jurisdiction over the universal Church. Same sacramental order as every other bishop.</div>
+                            <span class="badge ordained">Holy Orders — Bishop</span>
+                        </div>
+                        <div class="connector catholic"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node catholic">
+                            <div class="title">Bishops</div>
+                            <div class="role">Successors of the Apostles</div>
+                            <div class="desc">Hold the fullness of Holy Orders. Govern dioceses; ordain priests &amp; deacons; confirm &amp; consecrate. The college of bishops in union with the Pope continues the apostolic college.</div>
+                            <span class="badge ordained">Holy Orders — Bishop</span>
+                        </div>
+                        <div class="connector catholic"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node catholic">
+                            <div class="title">Priests</div>
+                            <div class="role">Presbyters</div>
+                            <div class="desc">Co-workers of the bishop. Celebrate the Eucharist, hear confessions, anoint the sick, preach &amp; teach. Ministry is sacramental, not administrative.</div>
+                            <span class="badge ordained">Holy Orders — Priest</span>
+                        </div>
+                        <div class="connector catholic"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node catholic">
+                            <div class="title">Deacons</div>
+                            <div class="role">Ordained servants</div>
+                            <div class="desc">Proclaim the Gospel, baptize, witness marriages, serve the poor. The first deacons were appointed by the Apostles in Acts 6.</div>
+                            <span class="badge ordained">Holy Orders — Deacon</span>
+                        </div>
+                        <div class="connector catholic"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node catholic" style="background: #f7f4fb; border-style: dashed;">
+                            <div class="title">The Faithful</div>
+                            <div class="role">The baptized laity</div>
+                            <div class="desc">Share in the common priesthood of all believers through Baptism. Called to holiness; participate in the Church's mission through their state of life.</div>
+                            <span class="badge lay">Baptismal priesthood</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── LDS COLUMN ── -->
+            <div>
+                <div class="column-header lds">
+                    <h3>LDS Church</h3>
+                    <div class="tagline">Administrative &amp; corporate</div>
+                </div>
+
+                <div class="hierarchy">
+                    <div class="node-wrapper">
+                        <div class="node divine">
+                            <div class="title">Jesus Christ</div>
+                            <div class="role">Nominal head</div>
+                            <div class="desc">Named as head of the Church, but all operational authority resides in the President, who claims ongoing private revelation</div>
+                        </div>
+                        <div class="connector divine"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">First Presidency</div>
+                            <div class="role">President + 2 counselors</div>
+                            <div class="desc">Functions as a CEO and executive board. The President is considered a "prophet, seer, and revelator" with final authority on all doctrine and policy.</div>
+                            <span class="badge admin">Administrative office</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">Quorum of the Twelve</div>
+                            <div class="role">Senior leadership</div>
+                            <div class="desc">Functions as a board of directors. Members serve for life; seniority determines succession to the Presidency. Travel worldwide managing Church affairs.</div>
+                            <span class="badge admin">Administrative office</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">Quorums of the Seventy</div>
+                            <div class="role">Regional management</div>
+                            <div class="desc">Multiple quorums organized in tiers. Oversee geographic "areas" of the Church. Function as regional vice presidents.</div>
+                            <span class="badge admin">Administrative office</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">Area Presidencies</div>
+                            <div class="role">Area management</div>
+                            <div class="desc">Oversee multi-stake regions. Coordinate programs, budgets, and construction. Serve defined terms and report upward.</div>
+                            <span class="badge admin">Administrative office</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">Stake Presidents</div>
+                            <div class="role">District managers</div>
+                            <div class="desc">Preside over a "stake" (a collection of wards). Conduct disciplinary councils, oversee finances, manage local leaders. Unpaid volunteers.</div>
+                            <span class="badge admin">Lay volunteer calling</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds">
+                            <div class="title">Ward Bishops</div>
+                            <div class="role">Branch managers</div>
+                            <div class="desc">Preside over a local congregation (~200–500 members). Handle budgets, conduct interviews, manage callings. No ordination in the historic Christian sense; rotated out after ~5 years.</div>
+                            <span class="badge admin">Lay volunteer calling</span>
+                        </div>
+                        <div class="connector lds"></div>
+                    </div>
+
+                    <div class="node-wrapper">
+                        <div class="node lds" style="background: #faf5ef; border-style: dashed;">
+                            <div class="title">Members</div>
+                            <div class="role">General membership</div>
+                            <div class="desc">Expected to hold callings, pay tithing, attend temple, and sustain leaders. Almost all adult men are ordained to the Aaronic or Melchizedek priesthood.</div>
+                            <span class="badge lay">Lay member</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="key-point">
+            <div class="label">Key point</div>
+            <p>The Catholic hierarchy has <strong>three ordained degrees</strong> and a clear theological reason for each one, rooted in the New Testament and confirmed by the earliest Church Fathers. The LDS hierarchy has <strong>six or more management layers</strong>, none of which correspond to anything in Scripture or in the first fifteen centuries of Christianity. The LDS structure was invented from scratch in the 1830s and has been reorganized repeatedly since.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: Key Contrasts Table -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="diagram-section" id="contrasts">
+        <h2>Point-by-Point Contrasts</h2>
+        <div class="section-sub">The differences run deeper than the org chart</div>
+
+        <table class="contrast-table">
+            <thead>
+                <tr>
+                    <th style="width: 22%;">Category</th>
+                    <th style="width: 39%;">Catholic</th>
+                    <th style="width: 39%;">LDS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="cat-label">Source of authority</td>
+                    <td>Sacramental ordination in apostolic succession. A bishop's authority comes from the unbroken chain of hands laid on hands going back to the Apostles.</td>
+                    <td>Administrative appointment ("calling"). Authority is assigned by higher-ranking leaders and can be revoked or reassigned at any time.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">The word "bishop"</td>
+                    <td>A bishop holds the fullness of Holy Orders. He can ordain priests and deacons, consecrate the Eucharist, and confirm. He governs a diocese, often containing hundreds of parishes.</td>
+                    <td>A "bishop" is a lay volunteer who manages a single ward of a few hundred people. He has no ordination in the historic sense, serves a ~5-year term, and is then "released" back to regular membership.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Priesthood</td>
+                    <td>A sacramental reality conferred through Holy Orders. Only bishops, priests, and deacons are ordained. The priesthood enables the minister to act <em>in persona Christi</em>.</td>
+                    <td>Conferred on virtually all male members at age 12 (Aaronic) and 18 (Melchizedek). Functions as a universal male membership credential rather than a sacramental reality.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Structural stability</td>
+                    <td>The threefold ministry of bishop, priest, and deacon has been in continuous operation since the apostolic era. Ignatius of Antioch attests to it around AD 107.</td>
+                    <td>The organizational structure has been repeatedly redesigned: the office of Presiding Patriarch was created, then eliminated; the First Presidency was dissolved and reconstituted; Quorums of the Seventy have been added, split, and reorganized multiple times.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Permanence of office</td>
+                    <td>Ordination is permanent and ontological. A priest is a priest forever; even a defrocked priest retains the sacramental character of ordination.</td>
+                    <td>Callings are temporary and rotational. A bishop today is a Sunday School teacher tomorrow. "Release" fully terminates the role.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Financial structure</td>
+                    <td>Bishops, priests, and deacons receive a modest stipend. Parish finances are managed transparently at the diocesan level.</td>
+                    <td>Local leaders are unpaid, but senior leaders (General Authorities) receive "living allowances" whose amounts are not publicly disclosed. The Church's total financial holdings are estimated at $100+ billion with minimal public transparency.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Doctrinal authority</td>
+                    <td>Resides in Sacred Scripture and Sacred Tradition as interpreted by the Magisterium (the Pope and bishops in union with him). Doctrine develops but does not contradict.</td>
+                    <td>Rests primarily in the living prophet, who can override all prior prophets. "A living prophet is more important than a dead prophet." This has resulted in outright doctrinal reversals.</td>
+                </tr>
+                <tr>
+                    <td class="cat-label">Historical model</td>
+                    <td>Reflects the structures described in the Pastoral Epistles (1 Timothy, 2 Timothy, Titus) and confirmed by the Apostolic Fathers.</td>
+                    <td>Reflects the organizational patterns of 19th-century American voluntary associations, Masonic lodges, and early corporate governance.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: Patristic Witness -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="diagram-section" id="patristic">
+        <h2>The Patristic Witness</h2>
+        <div class="section-sub">What the earliest Christians actually practiced</div>
+
+        <p style="margin-bottom: 1.5rem;">If the Catholic hierarchy were a later invention&mdash;as the LDS narrative requires&mdash;we would expect the earliest Christian writers to describe something different. They don't. From the very first generation after the Apostles, the threefold ministry of bishop, priest, and deacon is everywhere.</p>
+
+        <div class="patristic-block">
+            <div class="source">St. Ignatius of Antioch</div>
+            <blockquote>"See that you all follow the bishop, even as Jesus Christ does the Father, and the presbytery as you would the Apostles; and reverence the deacons, as being the institution of God."</blockquote>
+            <div class="citation">Letter to the Smyrnaeans, Ch. 8 — c. AD 107</div>
+        </div>
+
+        <div class="patristic-block">
+            <div class="source">St. Clement of Rome</div>
+            <blockquote>"Our Apostles also knew, through our Lord Jesus Christ, that there would be strife on account of the office of the episcopate. For this reason&hellip; they appointed those already mentioned, and afterwards gave instructions that when these should fall asleep, other approved men should succeed them in their ministry."</blockquote>
+            <div class="citation">First Epistle to the Corinthians, Ch. 44 — c. AD 96</div>
+        </div>
+
+        <div class="patristic-block">
+            <div class="source">St. Irenaeus of Lyon</div>
+            <blockquote>"We are in a position to reckon up those who were by the Apostles instituted bishops in the Churches, and the succession of these men to our own times."</blockquote>
+            <div class="citation">Against Heresies, Book III, Ch. 3 — c. AD 180</div>
+        </div>
+
+        <div class="key-point">
+            <div class="label">The challenge for LDS claims</div>
+            <p>Not a single early Christian writer&mdash;not one, across hundreds of surviving texts from the first three centuries&mdash;describes anything resembling the LDS organizational model: no First Presidency, no Quorum of the Twelve functioning as a corporate board, no Quorums of the Seventy, no stake presidents, no rotating lay bishops. What they describe, unanimously and in detail, is the Catholic structure of bishops, priests, and deacons operating in apostolic succession.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: The Corporate Model -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="diagram-section" id="corporate">
+        <h2>The Corporate Model</h2>
+        <div class="section-sub">Why the LDS structure looks like a Fortune 500 company</div>
+
+        <p style="margin-bottom: 1.5rem;">The LDS Church isn't just structured <em>like</em> a corporation&mdash;it literally <em>is</em> one. The Church operates through a sole corporation, the Corporation of the President of The Church of Jesus Christ of Latter-day Saints, with the Church President serving as its sole corporate officer. Subsidiary entities manage investments (Ensign Peak Advisors), real estate (Property Reserve, Inc.), media (Bonneville International), insurance (Deseret Mutual), agriculture (AgReserves), and retail (Deseret Book, Deseret Industries).</p>
+
+        <div class="critique-box">
+            <div class="label">Consider the contrast</div>
+            <p>When Christ told Peter, "Feed my sheep" (John 21:17, Douay-Rheims), He was commissioning a shepherd, not a CEO. The Catholic bishop is a spiritual father to his flock&mdash;he confirms, ordains, consecrates, and teaches. The LDS Church President is the sole legal officer of a multi-billion-dollar corporation who claims prophetic authority to override all previous prophets. These are fundamentally different conceptions of what it means to lead Christ's Church.</p>
+        </div>
+
+        <p>Consider how each structure handles a question like "Who can forgive sins?" In the Catholic Church, the answer is clear and has been since the Apostles: any validly ordained priest, acting <em>in persona Christi</em>, through the Sacrament of Confession (cf. John 20:22–23). The authority is sacramental, permanent, and universal. In the LDS Church, the answer depends on the severity of the sin, the member's standing, the bishop's judgment, and potentially the stake president's involvement&mdash;a bureaucratic process, not a sacramental one.</p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: LDS Structural Changes Timeline -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="diagram-section" id="timeline">
+        <h2>A History of Reorganization</h2>
+        <div class="section-sub">The LDS structure has never stayed still</div>
+
+        <p style="margin-bottom: 1.5rem;">If the LDS organizational structure were divinely revealed&mdash;as the Church claims&mdash;you'd expect it to remain stable. Instead, it has been repeatedly redesigned, expanded, contracted, and reworked. Here are some of the major structural changes:</p>
+
+        <div style="margin-bottom: 2rem;">
+            <div class="timeline-row">
+                <div class="timeline-date">1830</div>
+                <div class="timeline-content"><strong>Church organized</strong> with just "elders" and no complex hierarchy. Joseph Smith held the title "First Elder."</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1832</div>
+                <div class="timeline-content"><strong>First Presidency created.</strong> The concept of a President with two counselors was introduced&mdash;modeled after common fraternal organizations of the era.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1835</div>
+                <div class="timeline-content"><strong>Quorum of the Twelve Apostles organized.</strong> Also the First Quorum of the Seventy. The roles and authority of these bodies shifted considerably over the next decade.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1833–44</div>
+                <div class="timeline-content"><strong>Office of Presiding Patriarch created</strong> as a hereditary office passed through the Smith family&mdash;something with no precedent in Scripture.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1844</div>
+                <div class="timeline-content"><strong>Succession crisis.</strong> Joseph Smith's death triggered competing claims from Brigham Young, Sidney Rigdon, James Strang, and the Smith family. No clear succession plan existed&mdash;unusual for a "divinely revealed" structure.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1847</div>
+                <div class="timeline-content"><strong>First Presidency reconstituted</strong> under Brigham Young after a 3-year gap with the Quorum of the Twelve governing alone.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1941</div>
+                <div class="timeline-content"><strong>Assistants to the Twelve created</strong>&mdash;an entirely new office with no scriptural basis, added to handle growing administrative burden.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1976</div>
+                <div class="timeline-content"><strong>First Quorum of the Seventy reconstituted.</strong> Assistants to the Twelve were absorbed into this body. The Seventy were reorganized from a largely honorary title into an operational management layer.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1979</div>
+                <div class="timeline-content"><strong>Presiding Patriarch office shelved.</strong> Eldred G. Smith was given "emeritus" status; the hereditary office was quietly mothballed.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">1989–2004</div>
+                <div class="timeline-content"><strong>Additional Quorums of the Seventy created.</strong> Eventually expanded to eight quorums with differing terms and authorities&mdash;reflecting administrative growth, not theological development.</div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-date">2018</div>
+                <div class="timeline-content"><strong>Home &amp; visiting teaching programs scrapped</strong> in favor of "ministering"&mdash;yet another restructuring of how members interact at the local level.</div>
+            </div>
+        </div>
+
+        <div class="critique-box">
+            <div class="label">Compare with Catholic continuity</div>
+            <p>Throughout all of this reshuffling, the Catholic Church has continued to operate with the same three ordained degrees&mdash;bishop, priest, deacon&mdash;that Ignatius of Antioch described in AD 107. Administrative structures around these offices have evolved (the Roman Curia, diocesan organization, etc.), but the sacramental core has never changed. The LDS Church, by contrast, has reinvented its core leadership structure repeatedly within less than 200 years.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="page-footer">
+    <p><a href="../index.html">One Faith Delivered</a> &bull; By former Mormons, for future Catholics</p>
+    <p style="margin-top: 0.5rem;">All Scripture quotations from the Douay-Rheims Bible</p>
+</footer>
+
+<!-- Scripts -->
+<script>
+// Reading progress bar
+window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// Hamburger / Sidebar
+const hamburger = document.getElementById('hamburgerBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+function toggleSidebar() {
+    hamburger.classList.toggle('active');
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+hamburger.addEventListener('click', toggleSidebar);
+overlay.addEventListener('click', toggleSidebar);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) toggleSidebar();
+});
+</script>
+
+</body>
+</html>
