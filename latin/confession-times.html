@@ -311,7 +311,7 @@
     transition: max-height 0.3s ease;
     border-top: 1px solid var(--border-soft);
   }
-  .church-card.expanded .card-details { max-height: 800px; }
+  .church-card.expanded .card-details { max-height: 1600px; }
   .details-inner { padding: 1rem; }
 
   .detail-row {
@@ -503,7 +503,7 @@
 <header class="app-header">
   <div class="chi-rho">☧</div>
   <h1 class="app-title">Confiteor</h1>
-  <p class="app-subtitle">Confession times near Canton, GA</p>
+  <p class="app-subtitle">Confession &amp; Adoration near Canton, GA</p>
 </header>
 
 <div id="live-banner" class="live-banner">
@@ -546,12 +546,12 @@
   </div>
   <div class="info-section">
     <h2 class="info-heading">How to Use</h2>
-    <p class="info-text">The <em>Next Opportunity</em> banner shows the soonest confession available today or in coming days. The church list can be filtered by day of week or sorted by distance. Tap any card to see the full weekly schedule, directions, call button, and website link.</p>
-    <p class="info-text">Times highlighted in gold mark the next upcoming session for that parish. A green badge means confessions are happening <em>right now</em>.</p>
+    <p class="info-text">The <em>Next Opportunity</em> banner shows the soonest confession available today or in coming days. The church list can be filtered by day of week or sorted by distance. Tap any card to see the full weekly schedule, adoration hours, directions, call button, and website link.</p>
+    <p class="info-text">Times highlighted in gold mark the next upcoming confession for that parish. A green <em>Now</em> badge means confessions are happening right now. A sage <em>Adoration now</em> indicator under the parish city means the Blessed Sacrament is currently exposed.</p>
   </div>
   <div class="info-section">
     <h2 class="info-heading">A Note on Accuracy</h2>
-    <p class="info-text">Confession schedules change — especially during liturgical seasons. This app uses pre-populated data that should be verified periodically. When in doubt, <em>call ahead</em>. The phone number and website are always one tap away.</p>
+    <p class="info-text">Confession and Adoration schedules change — especially during liturgical seasons, Holy Week, and parish holidays. This app uses pre-populated data that should be verified periodically. When in doubt, <em>call ahead</em>. The phone number and website are always one tap away.</p>
   </div>
   <div class="info-section">
     <h2 class="info-heading">An Act of Contrition</h2>
@@ -598,6 +598,11 @@ const CHURCHES = [
       3: [{ start: '17:00', end: '18:15' }],
       6: [{ start: '16:00', end: '16:45' }]
     },
+    adoration: {
+      3: [{ start: '08:30', end: '18:45' }],
+      4: [{ start: '19:00', end: '20:00' }]
+    },
+    adorationNote: 'First Friday of the month: 9:30 AM until 6:00 AM Saturday.',
     notes: 'Other times by appointment. Verify during Lent & Advent.'
   },
   {
@@ -613,6 +618,15 @@ const CHURCHES = [
       3: [{ start: '17:00', end: '18:00' }],
       6: [{ start: '09:30', end: '10:30' }]
     },
+    adoration: {
+      // Near-perpetual: Tue 9:30am through Sat 9:00am in chapel
+      2: [{ start: '09:30', end: '23:59' }],
+      3: [{ start: '00:00', end: '23:59' }],
+      4: [{ start: '00:00', end: '23:59' }],
+      5: [{ start: '00:00', end: '23:59' }],
+      6: [{ start: '00:00', end: '09:00' }]
+    },
+    adorationNote: 'Chapel — near-perpetual Tuesday 9:30 AM through Saturday 9:00 AM. Pauses during Thanksgiving & Christmas weeks.',
     notes: 'Confession generally continues until the last person is heard.'
   },
   {
@@ -627,7 +641,12 @@ const CHURCHES = [
     schedule: {
       5: [{ start: '10:00', end: '11:00' }],
       6: [{ start: '15:00', end: '15:45' }, { start: '17:30', end: '17:45', note: 'Spanish' }]
-    }
+    },
+    adoration: {
+      3: [{ start: '18:30', end: '19:30' }],
+      5: [{ start: '10:00', end: '11:00' }]
+    },
+    adorationNote: 'First Friday of the month: 10:00 AM – 8:00 PM.'
   },
   {
     id: 'st-catherine-kennesaw',
@@ -641,7 +660,18 @@ const CHURCHES = [
     schedule: {
       3: [{ start: '18:00', end: '19:00', note: 'Or by appointment' }],
       6: [{ start: '09:00', end: '10:00' }, { start: '15:00', end: '16:00' }]
-    }
+    },
+    adoration: {
+      // Perpetual adoration chapel — 24/7
+      0: [{ start: '00:00', end: '23:59' }],
+      1: [{ start: '00:00', end: '23:59' }],
+      2: [{ start: '00:00', end: '23:59' }],
+      3: [{ start: '00:00', end: '23:59' }],
+      4: [{ start: '00:00', end: '23:59' }],
+      5: [{ start: '00:00', end: '23:59' }],
+      6: [{ start: '00:00', end: '23:59' }]
+    },
+    adorationNote: 'Perpetual Adoration Chapel — 24 hours a day, 7 days a week. Holy Hour in church on Wednesdays 6–7 PM.'
   },
   {
     id: 'transfiguration-marietta',
@@ -656,6 +686,15 @@ const CHURCHES = [
       3: [{ start: '17:30', end: '18:30' }],
       6: [{ start: '09:15', end: '10:15' }, { start: '15:30', end: '16:15' }]
     },
+    adoration: {
+      0: [{ start: '18:00', end: '22:00' }],
+      1: [{ start: '09:00', end: '22:00' }],
+      2: [{ start: '09:00', end: '22:00' }],
+      3: [{ start: '09:00', end: '22:00' }],
+      4: [{ start: '09:00', end: '22:00' }],
+      5: [{ start: '09:00', end: '22:00' }]
+    },
+    adorationNote: 'Adoration chapel — Mon–Fri 9 AM–10 PM, Sun 6–10 PM.',
     notes: 'Verify with parish — schedule may vary by season.'
   },
   {
@@ -669,6 +708,10 @@ const CHURCHES = [
     driveMin: 28,
     schedule: {
       6: [{ start: '15:30', end: '16:30' }]
+    },
+    adoration: {
+      4: [{ start: '09:30', end: '19:00' }],
+      5: [{ start: '09:30', end: '19:00' }]
     },
     notes: 'Saturday afternoon confessions. Call rectory for appointments.'
   },
@@ -685,7 +728,18 @@ const CHURCHES = [
       1: [{ start: '18:00', end: '18:30' }],
       3: [{ start: '07:15', end: '07:45' }],
       6: [{ start: '09:00', end: '10:00' }]
-    }
+    },
+    adoration: {
+      // Perpetual except Sat 8:30am-5:30pm and Sun 7am-6pm
+      0: [{ start: '00:00', end: '07:00' }, { start: '18:00', end: '23:59' }],
+      1: [{ start: '00:00', end: '23:59' }],
+      2: [{ start: '00:00', end: '23:59' }],
+      3: [{ start: '00:00', end: '23:59' }],
+      4: [{ start: '00:00', end: '23:59' }],
+      5: [{ start: '00:00', end: '23:59' }],
+      6: [{ start: '00:00', end: '08:30' }, { start: '17:30', end: '23:59' }]
+    },
+    adorationNote: 'Perpetual Adoration Chapel. Pauses Saturday 8:30 AM – 5:30 PM and Sunday 7:00 AM – 6:00 PM.'
   },
   {
     id: 'good-shepherd-cumming',
@@ -699,6 +753,14 @@ const CHURCHES = [
     schedule: {
       6: [{ start: '15:30', end: '16:30' }]
     },
+    adoration: {
+      2: [{ start: '17:00', end: '17:45' }],
+      3: [{ start: '08:15', end: '09:00' }],
+      4: [{ start: '08:15', end: '09:00' }],
+      5: [{ start: '08:15', end: '09:00' }],
+      6: [{ start: '08:00', end: '09:30' }]
+    },
+    adorationNote: 'Additional silent prayer available in Parish Center Chapel during office hours (Mon–Thu 8 AM – 4 PM, Fri 8 AM – noon).',
     notes: 'Verify schedule — confession times can shift seasonally.'
   }
 ];
@@ -764,12 +826,46 @@ function formatSlotLabel(slot, now) {
   return `${DAY_SHORT[slot.start.getDay()]} ${slot.start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${timeStr}`;
 }
 
+// Is adoration currently happening at this church, right now?
+function isAdorationNow(church, now) {
+  if (!church.adoration) return false;
+  const dow = now.getDay();
+  const daySlots = church.adoration[dow];
+  if (!daySlots) return false;
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  for (const slot of daySlots) {
+    const [sh, sm] = slot.start.split(':').map(Number);
+    const [eh, em] = slot.end.split(':').map(Number);
+    const startMin = sh * 60 + sm;
+    const endMin = eh * 60 + em;
+    if (nowMinutes >= startMin && nowMinutes <= endMin) return true;
+  }
+  return false;
+}
+
 function formatFullSchedule(schedule) {
+  // Detect perpetual (24/7): all 7 days with a single 00:00-23:59 slot
+  const allDays = [0,1,2,3,4,5,6];
+  const isPerpetual = allDays.every(d => {
+    const slots = schedule[d];
+    return slots && slots.length === 1
+      && slots[0].start === '00:00' && slots[0].end === '23:59';
+  });
+  if (isPerpetual) {
+    return `<span class="schedule-day" style="font-style:italic;color:var(--gold-deep);">Perpetual — 24 hours a day, 7 days a week</span>`;
+  }
+
   const parts = [];
   for (let d = 0; d < 7; d++) {
     const daySlots = schedule[d];
     if (!daySlots) continue;
     const times = daySlots.map(s => {
+      // "00:00" to "23:59" means full day
+      if (s.start === '00:00' && s.end === '23:59') {
+        return s.note
+          ? `All day <span style="color:var(--ink-faded);font-size:0.85em">(${s.note})</span>`
+          : `All day`;
+      }
       const t = `${formatTime12(s.start)} – ${formatTime12(s.end)}`;
       return s.note ? `${t} <span style="color:var(--ink-faded);font-size:0.85em">(${s.note})</span>` : t;
     }).join('<br>');
@@ -882,6 +978,11 @@ function renderList(containerId) {
       ? `<span class="status-flag now">Now</span>`
       : (isGlobalNext ? `<span class="status-flag next">Soonest</span>` : '');
 
+    const adorationLive = isAdorationNow(church, now);
+    const adorationBadge = adorationLive
+      ? `<span class="dot">·</span><span style="color:var(--sage);font-style:normal;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;"><span class="pulse-dot" style="background:var(--sage);width:6px;height:6px;animation:pulse 2s ease-in-out infinite;"></span>Adoration now</span>`
+      : '';
+
     const distanceBadge = `
       <div class="distance-badge">
         ${distance.toFixed(1)} MI
@@ -892,7 +993,7 @@ function renderList(containerId) {
       <div class="card-header" data-church-id="${church.id}">
         <div style="flex:1; min-width:0;">
           <h3 class="church-name">${church.name}${statusFlag}</h3>
-          <div class="church-meta">${church.city}${church.notes ? `<span class="dot">·</span><em>see notes</em>` : ''}</div>
+          <div class="church-meta">${church.city}${adorationBadge}${church.notes ? `<span class="dot">·</span><em>see notes</em>` : ''}</div>
         </div>
         ${distanceBadge}
       </div>
@@ -908,9 +1009,14 @@ function renderList(containerId) {
             <div class="detail-value"><a href="tel:${church.phone.replace(/[^0-9+]/g,'')}" style="color:var(--crimson-deep);text-decoration:none;border-bottom:1px dotted;">${church.phone}</a></div>
           </div>
           <div class="detail-row" style="align-items:flex-start;">
-            <div class="detail-label">Schedule</div>
+            <div class="detail-label">Confession</div>
             <div class="detail-value schedule">${formatFullSchedule(church.schedule)}</div>
           </div>
+          ${church.adoration ? `
+          <div class="detail-row" style="align-items:flex-start;">
+            <div class="detail-label">Adoration${isAdorationNow(church, now) ? ' <span class="status-flag now" style="margin-left:0.25rem;">Now</span>' : ''}</div>
+            <div class="detail-value schedule">${formatFullSchedule(church.adoration)}${church.adorationNote ? `<div style="margin-top:0.4rem;padding:0.4rem 0.6rem;background:rgba(92,107,79,0.08);border-left:2px solid var(--sage);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--ink-soft);line-height:1.4;">${church.adorationNote}</div>` : ''}</div>
+          </div>` : ''}
           ${church.notes ? `<div class="note">${church.notes}</div>` : ''}
           <div class="action-row">
             <a href="https://maps.google.com/?q=${encodeURIComponent(church.address)}" target="_blank" rel="noopener" class="action-btn primary">Directions</a>
