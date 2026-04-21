@@ -34,10 +34,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
+    html, body { margin: 0; padding: 0; }
 
     body {
       min-height: 100dvh;
@@ -65,11 +62,7 @@
       padding-right: calc(env(safe-area-inset-right) + 1.25rem);
     }
 
-    /* ---------- Header ---------- */
-    .header {
-      text-align: center;
-      padding: 0.75rem 0 1.25rem;
-    }
+    .header { text-align: center; padding: 0.75rem 0 1.25rem; }
 
     .chi-rho {
       font-family: 'Cinzel', serif;
@@ -109,7 +102,6 @@
       min-height: 0.9em;
     }
 
-    /* ---------- Ornamental divider ---------- */
     .divider {
       display: flex;
       align-items: center;
@@ -118,7 +110,6 @@
       margin: 0.25rem 0 0.5rem;
       color: var(--gold);
     }
-
     .divider::before, .divider::after {
       content: '';
       flex: 1;
@@ -127,7 +118,6 @@
       background: linear-gradient(to right, transparent, var(--gold) 25%, var(--gold) 75%, transparent);
       opacity: 0.7;
     }
-
     .divider-ornament {
       font-size: 0.9rem;
       color: var(--gold);
@@ -135,10 +125,7 @@
       transform: translateY(-1px);
     }
 
-    /* ---------- Cards ---------- */
-    main {
-      flex: 1;
-    }
+    main { flex: 1; }
 
     .card {
       background: linear-gradient(180deg, var(--vellum-dark) 0%, var(--vellum) 100%);
@@ -180,7 +167,6 @@
       color: var(--ink);
       margin: 0;
     }
-
     .theme-text::first-letter {
       font-family: 'Cinzel', serif;
       font-size: 3em;
@@ -210,7 +196,6 @@
       margin: 0;
       text-align: center;
     }
-
     .prayer-text .amen {
       display: block;
       margin-top: 0.7rem;
@@ -230,15 +215,12 @@
       color: var(--ink-faint);
       margin: 1.25rem 0 0.25rem;
     }
-
-    .gospel-ref::before,
-    .gospel-ref::after {
+    .gospel-ref::before, .gospel-ref::after {
       content: '·';
       margin: 0 0.7rem;
       color: var(--gold);
     }
 
-    /* ---------- Nav ---------- */
     .nav {
       display: flex;
       justify-content: space-between;
@@ -264,77 +246,38 @@
       transition: all 0.2s ease;
       min-height: 44px;
     }
-
     .nav-btn:hover:not(:disabled),
     .nav-btn:active:not(:disabled) {
       background: var(--gold);
       color: var(--vellum);
     }
+    .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .today-btn { flex: 0 0 auto; }
 
-    .nav-btn:disabled {
-      opacity: 0.25;
-      cursor: not-allowed;
-    }
-
-    .today-btn {
-      flex: 0 0 auto;
-    }
-
-    /* ---------- Loading / Error ---------- */
     .state {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 2.5rem 1rem;
       color: var(--ink-soft);
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-size: 1.15rem;
     }
-
-    .spinner {
+    .state-ornament {
       display: inline-block;
       font-family: 'Cinzel', serif;
       font-size: 2.8rem;
       color: var(--gold);
-      animation: glow 2s ease-in-out infinite;
       margin-bottom: 1rem;
       font-style: normal;
+      opacity: 0.55;
     }
 
-    @keyframes glow {
-      0%, 100% { opacity: 0.35; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.04); }
-    }
-
-    .retry-btn {
-      display: inline-block;
-      margin-top: 1.2rem;
-      background: var(--lapis);
-      color: var(--vellum);
-      border: none;
-      padding: 0.7rem 1.6rem;
-      border-radius: 2px;
-      font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: pointer;
-      min-height: 44px;
-    }
-
-    .retry-btn:active { background: var(--lapis-soft); }
-
-    /* ---------- Content animation ---------- */
-    .fade-in {
-      animation: fadeIn 0.55s ease-out;
-    }
-
+    .fade-in { animation: fadeIn 0.55s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---------- Small screens tuning ---------- */
     @media (max-width: 380px) {
       .theme-text { font-size: 1.22rem; }
       .question-text { font-size: 1.18rem; }
@@ -356,12 +299,7 @@
       <span class="divider-ornament">❦</span>
     </div>
 
-    <main id="mainContent">
-      <div class="state">
-        <div class="spinner">☧</div>
-        <p>Preparing today's message…</p>
-      </div>
-    </main>
+    <main id="mainContent"></main>
 
     <nav class="nav">
       <button class="nav-btn" id="prevBtn" aria-label="Previous day">← Prev</button>
@@ -371,10 +309,156 @@
   </div>
 
   <script>
+    // ============================================================
+    // DAILY ENTRIES — Easter Season, Year C
+    // Tuesday, April 21, 2026 → Sunday, May 10, 2026 (Mother's Day)
+    // Regenerate this block monthly.
+    // ============================================================
+    const DAILY_ENTRIES = {
+      "2026-04-21": {
+        liturgicalDay: "Tuesday · 3rd Week of Easter",
+        gospelReference: "John 6:30–35",
+        theme: "Jesus says, \u201CI am the Bread of Life.\u201D When we stay close to him, our hearts will never feel empty or alone.",
+        question: "What makes your heart feel full and happy? How might Jesus fill you up even more?",
+        prayer: "Jesus, thank you for being the Bread of Life. Help me remember that you fill my heart with love. I want to stay close to you today."
+      },
+      "2026-04-22": {
+        liturgicalDay: "Wednesday · 3rd Week of Easter",
+        gospelReference: "John 6:35–40",
+        theme: "Jesus promises that everyone who looks to him and trusts him will be with him forever. He does not want to lose even one of us.",
+        question: "What do you think it means that Jesus wants to keep you close forever?",
+        prayer: "Father, thank you for sending Jesus to bring us home to you. Help me trust you every day. Please keep me close to you."
+      },
+      "2026-04-23": {
+        liturgicalDay: "Thursday · 3rd Week of Easter",
+        gospelReference: "John 6:44–51",
+        theme: "Jesus calls himself the living bread from heaven. When we receive him, he gives us a life that never ends.",
+        question: "Jesus gives us life that lasts forever. How does that change the way you feel about today?",
+        prayer: "Jesus, you are the living bread. Thank you for giving me a life that lasts forever. Help me love you more each day."
+      },
+      "2026-04-24": {
+        liturgicalDay: "Friday · 3rd Week of Easter",
+        gospelReference: "John 6:52–59",
+        theme: "Jesus tells us that when we receive his Body and Blood in Holy Communion, he lives inside us and we live in him.",
+        question: "What do you think happens inside your heart when you receive Jesus in Holy Communion?",
+        prayer: "Jesus, thank you for giving me your very self in Holy Communion. Help me love you with a quiet, grateful heart."
+      },
+      "2026-04-25": {
+        liturgicalDay: "Feast of St. Mark, Evangelist",
+        gospelReference: "Mark 16:15–20",
+        theme: "Jesus sent his friends out to tell everyone the good news that he loves us. St. Mark wrote one of the Gospels so we could hear it too.",
+        question: "If someone asked you, \u201CWho is Jesus?\u201D \u2014 what is one thing you would tell them?",
+        prayer: "Jesus, thank you for St. Mark, who told the world about you. Help me be brave like him and share your love with others."
+      },
+      "2026-04-26": {
+        liturgicalDay: "4th Sunday of Easter · Good Shepherd Sunday",
+        gospelReference: "John 10:27–30",
+        theme: "Jesus is our Good Shepherd. He knows each of us by name, and we learn to know his voice when we listen with our hearts.",
+        question: "How do you think Jesus speaks to you? Where do you hear his voice?",
+        prayer: "Good Shepherd Jesus, thank you for knowing me and loving me. Help me listen for your voice today. Keep me close to you, like a lamb in your arms."
+      },
+      "2026-04-27": {
+        liturgicalDay: "Monday · 4th Week of Easter",
+        gospelReference: "John 10:1–10",
+        theme: "Jesus says he is the gate for his sheep. When we follow him, we find safety, freedom, and a life full of joy.",
+        question: "What does it feel like to know that Jesus keeps you safe?",
+        prayer: "Jesus, thank you for being the gate that keeps me safe. Help me follow you and nobody else. I want to walk with you today."
+      },
+      "2026-04-28": {
+        liturgicalDay: "Tuesday · 4th Week of Easter",
+        gospelReference: "John 10:22–30",
+        theme: "Jesus calls us his sheep, and he says no one can ever take us out of his hand. He holds us with a strong, loving grip.",
+        question: "What does it feel like to know that Jesus is holding onto you?",
+        prayer: "Jesus, thank you for holding me in your strong, gentle hand. I am safe because you love me. Please never let me go."
+      },
+      "2026-04-29": {
+        liturgicalDay: "St. Catherine of Siena · Doctor of the Church",
+        gospelReference: "Matthew 11:25–30",
+        theme: "Jesus thanks the Father for showing his love to little ones. He invites us to come to him when we\u2019re tired, and he gives us rest.",
+        question: "When do you feel tired or worried? How might Jesus give you rest?",
+        prayer: "Jesus, thank you for loving little hearts like mine. When I feel tired or sad, help me come to you. St. Catherine, pray for me."
+      },
+      "2026-04-30": {
+        liturgicalDay: "Thursday · 4th Week of Easter",
+        gospelReference: "John 13:16–20",
+        theme: "Jesus tells us that whoever welcomes one of his friends welcomes him too. The way we treat others is the way we treat Jesus.",
+        question: "How could you welcome Jesus today by being kind to someone?",
+        prayer: "Jesus, help me see you in the people around me. When I am kind to them, I am kind to you. Make my heart gentle and welcoming."
+      },
+      "2026-05-01": {
+        liturgicalDay: "St. Joseph the Worker",
+        gospelReference: "Matthew 13:54–58",
+        theme: "Jesus grew up in a regular town with a regular carpenter dad. St. Joseph shows us that ordinary work, done with love, is holy.",
+        question: "What is one ordinary thing you do every day? How could doing it with love make it special?",
+        prayer: "Good St. Joseph, you worked hard and loved Jesus. Help me do my small jobs well today \u2014 with love, the way you did."
+      },
+      "2026-05-02": {
+        liturgicalDay: "St. Athanasius · Bishop and Doctor",
+        gospelReference: "John 14:7–14",
+        theme: "Jesus tells us, \u201CIf you have seen me, you have seen the Father.\u201D When we look at Jesus, we see exactly what God is like.",
+        question: "What is one thing about Jesus that tells you what God is like?",
+        prayer: "Jesus, thank you for showing me what the Father is like. When I look at you, I see love. Help me look at you more every day."
+      },
+      "2026-05-03": {
+        liturgicalDay: "5th Sunday of Easter",
+        gospelReference: "John 13:31–33a, 34–35",
+        theme: "Jesus gives us a new rule: \u201CLove one another as I have loved you.\u201D People will know we belong to Jesus by how we love each other.",
+        question: "Who is someone you can love today the way Jesus loves you?",
+        prayer: "Jesus, you loved us all the way to the cross. Teach me to love my family and friends the same way. Let my love show people who you are."
+      },
+      "2026-05-04": {
+        liturgicalDay: "Monday · 5th Week of Easter",
+        gospelReference: "John 14:21–26",
+        theme: "Jesus says that if we love him, the Father and Jesus come to make their home in our hearts. God really wants to live with us!",
+        question: "If Jesus lives in your heart, how might that change the way you act today?",
+        prayer: "Jesus, please come and make your home in my heart. Bring the Father and the Holy Spirit with you. I want my heart to be a happy home for you."
+      },
+      "2026-05-05": {
+        liturgicalDay: "Tuesday · 5th Week of Easter",
+        gospelReference: "John 14:27–31a",
+        theme: "Jesus gives us his peace \u2014 not the kind the world gives, but a quiet, strong peace that calms our hearts when we are afraid.",
+        question: "When do you feel scared or worried? How might Jesus\u2019 peace help you?",
+        prayer: "Jesus, thank you for your peace. When my heart feels shaky, please calm me. Help me trust that you are always with me."
+      },
+      "2026-05-06": {
+        liturgicalDay: "Wednesday · 5th Week of Easter",
+        gospelReference: "John 15:1–8",
+        theme: "Jesus says he is the vine and we are the branches. If we stay connected to him, we will grow and do beautiful things, like fruit on a healthy plant.",
+        question: "What are some ways you can stay connected to Jesus every day?",
+        prayer: "Jesus, keep me close to you like a branch on your vine. Help me grow strong in your love and do good things for others."
+      },
+      "2026-05-07": {
+        liturgicalDay: "Thursday · 5th Week of Easter",
+        gospelReference: "John 15:9–11",
+        theme: "Jesus tells us to stay in his love the same way he stays in the Father\u2019s love. When we do, our joy will be complete.",
+        question: "What does it feel like to be loved? How does Jesus\u2019 love feel different?",
+        prayer: "Jesus, thank you for loving me just like the Father loves you. Help me stay close in that love today. Fill me with your joy."
+      },
+      "2026-05-08": {
+        liturgicalDay: "Friday · 5th Week of Easter",
+        gospelReference: "John 15:12–17",
+        theme: "Jesus calls us his friends, not just his helpers. A good friend loves us, tells us the truth, and wants only good for us \u2014 that\u2019s how Jesus loves.",
+        question: "What makes someone a really good friend? How is Jesus a friend to you?",
+        prayer: "Jesus, thank you for calling me your friend. Help me be a good friend to you and to the people around me. I want to love like you love."
+      },
+      "2026-05-09": {
+        liturgicalDay: "Saturday · 5th Week of Easter",
+        gospelReference: "John 15:18–21",
+        theme: "Jesus tells us that because we belong to him, not everyone will understand or like us \u2014 but that is okay, because we are his.",
+        question: "Has someone ever been unkind because you did the right thing? What did Jesus say about that?",
+        prayer: "Jesus, help me be brave when it\u2019s hard to follow you. Remind me that I belong to you, no matter what. Stay close to me."
+      },
+      "2026-05-10": {
+        liturgicalDay: "6th Sunday of Easter · Mother\u2019s Day",
+        gospelReference: "John 14:23–29",
+        theme: "Jesus promises to send the Holy Spirit to teach us everything. And he leaves us his peace \u2014 a peace that stays, even when the world is noisy.",
+        question: "Who are the people who teach you about Jesus? How can you thank them today?",
+        prayer: "Jesus, thank you for the Holy Spirit who helps me learn about you. Thank you for my mother and everyone who teaches me to love you. Fill our home with your peace."
+      }
+    };
+
     // ---------- State ----------
     let currentDate = new Date();
-    const CACHE_PREFIX = 'littleMissal_v1_';
-    const MODEL = 'claude-sonnet-4-20250514';
 
     // ---------- Date helpers ----------
     const pad = (n) => String(n).padStart(2, '0');
@@ -387,67 +471,6 @@
       const copy = new Date(d);
       copy.setDate(copy.getDate() + n);
       return copy;
-    };
-
-    // ---------- Cache ----------
-    const getCached = (d) => {
-      try {
-        const raw = localStorage.getItem(CACHE_PREFIX + dateKey(d));
-        return raw ? JSON.parse(raw) : null;
-      } catch (_) { return null; }
-    };
-    const setCached = (d, data) => {
-      try { localStorage.setItem(CACHE_PREFIX + dateKey(d), JSON.stringify(data)); }
-      catch (_) { /* quota or unavailable — fine */ }
-    };
-
-    // ---------- API call ----------
-    const fetchDayEntry = async (d) => {
-      const dateStr = dateDisplay(d);
-      const prompt =
-`You are creating a daily Catholic devotional entry for a child age 6-8.
-
-The date is ${dateStr}. Use the web_search tool to find the Catholic daily Mass Gospel reading for this date (Roman Rite / Ordinary Form), and the name of the liturgical day (for example: "Tuesday of the Third Week of Easter", or the saint's feast day if it is a memorial/feast/solemnity).
-
-Then respond with ONLY a JSON object, with no markdown, no backticks, no preamble, and no trailing commentary. The object must match this exact structure:
-
-{
-  "liturgicalDay": "short description of the liturgical day",
-  "gospelReference": "e.g. 'John 6:30-35'",
-  "theme": "A warm 1-2 sentence summary of the Gospel's main message for a 6-8 year old. Use simple, concrete words. No theological jargon. No abstract concepts without a concrete anchor.",
-  "question": "One short open-ended question inviting the child to think about the theme. Never yes/no. Under 18 words.",
-  "prayer": "A short 2-3 sentence prayer a child can pray aloud. Address simply to Jesus, the Father, or the Holy Spirit. End with 'Amen.'"
-}
-
-Respond with the JSON only. Nothing else.`;
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: MODEL,
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }],
-          tools: [{ type: 'web_search_20250305', name: 'web_search' }]
-        })
-      });
-
-      if (!res.ok) throw new Error('Network error: ' + res.status);
-      const data = await res.json();
-
-      // Gather all text blocks (skip server_tool_use / tool_result)
-      const text = (data.content || [])
-        .filter(b => b.type === 'text')
-        .map(b => b.text || '')
-        .join('\n')
-        .replace(/```json|```/g, '')
-        .trim();
-
-      // Extract the JSON object in case there's any stray text
-      const start = text.indexOf('{');
-      const end = text.lastIndexOf('}');
-      if (start === -1 || end === -1) throw new Error('No JSON found in response');
-      return JSON.parse(text.slice(start, end + 1));
     };
 
     // ---------- Rendering ----------
@@ -485,49 +508,27 @@ Respond with the JSON only. Nothing else.`;
       `;
     };
 
-    const renderLoading = () => {
+    const renderEmpty = () => {
+      document.getElementById('liturgicalDay').textContent = '';
       document.getElementById('mainContent').innerHTML = `
         <div class="state fade-in">
-          <div class="spinner">☧</div>
-          <p>Preparing today's message…</p>
+          <div class="state-ornament">❦</div>
+          <p>No entry for this day yet.<br>Try a different day, or come back after the next update.</p>
         </div>
       `;
-    };
-
-    const renderError = () => {
-      document.getElementById('mainContent').innerHTML = `
-        <div class="state fade-in">
-          <p>We couldn't reach today's reading.<br>Please try again in a moment.</p>
-          <button class="retry-btn" id="retryBtn">Try again</button>
-        </div>
-      `;
-      document.getElementById('retryBtn').addEventListener('click', renderDay);
     };
 
     // ---------- Main flow ----------
-    const renderDay = async () => {
+    const renderDay = () => {
       document.getElementById('dateLine').textContent = dateDisplay(currentDate);
-      document.getElementById('liturgicalDay').textContent = '';
 
       const todayBtn = document.getElementById('todayBtn');
       const onToday = isSameDay(currentDate, new Date());
       todayBtn.style.visibility = onToday ? 'hidden' : 'visible';
 
-      const cached = getCached(currentDate);
-      if (cached) {
-        renderContent(cached);
-        return;
-      }
-
-      renderLoading();
-      try {
-        const data = await fetchDayEntry(currentDate);
-        setCached(currentDate, data);
-        renderContent(data);
-      } catch (err) {
-        console.error(err);
-        renderError();
-      }
+      const entry = DAILY_ENTRIES[dateKey(currentDate)];
+      if (entry) renderContent(entry);
+      else renderEmpty();
     };
 
     // ---------- Nav ----------
