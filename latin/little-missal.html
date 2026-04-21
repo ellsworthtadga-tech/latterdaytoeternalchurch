@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Little Missal" />
+  <meta name="theme-color" content="#faf4e8" />
+  <title>The Little Missal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --vellum: #faf4e8;
+      --vellum-dark: #f4eada;
+      --vellum-deep: #ede0c4;
+      --ink: #2a241d;
+      --ink-soft: #5a4e3f;
+      --ink-faint: #857764;
+      --gold: #b08a3e;
+      --gold-light: #d4b56b;
+      --gold-dark: #866627;
+      --lapis: #1f2d5c;
+      --lapis-soft: #3a4a82;
+      --vermillion: #a8342a;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100dvh;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--vellum);
+      background-image:
+        radial-gradient(ellipse at top, rgba(176, 138, 62, 0.04), transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(31, 45, 92, 0.035), transparent 65%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.28  0 0 0 0.055 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .app {
+      min-height: 100dvh;
+      max-width: 620px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding-top: calc(env(safe-area-inset-top) + 1.25rem);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+      padding-left: calc(env(safe-area-inset-left) + 1.25rem);
+      padding-right: calc(env(safe-area-inset-right) + 1.25rem);
+    }
+
+    /* ---------- Header ---------- */
+    .header {
+      text-align: center;
+      padding: 0.75rem 0 1.25rem;
+    }
+
+    .chi-rho {
+      font-family: 'Cinzel', serif;
+      font-size: 2.75rem;
+      color: var(--gold);
+      line-height: 1;
+      margin: 0 0 0.35rem;
+      text-shadow: 0 1px 0 rgba(255, 248, 230, 0.6);
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      font-size: 1.15rem;
+      color: var(--lapis);
+      margin: 0 0 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .date-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      margin: 0.2rem 0 0.15rem;
+    }
+
+    .liturgical-day {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin: 0.4rem 0 0;
+      min-height: 0.9em;
+    }
+
+    /* ---------- Ornamental divider ---------- */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      margin: 0.25rem 0 0.5rem;
+      color: var(--gold);
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      max-width: 5.5rem;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold) 25%, var(--gold) 75%, transparent);
+      opacity: 0.7;
+    }
+
+    .divider-ornament {
+      font-size: 0.9rem;
+      color: var(--gold);
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    /* ---------- Cards ---------- */
+    main {
+      flex: 1;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--vellum-dark) 0%, var(--vellum) 100%);
+      border: 1px solid rgba(176, 138, 62, 0.3);
+      border-radius: 3px;
+      padding: 1.6rem 1.3rem 1.4rem;
+      margin: 1rem 0;
+      position: relative;
+      box-shadow:
+        0 1px 2px rgba(42, 36, 29, 0.08),
+        0 4px 14px rgba(42, 36, 29, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .card-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin: 0 0 0.4rem;
+      text-align: center;
+    }
+
+    .card-label-underline {
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 1rem;
+      opacity: 0.6;
+    }
+
+    .theme-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .theme-text::first-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 3em;
+      line-height: 0.82;
+      float: left;
+      padding: 0.08em 0.12em 0 0;
+      color: var(--lapis);
+      font-weight: 600;
+    }
+
+    .question-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      color: var(--lapis);
+      margin: 0;
+      text-align: center;
+    }
+
+    .prayer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      line-height: 1.65;
+      color: var(--ink);
+      margin: 0;
+      text-align: center;
+    }
+
+    .prayer-text .amen {
+      display: block;
+      margin-top: 0.7rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      color: var(--vermillion);
+    }
+
+    .gospel-ref {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 1.25rem 0 0.25rem;
+    }
+
+    .gospel-ref::before,
+    .gospel-ref::after {
+      content: '·';
+      margin: 0 0.7rem;
+      color: var(--gold);
+    }
+
+    /* ---------- Nav ---------- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(176, 138, 62, 0.25);
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.65rem 0.95rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      min-height: 44px;
+    }
+
+    .nav-btn:hover:not(:disabled),
+    .nav-btn:active:not(:disabled) {
+      background: var(--gold);
+      color: var(--vellum);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    .today-btn {
+      flex: 0 0 auto;
+    }
+
+    /* ---------- Loading / Error ---------- */
+    .state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--ink-soft);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      animation: glow 2s ease-in-out infinite;
+      margin-bottom: 1rem;
+      font-style: normal;
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    .retry-btn {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: var(--lapis);
+      color: var(--vellum);
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .retry-btn:active { background: var(--lapis-soft); }
+
+    /* ---------- Content animation ---------- */
+    .fade-in {
+      animation: fadeIn 0.55s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- Small screens tuning ---------- */
+    @media (max-width: 380px) {
+      .theme-text { font-size: 1.22rem; }
+      .question-text { font-size: 1.18rem; }
+      .prayer-text { font-size: 1.12rem; }
+      .nav-btn { padding: 0.6rem 0.7rem; font-size: 0.6rem; letter-spacing: 0.15em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="chi-rho" aria-hidden="true">☧</div>
+      <h1>The Little Missal</h1>
+      <p class="date-line" id="dateLine">—</p>
+      <p class="liturgical-day" id="liturgicalDay"></p>
+    </header>
+
+    <div class="divider" aria-hidden="true">
+      <span class="divider-ornament">❦</span>
+    </div>
+
+    <main id="mainContent">
+      <div class="state">
+        <div class="spinner">☧</div>
+        <p>Preparing today's message…</p>
+      </div>
+    </main>
+
+    <nav class="nav">
+      <button class="nav-btn" id="prevBtn" aria-label="Previous day">← Prev</button>
+      <button class="nav-btn today-btn" id="todayBtn">Today</button>
+      <button class="nav-btn" id="nextBtn" aria-label="Next day">Next →</button>
+    </nav>
+  </div>
+
+  <script>
+    // ---------- State ----------
+    let currentDate = new Date();
+    const CACHE_PREFIX = 'littleMissal_v1_';
+    const MODEL = 'claude-sonnet-4-20250514';
+
+    // ---------- Date helpers ----------
+    const pad = (n) => String(n).padStart(2, '0');
+    const dateKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const dateDisplay = (d) => d.toLocaleDateString('en-US', {
+      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+    });
+    const isSameDay = (a, b) => dateKey(a) === dateKey(b);
+    const addDays = (d, n) => {
+      const copy = new Date(d);
+      copy.setDate(copy.getDate() + n);
+      return copy;
+    };
+
+    // ---------- Cache ----------
+    const getCached = (d) => {
+      try {
+        const raw = localStorage.getItem(CACHE_PREFIX + dateKey(d));
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) { return null; }
+    };
+    const setCached = (d, data) => {
+      try { localStorage.setItem(CACHE_PREFIX + dateKey(d), JSON.stringify(data)); }
+      catch (_) { /* quota or unavailable — fine */ }
+    };
+
+    // ---------- API call ----------
+    const fetchDayEntry = async (d) => {
+      const dateStr = dateDisplay(d);
+      const prompt =
+`You are creating a daily Catholic devotional entry for a child age 6-8.
+
+The date is ${dateStr}. Use the web_search tool to find the Catholic daily Mass Gospel reading for this date (Roman Rite / Ordinary Form), and the name of the liturgical day (for example: "Tuesday of the Third Week of Easter", or the saint's feast day if it is a memorial/feast/solemnity).
+
+Then respond with ONLY a JSON object, with no markdown, no backticks, no preamble, and no trailing commentary. The object must match this exact structure:
+
+{
+  "liturgicalDay": "short description of the liturgical day",
+  "gospelReference": "e.g. 'John 6:30-35'",
+  "theme": "A warm 1-2 sentence summary of the Gospel's main message for a 6-8 year old. Use simple, concrete words. No theological jargon. No abstract concepts without a concrete anchor.",
+  "question": "One short open-ended question inviting the child to think about the theme. Never yes/no. Under 18 words.",
+  "prayer": "A short 2-3 sentence prayer a child can pray aloud. Address simply to Jesus, the Father, or the Holy Spirit. End with 'Amen.'"
+}
+
+Respond with the JSON only. Nothing else.`;
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }],
+          tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+        })
+      });
+
+      if (!res.ok) throw new Error('Network error: ' + res.status);
+      const data = await res.json();
+
+      // Gather all text blocks (skip server_tool_use / tool_result)
+      const text = (data.content || [])
+        .filter(b => b.type === 'text')
+        .map(b => b.text || '')
+        .join('\n')
+        .replace(/```json|```/g, '')
+        .trim();
+
+      // Extract the JSON object in case there's any stray text
+      const start = text.indexOf('{');
+      const end = text.lastIndexOf('}');
+      if (start === -1 || end === -1) throw new Error('No JSON found in response');
+      return JSON.parse(text.slice(start, end + 1));
+    };
+
+    // ---------- Rendering ----------
+    const escapeHtml = (s) => (s || '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+    const renderContent = (data) => {
+      document.getElementById('liturgicalDay').textContent = data.liturgicalDay || '';
+      const main = document.getElementById('mainContent');
+      const prayerBody = (data.prayer || '').replace(/\s*Amen\.?\s*$/i, '').trim();
+
+      main.innerHTML = `
+        <div class="fade-in">
+          <section class="card">
+            <p class="card-label">Today's Message</p>
+            <span class="card-label-underline"></span>
+            <p class="theme-text">${escapeHtml(data.theme || '')}</p>
+          </section>
+
+          <section class="card">
+            <p class="card-label">Something to Wonder</p>
+            <span class="card-label-underline"></span>
+            <p class="question-text">${escapeHtml(data.question || '')}</p>
+          </section>
+
+          <section class="card">
+            <p class="card-label">Let's Pray</p>
+            <span class="card-label-underline"></span>
+            <p class="prayer-text">${escapeHtml(prayerBody)}<span class="amen">Amen</span></p>
+          </section>
+
+          ${data.gospelReference ? `<p class="gospel-ref">${escapeHtml(data.gospelReference)}</p>` : ''}
+        </div>
+      `;
+    };
+
+    const renderLoading = () => {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="state fade-in">
+          <div class="spinner">☧</div>
+          <p>Preparing today's message…</p>
+        </div>
+      `;
+    };
+
+    const renderError = () => {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="state fade-in">
+          <p>We couldn't reach today's reading.<br>Please try again in a moment.</p>
+          <button class="retry-btn" id="retryBtn">Try again</button>
+        </div>
+      `;
+      document.getElementById('retryBtn').addEventListener('click', renderDay);
+    };
+
+    // ---------- Main flow ----------
+    const renderDay = async () => {
+      document.getElementById('dateLine').textContent = dateDisplay(currentDate);
+      document.getElementById('liturgicalDay').textContent = '';
+
+      const todayBtn = document.getElementById('todayBtn');
+      const onToday = isSameDay(currentDate, new Date());
+      todayBtn.style.visibility = onToday ? 'hidden' : 'visible';
+
+      const cached = getCached(currentDate);
+      if (cached) {
+        renderContent(cached);
+        return;
+      }
+
+      renderLoading();
+      try {
+        const data = await fetchDayEntry(currentDate);
+        setCached(currentDate, data);
+        renderContent(data);
+      } catch (err) {
+        console.error(err);
+        renderError();
+      }
+    };
+
+    // ---------- Nav ----------
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      currentDate = addDays(currentDate, -1);
+      renderDay();
+    });
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      currentDate = addDays(currentDate, 1);
+      renderDay();
+    });
+    document.getElementById('todayBtn').addEventListener('click', () => {
+      currentDate = new Date();
+      renderDay();
+    });
+
+    // ---------- Initial load ----------
+    renderDay();
+  </script>
+</body>
+</html>
