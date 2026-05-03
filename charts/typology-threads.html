@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threads Through Scripture &mdash; Biblical Typology &mdash; One Faith Delivered</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #F5F0E8;
+    --parchment-dark: #EDE5D5;
+    --parchment-darker: #E0D5BF;
+    --crimson: #8B0000;
+    --crimson-light: #B22222;
+    --gold: #C5A55A;
+    --gold-light: #D4B872;
+    --ink: #1F1B16;
+    --ink-light: #4A4239;
+    --ink-faded: #8A7F70;
+    --shadow: rgba(31, 27, 22, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--crimson);
+    width: 0%;
+    z-index: 200;
+    transition: width 0.1s;
+  }
+
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--parchment);
+    border-bottom: 2px solid var(--gold);
+    box-shadow: 0 2px 10px var(--shadow);
+    padding: 0.85rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--crimson);
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-brand em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-light);
+    font-size: 0.95rem;
+  }
+
+  .nav-print {
+    background: none;
+    border: 1px solid var(--ink-faded);
+    color: var(--ink-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .nav-print:hover {
+    border-color: var(--crimson);
+    color: var(--crimson);
+  }
+
+  /* Page header */
+  .page-header {
+    background: linear-gradient(135deg, #1a1410 0%, #2a1f18 100%);
+    color: #f5f0e8;
+    padding: 4rem 2rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 30% 40%, rgba(197, 165, 90, 0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 60%, rgba(139, 0, 0, 0.08) 0%, transparent 50%);
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+    color: #f5f0e8;
+    line-height: 1.1;
+    position: relative;
+  }
+
+  .page-header h1 em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  .page-header .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: #d4c8b0;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 1rem;
+  }
+
+  /* Intro */
+  .intro {
+    margin-bottom: 2.5rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--crimson);
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .intro p {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    color: var(--ink-light);
+  }
+
+  .intro p em { color: var(--ink); }
+
+  /* Toggles */
+  .toggle-bar {
+    background: var(--parchment-dark);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .toggle-bar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 0.85rem;
+  }
+
+  .toggle-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    justify-content: center;
+  }
+
+  .toggle-btn {
+    background: var(--parchment);
+    border: 2px solid var(--ink-faded);
+    color: var(--ink);
+    padding: 0.55rem 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1;
+  }
+
+  .toggle-btn .swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--type-color, currentColor);
+    border: 1.5px solid var(--ink);
+    flex-shrink: 0;
+  }
+
+  .toggle-btn:hover {
+    border-color: var(--type-color, var(--crimson));
+    transform: translateY(-1px);
+  }
+
+  .toggle-btn.active {
+    background: var(--type-color, var(--crimson));
+    border-color: var(--type-color, var(--crimson));
+    color: white;
+  }
+
+  .toggle-btn.active .swatch {
+    background: white;
+    border-color: white;
+  }
+
+  .toggle-aux {
+    margin-top: 0.85rem;
+    text-align: center;
+  }
+
+  .toggle-aux button {
+    background: none;
+    border: none;
+    color: var(--ink-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.25rem 0.6rem;
+    margin: 0 0.3rem;
+    transition: color 0.2s;
+  }
+
+  .toggle-aux button:hover { color: var(--crimson); }
+
+  /* Visualization */
+  .viz-container {
+    background: white;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.25rem 0.5rem 1rem;
+    box-shadow: 0 2px 8px var(--shadow);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    transition: padding 0.3s;
+  }
+
+  .viz-container.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--ink-faded);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+  }
+
+  .viz-svg {
+    width: 100%;
+    min-width: 1000px;
+    height: auto;
+    display: block;
+  }
+
+  /* SVG element styles */
+  .timeline-line {
+    stroke: var(--ink-faded);
+    stroke-width: 1;
+    stroke-dasharray: 2 4;
+  }
+
+  .testament-divider {
+    stroke: var(--gold);
+    stroke-width: 2;
+    stroke-dasharray: 6 3;
+    opacity: 0.6;
+  }
+
+  .book-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    fill: var(--ink-light);
+    letter-spacing: 0.04em;
+  }
+
+  .testament-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    fill: var(--gold);
+    letter-spacing: 0.18em;
+    font-weight: 600;
+  }
+
+  .lane-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .type-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.45s;
+    pointer-events: none;
+  }
+
+  .type-line.active {
+    opacity: 0.78;
+    animation: drawLine 1.4s ease-out;
+  }
+
+  @keyframes drawLine {
+    from { stroke-dasharray: 0 3000; stroke-dashoffset: 0; }
+    to { stroke-dasharray: 3000 0; stroke-dashoffset: 0; }
+  }
+
+  .passage-node {
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.45s;
+  }
+
+  .passage-node.active { opacity: 1; }
+
+  .passage-node circle {
+    transition: r 0.18s, stroke-width 0.18s;
+  }
+
+  .passage-node:hover .node-main {
+    r: 9;
+    stroke-width: 3;
+  }
+
+  .passage-node .node-halo {
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .passage-node.selected .node-halo {
+    opacity: 0.22;
+  }
+
+  .passage-node.selected .node-main {
+    r: 9;
+    stroke-width: 3.5;
+  }
+
+  .node-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    fill: var(--ink);
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    background: var(--parchment-dark);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.85rem 2rem;
+    margin-bottom: 2rem;
+    min-height: 200px;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .detail-panel-empty {
+    color: var(--ink-faded);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    line-height: 1.55;
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--parchment-darker);
+  }
+
+  .detail-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+
+  .detail-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.55rem;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .detail-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    border: 1.5px solid;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .detail-role.fulfillment-role {
+    color: white;
+  }
+
+  .detail-role.type-role {
+    background: transparent;
+  }
+
+  .detail-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.18rem;
+    color: var(--ink);
+    line-height: 1.55;
+    background: white;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--crimson);
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+
+  .detail-text-ref {
+    display: block;
+    margin-top: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-faded);
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  .detail-insight {
+    font-size: 1.04rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  .detail-insight em { color: var(--ink); }
+
+  .detail-insight strong { color: var(--ink); font-weight: 600; }
+
+  .detail-insight-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+  }
+
+  /* Legend */
+  .legend {
+    background: var(--parchment-dark);
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.97rem;
+    color: var(--ink-light);
+  }
+
+  .legend h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--crimson);
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .legend ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .legend li {
+    padding: 0.35rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .legend li::before {
+    content: '\2756';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 0.65rem;
+    top: 0.55rem;
+  }
+
+  .legend strong { color: var(--ink); }
+
+  /* Bottom note */
+  .bottom-note {
+    background: var(--parchment-dark);
+    border-left: 3px solid var(--crimson);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--ink-light);
+  }
+
+  .bottom-note strong { color: var(--ink); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2.5rem 2rem 3rem;
+    border-top: 2px solid var(--gold);
+    background: var(--parchment-dark);
+    color: var(--ink-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+
+  .footer p { margin: 0.35rem 0; }
+  .footer p.small { font-size: 0.85rem; color: var(--ink-faded); }
+
+  @media (max-width: 768px) {
+    .page-header { padding: 3rem 1.5rem 4rem; }
+    .container { padding: 2rem 1rem 1rem; }
+    .toggle-buttons { gap: 0.4rem; }
+    .toggle-btn { font-size: 0.85rem; padding: 0.45rem 0.75rem; }
+    .detail-panel { padding: 1.5rem 1.25rem; }
+    .detail-text { padding: 0.85rem 1.1rem; font-size: 1.08rem; }
+  }
+
+  @media print {
+    .top-nav, .nav-print, .progress-bar, .toggle-bar, .toggle-aux { display: none; }
+    body { background: white; }
+    .viz-container, .detail-panel { break-inside: avoid; box-shadow: none; }
+    .page-header { background: #1a1410 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav class="top-nav">
+    <div class="nav-brand">One Faith Delivered <em>&middot; Threads Through Scripture</em></div>
+    <button class="nav-print" onclick="window.print()">PRINT</button>
+  </nav>
+
+  <header class="page-header">
+    <h1>Threads <em>Through</em> Scripture</h1>
+    <p class="tagline">An interactive map of biblical typology &mdash; how the Old Testament prefigures, and the New Testament fulfills</p>
+  </header>
+
+  <div class="container">
+
+    <section class="intro">
+      <h2>What Is Typology?</h2>
+      <p>Typology is the historic Christian conviction that God authors history. The persons, events, institutions, and objects of the Old Testament are not merely <em>predictions</em> of Christ and His Church; they are real shadows cast by a real Light, divinely arranged so that when fulfillment comes, it illuminates everything that came before.</p>
+      <p>This is not allegory imposed from outside the text. The New Testament authors themselves read the Hebrew Scriptures this way. Saint Paul calls Adam <em>"a figure of him who was to come"</em> (Romans 5:14, DR). Saint Peter calls baptism the antitype of Noah's flood (1 Peter 3:21). The Letter to the Hebrews unfolds the entire Levitical priesthood as <em>"a shadow of good things to come"</em> (Hebrews 10:1, DR). Christ Himself, on the road to Emmaus, opens the Scriptures to show how <em>"all things must needs be fulfilled, which are written in the law of Moses, and in the prophets, and in the psalms, concerning me"</em> (Luke 24:44, DR).</p>
+      <p>Below, follow each typological thread by toggling its button. Click any node to read the passage and the connection. Activate multiple threads at once to see how the patterns reinforce one another &mdash; how the Eucharist, the New Adam, and the Tree of Life all converge in the final chapters of the Apocalypse, or how the Suffering Servant and the Cross trace parallel paths from Genesis to Calvary.</p>
+    </section>
+
+    <div class="toggle-bar">
+      <div class="toggle-bar-label">&mdash; Typological Threads &mdash;</div>
+      <div class="toggle-buttons" id="toggleButtons"></div>
+      <div class="toggle-aux">
+        <button onclick="setAllTypes(true)">Show All</button>
+        <span style="color: var(--ink-faded);">&middot;</span>
+        <button onclick="setAllTypes(false)">Clear</button>
+      </div>
+    </div>
+
+    <div class="viz-container" id="vizContainer">
+      <svg class="viz-svg" id="vizSvg" preserveAspectRatio="xMidYMid meet" aria-label="Biblical typology visualization"></svg>
+    </div>
+
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-panel-empty">
+        Select a thread above and click any node to read the passage and its typological resonance.
+      </div>
+    </div>
+
+    <div class="legend">
+      <h3>How to read this</h3>
+      <ul>
+        <li><strong>Hollow circle</strong> &mdash; an Old Testament <em>type</em> (the prefiguration)</li>
+        <li><strong>Filled circle</strong> &mdash; a New Testament <em>fulfillment</em> (the antitype)</li>
+        <li>The flowing line traces a single typological thread through Scripture's chronology, from Genesis (left) to the Apocalypse (right). The vertical dashed line marks the testaments.</li>
+        <li>Each thread occupies its own horizontal lane so multiple threads can be compared at once. Lanes appear and disappear as threads are toggled.</li>
+        <li>The threads are not exhaustive &mdash; each is selective, drawing the most luminous connections. The full case for any single thread requires more sources than a chart can hold.</li>
+      </ul>
+    </div>
+
+    <div class="bottom-note">
+      <strong>A note on the threads shown.</strong> The threads above are starting points, not the totality. Other major typological currents &mdash; the Davidic kingship, the Akedah and the Beloved Son, the Exodus pattern, the Tabernacle and the Temple, Wisdom Christology, the Two Adams, Sabbath rest and the new creation, the Jubilee, the Suffering Just One, Joseph the Patriarch as Provider, the Feast of Tabernacles, the messianic banquet, and many more &mdash; are each as rich as those displayed here. Within the Marian thread alone, the patristic and liturgical tradition multiplies images: Eve, Ark, Burning Bush, Hannah, Judith, Esther, Rachel, the Daughter of Zion, the Queen Mother, the Tower of David, Stella Maris, the enclosed garden, the dawn, the dew-laden fleece. This visualization is designed to expand. Threads will be added over time, and existing threads will deepen as research continues.
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>One Faith Delivered &middot; <em>By former Mormons, for future Catholics</em></p>
+    <p class="small">Scripture quotations from the Douay-Rheims version</p>
+  </footer>
+
+  <script>
+    // ============================================================
+    // DATA
+    // Position: 0-100 across the canon. OT spans roughly 0-76,
+    // NT spans roughly 77-100.
+    // ============================================================
+
+        const types = [
+
+      // ============================================================
+      // THREAD 1 — THE EUCHARIST
+      // ============================================================
+      {
+        id: 'eucharist',
+        name: 'The Eucharist',
+        color: '#8B0000',
+        passages: [
+          {
+            book: 'Genesis', ref: '14:18-20', position: 3,
+            title: "Melchizedek's Bread and Wine",
+            text: "But Melchisedech the king of Salem, bringing forth bread and wine, for he was the priest of the most high God, blessed him.",
+            insight: "Before Mosaic law, before the Levitical priesthood, before tabernacle or temple, a mysterious priest-king of Salem (later Jerusalem) brings out bread and wine to offer for Abram. He has no genealogy, no successor, no successor needed. The Letter to the Hebrews makes him the prototype of Christ's eternal priesthood: <em>&ldquo;a priest forever, according to the order of Melchisedech&rdquo;</em> (Hebrews 7:17, DR). Saint Cyprian (<em>Epistle 63</em>) reads the bread-and-wine offering as the unmistakable prefiguration of the Mass. The Council of Trent (<em>Session XXII</em>) affirmed the same. The Catholic Mass continues this priesthood &mdash; not Aaron's bloody slaughter of beasts, but the priesthood of bread and wine, offered to the Father in eternal procession.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '12:5-13', position: 7,
+            title: 'The Passover Lamb',
+            text: "It shall be a lamb without blemish, a male, of one year... and the whole multitude of the children of Israel shall sacrifice it in the evening... And they shall eat the flesh that night roasted at the fire.",
+            insight: "An unblemished lamb is slain, its blood marks the door, its flesh is eaten &mdash; and death passes over. Saint Paul says directly: <em>&ldquo;Christ our pasch is sacrificed&rdquo;</em> (1 Corinthians 5:7, DR). Note the ritual structure: the lamb's death alone does not save Israel; Israel must <em>eat</em> the lamb. Sacrifice and meal are inseparable. The Eucharist is the participatory dimension of Calvary, the meal that joins the household to the sacrifice. To object that &ldquo;the death on the Cross is enough&rdquo; is to misread the Passover from which the New Covenant takes its shape; the original Passover required both blood on the door and lamb on the table.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '16:4,15', position: 9,
+            title: 'Manna from Heaven',
+            text: "Behold I will rain bread from heaven for you... This is the bread, which the Lord hath given you to eat.",
+            insight: "Bread descends daily from heaven to sustain Israel through the desert. Christ deliberately invokes this in John 6: <em>&ldquo;Your fathers did eat manna in the desert, and are dead. This is the bread which cometh down from heaven; that if any man eat of it, he may not die&rdquo;</em> (John 6:49-50, DR). The fathers in the desert ate bread &amp; died. The Eucharist is the bread that gives life eternal &mdash; the manna's fulfillment, not its repetition. The Greek verb Christ uses for &ldquo;eat&rdquo; in the Bread of Life Discourse intensifies as the discourse proceeds (from <em>phag&omacr;</em> to <em>tr&omacr;g&omacr;</em>, &ldquo;to gnaw, to chew&rdquo;) &mdash; precisely the opposite of figurative softening.",
+            role: 'type'
+          },
+          {
+            book: 'Leviticus', ref: '7:11-15', position: 12,
+            title: 'The Todah Sacrifice',
+            text: "And this is the law of the sacrifice of peace offerings... if the oblation be for thanksgiving, they shall offer loaves without leaven... with the sacrifice of thanksgiving.",
+            insight: "The <em>todah</em> &mdash; the thanksgiving peace offering &mdash; combined an animal sacrifice with unleavened bread and wine, eaten by the worshipper in thanksgiving for deliverance from death. Ancient rabbinic tradition (<em>Pesikta</em>; cf. Hartmut Gese) held that in the messianic age, when all other sacrifices ceased, only the todah would remain. The Greek word for Eucharist, <em>eucharistia</em>, is the precise translation of the Hebrew <em>todah</em>. Psalm 21 (the Crucifixion psalm: <em>&ldquo;My God, my God, why hast thou forsaken me&rdquo;</em>) is the Bible's most prominent todah psalm, ending in eucharistic feast: <em>&ldquo;The poor shall eat and shall be filled&rdquo;</em> (v. 27). This is among the strongest and least encountered Eucharistic arguments in Scripture &mdash; and one of the rare cases where the Hebrew Bible's own liturgical anticipation lines up exactly with the Catholic Mass.",
+            role: 'type'
+          },
+          {
+            book: 'Leviticus', ref: '24:5-9', position: 13,
+            title: 'The Bread of the Presence',
+            text: "Thou shalt take also fine flour, and shalt bake twelve loaves thereof... And thou shalt set them before the Lord... It shall be Aaron's and his sons', that they may eat it in the holy place.",
+            insight: "Twelve loaves of <em>lechem ha-panim</em> &mdash; literally &ldquo;the bread of the face&rdquo; &mdash; stood perpetually in the sanctuary, eaten only by the priests in the holy place. The Hebrew name itself confesses what Israel's worship knew: this bread mediated the presence of God. Christ gives bread that is His very Presence to a priestly people, but now the presence is no longer behind a veil; it is consumed. The veil tears at the Crucifixion (Matthew 27:51) precisely because the new Bread of the Presence is no longer hidden from the laity but offered for the life of the world.",
+            role: 'type'
+          },
+          {
+            book: '3 Kings', ref: '19:5-8', position: 24,
+            title: "Elijah's Heavenly Bread",
+            text: "An angel of the Lord touched him and said to him: Arise and eat... And he arose, and ate, and drank, and walked in the strength of that food forty days and forty nights, unto the mount of God, Horeb.",
+            insight: "Despondent and ready to die, the prophet receives bread from an angel and walks forty days on its strength to encounter God on Horeb. The Roman Missal explicitly applies this passage to the Eucharist as <em>viaticum</em> &mdash; food for the journey through the wilderness toward the mountain of God. The pattern is decisive: heavenly food is not symbolic but really sustains the body for the long pilgrimage of faith.",
+            role: 'type'
+          },
+          {
+            book: 'Proverbs', ref: '9:1-5', position: 39,
+            title: "Wisdom's Banquet",
+            text: "Wisdom hath built herself a house... she hath mingled her wine, and set forth her table... Come, eat my bread, and drink the wine which I have mingled for you.",
+            insight: "Lady Wisdom &mdash; whom the Fathers identify with Christ the Eternal Wisdom (cf. 1 Corinthians 1:24) &mdash; sets a table of bread and mingled wine for those who seek understanding. The banquet imagery is messianic and sapiential at once. By the time we reach Christ's words at the Last Supper, the readers steeped in Wisdom literature already know that to eat at the table of Wisdom is to be incorporated into Wisdom Himself. The Catholic Mass is Wisdom's house, Wisdom's table, Wisdom's bread and wine &mdash; which is to say, Christ's.",
+            role: 'type'
+          },
+          {
+            book: 'Malachias', ref: '1:11', position: 73,
+            title: 'A Pure Offering Among the Gentiles',
+            text: "For from the rising of the sun even to the going down, my name is great among the Gentiles, and in every place there is sacrifice, and there is offered to my name a clean oblation.",
+            insight: "Malachias prophesies that the temple sacrifices will end, and a single, perpetual, pure offering &mdash; a <em>minchah</em>, an unbloody grain offering &mdash; will be made among the Gentiles &ldquo;from the rising of the sun even to the going down.&rdquo; The patristic consensus on this verse is unbroken: the <em>Didache</em> (c. AD 90), Saint Justin Martyr (<em>Dialogue</em> 41), Saint Irenaeus (<em>Adversus Haereses</em> IV.17), and Tertullian all read it as the prophecy of the Mass. No other Christian liturgy in history has answered Malachias's prophecy &mdash; one pure, unbloody offering, made every hour somewhere in the world, in every tongue, among all the Gentiles. The Mass alone fulfills the verse literally.",
+            role: 'type'
+          },
+          {
+            book: 'Matthew', ref: '26:26-28', position: 78,
+            title: 'The Last Supper',
+            text: "And whilst they were at supper, Jesus took bread, and blessed, and broke: and gave to his disciples, and said: Take ye, and eat. THIS IS MY BODY. And taking the chalice, he gave thanks, and gave to them, saying: Drink ye all of this. For THIS IS MY BLOOD of the new testament, which shall be shed for many unto remission of sins.",
+            insight: "&ldquo;<em>This is my body. This is my blood.</em>&rdquo; Christ celebrates the Passover and, at the climactic moment, identifies the bread &amp; cup not with the lamb but with Himself. Every Old Testament line so far converges here: Melchizedek's bread &amp; wine; the Passover lamb eaten; the manna from heaven; the todah of thanksgiving; the Bread of the Presence; Wisdom's table; Malachias's pure offering. Every one is taken up &amp; transfigured. The Words of Institution end the typological journey not with a metaphor but with a substance, and from this evening forward the Church will keep the New Passover by His command: <em>&ldquo;Do this for the commemoration of me&rdquo;</em> (Luke 22:19).",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Luke', ref: '24:30-31', position: 81.5,
+            title: 'Recognized in the Breaking of Bread',
+            text: "And it came to pass, whilst he was at table with them, he took bread, and blessed, and brake, and gave to them. And their eyes were opened, and they knew him: and he vanished out of their sight.",
+            insight: "On Easter evening the risen Christ walks with two disciples to Emmaus. He opens to them all the Scriptures concerning Himself, and yet they do not recognize Him. They recognize Him only in the breaking of bread &mdash; and the moment of recognition is also the moment of His sacramental withdrawal. He vanishes from their bodily sight precisely so that they may know Him in the bread. Saint Augustine (<em>Sermo</em> 235) draws the irrefutable conclusion: this is how the Church will know her Risen Lord until the end of the age &mdash; not by sight, but in the breaking of the bread.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '6:53-56', position: 83.5,
+            title: 'The Bread of Life Discourse',
+            text: "Except you eat the flesh of the Son of man, and drink his blood, you shall not have life in you. He that eateth my flesh, and drinketh my blood, hath everlasting life: and I will raise him up in the last day. For my flesh is meat indeed: and my blood is drink indeed.",
+            insight: "Christ's most extended teaching on the Eucharist meets the inevitable test: the disciples murmur. They say, <em>&ldquo;This saying is hard, and who can hear it?&rdquo;</em> (John 6:61). At precisely this moment, when a metaphorical reading would defuse the offense in a sentence, He doubles down. Saint John records that <em>&ldquo;many of his disciples went back, and walked no more with him&rdquo;</em> (John 6:67). Christ does not call them back to clarify; He turns to the Twelve and asks if they too will leave. The interpretive fork is unavoidable: either the saying really is what they thought it was (a teaching of the Real Presence), or Christ permitted disciples to abandon Him over a misunderstanding He could have fixed in a breath. The Catholic and Orthodox reading honors the text; the symbolic reading effectively rewrites it.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Corinthians', ref: '10:16-17', position: 88.5,
+            title: 'The Communion of the Body and Blood',
+            text: "The chalice of benediction, which we bless, is it not the communion of the blood of Christ? And the bread, which we break, is it not the partaking of the body of the Lord? For we, being many, are one bread, one body, all that partake of one bread.",
+            insight: "Saint Paul, writing earlier than the Gospels (c. AD 54), uses the strongest possible word: <em>koin&omacr;nia</em>, communion, real participation. To eat the bread is to <em>participate in the body of Christ</em> &mdash; not metaphorically, since the parallel verses (vv. 18-21) explicitly compare it to pagan sacrifices that really put their participants into communion with demons. Paul's logic only works if the Eucharist is a real participation in the real body. He goes further in 1 Corinthians 11:27-30: those who eat &amp; drink unworthily are <em>&ldquo;guilty of the body and of the blood of the Lord&rdquo;</em> and bring sickness &amp; death on themselves. One cannot blaspheme bread; one can only blaspheme a presence.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Hebrews', ref: '7:23-25', position: 93,
+            title: 'Christ, Priest Forever',
+            text: "And the others indeed were made many priests, because by reason of death they were not suffered to continue: but this, for that he continueth for ever, hath an everlasting priesthood, whereby he is able also to save for ever them that come to God by him; always living to make intercession for us.",
+            insight: "The argument of Hebrews 7-10 is the most sustained typological exposition in the New Testament. Aaron's priesthood was hereditary, succeeded by death. Christ's priesthood is <em>&ldquo;according to the order of Melchisedech&rdquo;</em> &mdash; not hereditary, not interrupted by death, eternal. The Mass, then, is not a re-sacrificing (Christ does not die again) but the eternal Melchizedekian offering of bread and wine made visible in time. The patristic Fathers without exception read Hebrews this way; the Reformation's reading of Hebrews against the Mass is a sixteenth-century innovation, not the historic Christian reading of the text.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '19:9', position: 99,
+            title: 'The Marriage Supper of the Lamb',
+            text: "And he said to me: Write: Blessed are they that are called to the marriage supper of the Lamb. And he said to me: These words of God are true.",
+            insight: "Scripture ends not at a tomb but at a wedding feast. The Lamb of Apocalypse 5 &mdash; standing as if slain &mdash; reigns over a liturgy that the Mass on earth participates in already. The eschaton is a banquet; the Eucharist is its first course. Every Mass joins us, in the words of the Roman Canon, <em>&ldquo;with the angels and saints&rdquo;</em> in the supper that has no end. The thread that began in Genesis with Melchizedek's bread &amp; wine reaches here its consummation: the priest-king of Salem, the slain &amp; risen Lamb, &amp; the table that gathers Israel and the Gentiles into one body. Heaven, it turns out, is a Mass.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 2 — MARY, MOTHER OF GOD
+      // (Expanded with Eve, Burning Bush, Hannah, Stella Maris, Cana)
+      // ============================================================
+      {
+        id: 'mary',
+        name: 'Mary, Mother of God',
+        color: '#1E3A8A',
+        passages: [
+          {
+            book: 'Genesis', ref: '3:15', position: 2,
+            title: 'The Protoevangelium',
+            text: "I will put enmities between thee and the woman, and thy seed and her seed: he shall crush thy head, and thou shalt lie in wait for her heel.",
+            insight: "The first announcement of the Gospel, spoken to the serpent in Eden. A note on the text: the Hebrew uses the masculine pronoun <em>hu</em> (&ldquo;he shall crush&rdquo;), referring to the woman's seed &mdash; that is, Christ. The Vulgate's familiar <em>ipsa</em> (&ldquo;<em>she</em> shall crush&rdquo;) is a Latin scribal reading that the Nova Vulgata of 1979 corrected back to <em>ipse</em>. <strong>This need not be hidden</strong>: the Marian dimension does not depend on the Vulgate variant. The &ldquo;woman&rdquo; here is set in inseparable enmity with the serpent; her seed crushes him; she is the mother of the One who triumphs. Saint Irenaeus (<em>Adversus Haereses</em> III.22.4) and Saint Justin (<em>Dialogue</em> 100) read this as the announcement of the New Eve already in the second century &mdash; before any pope, council, or Vulgate.",
+            role: 'type'
+          },
+          {
+            book: 'Genesis', ref: '3:20', position: 2.5,
+            title: 'Eve, Mother of All the Living',
+            text: "And Adam called the name of his wife Eve: because she was the mother of all the living.",
+            insight: "Adam names his wife <em>Hawwah</em>, &ldquo;Life,&rdquo; <em>after</em> the Fall &mdash; an act of eschatological hope just outside Eden. Eve becomes mother of all the living biologically; Mary becomes mother of all the living supernaturally, mother of those alive in Christ (cf. John 19:26-27). Saint Justin Martyr (<em>Dialogue</em> 100, c. AD 155) draws the parallel with surgical precision: <em>&ldquo;The Virgin Mary&hellip; receiving faith and joy when the angel Gabriel brought her good tidings&hellip; might bear forth what was begotten of the Holy Ghost&hellip; for what the virgin Eve received in the word of the serpent, that the Virgin Mary might receive in the word of the angel.&rdquo;</em> Saint Irenaeus tightens the parallel further (<em>AH</em> III.22.4): <em>&ldquo;The knot of Eve's disobedience was loosed by the obedience of Mary.&rdquo;</em> The New Eve theology is older than the canon of the New Testament.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '3:1-6', position: 7.5,
+            title: 'The Burning Bush',
+            text: "And the Lord appeared to him in a flame of fire out of the midst of a bush: and he saw that the bush was on fire, and was not burnt.",
+            insight: "A bush wrapped in divine fire and not consumed. The Greek Fathers, especially Saint Gregory of Nyssa (<em>Vita Moysis</em> II), read this as the great prefiguration of the Theotokos: the Virgin who bears God Himself in her womb &mdash; the divine fire &mdash; without being consumed by His holiness. Byzantine liturgy applies the image directly to Mary: <em>&ldquo;Hail, Burning Bush, unconsumed.&rdquo;</em> The image is foundational to Christian Mariology: Mary is the place where divine and human meet without contradiction or conflagration, exactly because she is divinely prepared for the meeting.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '25:10-22', position: 8,
+            title: 'The Ark of the Covenant',
+            text: "Frame an ark of setim wood... thou shalt overlay it with the purest gold, within and without... And thou shalt make a propitiatory of the purest gold... I will speak to thee from above the propitiatory.",
+            insight: "Israel's holiest object: a wooden chest overlaid <em>within and without</em> with pure gold, containing the manna (the Bread from Heaven), Aaron's rod (the High Priest's staff), and the tablets of the Word of God. Mary, in her womb, contained the antitypes of all three: the true Bread from Heaven, the eternal High Priest, and the Word of God Himself made flesh. The Ark was overlaid with gold &ldquo;within and without&rdquo; because it housed God's presence; this is the Old Covenant's inarguable theological warrant for the Immaculate Conception. A vessel that holds the Holy must be itself made holy by the One it will hold.",
+            role: 'type'
+          },
+          {
+            book: 'Numbers', ref: '24:17', position: 14.5,
+            title: 'A Star Out of Jacob',
+            text: "I shall see him, but not now: I shall behold him, but not near. A STAR SHALL RISE out of Jacob and a sceptre shall spring up from Israel.",
+            insight: "Balaam, against his will, prophesies the rising of a Star out of Jacob &mdash; the Magi will follow it (Matthew 2:1-12). But the patristic and liturgical tradition extends the image: Mary is <em>Stella Maris</em>, Star of the Sea, the one who rises before her Son &amp; first signals His coming. The medieval hymn <em>Ave Maris Stella</em> draws the title directly from this verse. Christ is the Morning Star (Apocalypse 22:16); Mary is the dawn that precedes Him. The image's power is in its order: she does not eclipse the Sun &mdash; she announces Him.",
+            role: 'type'
+          },
+          {
+            book: '1 Kings', ref: '2:1-10', position: 22,
+            title: "Hannah's Canticle",
+            text: "My heart hath rejoiced in the Lord, and my horn is exalted in my God... He hath put down the mighty from their seat, and hath exalted the humble. The hungry are filled with good things; and the rich are sent empty away.",
+            insight: "The Magnificat is not invented from nothing. Saint Luke patterns Mary's canticle (Luke 1:46-55) on Hannah's almost line-for-line: rejoicing in God, the strong put down, the humble exalted, the hungry filled, the rich sent empty away. Hannah is the type, Mary the fulfillment. Hannah's barrenness yields Samuel; Mary's virginity yields the Christ. Notice: Mary places herself consciously in the line of the faithful daughters of Israel. She is not a foreign import into Hebrew piety but its flowering &mdash; the daughter of Hannah, the daughter of Zion, the consummation of every faithful Jewish woman who ever sang to the God of Israel.",
+            role: 'type'
+          },
+          {
+            book: '2 Kings', ref: '6:9-15', position: 23,
+            title: "David and the Ark",
+            text: "And David was afraid of the Lord that day, saying: How shall the ark of the Lord come to me?... And the ark of the Lord abode in the house of Obededom the Gethite three months: and the Lord blessed Obededom, and all his household.",
+            insight: "David greets the Ark with fear and joy: <em>&ldquo;How shall the ark of the Lord come to me?&rdquo;</em> The Ark stays three months in the hill country &amp; blesses the house. Saint Luke deliberately mirrors every beat of this scene at the Visitation. Mary travels into the hill country (Luke 1:39); Elisabeth cries <em>&ldquo;Whence is this to me, that the mother of my Lord should come to me?&rdquo;</em> (1:43); the babe leaps for joy at the Ark's presence as David danced before it (1:41); Mary remains <em>three months</em> (1:56) and her presence blesses the house. The parallel is too exact to be accident; Saint Luke is interpreting Mary's role through 2 Kings 6.",
+            role: 'type'
+          },
+          {
+            book: 'Luke', ref: '1:26-38', position: 81,
+            title: 'The Annunciation',
+            text: "And the angel being come in, said unto her: Hail, full of grace, the Lord is with thee... And the angel said to her: Fear not, Mary, for thou hast found grace with God. Behold thou shalt conceive in thy womb, and shalt bring forth a son; and thou shalt call his name JESUS.",
+            insight: "Gabriel's greeting <em>kecharit&omacr;men&emacr;</em> (&ldquo;full of grace,&rdquo; literally &ldquo;you-who-have-been-made-graced&rdquo;) is a perfect passive participle &mdash; a state of being already brought to fullness before this moment. Gabriel does not <em>name</em> her by her name but by her condition. Saint Luke then says the Holy Spirit will <em>&ldquo;overshadow&rdquo;</em> her (<em>episkiasei</em>, 1:35), the very verb the Septuagint uses for the Shekinah cloud over the Tabernacle (Exodus 40:35) and over the Ark in 2 Kings 6:9. Mary becomes the new Tabernacle, the new dwelling of the divine glory.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Luke', ref: '1:46-55', position: 81.3,
+            title: 'The Magnificat',
+            text: "My soul doth magnify the Lord. And my spirit hath rejoiced in God my Saviour. Because he hath regarded the humility of his handmaid; for behold from henceforth all generations shall call me blessed.",
+            insight: "Mary's song is a tissue of Old Testament citations &mdash; Hannah, the Psalms, Habacuc &mdash; sung now by the new Daughter of Zion. The line <em>&ldquo;all generations shall call me blessed&rdquo;</em> is itself prophetic. The Marian piety of the historic Church (East and West) is not innovation but obedience to her own Spirit-inspired prediction; a Christianity that does <em>not</em> call her blessed is a Christianity in conflict with the Magnificat itself. Mary speaks here in her own voice (as nowhere else in Scripture except Cana &amp; the Annunciation), and what she speaks is the program of the Gospel: humility exalted, the proud scattered, the hungry filled, the covenant remembered.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '2:1-11', position: 83.4,
+            title: 'The Wedding at Cana',
+            text: "And the wine failing, the mother of Jesus saith to him: They have no wine. And Jesus saith to her: Woman, what is that to me and to thee? my hour is not yet come. His mother saith to the waiters: Whatsoever he shall say to you, do ye.",
+            insight: "Christ's first public sign is at His mother's request. The address &ldquo;Woman&rdquo; is no rebuke; it is a deliberate echo of Genesis 3:15 &mdash; she is <em>the</em> Woman, the New Eve, present at the inauguration of the Messianic age. The contradiction Protestants often raise (<em>&ldquo;my hour is not yet come,&rdquo;</em> followed immediately by the miracle that begins His hour) resolves elegantly: Mary's intercession <em>moves</em> the hour. Mary's last recorded words in Scripture are spoken here &mdash; <em>&ldquo;Whatsoever he shall say to you, do ye&rdquo;</em> &mdash; and they remain her standing instruction to the Church.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '19:26-27', position: 83.6,
+            title: 'Behold Thy Mother',
+            text: "When Jesus therefore had seen his mother and the disciple standing whom he loved, he saith to his mother: Woman, behold thy son. After that, he saith to the disciple: Behold thy mother. And from that hour, the disciple took her to his own.",
+            insight: "From the Cross, Christ addresses His mother again as <em>&ldquo;Woman,&rdquo;</em> closing the Genesis 3:15 inclusio. He gives her to the beloved disciple &amp; the disciple to her. Saint John, the only Gospel-writer present at the Cross, deliberately notes <em>&ldquo;the disciple took her to his own&rdquo;</em> &mdash; <em>eis ta idia</em>, into his own things, into his own household, into his own care. Patristic exegesis (Origen <em>Comm. Jn.</em> 1.6; Augustine <em>Tr. Jn.</em> 119) reads the beloved disciple here as the figure of every disciple: Mary is given to the Church as Mother. Two persons hung on Calvary in agony &mdash; the Son in His body, the Mother in her soul (Luke 2:35). Both poured themselves out; one for our redemption, one in cooperation with that redemption.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '11:19-12:1', position: 98.5,
+            title: 'The Ark Revealed in Heaven',
+            text: "And the temple of God was opened in heaven: and the ark of his testament was seen in his temple... And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars.",
+            insight: "Saint John has just shown us the Ark of the Covenant, hidden since Jeremiah, revealed at last in heaven &mdash; and then, in the same breath (the chapter division is medieval, not Johannine), he describes <em>&ldquo;a woman clothed with the sun&rdquo;</em> giving birth to the male child who will rule the nations. The Ark and the Woman are one continuous vision. The mother of the Messiah <em>is</em> the Ark of the New Covenant. The dragon &mdash; the ancient serpent of Genesis 3 &mdash; pursues her, and is defeated by her seed. The first thread (Genesis 3:15) closes here in the last chapter of the canon. Whatever else Apocalypse 12 means, it cannot mean less than this.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 3 — CHRIST, THE NEW ADAM
+      // ============================================================
+      {
+        id: 'newadam',
+        name: 'Christ, the New Adam',
+        color: '#166534',
+        passages: [
+          {
+            book: 'Genesis', ref: '2:7-8', position: 1.5,
+            title: 'Adam Formed of Earth',
+            text: "And the Lord God formed man of the slime of the earth: and breathed into his face the breath of life, and man became a living soul. And the Lord God had planted a paradise of pleasure from the beginning: wherein he placed man whom he had formed.",
+            insight: "The first Adam is formed from the earth and placed in a garden. The work of his hands &mdash; tilling, naming, keeping the garden &mdash; is priestly: the Hebrew verbs for &ldquo;till and keep&rdquo; (<em>'avad</em> and <em>shamar</em>) are the same verbs used later for the priest's work in the Tabernacle (Numbers 3:7-8). Adam is the prototype priest-king of the cosmic temple. Saint Paul will name him directly: <em>&ldquo;Adam, who is a figure of him who was to come&rdquo;</em> (Romans 5:14, DR). The whole biblical drama from this point forward is, in one sense, the search for the Adam who will not fall.",
+            role: 'type'
+          },
+          {
+            book: 'Genesis', ref: '2:21-22', position: 1.7,
+            title: "Adam's Sleep, the Bride from His Side",
+            text: "Then the Lord God cast a deep sleep upon Adam: and when he was fast asleep, he took one of his ribs, and filled up flesh for it. And the Lord God built the rib which he took from Adam into a woman: and brought her to Adam.",
+            insight: "Adam falls into a deep sleep &mdash; in Hebrew <em>tardemah</em>, the sleep of mystical transition &mdash; and from his opened side comes his bride. The Fathers (Tertullian, <em>De Anima</em> 43; Augustine, <em>Enarrationes in Psalmos</em>) saw this as a precise prophecy of the Cross. Christ falls into the deep sleep of death; His side is opened by the lance; from the opened side flow blood &amp; water (John 19:34) &mdash; the sacraments by which His Bride, the Church, is born. Eve from Adam's side is the Old Testament's most direct prefiguration of the Church from Christ's side. The wound that birthed the Church is not metaphorical; it is anatomical.",
+            role: 'type'
+          },
+          {
+            book: 'Genesis', ref: '3:6,17-19', position: 2.2,
+            title: 'The First Disobedience',
+            text: "And she took of the fruit thereof, and did eat, and gave to her husband who did eat... And to Adam he said: Because thou hast hearkened to the voice of thy wife... cursed is the earth in thy work; with labour and toil shalt thou eat thereof all the days of thy life.",
+            insight: "Adam, given dominion over the garden, was meant to crush the serpent there. He did not. He stood passive while Eve was tempted, accepted the fruit, and so death entered through a man's <em>non</em>-action. The thorns &amp; sweat that follow are the wages of his failure. Saint Paul stages the entire Christ-event as the reversal of this scene: <em>&ldquo;by one man sin entered into this world, and by sin death; and so death passed upon all men&rdquo;</em> (Romans 5:12). The New Adam will face the serpent in another garden &mdash; Gethsemani &mdash; and will not stand passive. He will sweat blood &amp; wear thorns by His own consent. Every detail is rebuke, repair, &amp; reversal.",
+            role: 'type'
+          },
+          {
+            book: 'John', ref: '19:34', position: 83.7,
+            title: 'Blood and Water from the Pierced Side',
+            text: "But one of the soldiers with a spear opened his side, and immediately there came out blood and water.",
+            insight: "Saint John witnesses this and pauses to underscore his testimony: <em>&ldquo;he that saw it hath given testimony&rdquo;</em> (19:35). Why? Because he is showing us Eden in reverse. Adam's side opened in mystical sleep yielded the bride; Christ's side opened in death yields the Bride &mdash; the Church &mdash; in the form of blood (Eucharist) and water (Baptism), the two sacraments by which the Bride is born &amp; sustained. Saint Augustine (<em>Tr. Jn.</em> 120) and Saint John Chrysostom (<em>Catechesis</em> 3) make the typological identification explicit and inseparable: the Church is born from the side of the Second Adam.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '19:41-42; 20:15', position: 83.8,
+            title: 'The Garden Tomb &amp; the Mistaken Gardener',
+            text: "Now there was in the place where he was crucified, a garden; and in the garden a new sepulchre... She, thinking it was the gardener, saith to him: Sir, if thou hast taken him hence, tell me where thou hast laid him, and I will take him away.",
+            insight: "Christ is buried in a garden, and on Easter morning Mary Magdalene mistakes Him for &ldquo;the gardener.&rdquo; She is not wrong. He <em>is</em> the gardener &mdash; the Second Adam at last in the new Eden, walking among His new creation in the cool of the morning. The first Adam hid from God in his garden when he heard the voice; the New Adam <em>is</em> the voice in His garden, calling His friends by name (<em>&ldquo;Mary&rdquo;</em>). Saint Cyril of Jerusalem (<em>Catech. Lec.</em> 14.11) is explicit: the Resurrection garden answers the Garden of Eden.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Romans', ref: '5:18-19', position: 87.5,
+            title: 'By One Man',
+            text: "Therefore as by the offence of one, unto all men to condemnation; so also by the justice of one, unto all men to justification of life. For as by the disobedience of one man, many were made sinners; so also by the obedience of one, many shall be made just.",
+            insight: "Saint Paul lays out the typology in two columns. <em>One offense &mdash; condemnation upon all. One justice &mdash; justification of life unto all.</em> <em>One disobedience &mdash; many sinners. One obedience &mdash; many made just.</em> The structure is not metaphor; it is corporate solidarity. We were really &ldquo;in Adam&rdquo;; we are now really &ldquo;in Christ&rdquo;. This is the typological logic that grounds Catholic sacramental theology: incorporation into the New Adam through Baptism is not legal fiction but real participation in His humanity, which is itself the New Humanity.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Corinthians', ref: '15:45-49', position: 88.7,
+            title: 'The Last Adam, Life-Giving Spirit',
+            text: "The first man Adam was made into a living soul; the last Adam into a quickening spirit... The first man was of the earth, earthly: the second man, from heaven, heavenly... Therefore as we have borne the image of the earthly, let us bear also the image of the heavenly.",
+            insight: "Saint Paul explicitly names Christ <em>&ldquo;the last Adam.&rdquo;</em> Adam was given life; Christ <em>gives</em> life. Adam came from earth; Christ comes from heaven. Adam transmitted death by generation; Christ transmits life by regeneration. The one was a living soul (<em>nephesh hayyah</em>); the other is a life-giving Spirit (<em>pneuma z&omacr;opoioun</em>). The Resurrection bodies of the redeemed will bear &ldquo;the image of the heavenly&rdquo; &mdash; the image of the Risen Christ. Adam's image was passed to all who descend from him by flesh; the New Adam's image is given to all who are baptized into Him by the Spirit.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Philippians', ref: '2:6-8', position: 90,
+            title: 'The Obedience That Reverses Eden',
+            text: "Who being in the form of God, thought it not robbery to himself to be equal with God: but emptied himself, taking the form of a servant, being made in the likeness of men, and in habit found as a man. He humbled himself, becoming obedient unto death, even to the death of the cross.",
+            insight: "The first Adam, made in the image of God, &ldquo;thought it robbery&rdquo; <em>not</em> to be equal with God; he reached for what he was not given. The Last Adam, who <em>was</em> equal with God, did not regard that equality as something to be clung to (<em>harpagmos</em>); He emptied Himself instead. Eden's grasping is reversed by Calvary's emptying. Saint Paul's Christ-hymn is the deepest theological statement in Scripture of the New Adam's whole work: a descent that reverses the ascent of Eden, an obedience that undoes a disobedience, a self-emptying that fills the universe with grace.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 4 — TREE OF LIFE AND THE CROSS
+      // ============================================================
+      {
+        id: 'tree',
+        name: 'The Tree of Life and the Cross',
+        color: '#92400E',
+        passages: [
+          {
+            book: 'Genesis', ref: '2:9', position: 1.6,
+            title: 'The Tree of Life in Eden',
+            text: "And the Lord God brought forth of the ground all manner of trees, fair to behold, and pleasant to eat of: the tree of life also in the midst of paradise: and the tree of knowledge of good and evil.",
+            insight: "Two trees stand at the center of Eden: the Tree of Life, which gives life, and the Tree of Knowledge, which (when seized by force) gives death. Adam &amp; Eve reach for the second and are exiled from the first; cherubim with flaming swords bar the way back (Genesis 3:24). The whole biblical drama from this point forward is, in one sense, the question: how does humanity get back to the Tree of Life? The answer Scripture finally gives is paradoxical: by way of <em>another</em> tree, planted on a hill outside the city, hung with the New Adam.",
+            role: 'type'
+          },
+          {
+            book: 'Numbers', ref: '21:8-9', position: 14,
+            title: 'The Bronze Serpent on the Pole',
+            text: "And the Lord said to him: Make a brazen serpent, and set it up for a sign: whosoever being struck shall look on it, shall live. Moses therefore made a brazen serpent, and set it up for a sign: which when they that were bitten looked upon, they were healed.",
+            insight: "Israel is dying in the desert from the bite of fiery serpents. The remedy God gives is paradoxical: <em>look at a serpent lifted up on a pole and live</em>. The image of the curse becomes the means of healing. Christ Himself names this as His own type: <em>&ldquo;As Moses lifted up the serpent in the desert, so must the Son of man be lifted up&rdquo;</em> (John 3:14). Saint Augustine (<em>Tr. Jn.</em> 12.11) reads the metallic serpent precisely: it is the <em>likeness</em> of sin (the form of the curse) without the venom (without the substance of sin). Christ on the Cross is &ldquo;made sin for us&rdquo; in form (2 Corinthians 5:21) without becoming sin in substance &mdash; and looking on Him heals.",
+            role: 'type'
+          },
+          {
+            book: 'Deuteronomy', ref: '21:22-23', position: 16.5,
+            title: 'Cursed Is Every One That Hangeth on a Tree',
+            text: "When a man hath committed a crime for which he is to be punished with death, and being condemned to die is hanged on a gibbet: His body shall not remain upon the tree, but shall be buried the same day: for he is accursed of God that hangeth on a tree.",
+            insight: "Mosaic law declared that anyone hanged on a tree was under a divine curse. By this very logic, the Cross was the most theologically scandalous form Israel could imagine for the Messiah's death. Saint Paul takes the verse and turns it inside out: <em>&ldquo;Christ hath redeemed us from the curse of the law, being made a curse for us&rdquo;</em> (Galatians 3:13). The thing the law decreed accursed is the very means by which the curse of the law is undone. The cursed tree of Eden, the bronze serpent's pole in the desert, the gibbet of Deuteronomy's curse, all converge on the Cross.",
+            role: 'type'
+          },
+          {
+            book: 'John', ref: '3:14-15', position: 83.5,
+            title: 'Christ Names Himself the Lifted-Up One',
+            text: "And as Moses lifted up the serpent in the desert, so must the Son of man be lifted up: That whosoever believeth in him, may not perish; but may have life everlasting.",
+            insight: "Christ's interpretation of His own death, given to Nicodemus before the Crucifixion is even foreshadowed publicly. <em>&ldquo;Lifted up&rdquo;</em> (<em>hypsoth&emacr;nai</em>) becomes Saint John's signature word for the Crucifixion (12:32, 12:34). The Cross is not Christ's defeat but His exaltation; the lifting up that heals. To look upon Him with faith is to live. The thread from Genesis runs straight through this verse: a tree, a serpent, a curse, a lifting up &mdash; and a healing of the original wound.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Galatians', ref: '3:13-14', position: 89.3,
+            title: 'Becoming a Curse to Lift the Curse',
+            text: "Christ hath redeemed us from the curse of the law, being made a curse for us, for it is written: Cursed is every one that hangeth on a tree: That the blessing of Abraham might come on the Gentiles through Christ Jesus.",
+            insight: "Saint Paul's argument depends on Deuteronomy 21:23. The Cross is not in spite of the Mosaic curse but because of it. Christ deliberately fulfills the curse-formula in order to drain it. He does not avoid the cursed tree; He hangs upon it &amp; absorbs every covenantal consequence pronounced over it. The Tree that brought death in Eden, the Serpent on the pole in the desert, the gibbet of the law's curse: all converge here. And the result is that <em>&ldquo;the blessing of Abraham&rdquo;</em> &mdash; the original promise of life to all nations &mdash; flows finally to the Gentiles.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Peter', ref: '2:24', position: 95,
+            title: 'Bearing Our Sins on the Tree',
+            text: "Who his own self bore our sins in his body upon the tree: that we, being dead to sins, should live to justice: by whose stripes you were healed.",
+            insight: "Saint Peter calls the Cross &ldquo;the tree&rdquo; (<em>xylon</em>), the same word the Septuagint uses for the Tree of Life and the Tree of Knowledge in Genesis. The vocabulary is deliberate. He also weaves in Isaias 53 (<em>&ldquo;by his stripes we are healed&rdquo;</em>) &mdash; the Suffering Servant typology fuses with the Tree typology: the Servant on the Tree, bearing our sins in His body. The Tree, once a place of grasping and curse, becomes a place of bearing &amp; healing.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '22:2,14', position: 99.5,
+            title: 'The Tree of Life Restored',
+            text: "In the midst of the street thereof, and on both sides of the river, was the tree of life, bearing twelve fruits, yielding its fruits every month: the leaves of the tree for the healing of the nations... Blessed are they that wash their robes in the blood of the Lamb: that they may have a right to the tree of life.",
+            insight: "Scripture closes by reopening the Tree of Life. The cherubim's flaming sword that barred the way in Genesis 3:24 is gone; the Tree now bears <em>twelve</em> fruits (one for every tribe; one for every month; the Apostolic completeness) and its leaves are for the healing of the nations. The road back to Eden runs through Calvary; the cursed tree was the gateway to the Tree of Life. <em>&ldquo;Blessed are they that wash their robes in the blood of the Lamb&rdquo;</em> &mdash; that is, those who are baptized into His death &amp; eat &amp; drink His Body &amp; Blood &mdash; <em>&ldquo;that they may have a right to the tree of life.&rdquo;</em> The arc closes. The Tree we lost is the Tree we have, and the way to it is the Cross.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 5 — BAPTISM: WATERS OF SALVATION
+      // ============================================================
+      {
+        id: 'baptism',
+        name: 'Baptism: Waters of Salvation',
+        color: '#0369A1',
+        passages: [
+          {
+            book: 'Genesis', ref: '1:1-2', position: 0.5,
+            title: 'The Spirit Over the Waters',
+            text: "In the beginning God created heaven, and earth. And the earth was void and empty, and darkness was upon the face of the deep; and the spirit of God moved over the waters.",
+            insight: "Creation begins with the Spirit of God hovering over the formless deep. From that primal chaos, by divine speech, comes the ordered world: light, sky, sea, land, life. Saint Basil (<em>De Spiritu Sancto</em> 15) and Tertullian (<em>De Baptismo</em> 3) read this as the first prefiguration of Baptism: the Spirit moves over water and a new creation comes forth. Saint Paul makes the typology explicit: <em>&ldquo;If then any be in Christ a new creature, the old things are passed away&rdquo;</em> (2 Corinthians 5:17). Baptism is not a private religious gesture; it is participation in the same Spirit-over-waters that made the world.",
+            role: 'type'
+          },
+          {
+            book: 'Genesis', ref: '7:17-23; 8:11', position: 2.5,
+            title: 'The Flood and the Ark',
+            text: "And the flood was forty days upon the earth... And he sent forth a dove after him... And she came to him in the evening, carrying a bough of an olive tree, with green leaves, in her mouth.",
+            insight: "Saint Peter explicitly types the Flood as Baptism: <em>&ldquo;a few, that is, eight souls, were saved by water. Whereunto baptism, being of the like form, now saveth you also&rdquo;</em> (1 Peter 3:20-21, DR). The dove returns over the receding waters &mdash; an image the Father will reach for again at Christ's Baptism in the Jordan. And the dove brings olive: the symbol of peace and anointing, of the chrism that will mark every Christian. Saint Cyprian (<em>Epistle</em> 69, 74) draws the further inference: there is no salvation outside the Ark / Church.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '14:21-22,29', position: 7.7,
+            title: 'The Red Sea Crossing',
+            text: "The waters were divided. And the children of Israel went in through the midst of the sea dried up; for the water was as a wall on their right hand and on their left.",
+            insight: "Saint Paul names this as the type of baptism with surgical precision: <em>&ldquo;all in Moses were baptized, in the cloud, and in the sea&rdquo;</em> (1 Corinthians 10:1-2, DR). Israel passes through the waters from slavery to freedom; pursuing Pharaoh's army (the prince of this world's powers) is drowned in the same waters that liberate. Saint Augustine (<em>Tractate on John</em> 11) reads the typology straight: the slave-master who pursues us across the threshold of Baptism is destroyed by the water that frees us. Baptism is liberation effected by drowning &mdash; not <em>our</em> drowning, but the drowning of what enslaved us.",
+            role: 'type'
+          },
+          {
+            book: 'Joshua', ref: '3:14-17', position: 19,
+            title: 'The Jordan Crossing',
+            text: "And when they that bare the ark were come into the Jordan, and their feet were dipped in the water (now the Jordan, since the time of harvest, was wont to overflow the banks): the waters that came down from above stood in one place... And the people passed over right against Jericho.",
+            insight: "Forty years after the Red Sea, a second water-crossing &mdash; this time into the Promised Land. The Ark of the Covenant goes first, the priests stand in the river, &amp; the waters part. Israel ends its wandering &amp; enters its inheritance through water. Saint Origen (<em>Homily on Joshua</em> 4) and Saint Ambrose (<em>De Sacramentis</em> 1) read this as the inner meaning of Baptism: not just deliverance <em>from</em> something, but entry <em>into</em> the inheritance, into the Kingdom. Note also the leader's name &mdash; <em>Yeshua</em>, Jesus &mdash; bringing the people through Jordan into the inheritance.",
+            role: 'type'
+          },
+          {
+            book: '4 Kings', ref: '5:10-14', position: 25,
+            title: "Naaman's Cleansing in the Jordan",
+            text: "Eliseus sent a messenger to him, saying: Go, and wash seven times in the Jordan, and thy flesh shall recover health, and thou shalt be clean... Then he went down, and washed in the Jordan seven times, according to the word of the man of God, and his flesh was restored, like the flesh of a little child.",
+            insight: "Naaman, the Syrian general, is healed of leprosy &mdash; the biblical figure for sin in its visible, infectious form &mdash; by washing seven times in the Jordan. Naaman scoffs at the means: <em>&ldquo;Are not the Abana, and the Pharphar, rivers of Damascus, better than all the waters of Israel?&rdquo;</em> (4 Kings 5:12). The very objection (&ldquo;why should ordinary water do anything?&rdquo;) is the perennial objection to sacramental Baptism. Saint Ambrose (<em>De Mysteriis</em> 3-4) and Saint Cyril of Jerusalem (<em>Procatechesis</em>) cite this passage repeatedly: God works through humble matter. Naaman's flesh comes back like a child's &mdash; the regenerative imagery the New Testament will pick up in <em>palingenesia</em> (Titus 3:5). Note also: Christ Himself names Naaman as a Gentile recipient of Israel's grace (Luke 4:27).",
+            role: 'type'
+          },
+          {
+            book: 'Matthew', ref: '3:13-17', position: 78,
+            title: 'The Baptism of Christ',
+            text: "Then cometh Jesus from Galilee to the Jordan... And Jesus being baptized, forthwith came out of the water: and lo, the heavens were opened to him: and he saw the Spirit of God descending as a dove, and coming upon him. And behold a voice from heaven, saying: This is my beloved Son, in whom I am well pleased.",
+            insight: "Christ does not need Baptism for the remission of His own sins; He goes down into the Jordan to <em>sanctify the waters</em>. Saint Maximus of Turin (<em>Sermon</em> 100): Christ does not receive holiness from the water; He gives holiness to the water. Every detail recapitulates earlier types: the dove (the dove returning after the Flood), the heavens opening (Eden's gate ajar at last), the Father's voice (the original divine speech over the deep). The Trinity is revealed at the Jordan; thereafter, every Christian Baptism is in <em>this</em> Jordan, in the name of Father, Son, &amp; Holy Spirit.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '3:5', position: 83.2,
+            title: 'Born of Water and the Spirit',
+            text: "Amen, amen I say to thee, unless a man be born again of water and the Holy Ghost, he cannot enter into the kingdom of God.",
+            insight: "Christ to Nicodemus, in the most direct sacramental language He uses anywhere: regeneration is by water <em>and</em> Spirit, <em>not</em> by Spirit alone. The early Church read &ldquo;water&rdquo; here as Baptism without exception or controversy &mdash; the symbolic-only reading is a sixteenth-century invention. The verb is not metaphorical: <em>gennao an&omacr;then</em>, to be begotten from above, generated anew. Saint Justin (<em>1 Apology</em> 61), writing in AD 155, cites this verse for the Church's universal practice of Baptism for entry into the Kingdom &mdash; about a century before any controversy on the question existed.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '9:6-7', position: 83.6,
+            title: 'The Pool of Siloam',
+            text: "He spat on the ground, and made clay of the spittle, and spread the clay upon his eyes, And said to him: Go, wash in the pool of Siloe, which is interpreted, Sent. He went therefore, and washed; and he came seeing.",
+            insight: "Christ heals the man born blind by sending him to wash in Siloam &mdash; a name Saint John pauses to translate: <em>&ldquo;which is interpreted, Sent.&rdquo;</em> The man is sent to a pool whose name is Sent, by the One who is Himself the Sent of the Father. Saint Augustine (<em>Tractate</em> 44) builds his catechetical reading on this: the man's washing in the water of the Sent One is the Christian's Baptism. The man comes up seeing for the first time &mdash; spiritual sight given through humble sacramental matter, exactly the pattern of Naaman in the Jordan.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Corinthians', ref: '10:1-4', position: 88.5,
+            title: 'All Baptized in Moses',
+            text: "I would not have you ignorant, brethren, that our fathers were all under the cloud, and all passed through the sea. And all in Moses were baptized, in the cloud, and in the sea: And did all eat the same spiritual food, and all drank the same spiritual drink.",
+            insight: "Saint Paul, writing in AD 54, reads the Exodus as <em>already</em> sacramental. Israel was &ldquo;baptized in Moses&rdquo; in the cloud and the sea, &amp; received &ldquo;the same spiritual food&rdquo; (the manna) and &ldquo;the same spiritual drink&rdquo; (the water from the rock, which was Christ). The two great sacraments &mdash; Baptism and Eucharist &mdash; are visible already in Israel's wilderness wandering. The patristic exegetical tradition simply elaborates what Saint Paul has already established: the Old Testament is intelligible only when read sacramentally, &amp; the sacraments of the Church are the fulfillment of types God Himself authored in Israel's life.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Peter', ref: '3:20-21', position: 95,
+            title: 'Baptism, the Antitype of the Flood',
+            text: "When they waited for the patience of God in the days of Noe, when the ark was a building: wherein a few, that is, eight souls, were saved by water. Whereunto baptism, being of the like form, now saveth you also: not the putting away of the filth of the flesh, but the examination of a good conscience towards God, by the resurrection of Jesus Christ.",
+            insight: "Saint Peter could not be more explicit: <em>&ldquo;baptism&hellip; now saveth you also.&rdquo;</em> Baptism is the antitype (<em>antitypon</em>) of the Flood; the Greek word means precisely &ldquo;the corresponding form, the fulfilling pattern.&rdquo; Whatever scholastic objections later traditions raised against baptismal regeneration, they cannot be raised against this verse. Peter further specifies that Baptism is not merely the cleaning of physical dirt &mdash; he names exactly what symbolic-only theology would later claim it is, and rejects that view. It is rather salvific union with the Resurrection of Christ. The Catholic doctrine is the apostolic doctrine.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 6 — THE PETRINE OFFICE: KEYS OF THE KINGDOM
+      // ============================================================
+      {
+        id: 'petrine',
+        name: 'The Keys of the Kingdom',
+        color: '#6B21A8',
+        passages: [
+          {
+            book: 'Genesis', ref: '41:39-44', position: 4.5,
+            title: 'Joseph as Steward Over Pharaoh\u2019s House',
+            text: "Pharao therefore said to Joseph: Seeing God hath shewn thee all that thou hast said, can I find one wiser and one like unto thee? Thou shalt be over my house, and at the commandment of thy mouth all the people shall obey: only in the kingly throne will I be above thee.",
+            insight: "Pharaoh elevates Joseph to be steward (<em>'al-bayit</em>) over the kingdom: second only to the throne, with full authority over the household, sealed with the king's signet ring. The pattern emerges: an absolute monarch &amp; a chief steward who acts in his name &amp; speaks with his authority. The same office reappears under David and Solomon, and Christ will deploy this exact image in His commission to Peter. The objection that &ldquo;there is no Old Testament basis for one human governor of God's people&rdquo; collapses under the weight of the office Joseph held in Egypt &mdash; an office God Himself orchestrated.",
+            role: 'type'
+          },
+          {
+            book: 'Isaias', ref: '22:20-22', position: 50,
+            title: 'Eliakim and the Keys of the House of David',
+            text: "And it shall come to pass in that day, that I will call my servant Eliacim the son of Helcias... And I will give him thy robe, and will strengthen him with thy girdle, and will give thy power into his hand: and he shall be as a father to the inhabitants of Jerusalem... And I will lay the key of the house of David upon his shoulder: and he shall open, and none shall shut: and he shall shut, and none shall open.",
+            insight: "Isaias narrates a public deposition: Shebna, the corrupt steward of King Ezechias, is removed; Eliakim is appointed in his place. The insignia of the office &mdash; robe, girdle, the key on the shoulder &mdash; are transferred. Note the office is <em>successional</em> (Shebna&rarr;Eliakim), <em>singular</em> (one steward at a time), and bears <em>real authority</em> (&ldquo;he shall open, and none shall shut&rdquo;). Christ deliberately quotes this verse twice in the Apocalypse (1:18, 3:7) of Himself, the King of David's house. He then quotes it again at Matthew 16 to designate Peter as His chief steward. The patristic witness (Leo the Great, <em>Sermons</em> 3-4; Ephrem; Chrysostom) reads the connection as inarguable.",
+            role: 'type'
+          },
+          {
+            book: 'Matthew', ref: '16:18-19', position: 78,
+            title: 'Peter, the Rock, Receives the Keys',
+            text: "And I say to thee: That thou art Peter; and upon this rock I will build my church, and the gates of hell shall not prevail against it. And I will give to thee the keys of the kingdom of heaven. And whatsoever thou shalt bind upon earth, it shall be bound also in heaven: and whatsoever thou shalt loose on earth, it shall be loosed also in heaven.",
+            insight: "Three Old Testament images converge on Peter in three verses. <em>Rock</em>: Abraham, named the rock from which Israel was hewn (Isaias 51:1-2), is the only other person in Scripture whose name God changes to a rock-name. <em>Keys</em>: Eliakim's office, transferred. <em>Bind and loose</em>: the rabbinic terminology for the magisterial authority of the chief teacher. To strip these allusions away (as some Protestant exegesis attempts) is not exegesis but theological surgery on the text. Christ is deliberately constructing a Davidic Kingdom &mdash; complete with a chief steward to govern in the King's absence. To object that Peter is &ldquo;a rock&rdquo; only insofar as he confesses the right faith is to import Reformation polemics into a passage whose grammar &amp; allusion know nothing of them.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Matthew', ref: '23:2-3', position: 79,
+            title: "Moses' Seat",
+            text: "The scribes and the Pharisees have sitten on the chair of Moses. All things therefore whatsoever they shall say to you, observe and do: but according to their works do ye not.",
+            insight: "Christ acknowledges that even corrupt teaching authority binds when it speaks from the legitimate <em>cathedra</em> (chair) of Moses. The teaching office subsists in the chair, not in the personal holiness of the occupant. This is the exact distinction Catholic ecclesiology has always drawn: the office of Peter is divinely instituted; the holiness of the man who occupies it is contingent &amp; sometimes wanting. Christ commands obedience to the cathedra of Moses despite the unworthiness of those then sitting on it. The same logic governs the cathedra of Peter; the office is Christ's, not Peter's, and the keys do not rust through human failure.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Luke', ref: '22:31-32', position: 81.7,
+            title: 'Strengthen Thy Brethren',
+            text: "And the Lord said: Simon, Simon, behold Satan hath desired to have you, that he may sift you as wheat: But I have prayed for thee, that thy faith fail not: and thou, being once converted, confirm thy brethren.",
+            insight: "Christ singles out Peter in the Upper Room. The Greek pronouns are decisive: Satan demanded to sift <em>all of you</em> (plural <em>hymas</em>); Christ has prayed for <em>thee</em> (singular <em>sou</em>) so that <em>thy</em> faith may not fail; and once converted, <em>thou</em> must strengthen <em>the brethren</em> (the rest). Christ's intercession secures the indefectibility of Peter's faith specifically &mdash; not Peter's personal sinlessness (he denies Christ within hours) but the faith of his teaching office. From this faith, Peter is then commissioned to confirm the rest. This is the doctrine of papal indefectibility in seed form, given by Christ in His own words on the night before He died.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'John', ref: '21:15-17', position: 83.9,
+            title: 'Feed My Sheep',
+            text: "Simon son of John, lovest thou me more than these?... Feed my lambs... Feed my lambs... Feed my sheep.",
+            insight: "After the Resurrection, Christ takes Peter aside &amp; commissions him three times &mdash; reversing the three denials. The verb shifts: <em>boske</em> (feed) and <em>poimaine</em> (shepherd, govern). Peter is not given the authority over a section of the flock or a portion of the lambs; he is given the whole. The whole flock, the whole sheepfold, the entire pastoral commission. Saint Augustine (<em>Tr. Jn.</em> 123): when Christ says &ldquo;feed My sheep&rdquo; without qualification, no qualification may be added. Peter is given universal pastoral authority by the Risen Christ Himself.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Acts', ref: '15:7-12', position: 86.5,
+            title: 'The Council of Jerusalem',
+            text: "And when there had been much disputing, Peter, rising up, said to them: Men, brethren, you know, that in former days God made choice among us, that by my mouth the Gentiles should hear the word of the gospel, and believe... And all the multitude held their peace.",
+            insight: "The first ecumenical council. The disputed question: must Gentiles be circumcised? After much debate, Peter rises &amp; speaks. The text's testimony is unambiguous: &ldquo;<em>And all the multitude held their peace.</em>&rdquo; The question is settled. James afterward proposes the practical implementation, but the doctrinal question is closed by Peter's word. The pattern of councils &mdash; debate, then Petrine settlement &mdash; is established in the first generation. Saint Cyprian (<em>De Unitate</em> 4) reads this as the original deployment of the keys: Peter binds &amp; looses, &amp; the Church receives.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '3:7', position: 99,
+            title: 'He That Hath the Key of David',
+            text: "These things saith the Holy One and the true one, he that hath the key of David; he that openeth, and no man shutteth; shutteth, and no man openeth.",
+            insight: "The Risen Christ identifies Himself in the very words of Isaias 22:22 &mdash; the Eliakim oracle. He is the King; He <em>holds</em> the key of David. And what He holds, He gave at Caesarea Philippi: <em>&ldquo;I will give to thee the keys of the kingdom of heaven&rdquo;</em> (Matthew 16:19). The thread closes precisely where it began: a Davidic kingdom, a single chief steward, a key on the shoulder, and an office that &ldquo;the gates of hell shall not prevail against.&rdquo; Whatever else Apocalypse 3:7 means, it cannot mean less than the continuity of the Petrine office in the Kingdom of the risen Christ.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 7 — THE BRIDEGROOM AND THE BRIDE
+      // ============================================================
+      {
+        id: 'bridegroom',
+        name: 'The Bridegroom and the Bride',
+        color: '#BE185D',
+        passages: [
+          {
+            book: 'Genesis', ref: '2:23-24', position: 1.8,
+            title: 'The First Marriage',
+            text: "And Adam said: This now is bone of my bones, and flesh of my flesh; she shall be called woman, because she was taken out of man. Wherefore a man shall leave father and mother, and shall cleave to his wife: and they shall be two in one flesh.",
+            insight: "The first words spoken by a human being in Scripture are spoken by a husband recognizing his bride. The first institution God establishes is marriage. Saint Paul will return to this verse for his most extended teaching on marriage &amp; will declare it <em>&ldquo;a great sacrament; but I speak in Christ and in the church&rdquo;</em> (Ephesians 5:32). In other words, Paul reads Genesis 2:24 not just as the founding of human marriage but as the prefigurement of the marriage of Christ &amp; His Church. Every human marriage participates in &amp; points to that primal nuptial reality.",
+            role: 'type'
+          },
+          {
+            book: 'Exodus', ref: '19:5-6,8', position: 7.8,
+            title: 'Sinai as Wedding Day',
+            text: "If therefore you will hear my voice, and keep my covenant, you shall be my peculiar possession above all people... And all the people answered together: All that the Lord hath spoken, we will do.",
+            insight: "Sinai is the wedding ceremony of God &amp; Israel. The covenant formula (<em>&ldquo;you shall be my people, and I will be your God&rdquo;</em>) is the formula of betrothal. Israel's <em>&ldquo;all that the Lord hath spoken, we will do&rdquo;</em> is the ancient near-eastern wedding consent. Jeremias names it directly: <em>&ldquo;I remember thee, pitying thy youth, and the love of thy espousals&rdquo;</em> (Jer. 2:2). Ezechiel sets it as a wedding scene in detail (Ezechiel 16:8-14). The Old Covenant, then, is a marriage. Israel's idolatry, by the prophets' relentless logic, is adultery &amp; whoredom; God's faithfulness is bridegroom-faithfulness.",
+            role: 'type'
+          },
+          {
+            book: 'Canticle', ref: '4:9-10', position: 41,
+            title: 'My Sister, My Bride',
+            text: "Thou hast wounded my heart, my sister, my spouse, thou hast wounded my heart with one of thy eyes, and with one hair of thy neck. How beautiful are thy breasts, my sister, my spouse! thy breasts are more beautiful than wine.",
+            insight: "The Canticle of Canticles, taken at face value, is a love song. But the unbroken Jewish &amp; Christian tradition has always read it allegorically: of God &amp; Israel, Christ &amp; the Church, Christ &amp; the soul. Saint Origen's commentary, Saint Gregory of Nyssa's homilies, Saint Bernard's eighty-six sermons, Saint John of the Cross's mystical poetry &mdash; the spiritual marriage tradition flows from this book. The two themes (sensuous human love &amp; divine union) are not in tension; the human is the type, the divine the antitype. Marriage is sacramental from Eden because it is iconographic of the deepest divine reality.",
+            role: 'type'
+          },
+          {
+            book: 'Osee', ref: '2:19-20', position: 58,
+            title: 'Osee Marries the Unfaithful Bride',
+            text: "And I will espouse thee to me for ever: and I will espouse thee to me in justice, and judgment, and in mercy, and in commiserations. And I will espouse thee to me in faith.",
+            insight: "Osee is commanded to marry Gomer, a prostitute. She bears children of unclear paternity, leaves him, falls into slavery. Osee is commanded to buy her back &amp; love her again. The whole horrific story is the divine self-portrait: God's bride was unfaithful, &amp; He bought her back at cost. The pattern of the Bridegroom faithful unto death is set here, centuries before Calvary. Saint Paul will quote Osee directly to describe the Gentile mission (Romans 9:25-26): the Gentiles, no people, become His people; the unloved, His beloved.",
+            role: 'type'
+          },
+          {
+            book: 'Isaias', ref: '62:4-5', position: 52,
+            title: 'The Bride Restored',
+            text: "Thou shalt no more be called Forsaken: and thy land shall no more be called Desolate: but thou shalt be called My pleasure in her, and thy land Inhabited. Because the Lord hath been well pleased with thee... For the young man shall dwell with the virgin, and thy children shall dwell in thee. And the bridegroom shall rejoice over the bride, and thy God shall rejoice over thee.",
+            insight: "Isaias's most explicit prophecy of the messianic age uses the wedding image. The exiled Bride is reclaimed, renamed, rejoiced over. <em>&ldquo;The bridegroom shall rejoice over the bride, and thy God shall rejoice over thee.&rdquo;</em> The verse is doubled deliberately: as a human bridegroom rejoices over his bride, so does God over Israel. Not figuratively, but with the same intensity of personal love. The eschaton, in Isaias, is a wedding feast.",
+            role: 'type'
+          },
+          {
+            book: 'John', ref: '2:1-11', position: 83.4,
+            title: 'The Wedding at Cana',
+            text: "And the third day, there was a marriage in Cana of Galilee... And the wine failing, the mother of Jesus saith to him: They have no wine... When the chief steward had tasted the water made wine... he calleth the bridegroom, And saith to him: Every man at first setteth forth good wine... but thou hast kept the good wine until now.",
+            insight: "Christ's first sign is at a wedding. The chief steward addresses the human bridegroom in confusion: he has saved the best wine for last. The steward does not know that he is unwittingly addressing the wrong bridegroom; the <em>true</em> Bridegroom is Christ Himself, who has just provided the messianic wine that fulfills Isaias 25:6, the eschatological feast of <em>&ldquo;wine on the lees, well refined.&rdquo;</em> Note the Bridegroom's mother is the one who initiates the sign. The wedding feast of the Lamb has begun, in seed, at Cana &mdash; with His mother present, His sign given, His hour begun.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Ephesians', ref: '5:25-32', position: 89.5,
+            title: 'Christ Loved the Church',
+            text: "Husbands, love your wives, as Christ also loved the church, and delivered himself up for it: That he might sanctify it, cleansing it by the laver of water in the word of life... For this cause shall a man leave his father and mother, and shall cleave to his wife, and they shall be two in one flesh. This is a great sacrament; but I speak in Christ and in the church.",
+            insight: "Saint Paul's most extended teaching on marriage. He quotes Genesis 2:24 &mdash; the very first marriage &mdash; and then declares: <em>&ldquo;This is a great sacrament; but I speak in Christ and in the church.&rdquo;</em> Marriage from the beginning was always pointing here. Christ's love for the Church is the substance; human marriage is the icon. Note also the embedded theology of Baptism: the Church is sanctified <em>&ldquo;cleansing it by the laver of water in the word of life.&rdquo;</em> The Bridegroom prepares His Bride sacramentally. Catholic sacramental marriage is rooted in this Pauline reading; the Reformation's reduction of marriage to a merely civil bond is a departure from the apostolic vision.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '19:6-9', position: 99,
+            title: 'The Marriage Supper of the Lamb',
+            text: "Let us be glad and rejoice, and give glory to him; for the marriage of the Lamb is come, and his wife hath prepared herself. And it is granted to her that she should clothe herself with fine linen, glittering and white. For the fine linen are the justifications of saints. And he said to me: Write: Blessed are they that are called to the marriage supper of the Lamb.",
+            insight: "The wedding feast of Genesis 2 is consummated in Apocalypse 19. The Bride is clothed in white linen &mdash; <em>&ldquo;the justifications of saints,&rdquo;</em> their good works wrought in grace; not bare imputation but actual transformation. The patristic and medieval tradition reads this image with great precision: the Church's holiness is real, won by Christ's blood, lived out in the lives of the saints, &amp; offered as the bridal garment. The Eucharistic thread &amp; the nuptial thread converge here in a single verse: the marriage feast IS the Mass extended into eternity.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Apocalypse', ref: '21:2', position: 99.4,
+            title: 'The New Jerusalem Descends as a Bride',
+            text: "And I John saw the holy city, the new Jerusalem, coming down out of heaven from God, prepared as a bride adorned for her husband.",
+            insight: "Scripture's last image of the Bride. The Holy City &mdash; Jerusalem, but transfigured, glorified, <em>new</em> &mdash; descends from heaven prepared as a bride for her husband. The Bride is also a city: a place, a polity, a community, the Mystical Body. Throughout Scripture, the Bride is never an abstract individual; she is corporate, structured, sacramental. From Eve to Israel to the Church to the New Jerusalem, the pattern holds: the Bridegroom comes for a Bride who is real, embodied, &amp; gathered. Whoever speaks of a private invisible faith without a visible Bride speaks not the Gospel but a counterfeit.",
+            role: 'fulfillment'
+          }
+        ]
+      },
+
+      // ============================================================
+      // THREAD 8 — THE SUFFERING SERVANT
+      // ============================================================
+      {
+        id: 'servant',
+        name: 'The Suffering Servant',
+        color: '#475569',
+        passages: [
+          {
+            book: 'Genesis', ref: '22:6-13', position: 3.5,
+            title: 'The Binding of Isaac',
+            text: "And Abraham took the wood for the holocaust, and laid it upon Isaac his son: and he himself carried in his hands fire and a sword. And as they two went on together, Isaac said to his father: Father... behold fire and wood: where is the victim for the holocaust? And Abraham said: God will provide himself a victim for an holocaust, my son.",
+            insight: "Isaac, the only beloved son of the promise, carries the wood of his own sacrifice up the mountain. Abraham binds him on the altar. At the last moment, a ram is provided. Saint John (1:29) and Saint Paul make the typology explicit: the Father did not spare His only beloved Son but delivered Him up for us all (Romans 8:32 &mdash; the verbal echo of Genesis 22 is exact in the Septuagint). Centuries of Jewish tradition (the <em>Akedah</em>) anticipated that the merit of Isaac's binding would atone for Israel; the Christian reading sees the merit fulfilled in the One whom Isaac merely prefigured. Isaac carries wood up Mount Moriah, the same mountain on which Solomon's Temple &mdash; and ultimately Calvary &mdash; would stand.",
+            role: 'type'
+          },
+          {
+            book: 'Genesis', ref: '37:23-28; 45:5', position: 4,
+            title: 'Joseph Sold by His Brothers',
+            text: "When he was come to his brethren, they forthwith stript him of his outside coat, that was of divers colours: And cast him into an old pit, where there was no water... and they sold him to the Ismaelites, for twenty pieces of silver... God sent me before you into Egypt for your preservation.",
+            insight: "Joseph, the father's beloved son, is rejected by his brethren, stripped of his garment, sold for silver, cast into a pit, &amp; left for dead. He is then raised up to be the savior of the very brothers who betrayed him &mdash; saving them &amp; the whole world (the Gentiles) from famine through bread. Saint Caesarius of Arles (<em>Sermons</em> 87-95) and Saint Ambrose (<em>De Joseph</em>) saw the parallels with surgical precision. Even the price &mdash; twenty pieces of silver in the Hebrew, thirty in some traditions &mdash; resonates with the betrayal of Christ. Joseph is provider of bread to all peoples; Christ is the Bread of Life given to all peoples. His brothers do not recognize him until he reveals himself; the Jewish people do not yet recognize Christ but will (Romans 11:25-26).",
+            role: 'type'
+          },
+          {
+            book: 'Wisdom', ref: '2:12-20', position: 43,
+            title: 'The Persecuted Just One',
+            text: "Let us therefore lie in wait for the just, because he is not for our turn, and he is contrary to our doings, and upbraideth us with transgressions of the law... He boasteth that he hath the knowledge of God, and calleth himself the son of God... if he be the true son of God, he will defend him, and will deliver him from the hands of his enemies.",
+            insight: "The Book of Wisdom, written perhaps a century before Christ, describes the persecution of <em>&ldquo;the just one&rdquo;</em> who calls God his father, claims divine sonship, &amp; is mocked at his death by the words: <em>&ldquo;If he be the true son of God, he will deliver him.&rdquo;</em> Compare Matthew 27:43: <em>&ldquo;He trusted in God; let him now deliver him if he will have him; for he said: I am the Son of God.&rdquo;</em> The mockers at the foot of the Cross quote Wisdom 2 almost verbatim &mdash; without realizing that they are fulfilling its prophecy. (One additional reason the Reformation's removal of Wisdom from the canon costs the Christian reader: this passage is silent in Protestant Bibles even though the New Testament quotes it directly at the Crucifixion.)",
+            role: 'type'
+          },
+          {
+            book: 'Isaias', ref: '53:3-7', position: 50,
+            title: 'The Suffering Servant',
+            text: "Despised, and the most abject of men, a man of sorrows, and acquainted with infirmity... Surely he hath borne our infirmities and carried our sorrows... He was wounded for our iniquities, he was bruised for our sins... and the Lord hath laid on him the iniquity of us all.",
+            insight: "The Old Testament's most extended prophecy of the Passion, written seven centuries before Christ. Every detail aligns: silent before His shearers, numbered with transgressors, pierced for our iniquities, bearing the sins of many, making intercession. So precise is the prophecy that some modern critics try to redate the chapter <em>after</em> the events &mdash; an admission that the text really does describe what Christianity claims it does. Saint Justin Martyr (<em>1 Apology</em> 50-51) used Isaias 53 in the second century as the unanswerable prophecy. Acts 8:32-35 has Philip preaching Christ to the Ethiopian eunuch directly out of this chapter. The patristic witness on the Isaias 53 / Christ identification is unanimous.",
+            role: 'type'
+          },
+          {
+            book: 'Daniel', ref: '3:24-25', position: 64,
+            title: 'The Fourth Man in the Furnace',
+            text: "Then Nabuchodonosor the king was astonished, and rose up in haste, and said to his nobles: Did we not cast three men bound into the midst of the fire? They answered the king, and said: True, O king. He answered, and said: Behold I see four men loose, and walking in the midst of the fire, and there is no hurt in them, and the form of the fourth is like the Son of God.",
+            insight: "Three young men &mdash; Sidrach, Misach, &amp; Abdenago &mdash; are cast into the fiery furnace for refusing to worship the king's image. The king sees a fourth man with them, <em>&ldquo;like the Son of God.&rdquo;</em> The Fathers (Hippolytus, Augustine) read this as a Christophany: Christ Himself with His persecuted ones in the fire. The pattern of the Servant reaches its fullest dimension here: the Suffering Servant is not merely the one who suffers but the One who suffers <em>with</em> His people. Catholic Eucharistic theology takes this thread up: He is Real Presence in our furnace, in our suffering, in our martyrdoms.",
+            role: 'type'
+          },
+          {
+            book: 'Daniel', ref: '6:16-23', position: 64.5,
+            title: "Daniel in the Lions' Den",
+            text: "Then the king commanded, and they brought Daniel, and cast him into the den of the lions... And a stone was brought, and laid upon the mouth of the den: which the king sealed with his own ring... Then king Darius rising very early in the morning, went in haste to the lions' den... and Daniel was taken out of the den, and no hurt was found in him.",
+            insight: "Daniel, falsely accused, is condemned by the king, sealed in a tomb of stones with the king's own seal. The next day, at dawn, the seal is broken, the stone rolled away, &amp; Daniel emerges alive. The Roman catacombs are full of this image; the early Church saw the parallel with the Resurrection so clearly that Daniel in the Lions' Den became the most common iconographic subject in the first three centuries of Christian art. Hippolytus (<em>Commentary on Daniel</em>) drew the connection in the second century. The vindication of the righteous one through the sealed tomb &mdash; this is the Old Testament's most direct narrative anticipation of Easter.",
+            role: 'type'
+          },
+          {
+            book: 'Matthew', ref: '27:46', position: 78.5,
+            title: 'The Cry from the Cross',
+            text: "And about the ninth hour Jesus cried with a loud voice, saying: Eli, Eli, lamma sabacthani? that is, My God, my God, why hast thou forsaken me?",
+            insight: "Christ's cry from the Cross is the opening line of Psalm 21 (Psalm 22 in Hebrew), the most extended pre-Christian description of crucifixion in world literature: <em>&ldquo;they have pierced my hands and my feet, they have numbered all my bones&rdquo;</em> (v. 17-18); <em>&ldquo;they have looked and stared upon me. They parted my garments amongst them; and upon my vesture they cast lots&rdquo;</em> (v. 18-19). The Psalm is a todah &mdash; a thanksgiving song &mdash; that begins in extremity but ends in vindication: <em>&ldquo;the poor shall eat and shall be filled&rdquo;</em> (v. 27). To quote the first verse of a psalm in Jewish tradition is to invoke the whole. Christ's cry is not despair but the prophetic identification of Himself as the Suffering Servant whose suffering issues in the eucharistic feast of the nations.",
+            role: 'fulfillment'
+          },
+          {
+            book: 'Acts', ref: '8:32-35', position: 86.5,
+            title: 'Philip Explains Isaias 53',
+            text: "And the place of the scripture which he was reading was this: He was led as a sheep to the slaughter; and like a lamb without voice before his shearer, so openeth he not his mouth... And Philip, opening his mouth, and beginning at this scripture, preached unto him Jesus.",
+            insight: "An Ethiopian eunuch is reading Isaias 53 on the road from Jerusalem to Gaza. Philip, sent by the Spirit, asks if he understands what he reads. The eunuch asks the question that has always been the Jewish-Christian fault line: <em>&ldquo;of whom doth the prophet speak this? of himself, or of some other man?&rdquo;</em> Philip answers, &ldquo;<em>beginning at this scripture, preached unto him Jesus.</em>&rdquo; The apostolic interpretation of Isaias 53 is not merely <em>about</em> Christ; it begins <em>from</em> Isaias 53 to preach Christ. This is the irreducible pattern of Christian preaching: the Old Testament read as the prophecy of the Crucified.",
+            role: 'fulfillment'
+          },
+          {
+            book: '1 Peter', ref: '2:21-25', position: 95,
+            title: 'Bearing Our Sins as the Servant',
+            text: "Christ also suffered for us, leaving you an example that you should follow his steps. Who did no sin, neither was guile found in his mouth. Who, when he was reviled, did not revile: when he suffered, he threatened not... Who his own self bore our sins in his body upon the tree... For you were as sheep going astray; but you are now converted to the shepherd and bishop of your souls.",
+            insight: "Saint Peter weaves Isaias 53 explicitly into his apostolic exhortation. <em>&ldquo;Did no sin&rdquo;</em> (Isaias 53:9). <em>&ldquo;When he was reviled, did not revile&rdquo;</em> (Isaias 53:7). <em>&ldquo;Bore our sins in his body upon the tree&rdquo;</em> (Isaias 53:11-12). <em>&ldquo;By whose stripes you were healed&rdquo;</em> (Isaias 53:5). <em>&ldquo;As sheep going astray&rdquo;</em> (Isaias 53:6). Five separate phrases from Isaias 53 packed into five verses. Peter does not <em>argue</em> that Christ fulfilled Isaias 53; he writes as if any literate Christian already takes this for granted. By the early decades of the Church, the Isaias-53-fulfillment is settled apostolic teaching. The thread closes: the Suffering Servant of the Old Testament is the Bishop and Shepherd of our souls in the New.",
+            role: 'fulfillment'
+          }
+        ]
+      }
+    ];
+
+
+        // ============================================================
+    // LAYOUT CONSTANTS
+    // ============================================================
+    const SVG_WIDTH = 1200;
+    const PADDING_LEFT = 95;
+    const PADDING_RIGHT = 30;
+    const HEADER_HEIGHT = 60;     // testament labels
+    const LANE_HEIGHT = 75;        // vertical space per active thread
+    const LANE_TOP_MARGIN = 55;    // gap below header before first lane
+    const LANE_BOTTOM_MARGIN = 35; // gap after last lane before timeline
+    const TIMELINE_LABEL_HEIGHT = 35; // book labels below timeline
+    const PLOT_AREA_WIDTH = SVG_WIDTH - PADDING_LEFT - PADDING_RIGHT;
+    const OT_NT_DIVIDER_POSITION = 76.5;
+
+    function positionToX(pos) {
+      return PADDING_LEFT + (pos / 100) * PLOT_AREA_WIDTH;
+    }
+
+    // Stagger Y to give the lines visual rhythm without blowing up the lane
+    function staggerY(yLane, idx) {
+      return yLane + (idx % 2 === 0 ? -10 : 10);
+    }
+
+    // Short book names for SVG labels
+    const SHORT_BOOK = {
+      'Genesis': 'Gen', 'Exodus': 'Ex', 'Leviticus': 'Lev', 'Numbers': 'Num',
+      'Deuteronomy': 'Deut', 'Joshua': 'Jos', 'Judges': 'Jdg',
+      '1 Kings': '1 Kgs', '2 Kings': '2 Kgs', '3 Kings': '3 Kgs', '4 Kings': '4 Kgs',
+      'Proverbs': 'Prov', 'Canticle': 'Cant', 'Wisdom': 'Wis',
+      'Isaias': 'Isa', 'Jeremias': 'Jer', 'Osee': 'Osee',
+      'Ezechiel': 'Ezk', 'Daniel': 'Dan', 'Malachias': 'Mal',
+      'Matthew': 'Mt', 'Mark': 'Mk', 'Luke': 'Lk', 'John': 'Jn',
+      'Acts': 'Acts',
+      'Romans': 'Rom', '1 Corinthians': '1 Cor', '2 Corinthians': '2 Cor',
+      'Galatians': 'Gal', 'Ephesians': 'Eph', 'Philippians': 'Phil',
+      'Colossians': 'Col', 'Hebrews': 'Heb',
+      '1 Peter': '1 Pet', '2 Peter': '2 Pet',
+      'Apocalypse': 'Apoc'
+    };
+
+    function shortRef(passage) {
+      const book = SHORT_BOOK[passage.book] || passage.book;
+      const refStart = passage.ref.split(';')[0].split(',')[0].split('-')[0];
+      return book + ' ' + refStart;
+    }
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    const activeTypes = new Set(['eucharist']); // Start with Eucharist on
+    let selected = null;
+
+    // ============================================================
+    // RENDER: TOGGLE BUTTONS
+    // ============================================================
+    function renderToggleButtons() {
+      const container = document.getElementById('toggleButtons');
+      container.innerHTML = '';
+      types.forEach(type => {
+        const btn = document.createElement('button');
+        btn.className = 'toggle-btn';
+        btn.style.setProperty('--type-color', type.color);
+        btn.dataset.typeId = type.id;
+        btn.innerHTML = '<span class="swatch"></span><span>' + type.name + '</span>';
+        btn.addEventListener('click', () => toggleType(type.id));
+        container.appendChild(btn);
+      });
+      updateButtonStates();
+    }
+
+    function toggleType(id) {
+      if (activeTypes.has(id)) activeTypes.delete(id);
+      else activeTypes.add(id);
+      // If selected node belonged to a now-inactive thread, clear selection
+      if (selected && !activeTypes.has(selected.typeId)) {
+        selected = null;
+        renderDetail();
+      }
+      updateButtonStates();
+      renderViz();
+    }
+
+    function setAllTypes(on) {
+      activeTypes.clear();
+      if (on) types.forEach(t => activeTypes.add(t.id));
+      if (!on) {
+        selected = null;
+        renderDetail();
+      } else if (selected && !activeTypes.has(selected.typeId)) {
+        selected = null;
+        renderDetail();
+      }
+      updateButtonStates();
+      renderViz();
+    }
+
+    function updateButtonStates() {
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', activeTypes.has(btn.dataset.typeId));
+      });
+    }
+
+    // ============================================================
+    // SVG HELPERS
+    // ============================================================
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    function svg(tag, attrs) {
+      const el = document.createElementNS(SVG_NS, tag);
+      if (attrs) {
+        for (const k in attrs) {
+          el.setAttribute(k, attrs[k]);
+        }
+      }
+      return el;
+    }
+
+    // Build short lane label (uppercase, abbreviated)
+    function laneLabel(type) {
+      const map = {
+        'eucharist': 'EUCHARIST',
+        'mary': 'MARIAN',
+        'newadam': 'NEW ADAM',
+        'tree': 'TREE / CROSS',
+        'baptism': 'BAPTISM',
+        'petrine': 'KEYS',
+        'bridegroom': 'NUPTIAL',
+        'servant': 'SERVANT'
+      };
+      return map[type.id] || type.name.toUpperCase();
+    }
+
+    // ============================================================
+    // RENDER: VISUALIZATION
+    // ============================================================
+    function renderViz() {
+      const root = document.getElementById('vizSvg');
+      const container = document.getElementById('vizContainer');
+      root.innerHTML = '';
+
+      // ---- Empty state ----
+      if (activeTypes.size === 0) {
+        container.classList.add('empty-state');
+        container.innerHTML = '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 1.2rem; color: var(--ink-faded);">Select one or more typological threads above to begin.</div>';
+        return;
+      }
+
+      container.classList.remove('empty-state');
+      // Restore SVG container if previously emptied
+      if (!document.getElementById('vizSvg')) {
+        container.innerHTML = '<svg class="viz-svg" id="vizSvg" preserveAspectRatio="xMidYMid meet" aria-label="Biblical typology visualization"></svg>';
+      }
+      const rootSvg = document.getElementById('vizSvg');
+
+      // ---- Compute dynamic dimensions ----
+      const activeOrdered = types.filter(t => activeTypes.has(t.id));
+      const numLanes = activeOrdered.length;
+      // Assign yLane to each active thread in order
+      const laneFor = {};
+      activeOrdered.forEach((type, i) => {
+        laneFor[type.id] = HEADER_HEIGHT + LANE_TOP_MARGIN + i * LANE_HEIGHT;
+      });
+      const lastLaneY = HEADER_HEIGHT + LANE_TOP_MARGIN + (numLanes - 1) * LANE_HEIGHT;
+      const TIMELINE_Y = lastLaneY + LANE_BOTTOM_MARGIN;
+      const SVG_HEIGHT = TIMELINE_Y + TIMELINE_LABEL_HEIGHT;
+
+      rootSvg.setAttribute('viewBox', '0 0 ' + SVG_WIDTH + ' ' + SVG_HEIGHT);
+
+      // ---- Layered groups ----
+      const gBackground = svg('g', { id: 'g-background' });
+      const gLines = svg('g', { id: 'g-lines' });
+      const gNodes = svg('g', { id: 'g-nodes' });
+      const gAxis = svg('g', { id: 'g-axis' });
+      rootSvg.appendChild(gBackground);
+      rootSvg.appendChild(gLines);
+      rootSvg.appendChild(gNodes);
+      rootSvg.appendChild(gAxis);
+
+      // ---- Lane separators &amp; labels ----
+      activeOrdered.forEach(type => {
+        const yLane = laneFor[type.id];
+        gBackground.appendChild(svg('line', {
+          x1: PADDING_LEFT, x2: SVG_WIDTH - PADDING_RIGHT,
+          y1: yLane, y2: yLane,
+          stroke: 'var(--parchment-darker)',
+          'stroke-width': '1',
+          'stroke-dasharray': '1 5'
+        }));
+        const label = svg('text', {
+          x: PADDING_LEFT - 10,
+          y: yLane + 3,
+          'text-anchor': 'end',
+          class: 'lane-label',
+          fill: type.color,
+          opacity: '0.85'
+        });
+        label.textContent = laneLabel(type);
+        gBackground.appendChild(label);
+      });
+
+      // ---- Testament divider ----
+      const dividerX = positionToX(OT_NT_DIVIDER_POSITION);
+      gAxis.appendChild(svg('line', {
+        x1: dividerX, x2: dividerX,
+        y1: HEADER_HEIGHT - 5, y2: TIMELINE_Y + 8,
+        class: 'testament-divider'
+      }));
+
+      // ---- Testament labels (header) ----
+      const otLbl = svg('text', {
+        x: positionToX(38), y: 38,
+        'text-anchor': 'middle', class: 'testament-label'
+      });
+      otLbl.textContent = 'O L D   T E S T A M E N T';
+      gAxis.appendChild(otLbl);
+
+      const ntLbl = svg('text', {
+        x: positionToX(88), y: 38,
+        'text-anchor': 'middle', class: 'testament-label'
+      });
+      ntLbl.textContent = 'N E W   T E S T A M E N T';
+      gAxis.appendChild(ntLbl);
+
+      // ---- Timeline ----
+      gAxis.appendChild(svg('line', {
+        x1: PADDING_LEFT, x2: SVG_WIDTH - PADDING_RIGHT,
+        y1: TIMELINE_Y, y2: TIMELINE_Y,
+        class: 'timeline-line'
+      }));
+
+      const bookMarkers = [
+        { name: 'Gen', pos: 1 },
+        { name: 'Ex', pos: 7 },
+        { name: 'Lev', pos: 12 },
+        { name: 'Num', pos: 14 },
+        { name: 'Deut', pos: 16 },
+        { name: 'Jos', pos: 19 },
+        { name: '1-4 Kgs', pos: 23 },
+        { name: 'Ps', pos: 33 },
+        { name: 'Cant', pos: 41 },
+        { name: 'Wis', pos: 43 },
+        { name: 'Isa', pos: 50 },
+        { name: 'Jer', pos: 56 },
+        { name: 'Osee', pos: 58 },
+        { name: 'Ezk', pos: 60 },
+        { name: 'Dan', pos: 64 },
+        { name: 'Mal', pos: 73 },
+        { name: 'Mt', pos: 78 },
+        { name: 'Lk', pos: 81.5 },
+        { name: 'Jn', pos: 83.5 },
+        { name: 'Acts', pos: 86 },
+        { name: 'Rom', pos: 87.5 },
+        { name: '1 Cor', pos: 88.5 },
+        { name: 'Eph', pos: 89.5 },
+        { name: 'Phil', pos: 90 },
+        { name: 'Heb', pos: 93 },
+        { name: '1 Pet', pos: 95 },
+        { name: 'Apoc', pos: 99 }
+      ];
+      bookMarkers.forEach(b => {
+        const x = positionToX(b.pos);
+        gAxis.appendChild(svg('line', {
+          x1: x, x2: x,
+          y1: TIMELINE_Y - 3, y2: TIMELINE_Y + 3,
+          stroke: 'var(--ink-faded)', 'stroke-width': '1'
+        }));
+        const lbl = svg('text', {
+          x: x, y: TIMELINE_Y + 18,
+          'text-anchor': 'middle', class: 'book-label'
+        });
+        lbl.textContent = b.name;
+        gAxis.appendChild(lbl);
+      });
+
+      // ---- Y-axis label ----
+      const yLbl = svg('text', {
+        x: 22, y: HEADER_HEIGHT + (TIMELINE_Y - HEADER_HEIGHT) / 2,
+        'text-anchor': 'middle', class: 'lane-label',
+        transform: 'rotate(-90, 22, ' + (HEADER_HEIGHT + (TIMELINE_Y - HEADER_HEIGHT) / 2) + ')',
+        fill: 'var(--ink-faded)'
+      });
+      yLbl.textContent = '\u2014  T H R E A D S  \u2014';
+      gAxis.appendChild(yLbl);
+
+      // ---- Type lines & nodes ----
+      activeOrdered.forEach(type => {
+        const yLane = laneFor[type.id];
+        const sorted = type.passages.slice().sort((a, b) => a.position - b.position);
+
+        const points = sorted.map((p, idx) => ({
+          x: positionToX(p.position),
+          y: staggerY(yLane, idx)
+        }));
+        const pathD = catmullRomPath(points);
+
+        if (pathD) {
+          const path = svg('path', {
+            d: pathD,
+            class: 'type-line active',
+            stroke: type.color
+          });
+          gLines.appendChild(path);
+        }
+
+        sorted.forEach((passage, idx) => {
+          const x = positionToX(passage.position);
+          const y = staggerY(yLane, idx);
+          const passageId = passage.book + '|' + passage.ref;
+          const isSelected = selected && selected.typeId === type.id && selected.passageId === passageId;
+
+          const g = svg('g', {
+            class: 'passage-node active' + (isSelected ? ' selected' : ''),
+            transform: 'translate(' + x + ',' + y + ')'
+          });
+
+          // Halo (visible when selected)
+          g.appendChild(svg('circle', {
+            r: 14, cx: 0, cy: 0,
+            fill: type.color, class: 'node-halo'
+          }));
+
+          // Main node
+          const main = svg('circle', {
+            r: 7, cx: 0, cy: 0,
+            class: 'node-main',
+            fill: passage.role === 'fulfillment' ? type.color : 'white',
+            stroke: type.color,
+            'stroke-width': '2.5'
+          });
+          g.appendChild(main);
+
+          // Reference label
+          const refLabel = svg('text', {
+            x: 0,
+            y: idx % 2 === 0 ? -16 : 24,
+            'text-anchor': 'middle',
+            class: 'node-ref'
+          });
+          refLabel.textContent = shortRef(passage);
+          g.appendChild(refLabel);
+
+          g.style.cursor = 'pointer';
+          g.addEventListener('click', () => {
+            selectPassage(type.id, passage);
+          });
+
+          gNodes.appendChild(g);
+        });
+      });
+    }
+
+    // Catmull-Rom to cubic Bezier spline for smooth curves through all points
+    function catmullRomPath(points) {
+      if (!points || points.length < 2) return null;
+      let d = 'M ' + points[0].x + ' ' + points[0].y;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i - 1] || points[i];
+        const p1 = points[i];
+        const p2 = points[i + 1];
+        const p3 = points[i + 2] || p2;
+        const c1x = p1.x + (p2.x - p0.x) / 6;
+        const c1y = p1.y + (p2.y - p0.y) / 6;
+        const c2x = p2.x - (p3.x - p1.x) / 6;
+        const c2y = p2.y - (p3.y - p1.y) / 6;
+        d += ' C ' + c1x + ' ' + c1y + ', ' + c2x + ' ' + c2y + ', ' + p2.x + ' ' + p2.y;
+      }
+      return d;
+    }
+
+    // ============================================================
+    // SELECTION & DETAIL PANEL
+    // ============================================================
+    function selectPassage(typeId, passage) {
+      selected = {
+        typeId: typeId,
+        passageId: passage.book + '|' + passage.ref,
+        passage: passage,
+        type: types.find(t => t.id === typeId)
+      };
+      renderDetail();
+      renderViz();
+      // Scroll detail into view on small screens
+      if (window.innerWidth <= 900) {
+        document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function renderDetail() {
+      const panel = document.getElementById('detailPanel');
+      if (!selected) {
+        panel.innerHTML = '<div class="detail-panel-empty">Select a thread above and click any node to read the passage and its typological resonance.</div>';
+        return;
+      }
+      const { type, passage } = selected;
+      const isFulfillment = passage.role === 'fulfillment';
+      const roleLabel = isFulfillment ? 'Fulfillment' : 'Type';
+      const roleClass = isFulfillment ? 'fulfillment-role' : 'type-role';
+      const roleStyle = isFulfillment
+        ? 'background:' + type.color + '; border-color:' + type.color + '; color: white;'
+        : 'border-color:' + type.color + '; color:' + type.color;
+      const textBorderStyle = 'border-left-color:' + type.color;
+
+      panel.innerHTML = ''
+        + '<div class="detail-header">'
+        + '  <div>'
+        + '    <div class="detail-ref">' + escapeHtml(passage.book) + ' ' + escapeHtml(passage.ref) + '</div>'
+        + '    <div class="detail-title">' + escapeHtml(passage.title) + '</div>'
+        + '  </div>'
+        + '  <div class="detail-role ' + roleClass + '" style="' + roleStyle + '">'
+        +      escapeHtml(type.name) + ' &middot; ' + roleLabel
+        + '  </div>'
+        + '</div>'
+        + '<div class="detail-text" style="' + textBorderStyle + '">'
+        +    passage.text
+        + '  <span class="detail-text-ref">' + escapeHtml(passage.book) + ' ' + escapeHtml(passage.ref) + ' &middot; Douay-Rheims</span>'
+        + '</div>'
+        + '<div class="detail-insight">'
+        + '  <span class="detail-insight-label">Typological Resonance</span>'
+        +    passage.insight
+        + '</div>';
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[c]);
+    }
+
+    // ============================================================
+    // PROGRESS BAR
+    // ============================================================
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    });
+
+    // ============================================================
+    // KEYBOARD: Escape clears selection
+    // ============================================================
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && selected) {
+        selected = null;
+        renderDetail();
+        renderViz();
+      }
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    renderToggleButtons();
+    renderViz();
+
+
+  </script>
+</body>
+</html>
