@@ -1451,23 +1451,25 @@
     // RENDER: VISUALIZATION
     // ============================================================
     function renderViz() {
-      const root = document.getElementById('vizSvg');
       const container = document.getElementById('vizContainer');
-      root.innerHTML = '';
 
       // ---- Empty state ----
+      // Note: container.innerHTML below destroys the <svg> element. The
+      // recovery block further down restores it before any subsequent render.
       if (activeTypes.size === 0) {
         container.classList.add('empty-state');
         container.innerHTML = '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 1.2rem; color: var(--ink-faded);">Select one or more typological threads above to begin.</div>';
         return;
       }
 
+      // Restore SVG element if a prior empty-state render destroyed it.
+      // This MUST happen before we try to read or clear #vizSvg.
       container.classList.remove('empty-state');
-      // Restore SVG container if previously emptied
       if (!document.getElementById('vizSvg')) {
         container.innerHTML = '<svg class="viz-svg" id="vizSvg" preserveAspectRatio="xMidYMid meet" aria-label="Biblical typology visualization"></svg>';
       }
       const rootSvg = document.getElementById('vizSvg');
+      rootSvg.innerHTML = '';
 
       // ---- Compute dynamic dimensions ----
       const activeOrdered = types.filter(t => activeTypes.has(t.id));
