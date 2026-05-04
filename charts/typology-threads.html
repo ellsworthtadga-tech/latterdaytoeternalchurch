@@ -626,6 +626,7 @@
         <li><strong>Hollow circle</strong> &mdash; an Old Testament <em>type</em> (the prefiguration)</li>
         <li><strong>Filled circle</strong> &mdash; a New Testament <em>fulfillment</em> (the antitype)</li>
         <li>The flowing line traces a single typological thread through Scripture's chronology, from Genesis (left) to the Apocalypse (right). The vertical dashed line marks the testaments.</li>
+        <li>The horizontal scale is canonical, not strictly linear: Genesis &amp; the New Testament are given proportionally more horizontal space because typological density is far higher there. (Otherwise the Akedah's six Genesis 22 nodes would sit on top of one another.)</li>
         <li>Each thread occupies its own horizontal lane so multiple threads can be compared at once. Lanes appear and disappear as threads are toggled.</li>
         <li>In very dense clusters (such as the six Genesis 22 nodes in the Akedah thread), some reference labels are automatically hidden to prevent overlap. Every node is still clickable: the full citation appears in the detail panel.</li>
         <li>The threads are not exhaustive &mdash; each is selective, drawing the most luminous connections. The full case for any single thread requires more sources than a chart can hold.</li>
@@ -1727,7 +1728,24 @@
     const OT_NT_DIVIDER_POSITION = 76.5;
 
     function positionToX(pos) {
-      return PADDING_LEFT + (pos / 100) * PLOT_AREA_WIDTH;
+      // Non-linear position-to-X mapping. Canonical position is preserved
+      // (Genesis still comes before Exodus etc.) but horizontal real estate
+      // is allocated by typological density rather than raw chronology, so
+      // dense regions don't squish their nodes & labels.
+      //
+      // Sections:
+      //   pos  0 -  5    (Genesis)        → 0% - 12% of plot width  (2.4x density)
+      //   pos  5 - 76.5  (rest of OT)     → 12% - 58%               (0.64x density)
+      //   pos 76.5 - 100 (New Testament)  → 58% - 100%               (1.79x density)
+      let pct;
+      if (pos <= 5) {
+        pct = (pos / 5) * 0.12;
+      } else if (pos <= 76.5) {
+        pct = 0.12 + ((pos - 5) / 71.5) * 0.46;
+      } else {
+        pct = 0.58 + ((pos - 76.5) / 23.5) * 0.42;
+      }
+      return PADDING_LEFT + pct * PLOT_AREA_WIDTH;
     }
 
     // Stagger Y to give the lines visual rhythm without blowing up the lane
@@ -2015,15 +2033,21 @@
       }));
 
       // ---- Testament labels (header) ----
+      // Position labels at the *visual* midpoint of each testament region,
+      // since under the non-linear scale, position-midpoints aren't the same
+      // as visual midpoints.
+      const otVisualMidX = (positionToX(0) + positionToX(OT_NT_DIVIDER_POSITION)) / 2;
+      const ntVisualMidX = (positionToX(OT_NT_DIVIDER_POSITION) + positionToX(100)) / 2;
+
       const otLbl = svg('text', {
-        x: positionToX(38), y: 38,
+        x: otVisualMidX, y: 38,
         'text-anchor': 'middle', class: 'testament-label'
       });
       otLbl.textContent = 'O L D   T E S T A M E N T';
       gAxis.appendChild(otLbl);
 
       const ntLbl = svg('text', {
-        x: positionToX(88), y: 38,
+        x: ntVisualMidX, y: 38,
         'text-anchor': 'middle', class: 'testament-label'
       });
       ntLbl.textContent = 'N E W   T E S T A M E N T';
