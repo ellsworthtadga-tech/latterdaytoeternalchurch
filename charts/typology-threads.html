@@ -358,14 +358,17 @@
     stroke-width: 3;
   }
 
+  /* Illuminated halo: three concentric rings with staggered opacity
+     create a rose-window glow when a node is selected. The outer rings
+     fade fastest, giving the visual illusion of light radiating outward. */
   .passage-node .node-halo {
     opacity: 0;
-    transition: opacity 0.18s;
+    transition: opacity 0.35s ease-out;
   }
 
-  .passage-node.selected .node-halo {
-    opacity: 0.22;
-  }
+  .passage-node.selected .node-halo.halo-inner { opacity: 0.32; }
+  .passage-node.selected .node-halo.halo-mid   { opacity: 0.16; }
+  .passage-node.selected .node-halo.halo-outer { opacity: 0.07; }
 
   .passage-node.selected .node-main {
     r: 9;
@@ -2253,6 +2256,38 @@
 
       rootSvg.setAttribute('viewBox', '0 0 ' + SVG_WIDTH + ' ' + SVG_HEIGHT);
 
+      // ---- SVG defs: drop-shadow filter for nodes ----
+      // A soft, parchment-toned shadow that gives the circles dimension
+      // without making them feel glossy or web-2.0. The offset is small
+      // and the blur is gentle.
+      const defs = svg('defs');
+      const shadowFilter = svg('filter', {
+        id: 'node-shadow',
+        x: '-50%', y: '-50%', width: '200%', height: '200%'
+      });
+      const feOffset = svg('feOffset', {
+        'in': 'SourceAlpha', dx: '0', dy: '1.2', result: 'offset'
+      });
+      const feBlur = svg('feGaussianBlur', {
+        'in': 'offset', stdDeviation: '1.4', result: 'blur'
+      });
+      const feFlood = svg('feFlood', {
+        'flood-color': '#1F1B16', 'flood-opacity': '0.28', result: 'color'
+      });
+      const feComposite = svg('feComposite', {
+        'in': 'color', in2: 'blur', operator: 'in', result: 'shadow'
+      });
+      const feMerge = svg('feMerge');
+      feMerge.appendChild(svg('feMergeNode', { 'in': 'shadow' }));
+      feMerge.appendChild(svg('feMergeNode', { 'in': 'SourceGraphic' }));
+      shadowFilter.appendChild(feOffset);
+      shadowFilter.appendChild(feBlur);
+      shadowFilter.appendChild(feFlood);
+      shadowFilter.appendChild(feComposite);
+      shadowFilter.appendChild(feMerge);
+      defs.appendChild(shadowFilter);
+      rootSvg.appendChild(defs);
+
       // ---- Layered groups ----
       const gBackground = svg('g', { id: 'g-background' });
       const gLines = svg('g', { id: 'g-lines' });
@@ -2262,6 +2297,22 @@
       rootSvg.appendChild(gLines);
       rootSvg.appendChild(gNodes);
       rootSvg.appendChild(gAxis);
+
+      // ---- Lane background tint ----
+      // Each active lane gets a faint wash of its thread color so the eye
+      // can anchor itself to a lane without tracking the line. ~4% opacity
+      // in a 60px-tall band, centered on the lane Y.
+      activeOrdered.forEach(type => {
+        const yLane = laneFor[type.id];
+        gBackground.appendChild(svg('rect', {
+          x: PADDING_LEFT - 5, y: yLane - 30,
+          width: SVG_WIDTH - PADDING_LEFT - PADDING_RIGHT + 10,
+          height: 60,
+          fill: type.color,
+          opacity: '0.04',
+          rx: '3'
+        }));
+      });
 
       // ---- Lane separators &amp; labels ----
       activeOrdered.forEach(type => {
@@ -2292,6 +2343,51 @@
         y1: HEADER_HEIGHT - 5, y2: TIMELINE_Y + 8,
         class: 'testament-divider'
       }));
+
+      // ---- Testament divider ornament ----
+      // A small gold quatrefoil/cross-and-diamond marker at the visual
+      // midpoint of the divider, flanked by tiny ornamental dots.
+      // Marks the most theologically charged moment on the chart with
+      // the gravity it deserves &mdash; the pivot of salvation history.
+      const ornamentY = (HEADER_HEIGHT + TIMELINE_Y) / 2;
+      const gOrnament = svg('g', {
+        transform: 'translate(' + dividerX + ',' + ornamentY + ')'
+      });
+      // Outer parchment disc to mask the divider line beneath
+      gOrnament.appendChild(svg('circle', {
+        r: 14, cx: 0, cy: 0,
+        fill: 'var(--parchment)',
+        stroke: 'none'
+      }));
+      // Gold ring
+      gOrnament.appendChild(svg('circle', {
+        r: 10, cx: 0, cy: 0,
+        fill: 'none',
+        stroke: 'var(--gold)',
+        'stroke-width': '1.2'
+      }));
+      // Inner gold quatrefoil-like cross: vertical and horizontal arms
+      gOrnament.appendChild(svg('path', {
+        d: 'M 0 -7 L 0 7 M -7 0 L 7 0',
+        stroke: 'var(--gold)',
+        'stroke-width': '1.2',
+        'stroke-linecap': 'round'
+      }));
+      // Center diamond
+      gOrnament.appendChild(svg('path', {
+        d: 'M 0 -3 L 3 0 L 0 3 L -3 0 Z',
+        fill: 'var(--gold)',
+        stroke: 'none'
+      }));
+      // Flanking dots above &amp; below the disc
+      [-22, 22].forEach(dy => {
+        gOrnament.appendChild(svg('circle', {
+          r: 1.6, cx: 0, cy: dy,
+          fill: 'var(--gold)',
+          opacity: '0.7'
+        }));
+      });
+      gAxis.appendChild(gOrnament);
 
       // ---- Testament labels (header) ----
       // Position labels at the *visual* midpoint of each testament region,
@@ -2413,19 +2509,38 @@
             transform: 'translate(' + x + ',' + y + ')'
           });
 
-          // Halo (visible when selected)
-          g.appendChild(svg('circle', {
-            r: 14, cx: 0, cy: 0,
-            fill: type.color, class: 'node-halo'
+          // Illuminated halo (visible when selected) — three concentric
+          // rings that fade outward like a rose-window glow. Each ring
+          // controls its own opacity so the effect is layered light, not
+          // a single hard disc. CSS makes only the .selected node show them.
+          const haloGroup = svg('g', { class: 'node-halo-group' });
+          haloGroup.appendChild(svg('circle', {
+            r: 24, cx: 0, cy: 0,
+            fill: type.color,
+            class: 'node-halo halo-outer'
           }));
+          haloGroup.appendChild(svg('circle', {
+            r: 17, cx: 0, cy: 0,
+            fill: type.color,
+            class: 'node-halo halo-mid'
+          }));
+          haloGroup.appendChild(svg('circle', {
+            r: 12, cx: 0, cy: 0,
+            fill: type.color,
+            class: 'node-halo halo-inner'
+          }));
+          g.appendChild(haloGroup);
 
-          // Main node
+          // Main node — soft drop-shadow lifts it off the parchment background.
+          // Hollow OT circles get a slightly thicker stroke to compensate
+          // visually for the light fill against the shadow.
           const main = svg('circle', {
             r: 7, cx: 0, cy: 0,
             class: 'node-main',
             fill: passage.role === 'fulfillment' ? type.color : 'white',
             stroke: type.color,
-            'stroke-width': '2.5'
+            'stroke-width': '2.5',
+            filter: 'url(#node-shadow)'
           });
           g.appendChild(main);
 
