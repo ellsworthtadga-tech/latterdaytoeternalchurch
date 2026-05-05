@@ -201,6 +201,68 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
 .empty-saved { text-align: center; padding: 30px 20px; color: var(--ink-soft); font-style: italic; font-size: 15px; line-height: 1.5; }
 .reading-category-label { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2.5px; color: var(--gold-deep); text-transform: uppercase; margin: 18px 0 10px; padding: 6px 0 4px; border-bottom: 1px solid var(--parchment-deep); font-weight: 600; }
 .reading-category-label:first-child { margin-top: 4px; }
+/* === Phase 3: practice (review + drills) === */
+.practice-overlay { display: none; position: fixed; inset: 0; background: var(--parchment); z-index: 100; flex-direction: column; padding-top: env(safe-area-inset-top); }
+.practice-overlay.active { display: flex; }
+.practice-progress { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1.5px; color: var(--gold-bright); margin-left: auto; padding-right: 10px; }
+.practice-body { flex: 1; display: flex; flex-direction: column; padding: 20px 18px; padding-bottom: calc(env(safe-area-inset-bottom) + 20px); min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.practice-card { background: linear-gradient(135deg, #fdf9eb 0%, #f0e2bd 100%); border: 2px solid var(--gold); border-radius: 14px; padding: 28px 20px; margin-bottom: 16px; box-shadow: var(--shadow-md); position: relative; text-align: center; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
+.practice-card .corner { position: absolute; width: 14px; height: 14px; border: 2px solid var(--gold); }
+.practice-card .corner.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+.practice-card .corner.br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+.prompt-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2.5px; color: var(--gold-deep); text-transform: uppercase; margin-bottom: 8px; }
+.prompt-word { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--ink); line-height: 1.2; margin: 4px 0; }
+.prompt-word .speak-btn { display: inline-flex; vertical-align: middle; margin-left: 10px; }
+.prompt-meta { font-size: 13px; font-style: italic; color: var(--ink-soft); margin-top: 8px; opacity: 0.8; }
+.answer-reveal { display: none; }
+.answer-reveal.show { display: block; animation: fadeIn 0.3s ease; }
+.answer-en { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--crimson-deep); font-weight: 600; margin-top: 18px; line-height: 1.3; }
+.answer-note { font-size: 14px; font-style: italic; color: var(--ink-soft); margin-top: 6px; }
+.show-answer-btn { display: block; width: 100%; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); color: var(--ink); border: none; padding: 14px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; letter-spacing: 2px; cursor: pointer; box-shadow: var(--shadow-md); text-transform: uppercase; }
+.show-answer-btn:active { transform: scale(0.98); }
+.rating-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+.rate-btn { background: white; border: 1.5px solid var(--parchment-deep); border-radius: 8px; padding: 10px 4px; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; box-shadow: var(--shadow-sm); transition: transform 0.1s; }
+.rate-btn:active { transform: scale(0.96); }
+.rate-btn .rate-label { font-weight: 700; }
+.rate-btn .rate-interval { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; opacity: 0.75; letter-spacing: 0; }
+.rate-btn.again { border-color: var(--crimson); color: var(--crimson-deep); }
+.rate-btn.hard { border-color: #c97a2b; color: #8a4f15; }
+.rate-btn.good { border-color: var(--green-it); color: #2d5a3a; }
+.rate-btn.easy { border-color: #4a7ab0; color: #2d4a70; }
+.option-btn { display: block; width: 100%; background: white; border: 1.5px solid var(--parchment-deep); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--ink); cursor: pointer; box-shadow: var(--shadow-sm); text-align: left; transition: all 0.15s; -webkit-user-select: none; user-select: none; }
+.option-btn:active { transform: scale(0.99); }
+.option-btn.correct { background: linear-gradient(135deg, #d4e8d4, #b6dab6); border-color: var(--green-it); color: #1f3f28; font-weight: 600; }
+.option-btn.wrong { background: linear-gradient(135deg, #f5d4d4, #e8b6b6); border-color: var(--crimson); color: var(--crimson-deep); font-weight: 600; }
+.option-btn.disabled { pointer-events: none; opacity: 0.55; }
+.next-btn { display: block; width: 100%; background: linear-gradient(180deg, #3a1f0d, #2a1505); color: var(--gold-bright); border: 1px solid var(--gold); padding: 12px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; cursor: pointer; margin-top: 14px; text-transform: uppercase; }
+.next-btn:active { transform: scale(0.98); }
+.feedback { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1.5px; text-align: center; padding: 8px; margin-top: 8px; border-radius: 6px; }
+.feedback.correct { background: rgba(0,122,61,0.1); color: var(--green-it); }
+.feedback.wrong { background: rgba(139,26,26,0.1); color: var(--crimson-deep); }
+.session-end { text-align: center; padding: 40px 20px; }
+.session-end h2 { font-family: 'Cinzel', serif; font-size: 22px; letter-spacing: 2px; color: var(--crimson-deep); margin: 0 0 14px; }
+.session-end .big-num { font-family: 'Cinzel', serif; font-size: 56px; font-weight: 700; color: var(--gold-deep); line-height: 1; margin: 12px 0; }
+.session-end p { font-size: 16px; color: var(--ink-soft); line-height: 1.5; }
+.practice-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.due-badge { display: inline-block; background: var(--crimson); color: white; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 8px; letter-spacing: 0.5px; }
+.tab-btn { font-size: 9px; letter-spacing: 0.5px; padding: 8px 2px; }
+.tab-btn .tab-icon { font-size: 18px; }
+/* === Phase 4: polish === */
+.full-translation.inline-mode { display: block; background: transparent; border: none; border-left: 2px solid var(--gold-deep); padding: 4px 12px; margin: 6px 0 14px; font-size: 14px; font-style: italic; color: var(--ink-soft); opacity: 0.78; line-height: 1.45; border-radius: 0; }
+.para-speak { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--gold-deep); background: rgba(184,148,31,0.12); color: var(--gold-deep); font-size: 8px; vertical-align: middle; margin-right: 8px; cursor: pointer; opacity: 0.6; transition: opacity 0.2s, transform 0.1s; flex-shrink: 0; padding: 0; line-height: 1; -webkit-user-select: none; user-select: none; font-family: inherit; }
+.para-speak:active { opacity: 1; transform: scale(0.9); background: var(--gold); color: var(--ink); }
+.reader-text p { position: relative; padding-left: 0; }
+.activity-heatmap { display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; margin: 8px 0 10px; }
+.activity-cell { aspect-ratio: 1; border-radius: 3px; background: var(--parchment-deep); transition: transform 0.15s; cursor: default; }
+.activity-cell.lvl-1 { background: rgba(212,175,55,0.30); }
+.activity-cell.lvl-2 { background: rgba(212,175,55,0.55); }
+.activity-cell.lvl-3 { background: rgba(184,148,31,0.85); }
+.activity-cell.lvl-4 { background: var(--gold-deep); }
+.activity-cell.lvl-5 { background: var(--crimson); }
+.activity-cell.today { box-shadow: 0 0 0 2px var(--ink); }
+.activity-legend { display: flex; justify-content: space-between; align-items: center; font-family: 'Cinzel', serif; font-size: 10px; color: var(--gold-deep); letter-spacing: 1px; padding: 0 2px; }
+.activity-scale { display: inline-flex; gap: 2px; align-items: center; margin-left: 6px; }
+.activity-scale-cell { width: 9px; height: 9px; border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -269,6 +331,35 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
     <div id="grammar-list"></div>
   </section>
 
+  <section class="tab-pane" id="tab-practice">
+    <div class="section-title">Esercizio</div>
+    <div class="section-subtitle">Review what you've saved · Drill the bridge rules</div>
+    <div class="quick-card" onclick="startReviewSession()">
+      <span class="quick-icon">⏳</span>
+      <div class="quick-content">
+        <div class="quick-title">REVIEW SAVED WORDS</div>
+        <div class="quick-desc" id="review-summary">No saved words yet</div>
+      </div>
+    </div>
+    <div class="quick-card" onclick="openDrillSetup()">
+      <span class="quick-icon">🎯</span>
+      <div class="quick-content">
+        <div class="quick-title">BRIDGE DRILLS</div>
+        <div class="quick-desc">Quick exercises on Sp→It transformations</div>
+      </div>
+    </div>
+    <div class="practice-stats">
+      <div class="stat-box"><div class="stat-num" id="stat-due">0</div><div class="stat-label">Due Now</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-learning">0</div><div class="stat-label">Learning</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-mastered">0</div><div class="stat-label">Mastered</div></div>
+    </div>
+    <div class="settings-section" style="margin-top: 18px;">
+      <h3>How it works</h3>
+      <p style="font-size: 14px; line-height: 1.5; margin: 4px 0;"><strong style="color: var(--crimson-deep);">Review:</strong> Words you save while reading appear here. Rate yourself on each — the algorithm schedules the next review (1 day, 3 days, weeks, months) based on how well you knew it.</p>
+      <p style="font-size: 14px; line-height: 1.5; margin: 8px 0 0;"><strong style="color: var(--crimson-deep);">Drills:</strong> 10-question multiple-choice rounds drawn from the bridge lessons. Pick a lesson or mix them all.</p>
+    </div>
+  </section>
+
   <section class="tab-pane" id="tab-me">
     <div class="profile-card">
       <div class="profile-symbol">L</div>
@@ -279,6 +370,21 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
       <div class="stat-box"><div class="stat-num" id="stat-lessons">0</div><div class="stat-label">Lessons</div></div>
       <div class="stat-box"><div class="stat-num" id="stat-words">0</div><div class="stat-label">Saved</div></div>
       <div class="stat-box"><div class="stat-num" id="stat-reads">0</div><div class="stat-label">Texts</div></div>
+    </div>
+    <div class="settings-section">
+      <h3>Last 14 Days</h3>
+      <div class="activity-heatmap" id="activity-heatmap"></div>
+      <div class="activity-legend">
+        <span id="activity-summary">No activity yet</span>
+        <span class="activity-scale">
+          <span class="activity-scale-cell" style="background: var(--parchment-deep);"></span>
+          <span class="activity-scale-cell" style="background: rgba(212,175,55,0.30);"></span>
+          <span class="activity-scale-cell" style="background: rgba(212,175,55,0.55);"></span>
+          <span class="activity-scale-cell" style="background: rgba(184,148,31,0.85);"></span>
+          <span class="activity-scale-cell" style="background: var(--gold-deep);"></span>
+          <span class="activity-scale-cell" style="background: var(--crimson);"></span>
+        </span>
+      </div>
     </div>
     <div class="settings-section">
       <h3>Cloud Sync</h3>
@@ -308,6 +414,7 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
   <button class="tab-btn" data-tab="read"><span class="tab-icon">📜</span><span class="tab-label">READ</span></button>
   <button class="tab-btn" data-tab="vocab"><span class="tab-icon">✠</span><span class="tab-label">VOCAB</span></button>
   <button class="tab-btn" data-tab="grammar"><span class="tab-icon">𝔄</span><span class="tab-label">GRAMMAR</span></button>
+  <button class="tab-btn" data-tab="practice"><span class="tab-icon">✦</span><span class="tab-label">PRACTICE</span></button>
   <button class="tab-btn" data-tab="me"><span class="tab-icon">☧</span><span class="tab-label">ME</span></button>
 </nav>
 
@@ -350,6 +457,24 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
     <textarea id="paste-input" placeholder="Incolla qui il testo italiano…"></textarea>
     <button class="complete-btn" onclick="openPastedText()">OPEN READER</button>
   </div>
+</div>
+
+<div class="practice-overlay" id="review-overlay">
+  <div class="lesson-detail-header">
+    <button class="back-btn" onclick="closeReview()">←</button>
+    <h2 class="lesson-detail-title">REVIEW</h2>
+    <div class="practice-progress" id="review-progress"></div>
+  </div>
+  <div class="practice-body" id="review-body"></div>
+</div>
+
+<div class="practice-overlay" id="drill-overlay">
+  <div class="lesson-detail-header">
+    <button class="back-btn" onclick="closeDrill()">←</button>
+    <h2 class="lesson-detail-title">DRILL</h2>
+    <div class="practice-progress" id="drill-progress"></div>
+  </div>
+  <div class="practice-body" id="drill-body"></div>
 </div>
 
 <div class="word-popup" id="word-popup"></div>
@@ -2216,6 +2341,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabName));
     document.querySelector('.main-content').scrollTop = 0;
+    if (tabName === 'practice') renderPracticeStats();
+    if (tabName === 'me') renderActivityHeatmap();
   });
 });
 
@@ -2284,7 +2411,7 @@ function closeLessonDetail() {
 function toggleLesson(id) {
   const idx = state.completedLessons.indexOf(id);
   if (idx >= 0) state.completedLessons.splice(idx, 1);
-  else { state.completedLessons.push(id); showToast('✓ Lezione completata'); }
+  else { state.completedLessons.push(id); showToast('✓ Lezione completata'); recordActivity(); }
   saveState();
   updateStats();
   renderLessons();
@@ -2417,11 +2544,87 @@ document.addEventListener('click', (e) => {
   }
 });
 
-function toggleFullTranslation() {
+// ---------- TRANSLATION MODE (3-state cycle) ----------
+let translationMode = 'off'; // 'off' | 'inline' | 'full'
+function applyTranslationMode() {
   const btn = document.getElementById('ft-btn');
-  const isOn = btn.classList.toggle('active');
-  document.querySelectorAll('.full-translation').forEach(el => el.classList.toggle('show', isOn));
-  btn.textContent = isOn ? 'HIDE TRANSLATION' : 'SHOW TRANSLATION';
+  document.querySelectorAll('.full-translation').forEach(el => {
+    el.classList.remove('show', 'inline-mode');
+    if (translationMode === 'inline') el.classList.add('show', 'inline-mode');
+    else if (translationMode === 'full') el.classList.add('show');
+  });
+  if (btn) {
+    btn.classList.toggle('active', translationMode !== 'off');
+    btn.textContent = `TRANSLATION: ${translationMode.toUpperCase()}`;
+  }
+}
+function toggleFullTranslation() {
+  if (translationMode === 'off') translationMode = 'inline';
+  else if (translationMode === 'inline') translationMode = 'full';
+  else translationMode = 'off';
+  applyTranslationMode();
+}
+
+function speakParagraph(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'it-IT';
+  u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+// ---------- ACTIVITY TRACKING ----------
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function recordActivity() {
+  if (!state.activityDays) state.activityDays = {};
+  const key = todayKey();
+  state.activityDays[key] = (state.activityDays[key] || 0) + 1;
+  // Trim to last 90 days to keep storage bounded
+  const keys = Object.keys(state.activityDays).sort();
+  if (keys.length > 90) {
+    keys.slice(0, keys.length - 90).forEach(k => delete state.activityDays[k]);
+  }
+  saveState();
+  renderActivityHeatmap();
+}
+function activityLevel(count) {
+  if (!count) return 0;
+  if (count === 1) return 1;
+  if (count <= 3) return 2;
+  if (count <= 6) return 3;
+  if (count <= 12) return 4;
+  return 5;
+}
+function renderActivityHeatmap() {
+  const grid = document.getElementById('activity-heatmap');
+  if (!grid) return;
+  const days = state.activityDays || {};
+  let html = '';
+  let total = 0;
+  let activeDays = 0;
+  const todayK = todayKey();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const count = days[key] || 0;
+    total += count;
+    if (count > 0) activeDays++;
+    const lvl = activityLevel(count);
+    const isToday = key === todayK ? ' today' : '';
+    const dateLabel = d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    html += `<div class="activity-cell lvl-${lvl}${isToday}" title="${dateLabel}: ${count} ${count === 1 ? 'action' : 'actions'}"></div>`;
+  }
+  grid.innerHTML = html;
+  const summary = document.getElementById('activity-summary');
+  if (summary) {
+    if (total === 0) summary.textContent = 'No activity yet';
+    else summary.textContent = `${activeDays}/14 active · ${total} actions`;
+  }
 }
 
 function speakAll() {
@@ -2551,6 +2754,8 @@ function removeSavedWord(word) {
   persistSavedWords();
   openVocabList('saved');
   renderThemes();
+  renderPracticeStats();
+  updateStats();
   showToast('Rimosso');
 }
 
@@ -2627,7 +2832,7 @@ async function syncPull() {
 
 function resetProgress() {
   if (!confirm('Clear all progress, saved words, and caches? This cannot be undone.')) return;
-  state = { completedLessons: [], readTexts: [], lastVisit: null, streak: 0 };
+  state = { completedLessons: [], readTexts: [], lastVisit: null, streak: 0, activityDays: {} };
   savedWords = [];
   wikCache = {};
   localStorage.removeItem(APP_ID + '_progress');
@@ -2638,6 +2843,8 @@ function resetProgress() {
   renderLessons();
   renderReadings();
   renderThemes();
+  renderActivityHeatmap();
+  renderPracticeStats();
   showToast('Reset complete');
 }
 
@@ -2670,12 +2877,13 @@ function toggleSaveWord(word, glossEn, glossNote) {
     showToast('✓ Salvato');
   }
   persistSavedWords();
-  // Re-render the popup if showing
   const popup = document.getElementById('word-popup');
   if (popup.classList.contains('show')) {
     renderWordPopup(word, { en: glossEn, note: glossNote, fromSaved: true });
   }
   renderThemes();
+  renderPracticeStats();
+  updateStats();
 }
 
 // ---------- WIKTIONARY LOOKUP ----------
@@ -2897,6 +3105,7 @@ function openLiveReading(item, kind) {
 // Refactored: openReader by ID, openReaderObj by object
 function openReaderObj(reading) {
   currentReader = reading;
+  recordActivity();
   document.getElementById('reader-header-title').textContent = reading.title.toUpperCase().slice(0, 40);
   const content = document.getElementById('reader-content');
   let html = `
@@ -2912,15 +3121,17 @@ function openReaderObj(reading) {
       const safe = clean.replace(/'/g, "\\'");
       return `<span class="word" data-word="${safe}" onclick="showWord(this, '${safe}')">${token}</span>`;
     }).join('');
-    html += `<p>${wordsHtml}</p>`;
+    const itEsc = p.it.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
+    const speakBtn = `<button class="para-speak" onclick="event.stopPropagation(); speakParagraph('${itEsc}')" title="Speak paragraph">▶</button>`;
+    html += `<p>${speakBtn}${wordsHtml}</p>`;
     if (p.en) html += `<div class="full-translation" id="ft-${pi}">${escapeHtml(p.en)}</div>`;
   });
   html += '</div>';
   content.innerHTML = html;
-  // Hide translation toolbar items that don't apply to live readings
+  // Reset translation mode for the new reading
+  translationMode = 'off';
+  applyTranslationMode();
   const ftBtn = document.getElementById('ft-btn');
-  ftBtn.classList.remove('active');
-  ftBtn.textContent = 'SHOW TRANSLATION';
   const hasTranslations = reading.paragraphs.some(p => p.en);
   ftBtn.style.display = hasTranslations ? '' : 'none';
   const readBtn = document.getElementById('read-btn');
@@ -2956,6 +3167,389 @@ function maybeShowInstallHint() {
   }
 }
 
+// ---------- SRS (spaced repetition, simplified SM-2) ----------
+const DAY_MS = 86400000;
+function ensureSrs(word) {
+  if (!word.srs) {
+    word.srs = {
+      easiness: 2.5,
+      interval: 0,
+      repetitions: 0,
+      nextReview: Date.now(),
+      lastReview: null
+    };
+  }
+  return word.srs;
+}
+function projectInterval(word, rating) {
+  const srs = ensureSrs(word);
+  const { easiness, interval, repetitions } = srs;
+  if (rating === 'again') return 1;
+  if (rating === 'hard') {
+    if (repetitions === 0) return 1;
+    return Math.max(1, Math.round(interval * 1.2));
+  }
+  if (rating === 'good') {
+    if (repetitions === 0) return 1;
+    if (repetitions === 1) return 6;
+    return Math.round(interval * easiness);
+  }
+  if (rating === 'easy') {
+    if (repetitions === 0) return 4;
+    return Math.round(interval * easiness * 1.3);
+  }
+  return 1;
+}
+function rateCard(word, rating) {
+  const srs = ensureSrs(word);
+  srs.lastReview = Date.now();
+  if (rating === 'again') {
+    srs.repetitions = 0;
+    srs.interval = 1;
+    srs.easiness = Math.max(1.3, srs.easiness - 0.2);
+  } else if (rating === 'hard') {
+    srs.interval = projectInterval(word, 'hard');
+    srs.easiness = Math.max(1.3, srs.easiness - 0.15);
+    srs.repetitions += 1;
+  } else if (rating === 'good') {
+    srs.interval = projectInterval(word, 'good');
+    srs.repetitions += 1;
+  } else if (rating === 'easy') {
+    srs.interval = projectInterval(word, 'easy');
+    srs.easiness = srs.easiness + 0.15;
+    srs.repetitions += 1;
+  }
+  srs.nextReview = Date.now() + srs.interval * DAY_MS;
+  persistSavedWords();
+}
+function getDueCards() {
+  const now = Date.now();
+  return savedWords.filter(w => !w.srs || (w.srs.nextReview || 0) <= now);
+}
+function getLearningCount() {
+  return savedWords.filter(w => w.srs && w.srs.repetitions > 0 && w.srs.interval < 21).length;
+}
+function getMasteredCount() {
+  return savedWords.filter(w => w.srs && w.srs.interval >= 21).length;
+}
+function formatInterval(days) {
+  if (days < 1) return '<1d';
+  if (days < 30) return Math.round(days) + 'd';
+  if (days < 365) return Math.round(days/30) + 'mo';
+  return Math.round(days/365) + 'y';
+}
+
+// ---------- REVIEW SESSION ----------
+let reviewQueue = [];
+let reviewIndex = 0;
+let reviewRevealed = false;
+
+function startReviewSession() {
+  if (!savedWords.length) {
+    showToast('Save some words first');
+    return;
+  }
+  reviewQueue = getDueCards();
+  if (!reviewQueue.length) {
+    const sorted = savedWords.slice().sort((a, b) => {
+      const aTime = (a.srs && a.srs.lastReview) || 0;
+      const bTime = (b.srs && b.srs.lastReview) || 0;
+      return aTime - bTime;
+    });
+    reviewQueue = sorted.slice(0, Math.min(10, sorted.length));
+    showToast('No cards due — practicing oldest');
+  }
+  for (let i = reviewQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [reviewQueue[i], reviewQueue[j]] = [reviewQueue[j], reviewQueue[i]];
+  }
+  reviewIndex = 0;
+  reviewRevealed = false;
+  document.getElementById('review-overlay').classList.add('active');
+  renderReviewCard();
+}
+
+function closeReview() {
+  document.getElementById('review-overlay').classList.remove('active');
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  renderPracticeStats();
+  updateStats();
+  renderThemes();
+}
+
+function renderReviewCard() {
+  const body = document.getElementById('review-body');
+  const progressEl = document.getElementById('review-progress');
+  if (reviewIndex >= reviewQueue.length) {
+    progressEl.textContent = '';
+    body.innerHTML = `
+      <div class="session-end">
+        <div style="font-size: 56px;">✦</div>
+        <h2>Sessione Completata</h2>
+        <div class="big-num">${reviewQueue.length}</div>
+        <p>parole riviste</p>
+        <p style="margin-top: 18px; font-size: 14px;">Torna domani per la prossima sessione.</p>
+        <button class="next-btn" onclick="closeReview()">CHIUDI</button>
+      </div>
+    `;
+    return;
+  }
+  progressEl.textContent = `${reviewIndex + 1} / ${reviewQueue.length}`;
+  const word = reviewQueue[reviewIndex];
+  reviewRevealed = false;
+  const itEsc = word.it.replace(/'/g, "\\'");
+  body.innerHTML = `
+    <div class="practice-card">
+      <div class="corner tl"></div>
+      <div class="corner br"></div>
+      <div class="prompt-label">Italiano</div>
+      <div class="prompt-word">${escapeHtml(word.it)}<button class="speak-btn" onclick="event.stopPropagation(); speakItalian('${itEsc}')">▶</button></div>
+      <div class="answer-reveal" id="answer-reveal">
+        <div class="answer-en">${escapeHtml(word.en || '(no definition)')}</div>
+        ${word.note ? `<div class="answer-note">${escapeHtml(word.note)}</div>` : ''}
+      </div>
+    </div>
+    <button class="show-answer-btn" id="reveal-btn" onclick="revealAnswer()">SHOW ANSWER</button>
+    <div class="rating-row" id="rating-row" style="display: none;">
+      <button class="rate-btn again" onclick="submitRating('again')">
+        <span class="rate-label">AGAIN</span>
+        <span class="rate-interval">${formatInterval(projectInterval(word, 'again'))}</span>
+      </button>
+      <button class="rate-btn hard" onclick="submitRating('hard')">
+        <span class="rate-label">HARD</span>
+        <span class="rate-interval">${formatInterval(projectInterval(word, 'hard'))}</span>
+      </button>
+      <button class="rate-btn good" onclick="submitRating('good')">
+        <span class="rate-label">GOOD</span>
+        <span class="rate-interval">${formatInterval(projectInterval(word, 'good'))}</span>
+      </button>
+      <button class="rate-btn easy" onclick="submitRating('easy')">
+        <span class="rate-label">EASY</span>
+        <span class="rate-interval">${formatInterval(projectInterval(word, 'easy'))}</span>
+      </button>
+    </div>
+  `;
+  setTimeout(() => speakItalian(word.it), 200);
+}
+
+function revealAnswer() {
+  if (reviewRevealed) return;
+  reviewRevealed = true;
+  document.getElementById('answer-reveal').classList.add('show');
+  document.getElementById('reveal-btn').style.display = 'none';
+  document.getElementById('rating-row').style.display = 'grid';
+}
+
+function submitRating(rating) {
+  const word = reviewQueue[reviewIndex];
+  rateCard(word, rating);
+  recordActivity();
+  if (rating === 'again') reviewQueue.push(word);
+  reviewIndex += 1;
+  renderReviewCard();
+}
+
+// ---------- DRILL SESSION ----------
+let drillQueue = [];
+let drillIndex = 0;
+let drillCorrect = 0;
+let drillAnswered = false;
+let drillLessonFilter = null;
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function generateDrillQuestion() {
+  const pool = drillLessonFilter
+    ? LESSONS.filter(l => l.id === drillLessonFilter)
+    : LESSONS;
+  const lesson = pool[Math.floor(Math.random() * pool.length)];
+  const ex = lesson.examples[Math.floor(Math.random() * lesson.examples.length)];
+
+  const typePool = ['sp_to_it', 'sp_to_it', 'sp_to_it', 'it_to_sp', 'it_to_meaning'];
+  const type = typePool[Math.floor(Math.random() * typePool.length)];
+
+  let prompt, promptLabel, answer, answerLabel, distractorPool;
+  if (type === 'sp_to_it') {
+    prompt = ex.sp; promptLabel = 'Spagnolo';
+    answer = ex.it; answerLabel = 'Italiano';
+    distractorPool = lesson.examples.map(e => e.it).filter(x => x !== answer);
+  } else if (type === 'it_to_sp') {
+    prompt = ex.it; promptLabel = 'Italiano';
+    answer = ex.sp; answerLabel = 'Spagnolo';
+    distractorPool = lesson.examples.map(e => e.sp).filter(x => x !== answer);
+  } else {
+    prompt = ex.it; promptLabel = 'Italiano';
+    answer = ex.mean; answerLabel = 'Meaning';
+    distractorPool = lesson.examples.map(e => e.mean).filter(x => x !== answer);
+  }
+
+  if (distractorPool.length < 3) {
+    const allFromOthers = LESSONS.filter(l => l.id !== lesson.id).flatMap(l => {
+      if (type === 'sp_to_it') return l.examples.map(e => e.it);
+      if (type === 'it_to_sp') return l.examples.map(e => e.sp);
+      return l.examples.map(e => e.mean);
+    }).filter(x => x !== answer);
+    distractorPool = distractorPool.concat(shuffleArray(allFromOthers));
+  }
+
+  const distractors = shuffleArray(distractorPool).slice(0, 3);
+  const options = shuffleArray([answer, ...distractors]);
+
+  return {
+    lessonTitle: lesson.title,
+    lessonFormula: lesson.formula,
+    type, prompt, promptLabel, answer, answerLabel, options,
+    meaning: ex.mean
+  };
+}
+
+function openDrillSetup() {
+  const overlay = document.getElementById('drill-overlay');
+  document.getElementById('drill-progress').textContent = '';
+  const body = document.getElementById('drill-body');
+  let html = `
+    <div class="quick-card" onclick="startDrillSession(null)">
+      <span class="quick-icon">✦</span>
+      <div class="quick-content">
+        <div class="quick-title">MIX ALL LESSONS</div>
+        <div class="quick-desc">Random questions from all 12 bridge rules</div>
+      </div>
+    </div>
+    <div class="reading-category-label">Or pick a single lesson</div>
+  `;
+  LESSONS.forEach(l => {
+    html += `
+      <div class="quick-card" onclick="startDrillSession('${l.id}')">
+        <div class="quick-content">
+          <div class="quick-title">${escapeHtml(l.title)}</div>
+          <div class="quick-desc">${escapeHtml(l.formula)}</div>
+        </div>
+      </div>
+    `;
+  });
+  body.innerHTML = html;
+  overlay.classList.add('active');
+}
+
+function startDrillSession(lessonId) {
+  drillLessonFilter = lessonId;
+  drillCorrect = 0;
+  drillIndex = 0;
+  drillAnswered = false;
+  drillQueue = [];
+  for (let i = 0; i < 10; i++) drillQueue.push(generateDrillQuestion());
+  renderDrillCard();
+}
+
+function closeDrill() {
+  document.getElementById('drill-overlay').classList.remove('active');
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function renderDrillCard() {
+  const body = document.getElementById('drill-body');
+  const progressEl = document.getElementById('drill-progress');
+  if (drillIndex >= drillQueue.length) {
+    state.drillCorrect = (state.drillCorrect || 0) + drillCorrect;
+    state.drillTotal = (state.drillTotal || 0) + drillQueue.length;
+    saveState();
+    progressEl.textContent = '';
+    const pct = Math.round((drillCorrect / drillQueue.length) * 100);
+    let msg = 'Continua così!';
+    if (pct === 100) msg = 'Perfetto! ✦';
+    else if (pct >= 80) msg = 'Molto bene!';
+    else if (pct >= 60) msg = 'Bene. Riprova per migliorare.';
+    else msg = 'Rivedi la lezione e riprova.';
+    body.innerHTML = `
+      <div class="session-end">
+        <div style="font-size: 56px;">${pct >= 80 ? '✦' : '⚜'}</div>
+        <h2>Drill Completato</h2>
+        <div class="big-num">${drillCorrect}/${drillQueue.length}</div>
+        <p>${msg}</p>
+        <button class="next-btn" onclick="startDrillSession(drillLessonFilter)">RIPROVA</button>
+        <button class="next-btn" style="background: rgba(212,175,55,0.15); color: var(--gold-deep); margin-top: 8px;" onclick="openDrillSetup()">CAMBIA LEZIONE</button>
+      </div>
+    `;
+    return;
+  }
+  progressEl.textContent = `${drillIndex + 1} / ${drillQueue.length}  ·  ${drillCorrect}✓`;
+  const q = drillQueue[drillIndex];
+  drillAnswered = false;
+  const itEsc = (q.type === 'it_to_sp' || q.type === 'it_to_meaning') ? q.prompt.replace(/'/g, "\\'") : '';
+  let optionsHtml = '';
+  q.options.forEach((opt, i) => {
+    const optEsc = opt.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
+    optionsHtml += `<button class="option-btn" data-idx="${i}" onclick="answerDrill(${i}, '${optEsc}')">${escapeHtml(opt)}</button>`;
+  });
+  const speakBtn = itEsc
+    ? `<button class="speak-btn" onclick="event.stopPropagation(); speakItalian('${itEsc}')">▶</button>`
+    : '';
+  body.innerHTML = `
+    <div class="prompt-label" style="text-align: center; margin-bottom: 4px;">${escapeHtml(q.lessonTitle)}</div>
+    <div style="text-align: center; margin-bottom: 16px; font-family: 'Cinzel', serif; font-size: 11px; color: var(--gold-deep); letter-spacing: 1px;">${escapeHtml(q.lessonFormula)}</div>
+    <div class="practice-card" style="min-height: 100px; padding: 22px 18px;">
+      <div class="corner tl"></div>
+      <div class="corner br"></div>
+      <div class="prompt-label">${q.promptLabel}</div>
+      <div class="prompt-word" style="font-size: 26px;">${escapeHtml(q.prompt)} ${speakBtn}</div>
+    </div>
+    <div class="prompt-label" style="margin: 6px 0;">→ ${q.answerLabel}?</div>
+    <div id="drill-options">${optionsHtml}</div>
+    <div id="drill-feedback"></div>
+    <button class="next-btn" id="drill-next-btn" style="display: none;" onclick="nextDrill()">CONTINUA →</button>
+  `;
+}
+
+function answerDrill(idx, chosen) {
+  if (drillAnswered) return;
+  drillAnswered = true;
+  recordActivity();
+  const q = drillQueue[drillIndex];
+  const correct = chosen === q.answer;
+  if (correct) drillCorrect += 1;
+  document.querySelectorAll('#drill-options .option-btn').forEach(btn => {
+    const text = btn.textContent;
+    if (text === q.answer) btn.classList.add('correct');
+    else if (text === chosen && !correct) btn.classList.add('wrong');
+    btn.classList.add('disabled');
+  });
+  const fb = document.getElementById('drill-feedback');
+  fb.className = 'feedback ' + (correct ? 'correct' : 'wrong');
+  fb.textContent = correct ? `✓ Esatto · ${q.meaning}` : `✗  ${q.answer} · ${q.meaning}`;
+  document.getElementById('drill-next-btn').style.display = 'block';
+  const italianForm = (q.answerLabel === 'Italiano') ? q.answer : q.prompt;
+  speakItalian(italianForm);
+}
+
+function nextDrill() {
+  drillIndex += 1;
+  renderDrillCard();
+}
+
+// ---------- PRACTICE TAB STATS ----------
+function renderPracticeStats() {
+  const summaryEl = document.getElementById('review-summary');
+  if (!summaryEl) return;
+  const due = getDueCards().length;
+  const total = savedWords.length;
+  if (!total) summaryEl.textContent = 'No saved words yet — save some while reading';
+  else if (!due) summaryEl.textContent = `${total} saved · all caught up`;
+  else summaryEl.innerHTML = `${due} due now <span class="due-badge">${due}</span> · ${total} saved`;
+  const dueEl = document.getElementById('stat-due');
+  const learningEl = document.getElementById('stat-learning');
+  const masteredEl = document.getElementById('stat-mastered');
+  if (dueEl) dueEl.textContent = due;
+  if (learningEl) learningEl.textContent = getLearningCount();
+  if (masteredEl) masteredEl.textContent = getMasteredCount();
+}
+
 function init() {
   detectStandalone();
   loadState();
@@ -2968,6 +3562,8 @@ function init() {
   renderReadings();
   renderThemes();
   renderGrammar();
+  renderPracticeStats();
+  renderActivityHeatmap();
   updateStats();
   maybeShowInstallHint();
   setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);

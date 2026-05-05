@@ -1,0 +1,99 @@
+<!--
+============================================================
+  LECTIO TILE — for language-home.html
+============================================================
+  Paste this <a> element wherever you keep your other language
+  cards. The styles are scoped under .lectio-tile so they
+  shouldn't conflict with your existing CSS.
+
+  If you already have a grid wrapper for tiles, drop the <a>
+  inside it. The card is self-styled — fonts load from Google
+  if not already on the page (you likely already have Cinzel
+  loaded for your other Catholic apps).
+
+  Adjust the href to match your hosted filename.
+============================================================
+-->
+
+<a href="lectio.html" class="lectio-tile" aria-label="Open Lectio — Italian for Reading">
+  <div class="lectio-tile-symbol">L</div>
+  <div class="lectio-tile-body">
+    <div class="lectio-tile-name">LECTIO</div>
+    <div class="lectio-tile-subtitle">Italiano · per la lettura</div>
+    <div class="lectio-tile-tag">Catholic news, papal docs, saints' writings</div>
+  </div>
+  <div class="lectio-tile-flag">🇮🇹</div>
+</a>
+
+<style>
+  /* Scoped to .lectio-tile so this won't bleed into your other styles */
+  .lectio-tile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    background: linear-gradient(135deg, #3a1f0d 0%, #2a1505 100%);
+    color: #f5ecd7;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 2px solid #b8941f;
+    box-shadow: 0 4px 12px rgba(42,21,5,0.3), inset 0 1px 1px rgba(212,175,55,0.2);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .lectio-tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #d4af37 50%, transparent);
+  }
+  .lectio-tile:hover, .lectio-tile:active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42,21,5,0.4), inset 0 1px 1px rgba(212,175,55,0.3);
+  }
+  .lectio-tile-symbol {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 30% 30%, #d4af37, #8a6f17);
+    border-radius: 50%;
+    font-family: 'Cinzel', Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #2a1505;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+  }
+  .lectio-tile-body { flex: 1; min-width: 0; }
+  .lectio-tile-name {
+    font-family: 'Cinzel', Georgia, serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: #d4af37;
+    line-height: 1.1;
+  }
+  .lectio-tile-subtitle {
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(245,236,215,0.75);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+  .lectio-tile-tag {
+    font-size: 12px;
+    color: rgba(245,236,215,0.55);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  .lectio-tile-flag {
+    font-size: 22px;
+    flex-shrink: 0;
+    opacity: 0.9;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  }
+</style>
