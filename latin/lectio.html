@@ -177,6 +177,30 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
 .loader.hide { opacity: 0; pointer-events: none; }
 .loader-symbol { width: 80px; height: 80px; background: radial-gradient(circle at 30% 30%, var(--gold-bright), var(--gold-deep)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 48px; font-weight: 700; color: var(--ink); box-shadow: 0 0 40px rgba(212,175,55,0.5); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+/* === Phase 1: paste modal, news, save button === */
+.quick-card { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #fdf9eb 0%, #ebdfc2 100%); border: 1px solid var(--gold); border-radius: 10px; padding: 14px; margin-bottom: 10px; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+.quick-card:active { transform: scale(0.98); }
+.quick-icon { font-size: 28px; flex-shrink: 0; }
+.quick-content { flex: 1; min-width: 0; }
+.quick-title { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: 1px; }
+.quick-desc { font-size: 14px; font-style: italic; color: var(--ink-soft); opacity: 0.85; margin-top: 2px; }
+.paste-modal { display: none; position: fixed; inset: 0; background: var(--parchment); z-index: 100; flex-direction: column; padding-top: env(safe-area-inset-top); }
+.paste-modal.active { display: flex; }
+.paste-body { flex: 1; display: flex; flex-direction: column; padding: 16px; padding-bottom: calc(env(safe-area-inset-bottom) + 16px); min-height: 0; gap: 12px; }
+.paste-help { font-size: 14px; font-style: italic; color: var(--ink-soft); padding: 8px 4px; }
+#paste-input, #paste-en-input { flex: 1; min-height: 120px; resize: none; background: white; border: 1px solid var(--parchment-deep); border-radius: 8px; padding: 12px 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--ink); -webkit-user-select: text; user-select: text; }
+#paste-input:focus, #paste-en-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+.popup-save-btn { display: block; width: 100%; margin-top: 8px; background: rgba(212,175,55,0.15); border: 1px solid var(--gold); color: var(--gold-bright); padding: 6px 10px; border-radius: 6px; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px; cursor: pointer; }
+.popup-save-btn:active { transform: scale(0.97); }
+.popup-save-btn.saved { background: var(--gold); color: var(--ink); }
+.word-popup { max-width: 320px; }
+.word-popup-en { font-size: 15px; line-height: 1.4; }
+.word-popup-en strong { color: var(--gold-bright); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+.news-pubdate { font-size: 11px; color: var(--gold-deep); font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
+.refresh-link { font-size: 12px; color: var(--gold-deep); font-style: italic; cursor: pointer; text-align: center; padding: 8px; text-decoration: underline; }
+.empty-saved { text-align: center; padding: 30px 20px; color: var(--ink-soft); font-style: italic; font-size: 15px; line-height: 1.5; }
+.reading-category-label { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2.5px; color: var(--gold-deep); text-transform: uppercase; margin: 18px 0 10px; padding: 6px 0 4px; border-bottom: 1px solid var(--parchment-deep); font-weight: 600; }
+.reading-category-label:first-child { margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -210,6 +234,22 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
   <section class="tab-pane" id="tab-read">
     <div class="section-title">Letture</div>
     <div class="section-subtitle">Tap any word for translation. Toggle full translation when stuck.</div>
+    <div class="quick-card" onclick="openPasteModal()">
+      <span class="quick-icon">📋</span>
+      <div class="quick-content">
+        <div class="quick-title">PASTE ITALIAN TEXT</div>
+        <div class="quick-desc">Read any Italian — Wiktionary backs unknown words</div>
+      </div>
+    </div>
+    <div class="quick-card" onclick="loadVaticanNews()">
+      <span class="quick-icon">📰</span>
+      <div class="quick-content">
+        <div class="quick-title">VATICAN NEWS · OGGI</div>
+        <div class="quick-desc">Today's headlines in Italian</div>
+      </div>
+    </div>
+    <div id="news-feed-list"></div>
+    <div class="section-title" style="margin-top: 24px;">Curated</div>
     <div id="reading-list"></div>
   </section>
 
@@ -237,7 +277,7 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
     </div>
     <div class="stats-row">
       <div class="stat-box"><div class="stat-num" id="stat-lessons">0</div><div class="stat-label">Lessons</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-words">0</div><div class="stat-label">Words</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-words">0</div><div class="stat-label">Saved</div></div>
       <div class="stat-box"><div class="stat-num" id="stat-reads">0</div><div class="stat-label">Texts</div></div>
     </div>
     <div class="settings-section">
@@ -298,6 +338,18 @@ body { display: flex; flex-direction: column; min-height: 0; background: radial-
     <h2 class="lesson-detail-title" id="vocab-list-title"></h2>
   </div>
   <div class="vocab-list-content" id="vocab-list-content"></div>
+</div>
+
+<div class="paste-modal" id="paste-modal">
+  <div class="lesson-detail-header">
+    <button class="back-btn" onclick="closePasteModal()">←</button>
+    <h2 class="lesson-detail-title">PASTE TEXT</h2>
+  </div>
+  <div class="paste-body">
+    <div class="paste-help">Paste any Italian text below. Tap any word in the reader for a translation. Unknown words are looked up in Wiktionary.</div>
+    <textarea id="paste-input" placeholder="Incolla qui il testo italiano…"></textarea>
+    <button class="complete-btn" onclick="openPastedText()">OPEN READER</button>
+  </div>
 </div>
 
 <div class="word-popup" id="word-popup"></div>
@@ -766,6 +818,7 @@ const READINGS = [
     id: 'ave-maria',
     title: 'Ave Maria',
     source: 'Tradizione',
+    category: 'prayers',
     difficulty: 1,
     paragraphs: [
       {
@@ -806,6 +859,7 @@ const READINGS = [
     id: 'pater',
     title: 'Padre Nostro',
     source: 'Tradizione',
+    category: 'prayers',
     difficulty: 1,
     paragraphs: [
       {
@@ -856,6 +910,7 @@ const READINGS = [
     id: 'padre-pio',
     title: 'San Pio · Una raccomandazione',
     source: 'San Pio da Pietrelcina',
+    category: 'saints',
     difficulty: 1,
     paragraphs: [
       {
@@ -910,6 +965,7 @@ const READINGS = [
     id: 'francesco-pace',
     title: 'San Francesco · Strumento di pace',
     source: "Preghiera attribuita a San Francesco d'Assisi",
+    category: 'saints',
     difficulty: 2,
     paragraphs: [
       {
@@ -984,6 +1040,7 @@ const READINGS = [
     id: 'vatican-news-sample',
     title: 'Stile di un articolo · Vatican News',
     source: 'Esempio di stile giornalistico',
+    category: 'magisterium',
     difficulty: 2,
     paragraphs: [
       {
@@ -1052,6 +1109,7 @@ const READINGS = [
     id: 'aquinas-fragment',
     title: "Da S. Tommaso · Sulla preghiera",
     source: "San Tommaso d'Aquino, parafrasi italiana",
+    category: 'saints',
     difficulty: 3,
     paragraphs: [
       {
@@ -1112,6 +1170,826 @@ const READINGS = [
       'parole': { en: 'words', note: 'Sp: palabras' }
     }
   }
+,
+  // ===== PRAYERS =====
+  {
+    id: "salve-regina",
+    title: "Salve Regina",
+    source: "Tradizione · attribuita a Hermann von Reichenau",
+    category: "prayers",
+    difficulty: 1,
+    paragraphs: [
+      {
+        it: "Salve, Regina, Madre di misericordia, vita, dolcezza e speranza nostra, salve.",
+        en: "Hail, Holy Queen, Mother of Mercy, our life, our sweetness, and our hope. Hail."
+      },
+      {
+        it: "A Te ricorriamo, esuli figli di Eva; a Te sospiriamo, gementi e piangenti in questa valle di lacrime.",
+        en: "To thee do we cry, poor banished children of Eve; to thee do we send up our sighs, mourning and weeping in this valley of tears."
+      },
+      {
+        it: "Orsù dunque, avvocata nostra, rivolgi a noi gli occhi tuoi misericordiosi. E mostraci, dopo questo esilio, Gesù, il frutto benedetto del tuo seno.",
+        en: "Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus."
+      },
+      {
+        it: "O clemente, o pia, o dolce Vergine Maria! Amen.",
+        en: "O clement, O loving, O sweet Virgin Mary. Amen."
+      }
+    ],
+    glosses: {
+      "salve": { en: "hail / greetings", note: "Lat: salve" },
+      "regina": { en: "queen", note: "Sp: reina" },
+      "madre": { en: "mother", note: "Sp: madre" },
+      "misericordia": { en: "mercy", note: "Sp: misericordia" },
+      "vita": { en: "life", note: "Sp: vida" },
+      "dolcezza": { en: "sweetness", note: "Sp: dulzura" },
+      "speranza": { en: "hope", note: "Sp: esperanza" },
+      "ricorriamo": { en: "we turn / have recourse", note: "verb ricorrere" },
+      "esuli": { en: "exiled (m.pl.)", note: "Sp: exiliados" },
+      "figli": { en: "children / sons", note: "Sp: hijos (h↔f, ll↔gli)" },
+      "sospiriamo": { en: "we sigh", note: "verb sospirare" },
+      "gementi": { en: "groaning", note: "from gemere" },
+      "piangenti": { en: "weeping", note: "from piangere (Sp: llorar)" },
+      "valle": { en: "valley", note: "Sp: valle" },
+      "lacrime": { en: "tears", note: "Sp: lágrimas" },
+      "orsù": { en: "come now / well then", note: "literary exhortation" },
+      "dunque": { en: "therefore / then", note: "Sp: por lo tanto" },
+      "avvocata": { en: "advocate (f.)", note: "Sp: abogada" },
+      "rivolgi": { en: "turn (imp.)", note: "imp. of rivolgere" },
+      "occhi": { en: "eyes", note: "Sp: ojos" },
+      "tuoi": { en: "your (m.pl.)", note: "Sp: tus / tuyos" },
+      "misericordiosi": { en: "merciful (m.pl.)", note: "Sp: misericordiosos" },
+      "mostraci": { en: "show us", note: "mostra + ci" },
+      "esilio": { en: "exile", note: "Sp: exilio" },
+      "frutto": { en: "fruit", note: "Sp: fruto" },
+      "benedetto": { en: "blessed", note: "Sp: bendito" },
+      "seno": { en: "womb", note: "Sp: seno" },
+      "clemente": { en: "clement / merciful", note: "Sp: clemente" },
+      "pia": { en: "loving / pious (f.)", note: "Sp: pía" },
+      "dolce": { en: "sweet", note: "Sp: dulce" },
+      "vergine": { en: "virgin", note: "Sp: virgen" }
+    }
+  },
+  {
+    id: "magnificat",
+    title: "Magnificat",
+    source: "Vangelo secondo Luca 1, 46-55",
+    category: "prayers",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "L\'anima mia magnifica il Signore e il mio spirito esulta in Dio, mio salvatore, perché ha guardato l\'umiltà della sua serva.",
+        en: "My soul magnifies the Lord, and my spirit rejoices in God my Savior, for he has looked upon the humility of his handmaid."
+      },
+      {
+        it: "D\'ora in poi tutte le generazioni mi chiameranno beata. Grandi cose ha fatto in me l\'Onnipotente e Santo è il suo nome.",
+        en: "From this day all generations will call me blessed. The Almighty has done great things for me, and holy is his name."
+      },
+      {
+        it: "Di generazione in generazione la sua misericordia per quelli che lo temono. Ha spiegato la potenza del suo braccio, ha disperso i superbi nei pensieri del loro cuore.",
+        en: "His mercy is from generation to generation on those who fear him. He has shown might with his arm, he has scattered the proud in the conceit of their heart."
+      },
+      {
+        it: "Ha rovesciato i potenti dai troni, ha innalzato gli umili; ha ricolmato di beni gli affamati, ha rimandato i ricchi a mani vuote.",
+        en: "He has cast down the mighty from their thrones and has lifted up the lowly. He has filled the hungry with good things, and the rich he has sent away empty."
+      }
+    ],
+    glosses: {
+      "magnifica": { en: "magnifies", note: "verb magnificare" },
+      "esulta": { en: "rejoices", note: "Sp: exulta" },
+      "salvatore": { en: "savior", note: "Sp: salvador" },
+      "guardato": { en: "looked upon", note: "Sp: mirado" },
+      "umiltà": { en: "humility", note: "Sp: humildad (-dad→-tà)" },
+      "serva": { en: "handmaid / servant (f.)", note: "Sp: sierva" },
+      "ora": { en: "hour / now", note: "d'ora in poi = from now on" },
+      "poi": { en: "then / after", note: "Sp: luego / después" },
+      "generazioni": { en: "generations", note: "Sp: generaciones (no -s!)" },
+      "chiameranno": { en: "they will call", note: "future of chiamare" },
+      "beata": { en: "blessed (f.)", note: "Sp: bienaventurada" },
+      "onnipotente": { en: "the Almighty", note: "Sp: Omnipotente (nn!)" },
+      "tema": { en: "fear (subj.)", note: "subj. of temere" },
+      "temono": { en: "they fear", note: "verb temere" },
+      "spiegato": { en: "shown / unfolded", note: "lit. 'unfolded'; here 'shown'" },
+      "potenza": { en: "power", note: "Sp: potencia" },
+      "braccio": { en: "arm", note: "Sp: brazo" },
+      "disperso": { en: "scattered", note: "Sp: dispersado" },
+      "superbi": { en: "proud (m.pl.)", note: "Sp: soberbios" },
+      "pensieri": { en: "thoughts", note: "Sp: pensamientos" },
+      "loro": { en: "their / they / them", note: "Sp: su / ellos" },
+      "cuore": { en: "heart", note: "Sp: corazón" },
+      "rovesciato": { en: "cast down / overturned", note: "Sp: derrocado" },
+      "potenti": { en: "the mighty", note: "Sp: poderosos" },
+      "troni": { en: "thrones", note: "Sp: tronos" },
+      "innalzato": { en: "lifted up", note: "Sp: ensalzado" },
+      "umili": { en: "the humble / lowly", note: "Sp: humildes" },
+      "ricolmato": { en: "filled up", note: "ri- + colmare" },
+      "beni": { en: "goods / blessings", note: "Sp: bienes" },
+      "affamati": { en: "the hungry", note: "Sp: hambrientos" },
+      "rimandato": { en: "sent back / away", note: "ri- + mandare" },
+      "ricchi": { en: "the rich", note: "Sp: ricos" },
+      "mani": { en: "hands", note: "Sp: manos" },
+      "vuote": { en: "empty (f.pl.)", note: "Sp: vacías" }
+    }
+  },
+  {
+    id: "anima-christi",
+    title: "Anima Christi",
+    source: "Tradizione · ca. XIV secolo",
+    category: "prayers",
+    difficulty: 1,
+    paragraphs: [
+      {
+        it: "Anima di Cristo, santificami. Corpo di Cristo, salvami. Sangue di Cristo, inebriami.",
+        en: "Soul of Christ, sanctify me. Body of Christ, save me. Blood of Christ, inebriate me."
+      },
+      {
+        it: "Acqua del costato di Cristo, lavami. Passione di Cristo, fortificami. O buon Gesù, esaudiscimi.",
+        en: "Water from the side of Christ, wash me. Passion of Christ, strengthen me. O good Jesus, hear me."
+      },
+      {
+        it: "Nelle tue piaghe, nascondimi. Non permettere che io sia separato da Te. Dal nemico maligno difendimi.",
+        en: "Within your wounds hide me. Permit me not to be separated from you. From the malicious enemy defend me."
+      },
+      {
+        it: "Nell\'ora della mia morte, chiamami, e comandami di venire a Te, perché con i tuoi Santi io Ti lodi nei secoli dei secoli. Amen.",
+        en: "At the hour of my death, call me, and bid me come to thee, that with thy saints I may praise thee forever and ever. Amen."
+      }
+    ],
+    glosses: {
+      "santificami": { en: "sanctify me", note: "santifica + mi" },
+      "corpo": { en: "body", note: "Sp: cuerpo (ue→o)" },
+      "salvami": { en: "save me", note: "salva + mi" },
+      "sangue": { en: "blood", note: "Sp: sangre" },
+      "inebriami": { en: "inebriate / intoxicate me", note: "Sp: embriágame" },
+      "acqua": { en: "water", note: "Sp: agua" },
+      "costato": { en: "side / rib", note: "Lat: costa = rib" },
+      "lavami": { en: "wash me", note: "Sp: lávame" },
+      "passione": { en: "passion / suffering", note: "Sp: pasión" },
+      "fortificami": { en: "strengthen me", note: "Sp: fortifícame" },
+      "buon": { en: "good (apocopated)", note: "buono before m. nouns" },
+      "esaudiscimi": { en: "hear / answer me", note: "verb esaudire" },
+      "piaghe": { en: "wounds", note: "Sp: llagas (ll↔gh? No, 'piaghe' from Lat plaga)" },
+      "nascondimi": { en: "hide me", note: "Sp: escóndeme" },
+      "permettere": { en: "to permit", note: "Sp: permitir" },
+      "separato": { en: "separated", note: "Sp: separado" },
+      "nemico": { en: "enemy", note: "Sp: enemigo" },
+      "maligno": { en: "evil / malign", note: "Sp: maligno" },
+      "difendimi": { en: "defend me", note: "Sp: defiéndeme" },
+      "comandami": { en: "command me", note: "Sp: ordéname" },
+      "venire": { en: "to come", note: "Sp: venir" },
+      "lodi": { en: "I may praise (subj.)", note: "subj. of lodare" },
+      "secoli": { en: "ages / centuries", note: "Sp: siglos" }
+    }
+  },
+  {
+    id: "memorare",
+    title: "Memorare",
+    source: "Tradizione · attribuita a san Bernardo",
+    category: "prayers",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "Ricordati, o piissima Vergine Maria, non essersi mai udito al mondo che alcuno abbia ricorso al tuo patrocinio, implorato il tuo aiuto, chiesto la tua protezione, e sia stato abbandonato.",
+        en: "Remember, O most pious Virgin Mary, that never was it known that anyone who fled to thy protection, implored thy help, or sought thy intercession, was left unaided."
+      },
+      {
+        it: "Animato da tale confidenza, a te ricorro, o Madre, Vergine delle vergini; a te io vengo, dinanzi a te mi prostro peccatore e pentito.",
+        en: "Inspired by this confidence, I fly unto thee, O Mother, Virgin of virgins; to thee do I come; before thee I stand, a sinful and sorrowful soul."
+      },
+      {
+        it: "Non volere, o Madre del Verbo, disprezzare le mie preghiere, ma ascoltami benigna ed esaudiscimi. Amen.",
+        en: "O Mother of the Word, do not despise my prayers, but in thy mercy hear and answer me. Amen."
+      }
+    ],
+    glosses: {
+      "ricordati": { en: "remember (yourself)", note: "ricorda + ti (imp.)" },
+      "piissima": { en: "most pious (f.)", note: "Sp: piísima" },
+      "essersi": { en: "to have been (refl.)", note: "essere + si" },
+      "udito": { en: "heard", note: "past part. udire" },
+      "mondo": { en: "world", note: "Sp: mundo" },
+      "alcuno": { en: "anyone", note: "Sp: alguno" },
+      "abbia": { en: "has (subj.)", note: "subj. of avere" },
+      "ricorso": { en: "had recourse", note: "past part. ricorrere" },
+      "patrocinio": { en: "patronage / protection", note: "Sp: patrocinio" },
+      "implorato": { en: "implored", note: "Sp: implorado" },
+      "aiuto": { en: "help", note: "Sp: ayuda" },
+      "chiesto": { en: "asked / requested", note: "past part. chiedere" },
+      "protezione": { en: "protection", note: "Sp: protección" },
+      "sia": { en: "be (subj.)", note: "subj. of essere" },
+      "stato": { en: "been", note: "past part. essere/stare" },
+      "abbandonato": { en: "abandoned", note: "Sp: abandonado" },
+      "animato": { en: "animated / inspired", note: "Sp: animado" },
+      "tale": { en: "such", note: "Sp: tal" },
+      "confidenza": { en: "confidence / trust", note: "Sp: confianza" },
+      "ricorro": { en: "I turn / fly", note: "verb ricorrere" },
+      "dinanzi": { en: "before / in front of", note: "literary 'davanti'" },
+      "prostro": { en: "I prostrate myself", note: "Sp: postro" },
+      "pentito": { en: "repentant", note: "Sp: arrepentido" },
+      "verbo": { en: "Word (Logos)", note: "Sp: Verbo" },
+      "disprezzare": { en: "to despise", note: "Sp: despreciar" },
+      "preghiere": { en: "prayers", note: "Sp: oraciones" },
+      "ascoltami": { en: "listen to me", note: "ascolta + mi" },
+      "benigna": { en: "kind (f.)", note: "Sp: benigna" }
+    }
+  },
+  // ===== SAINTS =====
+  {
+    id: "agostino-tardi",
+    title: "Sant\'Agostino · Tardi ti ho amato",
+    source: "Confessioni X, 27, 38",
+    category: "saints",
+    difficulty: 3,
+    paragraphs: [
+      {
+        it: "Tardi ti ho amato, bellezza tanto antica e tanto nuova, tardi ti ho amato!",
+        en: "Late have I loved thee, beauty so ancient and so new, late have I loved thee!"
+      },
+      {
+        it: "Ed ecco, tu eri dentro di me, e io fuori, e là ti cercavo. Deformemente mi gettavo sulle belle forme delle tue creature.",
+        en: "And behold, thou wert within me, and I outside, and I was seeking thee there. Deformed, I rushed upon the beautiful forms of thy creatures."
+      },
+      {
+        it: "Tu eri con me, ma io non ero con te. Mi tenevano lontano da te quelle creature che, se non fossero in te, non sarebbero.",
+        en: "Thou wert with me, but I was not with thee. They held me far from thee, those creatures which, if they were not in thee, would not be."
+      },
+      {
+        it: "Mi hai chiamato, hai gridato, hai squarciato la mia sordità; hai brillato, hai sfolgorato, hai dissipato la mia cecità.",
+        en: "Thou hast called me, hast cried out, hast pierced my deafness; thou hast shone, hast blazed forth, hast dispelled my blindness."
+      },
+      {
+        it: "Hai sparso il tuo profumo, e io ho respirato e ora anelo a te; ho gustato, e ora ho fame e sete; mi hai toccato, e ardo nella tua pace.",
+        en: "Thou hast breathed thy fragrance, and I have drawn in breath and now I pant for thee; I have tasted, and now I hunger and thirst; thou hast touched me, and I burn for thy peace."
+      }
+    ],
+    glosses: {
+      "tardi": { en: "late", note: "Sp: tarde" },
+      "amato": { en: "loved", note: "past part. amare" },
+      "bellezza": { en: "beauty", note: "Sp: belleza (zz!)" },
+      "antica": { en: "ancient (f.)", note: "Sp: antigua" },
+      "nuova": { en: "new (f.)", note: "Sp: nueva" },
+      "ecco": { en: "behold / here is", note: "Sp: he aquí" },
+      "eri": { en: "you were", note: "imperfect of essere" },
+      "dentro": { en: "inside", note: "Sp: dentro" },
+      "fuori": { en: "outside", note: "Sp: fuera" },
+      "là": { en: "there", note: "Sp: allá" },
+      "cercavo": { en: "I was seeking", note: "imperfect cercare" },
+      "deformemente": { en: "deformedly / disfiguringly", note: "deforme + -mente" },
+      "gettavo": { en: "I was throwing/casting myself", note: "imperfect gettare" },
+      "belle": { en: "beautiful (f.pl.)", note: "Sp: bellas" },
+      "forme": { en: "forms", note: "Sp: formas" },
+      "creature": { en: "creatures", note: "Sp: criaturas" },
+      "tenevano": { en: "they were holding", note: "imperfect tenere" },
+      "lontano": { en: "far", note: "Sp: lejos" },
+      "fossero": { en: "they were (subj.)", note: "subj. imperfect of essere" },
+      "sarebbero": { en: "they would be", note: "conditional of essere" },
+      "chiamato": { en: "called", note: "past part. chiamare" },
+      "gridato": { en: "shouted", note: "Sp: gritado" },
+      "squarciato": { en: "torn / pierced", note: "Sp: rasgado" },
+      "sordità": { en: "deafness", note: "Sp: sordera" },
+      "brillato": { en: "shone", note: "Sp: brillado" },
+      "sfolgorato": { en: "blazed forth", note: "intensified 'folgorato'" },
+      "dissipato": { en: "dispelled", note: "Sp: disipado" },
+      "cecità": { en: "blindness", note: "Sp: ceguera" },
+      "sparso": { en: "spread / breathed", note: "past part. spargere" },
+      "profumo": { en: "fragrance / perfume", note: "Sp: perfume" },
+      "respirato": { en: "breathed in", note: "Sp: respirado" },
+      "anelo": { en: "I yearn / pant", note: "Sp: anhelo" },
+      "gustato": { en: "tasted", note: "Sp: gustado" },
+      "fame": { en: "hunger", note: "Sp: hambre (h↔f)" },
+      "sete": { en: "thirst", note: "Sp: sed" },
+      "toccato": { en: "touched", note: "Sp: tocado" },
+      "ardo": { en: "I burn", note: "Sp: ardo" }
+    }
+  },
+  {
+    id: "teresa-avila",
+    title: "Santa Teresa d\'Avila · Nulla ti turbi",
+    source: "Bigliettino del breviario di santa Teresa",
+    category: "saints",
+    difficulty: 1,
+    paragraphs: [
+      {
+        it: "Nulla ti turbi, nulla ti spaventi: tutto passa.",
+        en: "Let nothing disturb you, nothing frighten you: all things pass."
+      },
+      {
+        it: "Dio non muta, la pazienza tutto ottiene.",
+        en: "God does not change. Patience obtains all things."
+      },
+      {
+        it: "Chi ha Dio, nulla gli manca: Dio solo basta.",
+        en: "Whoever has God, lacks for nothing: God alone suffices."
+      }
+    ],
+    glosses: {
+      "nulla": { en: "nothing", note: "Sp: nada" },
+      "turbi": { en: "disturb (subj.)", note: "subj. of turbare" },
+      "spaventi": { en: "frighten (subj.)", note: "subj. of spaventare" },
+      "tutto": { en: "everything / all", note: "Sp: todo" },
+      "passa": { en: "passes", note: "Sp: pasa" },
+      "muta": { en: "changes", note: "Sp: muda" },
+      "pazienza": { en: "patience", note: "Sp: paciencia" },
+      "ottiene": { en: "obtains", note: "Sp: obtiene" },
+      "manca": { en: "is lacking", note: "Sp: falta" },
+      "solo": { en: "alone / only", note: "Sp: solo" },
+      "basta": { en: "is enough / suffices", note: "Sp: basta" }
+    }
+  },
+  {
+    id: "therese-piccola-via",
+    title: "Santa Teresa di Lisieux · La piccola via",
+    source: "Storia di un\'anima · cap. IX",
+    category: "saints",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "Voglio cercare il mezzo di andare in Cielo per una piccola via, ben dritta, ben corta, una piccola via tutta nuova.",
+        en: "I want to seek a way to go to Heaven by a little path, very straight, very short, a little path entirely new."
+      },
+      {
+        it: "Siamo in un secolo di invenzioni; ora non vale più la pena di salire i gradini di una scala: presso i ricchi un ascensore li sostituisce vantaggiosamente.",
+        en: "We live in an age of inventions; nowadays it is no longer worthwhile to climb the steps of a stairway: in the homes of the rich an elevator replaces them advantageously."
+      },
+      {
+        it: "Vorrei trovare anch\'io un ascensore per innalzarmi fino a Gesù, perché sono troppo piccola per salire la dura scala della perfezione.",
+        en: "I would like to find an elevator too, to lift me up to Jesus, because I am too small to climb the rough stairway of perfection."
+      },
+      {
+        it: "Allora ho cercato nei libri sacri l\'indicazione dell\'ascensore, oggetto del mio desiderio, e ho letto queste parole uscite dalla bocca della Sapienza eterna: «Chiunque è piccolo, venga a me».",
+        en: "So I searched in the sacred books for an indication of the elevator I longed for, and I read these words coming from the mouth of Eternal Wisdom: 'Whoever is little, let him come to me.'"
+      }
+    ],
+    glosses: {
+      "voglio": { en: "I want", note: "verb volere" },
+      "cercare": { en: "to seek / look for", note: "Sp: buscar" },
+      "mezzo": { en: "means / middle", note: "Sp: medio" },
+      "andare": { en: "to go", note: "Sp: ir" },
+      "cielo": { en: "heaven / sky", note: "Sp: cielo" },
+      "piccola": { en: "small / little (f.)", note: "Sp: pequeña" },
+      "via": { en: "way / road", note: "Sp: vía" },
+      "ben": { en: "well (apocopated)", note: "shortened 'bene'" },
+      "dritta": { en: "straight (f.)", note: "Sp: derecha / recta" },
+      "corta": { en: "short (f.)", note: "Sp: corta" },
+      "siamo": { en: "we are", note: "1pl essere" },
+      "secolo": { en: "century / age", note: "Sp: siglo" },
+      "invenzioni": { en: "inventions", note: "Sp: invenciones (-ciones → -zioni)" },
+      "vale": { en: "is worth", note: "verb valere" },
+      "pena": { en: "trouble / pain", note: "Sp: pena" },
+      "salire": { en: "to GO UP", note: "FALSO AMICO! Sp: salir = leave" },
+      "gradini": { en: "steps", note: "Sp: escalones / peldaños" },
+      "scala": { en: "stairway / ladder", note: "Sp: escalera" },
+      "presso": { en: "by / at the home of", note: "Sp: en casa de" },
+      "ascensore": { en: "elevator", note: "Sp: ascensor" },
+      "sostituisce": { en: "replaces", note: "Sp: sustituye" },
+      "vantaggiosamente": { en: "advantageously", note: "Sp: ventajosamente" },
+      "vorrei": { en: "I would like", note: "conditional volere" },
+      "trovare": { en: "to find", note: "Sp: encontrar (different)" },
+      "innalzarmi": { en: "to lift myself up", note: "innalzare + mi" },
+      "fino": { en: "until / up to", note: "Sp: hasta" },
+      "troppo": { en: "too / too much", note: "Sp: demasiado" },
+      "dura": { en: "hard / harsh (f.)", note: "Sp: dura" },
+      "perfezione": { en: "perfection", note: "Sp: perfección" },
+      "allora": { en: "then / so", note: "Sp: entonces" },
+      "libri": { en: "books", note: "Sp: libros" },
+      "sacri": { en: "sacred (m.pl.)", note: "Sp: sagrados" },
+      "indicazione": { en: "indication", note: "Sp: indicación" },
+      "oggetto": { en: "object", note: "Sp: objeto" },
+      "desiderio": { en: "desire", note: "Sp: deseo" },
+      "letto": { en: "read (past part.)", note: "past part. leggere" },
+      "parole": { en: "words", note: "Sp: palabras" },
+      "uscite": { en: "come out / exited (f.pl.)", note: "past part. uscire" },
+      "bocca": { en: "mouth", note: "Sp: boca" },
+      "sapienza": { en: "wisdom", note: "Sp: sabiduría" },
+      "eterna": { en: "eternal (f.)", note: "Sp: eterna" },
+      "chiunque": { en: "whoever", note: "Sp: quienquiera" },
+      "venga": { en: "let him come (subj.)", note: "subj. of venire" }
+    }
+  },
+  {
+    id: "francesco-cantico",
+    title: "San Francesco · Cantico delle Creature",
+    source: "Cantico di Frate Sole, ca. 1224 · versione modernizzata",
+    category: "saints",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "Altissimo, onnipotente, buon Signore, tue sono le lodi, la gloria e l\'onore e ogni benedizione.",
+        en: "Most High, almighty, good Lord, yours are the praises, the glory, the honor, and every blessing."
+      },
+      {
+        it: "A te solo, Altissimo, si addicono, e nessun uomo è degno di nominarti.",
+        en: "To you alone, Most High, do they belong, and no man is worthy to mention your name."
+      },
+      {
+        it: "Lodato sii, mio Signore, con tutte le tue creature, specialmente messer fratello Sole, il quale fa il giorno, e tu ci illumini per mezzo di lui.",
+        en: "Praised be you, my Lord, with all your creatures, especially Sir Brother Sun, who makes the day, and through whom you give us light."
+      },
+      {
+        it: "Ed esso è bello e radioso con grande splendore: di te, Altissimo, porta significazione.",
+        en: "And he is beautiful and radiant with great splendor: of you, Most High, he bears the likeness."
+      },
+      {
+        it: "Lodato sii, mio Signore, per sora Luna e le stelle: in cielo le hai formate chiare e preziose e belle.",
+        en: "Praised be you, my Lord, for Sister Moon and the stars: in heaven you have formed them clear and precious and beautiful."
+      }
+    ],
+    glosses: {
+      "altissimo": { en: "Most High", note: "alto + -issimo (superlative)" },
+      "onnipotente": { en: "almighty", note: "Sp: omnipotente" },
+      "lodi": { en: "praises", note: "Sp: alabanzas" },
+      "gloria": { en: "glory", note: "Sp: gloria" },
+      "onore": { en: "honor", note: "Sp: honor" },
+      "ogni": { en: "every", note: "Sp: cada / todo" },
+      "benedizione": { en: "blessing", note: "Sp: bendición (-ción → -zione)" },
+      "addicono": { en: "are fitting / belong", note: "verb addirsi" },
+      "nessun": { en: "no / not any", note: "Sp: ningún" },
+      "uomo": { en: "man", note: "Sp: hombre (h↔f? no — hombre→uomo)" },
+      "degno": { en: "worthy", note: "Sp: digno (gn!)" },
+      "nominarti": { en: "to name you", note: "nominare + ti" },
+      "lodato": { en: "praised", note: "past part. lodare" },
+      "sii": { en: "be (imp.)", note: "imp. of essere" },
+      "creature": { en: "creatures", note: "Sp: criaturas" },
+      "specialmente": { en: "especially", note: "Sp: especialmente" },
+      "messer": { en: "Sir / lord (archaic)", note: "from messere" },
+      "fratello": { en: "brother", note: "Sp: hermano (h↔f)" },
+      "sole": { en: "sun", note: "Sp: sol" },
+      "giorno": { en: "day", note: "Sp: día (different)" },
+      "illumini": { en: "you illuminate", note: "Sp: iluminas" },
+      "mezzo": { en: "means / middle", note: "per mezzo di = through" },
+      "esso": { en: "it / he (literary)", note: "literary form" },
+      "bello": { en: "beautiful (m.)", note: "Sp: bello" },
+      "radioso": { en: "radiant", note: "Sp: radiante" },
+      "splendore": { en: "splendor", note: "Sp: esplendor" },
+      "porta": { en: "bears / carries", note: "verb portare" },
+      "significazione": { en: "signification / likeness", note: "Sp: significación" },
+      "sora": { en: "sister (archaic)", note: "old form of 'suora'" },
+      "luna": { en: "moon", note: "Sp: luna" },
+      "stelle": { en: "stars", note: "Sp: estrellas" },
+      "formate": { en: "formed (f.pl.)", note: "past part. formare" },
+      "chiare": { en: "clear (f.pl.)", note: "Sp: claras" },
+      "preziose": { en: "precious (f.pl.)", note: "Sp: preciosas" }
+    }
+  },
+  // ===== MAGISTERIUM =====
+  {
+    id: "ccc-27",
+    title: "Catechismo · Il desiderio di Dio",
+    source: "Catechismo della Chiesa Cattolica, n. 27",
+    category: "magisterium",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "Il desiderio di Dio è inscritto nel cuore dell\'uomo, perché l\'uomo è stato creato da Dio e per Dio; Dio non cessa di attirare a sé l\'uomo, e soltanto in Dio l\'uomo troverà la verità e la felicità che cerca senza posa.",
+        en: "The desire for God is written in the human heart, because man is created by God and for God; God never ceases to draw man to himself, and only in God will man find the truth and happiness for which he ceaselessly searches."
+      },
+      {
+        it: "La dignità dell\'uomo, in modo del tutto speciale, è radicata nella sua chiamata alla comunione con Dio.",
+        en: "The dignity of man, in a wholly special way, is rooted in his calling to communion with God."
+      }
+    ],
+    glosses: {
+      "desiderio": { en: "desire", note: "Sp: deseo" },
+      "inscritto": { en: "written / inscribed", note: "Sp: inscrito" },
+      "uomo": { en: "man / human", note: "Lat: homo" },
+      "creato": { en: "created", note: "Sp: creado" },
+      "cessa": { en: "ceases", note: "Sp: cesa" },
+      "attirare": { en: "to draw / attract", note: "Sp: atraer" },
+      "sé": { en: "himself / oneself", note: "Sp: sí" },
+      "soltanto": { en: "only", note: "solo + -tanto" },
+      "troverà": { en: "will find", note: "future of trovare" },
+      "verità": { en: "truth", note: "Sp: verdad (-dad → -tà)" },
+      "felicità": { en: "happiness", note: "Sp: felicidad (-dad → -tà)" },
+      "cerca": { en: "seeks", note: "verb cercare" },
+      "senza": { en: "without", note: "Sp: sin" },
+      "posa": { en: "rest / pause", note: "senza posa = ceaselessly" },
+      "dignità": { en: "dignity", note: "Sp: dignidad (-dad → -tà)" },
+      "modo": { en: "way / manner", note: "Sp: modo" },
+      "del": { en: "of the (m.)", note: "di + il" },
+      "tutto": { en: "all / wholly", note: "Sp: todo" },
+      "speciale": { en: "special", note: "Sp: especial" },
+      "radicata": { en: "rooted (f.)", note: "Sp: arraigada" },
+      "chiamata": { en: "call / calling", note: "noun from chiamare" },
+      "comunione": { en: "communion", note: "Sp: comunión" }
+    }
+  },
+  {
+    id: "ccc-2559",
+    title: "Catechismo · Cos\'è la preghiera",
+    source: "Catechismo della Chiesa Cattolica, n. 2559",
+    category: "magisterium",
+    difficulty: 3,
+    paragraphs: [
+      {
+        it: "«La preghiera è l\'elevazione dell\'anima a Dio o la richiesta a Dio di beni convenienti».",
+        en: "Prayer is the elevation of the soul to God, or the request to God for fitting goods."
+      },
+      {
+        it: "Da dove parliamo nella preghiera? Dall\'altezza del nostro orgoglio e della nostra volontà, o dal «profondo» di un cuore umile e contrito?",
+        en: "From where do we speak in prayer? From the height of our pride and our will, or from the depth of a humble and contrite heart?"
+      },
+      {
+        it: "Colui che si umilia, sarà esaltato. L\'umiltà è il fondamento della preghiera.",
+        en: "He who humbles himself will be exalted. Humility is the foundation of prayer."
+      }
+    ],
+    glosses: {
+      "elevazione": { en: "elevation", note: "Sp: elevación" },
+      "richiesta": { en: "request", note: "Sp: petición / solicitud" },
+      "beni": { en: "goods / blessings", note: "Sp: bienes" },
+      "convenienti": { en: "fitting / suitable", note: "Sp: convenientes" },
+      "dove": { en: "where", note: "Sp: dónde" },
+      "parliamo": { en: "we speak", note: "verb parlare (Sp: hablar)" },
+      "altezza": { en: "height", note: "Sp: altura" },
+      "orgoglio": { en: "pride", note: "Sp: orgullo (ll↔gli)" },
+      "volontà": { en: "will", note: "Sp: voluntad" },
+      "profondo": { en: "deep / depth", note: "Sp: profundo" },
+      "umile": { en: "humble", note: "Sp: humilde" },
+      "contrito": { en: "contrite", note: "Sp: contrito" },
+      "colui": { en: "he who / the one", note: "literary 'quello'" },
+      "umilia": { en: "humbles (refl.)", note: "verb umiliare" },
+      "esaltato": { en: "exalted", note: "Sp: exaltado" },
+      "fondamento": { en: "foundation", note: "Sp: fundamento" }
+    }
+  },
+  {
+    id: "deus-caritas-est",
+    title: "Benedetto XVI · Deus Caritas Est",
+    source: "Lettera enciclica · 25 dicembre 2005",
+    category: "magisterium",
+    difficulty: 3,
+    paragraphs: [
+      {
+        it: "«Dio è amore; chi sta nell\'amore dimora in Dio e Dio dimora in lui».",
+        en: "God is love; he who abides in love abides in God, and God in him."
+      },
+      {
+        it: "Queste parole della Prima Lettera di Giovanni esprimono con singolare chiarezza il centro della fede cristiana: l\'immagine cristiana di Dio e anche la conseguente immagine dell\'uomo e del suo cammino.",
+        en: "These words from the First Letter of John express with singular clarity the heart of the Christian faith: the Christian image of God, and also the resulting image of man and of his journey."
+      },
+      {
+        it: "Inoltre, nello stesso versetto, Giovanni ci offre, per così dire, una formula sintetica dell\'esistenza cristiana: «Noi abbiamo riconosciuto l\'amore che Dio ha per noi e vi abbiamo creduto».",
+        en: "Moreover, in the same verse, John offers us, so to speak, a synthetic formula of Christian existence: 'We have come to know and to believe in the love God has for us.'"
+      }
+    ],
+    glosses: {
+      "amore": { en: "love", note: "Sp: amor" },
+      "sta": { en: "stays / is", note: "verb stare" },
+      "dimora": { en: "dwells / abides", note: "Sp: mora / habita" },
+      "lui": { en: "him / he", note: "Sp: él" },
+      "queste": { en: "these (f.)", note: "Sp: estas" },
+      "parole": { en: "words", note: "Sp: palabras" },
+      "lettera": { en: "letter / epistle", note: "Sp: carta" },
+      "esprimono": { en: "they express", note: "verb esprimere" },
+      "singolare": { en: "singular", note: "Sp: singular" },
+      "chiarezza": { en: "clarity", note: "Sp: claridad (-dad → -tà; alt form)" },
+      "centro": { en: "center", note: "Sp: centro" },
+      "fede": { en: "faith", note: "Sp: fe" },
+      "cristiana": { en: "Christian (f.)", note: "Sp: cristiana" },
+      "immagine": { en: "image", note: "Sp: imagen" },
+      "anche": { en: "also / even", note: "Sp: también" },
+      "conseguente": { en: "consequent / resulting", note: "Sp: consiguiente" },
+      "cammino": { en: "way / journey", note: "Sp: camino" },
+      "inoltre": { en: "moreover / furthermore", note: "literary connector" },
+      "stesso": { en: "same", note: "Sp: mismo" },
+      "versetto": { en: "verse (Bible)", note: "Sp: versículo" },
+      "offre": { en: "offers", note: "Sp: ofrece" },
+      "dire": { en: "to say", note: "Sp: decir" },
+      "formula": { en: "formula", note: "Sp: fórmula" },
+      "sintetica": { en: "synthetic / brief (f.)", note: "Sp: sintética" },
+      "esistenza": { en: "existence", note: "Sp: existencia" },
+      "noi": { en: "we / us", note: "Sp: nosotros" },
+      "abbiamo": { en: "we have", note: "1pl avere" },
+      "riconosciuto": { en: "recognized", note: "Sp: reconocido" },
+      "creduto": { en: "believed", note: "past part. credere" }
+    }
+  },
+  {
+    id: "laudato-si",
+    title: "Papa Francesco · Laudato Si\'",
+    source: "Lettera enciclica · 24 maggio 2015",
+    category: "magisterium",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "«Laudato si\', mi\' Signore», cantava san Francesco d\'Assisi.",
+        en: "'Praised be you, my Lord,' sang Saint Francis of Assisi."
+      },
+      {
+        it: "In questo bel cantico ci ricordava che la nostra casa comune è anche come una sorella, con la quale condividiamo l\'esistenza, e come una madre bella che ci accoglie tra le sue braccia.",
+        en: "In this beautiful canticle he reminded us that our common home is also like a sister, with whom we share existence, and like a beautiful mother who welcomes us in her arms."
+      },
+      {
+        it: "Questa sorella protesta per il male che le provochiamo, a causa dell\'uso irresponsabile e dell\'abuso dei beni che Dio ha posto in lei.",
+        en: "This sister now cries out to us because of the harm we have inflicted on her, by our irresponsible use and abuse of the goods which God has bestowed on her."
+      }
+    ],
+    glosses: {
+      "laudato": { en: "praised (Old Umbrian)", note: "modern 'lodato'" },
+      "si\'": { en: "be (Old Umbrian)", note: "modern 'sii'" },
+      "mi\'": { en: "my (apocopated)", note: "modern 'mio'" },
+      "cantava": { en: "was singing", note: "imperfect cantare" },
+      "questo": { en: "this (m.)", note: "Sp: este" },
+      "bel": { en: "beautiful (m. apoc.)", note: "before consonant: bel" },
+      "cantico": { en: "canticle / hymn", note: "Sp: cántico" },
+      "ricordava": { en: "was reminding", note: "imperfect ricordare" },
+      "casa": { en: "house / home", note: "Sp: casa" },
+      "comune": { en: "common", note: "Sp: común" },
+      "anche": { en: "also", note: "Sp: también" },
+      "sorella": { en: "sister", note: "Sp: hermana (h↔f, related)" },
+      "quale": { en: "which / who", note: "la quale = with whom" },
+      "condividiamo": { en: "we share", note: "Sp: compartimos" },
+      "madre": { en: "mother", note: "Sp: madre" },
+      "bella": { en: "beautiful (f.)", note: "Sp: bella" },
+      "accoglie": { en: "welcomes / receives", note: "verb accogliere" },
+      "tra": { en: "between / among", note: "Sp: entre" },
+      "braccia": { en: "arms (f.pl.)", note: "irregular plural of braccio" },
+      "questa": { en: "this (f.)", note: "Sp: esta" },
+      "protesta": { en: "protests / cries out", note: "Sp: protesta" },
+      "male": { en: "evil / harm", note: "Sp: mal" },
+      "provochiamo": { en: "we cause", note: "Sp: provocamos" },
+      "causa": { en: "cause", note: "a causa di = because of" },
+      "uso": { en: "use", note: "Sp: uso" },
+      "irresponsabile": { en: "irresponsible", note: "Sp: irresponsable" },
+      "abuso": { en: "abuse", note: "Sp: abuso" },
+      "posto": { en: "placed", note: "past part. porre" },
+      "lei": { en: "her / she", note: "Sp: ella" }
+    }
+  },
+  {
+    id: "jp2-non-abbiate-paura",
+    title: "Giovanni Paolo II · Non abbiate paura",
+    source: "Omelia di inizio del pontificato · 22 ottobre 1978",
+    category: "magisterium",
+    difficulty: 2,
+    paragraphs: [
+      {
+        it: "Non abbiate paura! Aprite, anzi, spalancate le porte a Cristo!",
+        en: "Be not afraid! Open, indeed, throw wide the doors to Christ!"
+      },
+      {
+        it: "Alla sua salvatrice potestà aprite i confini degli Stati, i sistemi economici come quelli politici, i vasti campi di cultura, di civiltà, di sviluppo.",
+        en: "To his saving power open the boundaries of States, economic systems as well as political ones, the vast fields of culture, civilization, and development."
+      },
+      {
+        it: "Non abbiate paura! Cristo sa cosa è dentro l\'uomo. Solo lui lo sa!",
+        en: "Be not afraid! Christ knows what is within man. He alone knows!"
+      },
+      {
+        it: "Permettete, quindi, a Cristo di parlare all\'uomo. Solo lui ha parole di vita, sì, di vita eterna.",
+        en: "Allow, therefore, Christ to speak to man. He alone has words of life, yes, of eternal life."
+      }
+    ],
+    glosses: {
+      "abbiate": { en: "have (subj./imp.)", note: "subj./imp. of avere" },
+      "paura": { en: "fear", note: "Sp: miedo (different)" },
+      "aprite": { en: "open (imp.)", note: "imp. of aprire" },
+      "anzi": { en: "rather / indeed", note: "Sp: más bien" },
+      "spalancate": { en: "throw wide (imp.)", note: "spalancare = open wide" },
+      "porte": { en: "doors", note: "Sp: puertas (ue→o)" },
+      "salvatrice": { en: "saving (f.)", note: "Sp: salvadora" },
+      "potestà": { en: "power", note: "Sp: potestad (-tad → -tà)" },
+      "confini": { en: "borders / boundaries", note: "Sp: confines" },
+      "sistemi": { en: "systems", note: "Sp: sistemas (irregular gender)" },
+      "economici": { en: "economic", note: "Sp: económicos" },
+      "quelli": { en: "those (m.pl.)", note: "Sp: aquellos" },
+      "politici": { en: "political (m.pl.)", note: "Sp: políticos" },
+      "vasti": { en: "vast (m.pl.)", note: "Sp: vastos" },
+      "campi": { en: "fields", note: "Sp: campos" },
+      "cultura": { en: "culture", note: "Sp: cultura" },
+      "civiltà": { en: "civilization", note: "Sp: civilidad / civilización" },
+      "sviluppo": { en: "development", note: "Sp: desarrollo (different)" },
+      "sa": { en: "knows", note: "verb sapere" },
+      "cosa": { en: "thing / what", note: "Sp: cosa" },
+      "permettete": { en: "permit (imp.)", note: "imp. of permettere" },
+      "quindi": { en: "therefore", note: "Sp: por lo tanto" },
+      "parlare": { en: "to speak", note: "Sp: hablar" },
+      "sì": { en: "yes (with accent)", note: "Sp: sí; Italian 'si' = oneself" }
+    }
+  },
+  // ===== LITERATURE =====
+  {
+    id: "manzoni-incipit",
+    title: "Manzoni · Quel ramo del lago di Como",
+    source: "I Promessi Sposi · cap. I",
+    category: "literature",
+    difficulty: 3,
+    paragraphs: [
+      {
+        it: "Quel ramo del lago di Como, che volge a mezzogiorno, tra due catene non interrotte di monti, tutto a seni e a golfi, a seconda dello sporgere e del rientrare di quelli, vien, quasi a un tratto, a ristringersi.",
+        en: "That branch of Lake Como which turns toward the south, between two unbroken chains of mountains, all bays and gulfs according to the jutting out and receding of these, comes, almost all at once, to narrow."
+      },
+      {
+        it: "E a prender corso e figura di fiume, tra un promontorio a destra, e un\'ampia costiera dall\'altra parte.",
+        en: "And to take the course and shape of a river, between a promontory on the right, and a wide shoreline on the other side."
+      },
+      {
+        it: "Il ponte, che ivi congiunge le due rive, par che renda ancor più sensibile all\'occhio questa trasformazione, e segni il punto in cui il lago cessa, e l\'Adda rincomincia.",
+        en: "The bridge, which there joins the two banks, seems to make this transformation even more visible to the eye, and marks the point where the lake ends, and the Adda begins again."
+      }
+    ],
+    glosses: {
+      "quel": { en: "that (m. apoc.)", note: "quello before consonant" },
+      "ramo": { en: "branch", note: "Sp: rama" },
+      "lago": { en: "lake", note: "Sp: lago" },
+      "como": { en: "Como (city)", note: "in Lombardy" },
+      "volge": { en: "turns", note: "verb volgere" },
+      "mezzogiorno": { en: "south / noon", note: "lit. 'midday'; here south" },
+      "catene": { en: "chains", note: "Sp: cadenas" },
+      "interrotte": { en: "interrupted (f.pl.)", note: "past part. interrompere" },
+      "monti": { en: "mountains", note: "Sp: montes" },
+      "seni": { en: "bays / breasts", note: "here: bays of a lake" },
+      "golfi": { en: "gulfs", note: "Sp: golfos" },
+      "seconda": { en: "according to", note: "a seconda di = according to" },
+      "sporgere": { en: "to jut out", note: "verb sporgere" },
+      "rientrare": { en: "to recede / re-enter", note: "ri- + entrare" },
+      "vien": { en: "comes (apoc.)", note: "shortened from 'viene'" },
+      "quasi": { en: "almost", note: "Sp: casi" },
+      "tratto": { en: "stretch / moment", note: "a un tratto = suddenly" },
+      "ristringersi": { en: "to narrow itself", note: "ri + stringere + si" },
+      "prender": { en: "to take (apoc.)", note: "shortened 'prendere'" },
+      "corso": { en: "course", note: "Sp: curso" },
+      "figura": { en: "shape / figure", note: "Sp: figura" },
+      "fiume": { en: "river", note: "Sp: río" },
+      "promontorio": { en: "promontory", note: "Sp: promontorio" },
+      "destra": { en: "right (side)", note: "Sp: derecha" },
+      "ampia": { en: "wide (f.)", note: "Sp: amplia" },
+      "costiera": { en: "shoreline / coast", note: "Sp: costa / costera" },
+      "altra": { en: "other (f.)", note: "Sp: otra" },
+      "parte": { en: "part / side", note: "Sp: parte" },
+      "ponte": { en: "bridge", note: "Sp: puente (ue→o)" },
+      "ivi": { en: "there (literary)", note: "literary form of 'lì'" },
+      "congiunge": { en: "joins / connects", note: "verb congiungere" },
+      "rive": { en: "banks / shores", note: "Sp: riberas / orillas" },
+      "par": { en: "seems (apoc.)", note: "shortened 'pare'" },
+      "renda": { en: "renders (subj.)", note: "subj. of rendere" },
+      "ancor": { en: "still / yet (apoc.)", note: "shortened 'ancora'" },
+      "sensibile": { en: "visible / perceptible", note: "Sp: sensible / visible" },
+      "occhio": { en: "eye", note: "Sp: ojo (j→cchi)" },
+      "trasformazione": { en: "transformation", note: "Sp: transformación" },
+      "segni": { en: "marks / signs (subj.)", note: "subj. of segnare" },
+      "punto": { en: "point", note: "Sp: punto" },
+      "cessa": { en: "ceases / ends", note: "Sp: cesa" },
+      "rincomincia": { en: "begins again", note: "ri- + (in)cominciare" }
+    }
+  },
+  {
+    id: "manzoni-addio",
+    title: "Manzoni · Addio ai monti",
+    source: "I Promessi Sposi · cap. VIII",
+    category: "literature",
+    difficulty: 3,
+    paragraphs: [
+      {
+        it: "Addio, monti sorgenti dall\'acque, ed elevati al cielo; cime inuguali, note a chi è cresciuto tra voi, e impresse nella sua mente, non meno che lo sia l\'aspetto de\' suoi più familiari.",
+        en: "Farewell, mountains rising from the waters and lifted to the sky; uneven peaks, known to one who has grown up among you, and stamped in his mind, no less than the faces of his nearest kin."
+      },
+      {
+        it: "Torrenti, dei quali distingue lo scroscio, come il suono delle voci domestiche; ville sparse e biancheggianti sul pendio, come branchi di pecore pascenti; addio!",
+        en: "Torrents, whose roar he distinguishes like the sound of familiar voices; villas scattered and gleaming white on the slope, like flocks of grazing sheep; farewell!"
+      },
+      {
+        it: "Quanto è triste il passo di chi, cresciuto tra voi, se ne allontana!",
+        en: "How sorrowful is the step of one who, having grown up among you, departs from you!"
+      }
+    ],
+    glosses: {
+      "addio": { en: "farewell / goodbye", note: "Sp: adiós" },
+      "sorgenti": { en: "rising", note: "from sorgere" },
+      "acque": { en: "waters", note: "Sp: aguas" },
+      "elevati": { en: "lifted up (m.pl.)", note: "Sp: elevados" },
+      "cime": { en: "peaks / summits", note: "Sp: cimas" },
+      "inuguali": { en: "unequal (m.pl.)", note: "in- + uguali" },
+      "note": { en: "known (f.pl.)", note: "past part. of conoscere; here adj." },
+      "cresciuto": { en: "grown up", note: "past part. crescere" },
+      "voi": { en: "you (pl.)", note: "Sp: vosotros" },
+      "impresse": { en: "imprinted (f.pl.)", note: "past part. imprimere" },
+      "mente": { en: "mind", note: "Sp: mente" },
+      "meno": { en: "less", note: "Sp: menos" },
+      "aspetto": { en: "appearance / aspect", note: "Sp: aspecto" },
+      "de\'": { en: "of the (apoc.)", note: "shortened 'dei'" },
+      "suoi": { en: "his / her (m.pl.)", note: "Sp: sus" },
+      "più": { en: "most / more", note: "Sp: más" },
+      "familiari": { en: "family members / familiars", note: "Sp: familiares" },
+      "torrenti": { en: "torrents / mountain streams", note: "Sp: torrentes" },
+      "distingue": { en: "distinguishes", note: "Sp: distingue" },
+      "scroscio": { en: "roar / cascade sound", note: "onomatopoeic" },
+      "suono": { en: "sound", note: "Sp: sonido" },
+      "voci": { en: "voices", note: "Sp: voces" },
+      "domestiche": { en: "familiar / household (f.pl.)", note: "Sp: domésticas" },
+      "ville": { en: "villas / country houses", note: "Sp: villas" },
+      "sparse": { en: "scattered (f.pl.)", note: "past part. spargere" },
+      "biancheggianti": { en: "gleaming white", note: "from biancheggiare" },
+      "pendio": { en: "slope", note: "Sp: pendiente" },
+      "branchi": { en: "flocks / herds", note: "Sp: rebaños / manadas" },
+      "pecore": { en: "sheep (pl.)", note: "Sp: ovejas" },
+      "pascenti": { en: "grazing", note: "from pascere" },
+      "quanto": { en: "how / how much", note: "Sp: cuán / cuánto" },
+      "triste": { en: "sad", note: "Sp: triste" },
+      "passo": { en: "step", note: "Sp: paso" },
+      "allontana": { en: "moves away (refl.)", note: "ad + lontano + verb" }
+    }
+  }
+
 ];
 
 // === DATA: GRAMMAR ===
@@ -1319,8 +2197,8 @@ function updateStats() {
   if (readsEl) readsEl.textContent = state.readTexts.length;
   if (streakEl) streakEl.textContent = state.streak;
   if (wordsEl) {
-    const total = Object.values(VOCAB_THEMES).reduce((s, t) => s + t.words.length, 0);
-    wordsEl.textContent = total;
+    // Saved (personal) words — the meaningful number for the user
+    wordsEl.textContent = savedWords.length;
   }
 }
 
@@ -1417,52 +2295,54 @@ function toggleLesson(id) {
 function renderReadings() {
   const list = document.getElementById('reading-list');
   list.innerHTML = '';
+  const CATEGORIES = [
+    { key: 'prayers',     label: 'Preghiere' },
+    { key: 'saints',      label: 'Santi & Mistici' },
+    { key: 'magisterium', label: 'Magistero' },
+    { key: 'literature',  label: 'Letteratura' }
+  ];
+  // Bucket readings, including any without category (shouldn't happen but safe)
+  const buckets = {};
+  CATEGORIES.forEach(c => buckets[c.key] = []);
+  buckets._other = [];
   READINGS.forEach(r => {
+    if (r.category && buckets[r.category]) buckets[r.category].push(r);
+    else buckets._other.push(r);
+  });
+  function renderCard(r) {
     const card = document.createElement('div');
     card.className = 'text-card' + (state.readTexts.includes(r.id) ? ' read' : '');
     const snippet = r.paragraphs[0].it.slice(0, 140);
+    const dots = '·'.repeat(r.difficulty) || '·';
     card.innerHTML = `
       <div class="text-card-header">
-        <div class="text-card-title">${r.title}</div>
-        <div class="difficulty-badge difficulty-${r.difficulty}">${'·'.repeat(r.difficulty) || 'I'}</div>
+        <div class="text-card-title">${escapeHtml(r.title)}</div>
+        <div class="difficulty-badge difficulty-${r.difficulty}">${dots}</div>
       </div>
-      <div class="text-card-snippet">${snippet}…</div>
-      <div class="text-card-meta"><span>${r.source}</span></div>
+      <div class="text-card-snippet">${escapeHtml(snippet)}…</div>
+      <div class="text-card-meta"><span>${escapeHtml(r.source)}</span></div>
     `;
     card.addEventListener('click', () => openReader(r.id));
-    list.appendChild(card);
+    return card;
+  }
+  CATEGORIES.forEach(cat => {
+    const items = buckets[cat.key];
+    if (!items.length) return;
+    const header = document.createElement('div');
+    header.className = 'reading-category-label';
+    header.textContent = cat.label;
+    list.appendChild(header);
+    items.forEach(r => list.appendChild(renderCard(r)));
   });
+  if (buckets._other.length) {
+    buckets._other.forEach(r => list.appendChild(renderCard(r)));
+  }
 }
 
 function openReader(id) {
   const reading = READINGS.find(r => r.id === id);
   if (!reading) return;
-  currentReader = reading;
-  document.getElementById('reader-header-title').textContent = reading.title.toUpperCase();
-  const content = document.getElementById('reader-content');
-  let html = `
-    <div class="reader-title">${reading.title}</div>
-    <div class="reader-source">${reading.source}</div>
-    <div class="reader-text">
-  `;
-  reading.paragraphs.forEach((p, pi) => {
-    const wordsHtml = p.it.split(/(\s+)/).map(token => {
-      if (/^\s+$/.test(token)) return token;
-      const clean = token.toLowerCase().replace(/[.,;:!?«»"'()…]/g, '').trim();
-      if (!clean) return token;
-      const safe = clean.replace(/'/g, "\\'");
-      return `<span class="word" data-word="${safe}" onclick="showWord(this, '${safe}')">${token}</span>`;
-    }).join('');
-    html += `<p>${wordsHtml}</p>`;
-    html += `<div class="full-translation" id="ft-${pi}">${p.en}</div>`;
-  });
-  html += '</div>';
-  content.innerHTML = html;
-  document.getElementById('ft-btn').classList.remove('active');
-  document.getElementById('ft-btn').textContent = 'SHOW TRANSLATION';
-  document.getElementById('read-btn').textContent = state.readTexts.includes(id) ? '✓ READ' : 'MARK READ';
-  document.getElementById('reader').classList.add('active');
-  content.scrollTop = 0;
+  openReaderObj(reading);
 }
 
 function closeReader() {
@@ -1472,46 +2352,62 @@ function closeReader() {
   currentReader = null;
 }
 
-function showWord(el, word) {
+async function showWord(el, word) {
   if (!currentReader) return;
-  // Look up by progressively stripping prefixes
-  let gloss = currentReader.glosses[word];
-  if (!gloss) {
-    // try stripping common prefixes
-    const stripped = word.replace(/^(l['']|del[l]?[ao']?|nel[l]?[ao']?|sul[l]?[ao']?|al[l]?[ao']?|dal[l]?[ao']?)/, '');
-    gloss = currentReader.glosses[stripped];
-  }
+  // Position popup with placeholder content first
   const popup = document.getElementById('word-popup');
-  if (gloss) {
-    popup.innerHTML = `
-      <div class="word-popup-it">${word}</div>
-      <div class="word-popup-en">${gloss.en}</div>
-      ${gloss.note ? `<div class="word-popup-note">${gloss.note}</div>` : ''}
-    `;
-  } else {
-    popup.innerHTML = `
-      <div class="word-popup-it">${word}</div>
-      <div class="word-popup-en"><em>(infer from Spanish)</em></div>
-      <div class="word-popup-note">Try the Italian transformation rules — most words follow them.</div>
-    `;
-  }
-  // Position popup near the tapped word
-  const rect = el.getBoundingClientRect();
-  popup.classList.add('show');
-  // Measure after show
-  const popupRect = popup.getBoundingClientRect();
-  let top = rect.bottom + 8;
-  let left = rect.left + (rect.width / 2) - (popupRect.width / 2);
-  if (left < 8) left = 8;
-  if (left + popupRect.width > window.innerWidth - 8) left = window.innerWidth - popupRect.width - 8;
-  if (top + popupRect.height > window.innerHeight - 80) top = rect.top - popupRect.height - 8;
-  popup.style.top = top + 'px';
-  popup.style.left = left + 'px';
-  // Speak the word
+  popup.innerHTML = `<div class="word-popup-it">${escapeHtml(word)}</div><div class="word-popup-en"><em>…</em></div>`;
+  positionPopupNear(el);
   speakItalian(word);
-  // Auto-dismiss
+
+  // 1. Local glosses (current reading)
+  let gloss = currentReader.glosses && currentReader.glosses[word];
+  if (!gloss) {
+    const stripped = word.replace(/^(l['']|del[l]?[ao']?|nel[l]?[ao']?|sul[l]?[ao']?|al[l]?[ao']?|dal[l]?[ao']?)/, '');
+    gloss = currentReader.glosses && currentReader.glosses[stripped];
+  }
+  if (gloss) {
+    renderWordPopup(word, { en: gloss.en, note: gloss.note });
+    clearTimeout(window._popupTimer);
+    window._popupTimer = setTimeout(() => popup.classList.remove('show'), 6000);
+    return;
+  }
+
+  // 2. Saved words
+  const saved = savedWords.find(s => s.it.toLowerCase() === word.toLowerCase());
+  if (saved && saved.en) {
+    renderWordPopup(word, { en: saved.en, note: saved.note || 'salvato' });
+    clearTimeout(window._popupTimer);
+    window._popupTimer = setTimeout(() => popup.classList.remove('show'), 6000);
+    return;
+  }
+
+  // 3. Wiktionary
+  const wik = await lookupWiktionary(word);
+  // If popup was dismissed while loading, abort
+  if (!popup.classList.contains('show')) return;
+
+  if (wik.error) {
+    renderWordPopup(word, { en: '(network error)', note: 'Try inferring from Spanish using the bridge rules.' });
+  } else if (wik.notFound) {
+    renderWordPopup(word, { en: '(not in Wiktionary)', note: 'Likely an inflected form. Try inferring from Spanish.' });
+  } else {
+    const html = wik.defs.map(d => `<div style="margin-bottom:4px"><strong>${escapeHtml(d.pos)}</strong> ${escapeHtml(d.def)}</div>`).join('');
+    // First definition for save (plain text)
+    const firstPlain = wik.defs[0].def;
+    renderWordPopup(word, { en: html, htmlEn: true, note: 'via Wiktionary', _saveText: firstPlain });
+    // Override save button to use plain first def
+    const btn = popup.querySelector('.popup-save-btn');
+    if (btn) {
+      const wordEsc = word.replace(/'/g, "\\'");
+      const plainEsc = firstPlain.replace(/'/g, "\\'").replace(/\\/g, '\\\\').slice(0, 200);
+      btn.setAttribute('onclick', `event.stopPropagation(); toggleSaveWord('${wordEsc}', '${plainEsc}', 'via Wiktionary')`);
+    }
+  }
+  // Reposition (content may have grown)
+  positionPopupNear(el);
   clearTimeout(window._popupTimer);
-  window._popupTimer = setTimeout(() => popup.classList.remove('show'), 4000);
+  window._popupTimer = setTimeout(() => popup.classList.remove('show'), 8000);
 }
 
 document.addEventListener('click', (e) => {
@@ -1567,6 +2463,19 @@ function markRead() {
 function renderThemes() {
   const grid = document.getElementById('theme-grid');
   grid.innerHTML = '';
+
+  // Saved words tile (always show for discoverability)
+  const savedCard = document.createElement('div');
+  savedCard.className = 'theme-card';
+  savedCard.style.borderColor = 'var(--crimson)';
+  savedCard.innerHTML = `
+    <span class="theme-icon">⭐</span>
+    <div class="theme-name" style="color: var(--crimson-deep);">LE MIE PAROLE</div>
+    <div class="theme-count">${savedWords.length} salvate</div>
+  `;
+  savedCard.addEventListener('click', () => openVocabList('saved'));
+  grid.appendChild(savedCard);
+
   Object.keys(VOCAB_THEMES).forEach(key => {
     if (key === 'falsi') return; // shown in warning card
     const t = VOCAB_THEMES[key];
@@ -1583,6 +2492,40 @@ function renderThemes() {
 }
 
 function openVocabList(themeKey) {
+  if (themeKey === 'saved') {
+    document.getElementById('vocab-list-title').textContent = 'LE MIE PAROLE';
+    const content = document.getElementById('vocab-list-content');
+    if (!savedWords.length) {
+      content.innerHTML = `
+        <div class="empty-saved">
+          Nessuna parola salvata.<br>
+          Tap any word in a reading and press <strong>+ SAVE WORD</strong> to build your personal list.
+        </div>`;
+    } else {
+      let html = '';
+      // Show most recent first
+      const sorted = savedWords.slice().sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0));
+      sorted.forEach(w => {
+        const itEsc = w.it.replace(/'/g, "\\'");
+        const wordEsc = w.it.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        html += `
+          <div class="vocab-row">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+              <div style="flex:1;min-width:0;" onclick="speakItalian('${itEsc}')">
+                <div class="vocab-italian">${escapeHtml(w.it)}</div>
+                <div class="vocab-english">${escapeHtml(w.en || '(no definition)')}</div>
+                ${w.note ? `<div class="vocab-bridge">${escapeHtml(w.note)}</div>` : ''}
+              </div>
+              <button class="popup-save-btn saved" style="width:auto;flex-shrink:0;margin-top:0;" onclick="removeSavedWord('${wordEsc}')">✕</button>
+            </div>
+          </div>
+        `;
+      });
+      content.innerHTML = html;
+    }
+    document.getElementById('vocab-list-view').classList.add('active');
+    return;
+  }
   const theme = VOCAB_THEMES[themeKey];
   if (!theme) return;
   document.getElementById('vocab-list-title').textContent = theme.name.toUpperCase();
@@ -1600,6 +2543,15 @@ function openVocabList(themeKey) {
   });
   content.innerHTML = html;
   document.getElementById('vocab-list-view').classList.add('active');
+}
+
+function removeSavedWord(word) {
+  const w = word.toLowerCase();
+  savedWords = savedWords.filter(s => s.it.toLowerCase() !== w);
+  persistSavedWords();
+  openVocabList('saved');
+  renderThemes();
+  showToast('Rimosso');
 }
 
 function closeVocabList() {
@@ -1635,11 +2587,12 @@ function openGrammar(idx) {
 async function syncPush() {
   const pin = document.getElementById('sync-pin').value.trim();
   if (!pin) { showToast('Set a sync PIN first'); return; }
+  const payload = Object.assign({}, state, { savedWords });
   try {
     const res = await fetch(`${FIREBASE_BASE}/${APP_ID}/${pin}.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
+      body: JSON.stringify(payload)
     });
     if (res.ok) showToast('☁ Pushed to cloud');
     else showToast('Push failed');
@@ -1653,11 +2606,18 @@ async function syncPull() {
     const res = await fetch(`${FIREBASE_BASE}/${APP_ID}/${pin}.json`);
     const data = await res.json();
     if (data) {
+      // Pull saved words separately so they don't get lost
+      if (Array.isArray(data.savedWords)) {
+        savedWords = data.savedWords;
+        persistSavedWords();
+      }
+      delete data.savedWords;
       state = Object.assign(state, data);
       saveState();
       updateStats();
       renderLessons();
       renderReadings();
+      renderThemes();
       showToast('☁ Pulled from cloud');
     } else {
       showToast('No data found for that PIN');
@@ -1666,12 +2626,18 @@ async function syncPull() {
 }
 
 function resetProgress() {
-  if (!confirm('Clear all progress? This cannot be undone.')) return;
+  if (!confirm('Clear all progress, saved words, and caches? This cannot be undone.')) return;
   state = { completedLessons: [], readTexts: [], lastVisit: null, streak: 0 };
+  savedWords = [];
+  wikCache = {};
   localStorage.removeItem(APP_ID + '_progress');
+  localStorage.removeItem(APP_ID + '_saved_words');
+  localStorage.removeItem(APP_ID + '_wik_cache');
+  localStorage.removeItem(APP_ID + '_news_cache');
   updateStats();
   renderLessons();
   renderReadings();
+  renderThemes();
   showToast('Reset complete');
 }
 
@@ -1680,7 +2646,293 @@ document.getElementById('sync-pin').addEventListener('change', e => {
   localStorage.setItem(APP_ID + '_pin', e.target.value);
 });
 
-// ---------- INIT ----------
+// ---------- SAVED WORDS (personal vocab) ----------
+let savedWords = [];
+function loadSavedWords() {
+  try { savedWords = JSON.parse(localStorage.getItem(APP_ID + '_saved_words') || '[]'); }
+  catch(e) { savedWords = []; }
+}
+function persistSavedWords() {
+  try { localStorage.setItem(APP_ID + '_saved_words', JSON.stringify(savedWords)); } catch(e){}
+}
+function isWordSaved(word) {
+  const w = word.toLowerCase();
+  return savedWords.some(s => s.it.toLowerCase() === w);
+}
+function toggleSaveWord(word, glossEn, glossNote) {
+  const w = word.toLowerCase();
+  const idx = savedWords.findIndex(s => s.it.toLowerCase() === w);
+  if (idx >= 0) {
+    savedWords.splice(idx, 1);
+    showToast('Rimosso');
+  } else {
+    savedWords.push({ it: word, en: glossEn || '', note: glossNote || '', savedAt: Date.now() });
+    showToast('✓ Salvato');
+  }
+  persistSavedWords();
+  // Re-render the popup if showing
+  const popup = document.getElementById('word-popup');
+  if (popup.classList.contains('show')) {
+    renderWordPopup(word, { en: glossEn, note: glossNote, fromSaved: true });
+  }
+  renderThemes();
+}
+
+// ---------- WIKTIONARY LOOKUP ----------
+let wikCache = {};
+function loadWikCache() {
+  try { wikCache = JSON.parse(localStorage.getItem(APP_ID + '_wik_cache') || '{}'); }
+  catch(e) { wikCache = {}; }
+}
+function persistWikCache() {
+  // Keep cache size reasonable
+  const keys = Object.keys(wikCache);
+  if (keys.length > 600) {
+    keys.slice(0, 200).forEach(k => delete wikCache[k]);
+  }
+  try { localStorage.setItem(APP_ID + '_wik_cache', JSON.stringify(wikCache)); } catch(e){}
+}
+async function lookupWiktionary(word) {
+  const key = word.toLowerCase();
+  if (wikCache[key]) return wikCache[key];
+  try {
+    const url = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(key)}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      wikCache[key] = { notFound: true };
+      persistWikCache();
+      return wikCache[key];
+    }
+    const data = await res.json();
+    const itEntries = data.it || [];
+    const defs = [];
+    for (const entry of itEntries) {
+      for (const def of (entry.definitions || []).slice(0, 2)) {
+        // Strip HTML, collapse whitespace
+        const plain = (def.definition || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+        if (plain && defs.length < 4) {
+          defs.push({ pos: entry.partOfSpeech || '', def: plain });
+        }
+      }
+    }
+    const result = defs.length ? { defs } : { notFound: true };
+    wikCache[key] = result;
+    persistWikCache();
+    return result;
+  } catch (e) {
+    return { error: true };
+  }
+}
+
+// ---------- WORD POPUP RENDERING ----------
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function positionPopupNear(el) {
+  const popup = document.getElementById('word-popup');
+  const rect = el.getBoundingClientRect();
+  popup.classList.add('show');
+  const popupRect = popup.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  let left = rect.left + (rect.width / 2) - (popupRect.width / 2);
+  if (left < 8) left = 8;
+  if (left + popupRect.width > window.innerWidth - 8) left = window.innerWidth - popupRect.width - 8;
+  if (top + popupRect.height > window.innerHeight - 80) top = rect.top - popupRect.height - 8;
+  if (top < 8) top = 8;
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+}
+function renderWordPopup(word, gloss) {
+  const popup = document.getElementById('word-popup');
+  const saved = isWordSaved(word);
+  const enContent = gloss.htmlEn ? gloss.en : escapeHtml(gloss.en || '');
+  const wordEsc = word.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  const enEsc = (gloss.en || '').replace(/'/g, "\\'").replace(/\\/g, '\\\\').replace(/<[^>]*>/g, '').slice(0, 200);
+  const noteEsc = (gloss.note || '').replace(/'/g, "\\'").slice(0, 100);
+  popup.innerHTML = `
+    <div class="word-popup-it">${escapeHtml(word)}</div>
+    <div class="word-popup-en">${enContent}</div>
+    ${gloss.note ? `<div class="word-popup-note">${escapeHtml(gloss.note)}</div>` : ''}
+    <button class="popup-save-btn ${saved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSaveWord('${wordEsc}', '${enEsc}', '${noteEsc}')">
+      ${saved ? '✓ SAVED' : '+ SAVE WORD'}
+    </button>
+  `;
+}
+
+// ---------- VATICAN NEWS FETCH ----------
+async function loadVaticanNews(force) {
+  const list = document.getElementById('news-feed-list');
+  list.innerHTML = '<div class="empty-saved">Caricamento…</div>';
+
+  // Check cache (1 hour TTL unless forced)
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem(APP_ID + '_news_cache') || 'null');
+      if (cached && cached.items && (Date.now() - cached.timestamp < 3600000)) {
+        renderNewsItems(cached.items, cached.timestamp);
+        return;
+      }
+    } catch(e) {}
+  }
+
+  const rssUrl = 'https://www.vaticannews.va/it.rss.xml';
+  const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(rssUrl);
+
+  try {
+    const res = await fetch(proxyUrl);
+    if (!res.ok) throw new Error('proxy ' + res.status);
+    const text = await res.text();
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+    const items = Array.from(xml.querySelectorAll('item')).slice(0, 10).map(it => ({
+      title: (it.querySelector('title') || {}).textContent || '',
+      description: stripHtml((it.querySelector('description') || {}).textContent || ''),
+      link: (it.querySelector('link') || {}).textContent || '',
+      pubDate: (it.querySelector('pubDate') || {}).textContent || ''
+    })).filter(it => it.title);
+    if (!items.length) throw new Error('no items');
+    const payload = { timestamp: Date.now(), items };
+    try { localStorage.setItem(APP_ID + '_news_cache', JSON.stringify(payload)); } catch(e){}
+    renderNewsItems(items, payload.timestamp);
+  } catch (e) {
+    console.error('News fetch failed:', e);
+    list.innerHTML = '<div class="empty-saved" style="color: var(--crimson-deep);">Errore di rete.<br><span class="refresh-link" onclick="loadVaticanNews(true)">Riprova</span></div>';
+  }
+}
+function stripHtml(s) {
+  const div = document.createElement('div');
+  div.innerHTML = s || '';
+  return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+}
+function renderNewsItems(items, timestamp) {
+  const list = document.getElementById('news-feed-list');
+  list.innerHTML = '';
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'text-card';
+    const dateLabel = formatPubDate(item.pubDate);
+    card.innerHTML = `
+      <div class="text-card-header">
+        <div class="text-card-title">${escapeHtml(item.title)}</div>
+        <div class="difficulty-badge difficulty-2">···</div>
+      </div>
+      <div class="text-card-snippet">${escapeHtml(item.description.slice(0, 220))}…</div>
+      <div class="text-card-meta"><span>Vatican News</span><span class="news-pubdate">${dateLabel}</span></div>
+    `;
+    card.onclick = () => openLiveReading(item, 'news');
+    list.appendChild(card);
+  });
+  const refresh = document.createElement('div');
+  refresh.className = 'refresh-link';
+  refresh.onclick = () => loadVaticanNews(true);
+  refresh.textContent = '↻ Aggiorna · ' + formatTimeAgo(timestamp);
+  list.appendChild(refresh);
+}
+function formatPubDate(s) {
+  if (!s) return '';
+  try {
+    const d = new Date(s);
+    if (isNaN(d)) return '';
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    if (sameDay) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  } catch(e) { return ''; }
+}
+function formatTimeAgo(ts) {
+  const mins = Math.round((Date.now() - ts) / 60000);
+  if (mins < 1) return 'now';
+  if (mins < 60) return mins + 'm ago';
+  return Math.round(mins / 60) + 'h ago';
+}
+
+// ---------- PASTE-TEXT READER ----------
+function openPasteModal() {
+  document.getElementById('paste-modal').classList.add('active');
+  setTimeout(() => document.getElementById('paste-input').focus(), 200);
+}
+function closePasteModal() {
+  document.getElementById('paste-modal').classList.remove('active');
+}
+function openPastedText() {
+  const text = document.getElementById('paste-input').value.trim();
+  if (!text) { showToast('Paste some text first'); return; }
+  const paragraphs = text.split(/\n\n+|\n+/).map(p => p.trim()).filter(p => p).map(it => ({ it, en: '' }));
+  if (!paragraphs.length) { showToast('No text found'); return; }
+  closePasteModal();
+  document.getElementById('paste-input').value = '';
+  openLiveReading({
+    title: 'Testo personale',
+    description: '',
+    paragraphs,
+    source: 'Pasted · ' + new Date().toLocaleDateString()
+  }, 'paste');
+}
+
+// ---------- LIVE READING (news / paste / future sources) ----------
+function openLiveReading(item, kind) {
+  let paragraphs;
+  if (item.paragraphs) {
+    paragraphs = item.paragraphs;
+  } else {
+    paragraphs = [];
+    if (item.title) paragraphs.push({ it: item.title, en: '' });
+    if (item.description) {
+      item.description.split(/(?<=[.!?])\s+(?=[A-ZÀ-Ú])/).forEach(s => {
+        if (s.trim()) paragraphs.push({ it: s.trim(), en: '' });
+      });
+    }
+  }
+  const reading = {
+    id: kind + '_' + Date.now(),
+    title: item.title || 'Lettura',
+    source: item.source || 'Vatican News',
+    difficulty: 2,
+    paragraphs,
+    glosses: {},
+    isLive: true
+  };
+  openReaderObj(reading);
+}
+
+// Refactored: openReader by ID, openReaderObj by object
+function openReaderObj(reading) {
+  currentReader = reading;
+  document.getElementById('reader-header-title').textContent = reading.title.toUpperCase().slice(0, 40);
+  const content = document.getElementById('reader-content');
+  let html = `
+    <div class="reader-title">${escapeHtml(reading.title)}</div>
+    <div class="reader-source">${escapeHtml(reading.source)}</div>
+    <div class="reader-text">
+  `;
+  reading.paragraphs.forEach((p, pi) => {
+    const wordsHtml = p.it.split(/(\s+)/).map(token => {
+      if (/^\s+$/.test(token)) return token;
+      const clean = token.toLowerCase().replace(/[.,;:!?«»"'()…—–]/g, '').trim();
+      if (!clean) return token;
+      const safe = clean.replace(/'/g, "\\'");
+      return `<span class="word" data-word="${safe}" onclick="showWord(this, '${safe}')">${token}</span>`;
+    }).join('');
+    html += `<p>${wordsHtml}</p>`;
+    if (p.en) html += `<div class="full-translation" id="ft-${pi}">${escapeHtml(p.en)}</div>`;
+  });
+  html += '</div>';
+  content.innerHTML = html;
+  // Hide translation toolbar items that don't apply to live readings
+  const ftBtn = document.getElementById('ft-btn');
+  ftBtn.classList.remove('active');
+  ftBtn.textContent = 'SHOW TRANSLATION';
+  const hasTranslations = reading.paragraphs.some(p => p.en);
+  ftBtn.style.display = hasTranslations ? '' : 'none';
+  const readBtn = document.getElementById('read-btn');
+  if (reading.isLive) {
+    readBtn.style.display = 'none';
+  } else {
+    readBtn.style.display = '';
+    readBtn.textContent = state.readTexts.includes(reading.id) ? '✓ READ' : 'MARK READ';
+  }
+  document.getElementById('reader').classList.add('active');
+  content.scrollTop = 0;
+}
 function detectStandalone() {
   const standalone = window.matchMedia('(display-mode: standalone)').matches ||
                      window.navigator.standalone === true;
@@ -1707,6 +2959,8 @@ function maybeShowInstallHint() {
 function init() {
   detectStandalone();
   loadState();
+  loadSavedWords();
+  loadWikCache();
   updateStreak();
   const savedPin = localStorage.getItem(APP_ID + '_pin');
   if (savedPin) document.getElementById('sync-pin').value = savedPin;
