@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Endowment and the Lodge | One Faith Delivered</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #7a1f2b;
+    --crimson-deep: #5a1620;
+    --crimson-light: #a4334a;
+    --gold: #b8893a;
+    --gold-light: #d4a85a;
+    --gold-pale: #e8d4a0;
+    --parchment: #f7f1e3;
+    --parchment-deep: #ede4cc;
+    --ink: #1f1a14;
+    --ink-soft: #3d342a;
+    --ink-muted: #6b5d4b;
+    --rule: #c8b896;
+    --bg: #faf6ec;
+  }
+
+  [data-theme="dark"] {
+    --crimson: #c44a5f;
+    --crimson-deep: #a4334a;
+    --crimson-light: #d96680;
+    --gold: #d4a85a;
+    --gold-light: #e8c878;
+    --gold-pale: #5a4a2a;
+    --parchment: #1a1611;
+    --parchment-deep: #241e16;
+    --ink: #f0e8d4;
+    --ink-soft: #d8cdb4;
+    --ink-muted: #a09583;
+    --rule: #4a3e2a;
+    --bg: #14110c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--ink);
+    background: var(--bg);
+    background-image:
+      radial-gradient(at 20% 10%, rgba(184, 137, 58, 0.05) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(122, 31, 43, 0.04) 0px, transparent 50%);
+  }
+
+  /* Reading progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--crimson));
+    width: 0%;
+    z-index: 1000;
+    transition: width 0.1s ease;
+  }
+
+  /* Sticky nav */
+  nav.top {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    z-index: 100;
+    padding: 0.75rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(8px);
+  }
+
+  nav.top .brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--crimson);
+    letter-spacing: 0.02em;
+  }
+
+  nav.top .brand small {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 0.5rem;
+  }
+
+  nav.top .controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  nav.top button {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-soft);
+    padding: 0.4rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+
+  nav.top button:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  /* Hero */
+  header.hero {
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  header.hero::before {
+    content: "✦";
+    display: block;
+    color: var(--gold);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    letter-spacing: 1rem;
+  }
+
+  header.hero .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  header.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  header.hero h1 em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--crimson);
+  }
+
+  header.hero .deck {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--ink-muted);
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  header.hero .meta {
+    margin-top: 2.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+  }
+
+  header.hero .meta span { margin: 0 0.75rem; color: var(--gold); }
+
+  /* Section dividers */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 5rem auto 3rem;
+    max-width: 800px;
+    padding: 0 2rem;
+  }
+
+  .section-divider .line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .section-divider .number {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+
+  /* Main content */
+  main {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--crimson);
+    margin: 2.5rem 0 1rem;
+    line-height: 1.3;
+  }
+
+  h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  p {
+    margin-bottom: 1.25rem;
+    color: var(--ink-soft);
+  }
+
+  p.lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--gold);
+  }
+
+  /* First-letter drop cap on first paragraph after h2 */
+  h2 + p::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    float: left;
+    line-height: 0.85;
+    margin: 0.25rem 0.5rem 0 0;
+    color: var(--crimson);
+  }
+
+  blockquote {
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    background: rgba(184, 137, 58, 0.05);
+  }
+
+  blockquote cite {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  /* Patristic block */
+  .patristic-block {
+    border: 1px solid var(--gold);
+    background: rgba(184, 137, 58, 0.06);
+    padding: 1.75rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .patristic-block::before {
+    content: "✦";
+    position: absolute;
+    top: -0.7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    color: var(--gold);
+    padding: 0 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Critique box */
+  .critique-box {
+    border-left: 4px solid var(--crimson);
+    background: rgba(122, 31, 43, 0.04);
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+  }
+
+  .critique-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  /* Key point */
+  .key-point {
+    border-left: 4px solid var(--gold);
+    background: rgba(184, 137, 58, 0.04);
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+  }
+
+  .key-point .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  /* Comparison table */
+  .comparison-wrapper {
+    margin: 3rem -1rem;
+    overflow-x: auto;
+  }
+
+  table.comparison {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: var(--parchment);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  [data-theme="dark"] table.comparison {
+    background: var(--parchment-deep);
+  }
+
+  table.comparison thead {
+    background: var(--crimson-deep);
+    color: var(--parchment);
+  }
+
+  table.comparison th {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  table.comparison th:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    width: 22%;
+  }
+
+  table.comparison td {
+    padding: 1rem 1.25rem;
+    vertical-align: top;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  table.comparison td:first-child {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--crimson);
+    font-size: 0.95rem;
+  }
+
+  table.comparison tr:hover td {
+    background: rgba(184, 137, 58, 0.04);
+  }
+
+  table.comparison tr:last-child td { border-bottom: none; }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    margin: 3rem 0;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--gold);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.3rem;
+    top: 0.5rem;
+    width: 14px;
+    height: 14px;
+    background: var(--bg);
+    border: 3px solid var(--crimson);
+    border-radius: 50%;
+  }
+
+  .timeline-item .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-item .event {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-item .desc {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Two column layout for theological additions */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    header.hero { padding: 4rem 1.5rem 2.5rem; }
+    main { padding: 0 1.5rem; }
+    h2 { font-size: 2rem; }
+  }
+
+  .col-card {
+    padding: 1.5rem;
+    background: rgba(184, 137, 58, 0.05);
+    border-top: 3px solid var(--gold);
+  }
+
+  .col-card h4 {
+    margin-top: 0;
+    color: var(--crimson);
+    font-style: normal;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+  }
+
+  ul, ol {
+    margin: 1rem 0 1.5rem 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  ul li, ol li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  ul li::marker { color: var(--gold); }
+  ol li::marker { color: var(--crimson); font-weight: 600; }
+
+  /* Footer */
+  footer {
+    margin-top: 6rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  footer::before {
+    content: "✦  ✦  ✦";
+    display: block;
+    color: var(--gold);
+    letter-spacing: 1rem;
+    margin-bottom: 1.5rem;
+    font-style: normal;
+  }
+
+  /* Source citations */
+  .sources {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    font-size: 0.85rem;
+  }
+
+  [data-theme="dark"] .sources {
+    background: var(--parchment-deep);
+  }
+
+  .sources h4 {
+    font-family: 'Playfair Display', serif;
+    font-style: normal;
+    color: var(--crimson);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .sources ul {
+    margin: 0;
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .sources li {
+    padding: 0.4rem 0;
+    border-bottom: 1px dotted var(--rule);
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .sources li:last-child { border-bottom: none; }
+
+  /* Print styles */
+  @media print {
+    nav.top, .progress-bar, footer { display: none; }
+    body { background: white; color: black; }
+    .comparison-wrapper { overflow: visible; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="top">
+  <div class="brand">One Faith Delivered <small>by former Mormons, for future Catholics</small></div>
+  <div class="controls">
+    <button onclick="toggleTheme()">◐ Theme</button>
+    <button onclick="window.print()">⎙ Print</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="eyebrow">Comparative Ritual Study</span>
+  <h1>The Endowment <em>&amp;</em> the Lodge</h1>
+  <p class="deck">A side-by-side examination of the Masonic origins of the LDS temple endowment, its evolution, and the theological scaffolding Joseph Smith built atop it.</p>
+  <div class="meta">
+    Onefaithdelivered.org <span>✦</span> Comparative Ritual <span>✦</span> Primary Source Survey
+  </div>
+</header>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">I.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>Forty-Nine Days</h2>
+
+  <p>The historical record is not in dispute. On March 15, 1842, Joseph Smith was initiated as an Entered Apprentice in the newly-installed Nauvoo Masonic Lodge. The following day — an irregular advancement that bypassed the customary waiting periods between degrees — he was raised to the sublime degree of Master Mason. Forty-nine days later, on May 4, 1842, he assembled nine men in the upper room of his red brick store on Water Street and introduced what would come to be called the endowment.</p>
+
+  <p>The participants in that first endowment ceremony were almost without exception fellow Masons. Heber C. Kimball, Brigham Young, Newel K. Whitney, William Law, William Marks, George Miller, Willard Richards, James Adams, and Hyrum Smith — Masonic brethren receiving a ceremony whose forms, signs, tokens, penalties, and physical arrangements were immediately and obviously familiar to every man present.</p>
+
+  <p class="lead">The question is not whether the Nauvoo endowment drew from Masonic ritual. The question is what to make of the borrowing — and what Joseph Smith added to it.</p>
+
+  <div class="key-point">
+    <span class="label">A Note on Sources</span>
+    This page draws principally on primary documents: Joseph Smith's own journal and history, the diaries of Heber C. Kimball, Joseph Fielding, and William Clayton, the records of the Nauvoo Masonic Lodge, and the Church's own statements through its Gospel Topics essays and the Joseph Smith Papers Project. Where LDS-friendly sources establish a fact, those are preferred.
+  </div>
+</main>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">II.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>The Side-by-Side</h2>
+
+  <p>What follows is a structural comparison of the Masonic Blue Lodge ritual (Entered Apprentice, Fellow Craft, and Master Mason degrees) with the LDS temple endowment as it stood from 1842 until the major revision of 1990. Where elements have since been removed or altered, this is noted in the text below. The 1990 and 2019 revisions are addressed in Section IV.</p>
+
+  <div class="comparison-wrapper">
+  <table class="comparison">
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>Masonic Ritual</th>
+        <th>LDS Endowment (1842–1990)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Preparatory Washing</td>
+        <td>Candidate is symbolically prepared in a preparation room, partially disrobed, dressed in special clothing.</td>
+        <td>Initiate is washed and anointed in a curtained station, dressed in a ceremonial undergarment and temple clothing.</td>
+      </tr>
+      <tr>
+        <td>Ritual Apron</td>
+        <td>White lambskin apron, presented as the badge of a Mason and "more ancient than the Golden Fleece."</td>
+        <td>Green apron of fig leaves worn over temple robes, identified with the apron Adam wore in Eden.</td>
+      </tr>
+      <tr>
+        <td>Three Degrees</td>
+        <td>Entered Apprentice, Fellow Craft, Master Mason — progressive degrees of light.</td>
+        <td>Originally framed in three ascending priesthood/kingdom stages (Aaronic, Melchizedek, Patriarchal), aligned with the three degrees of glory.</td>
+      </tr>
+      <tr>
+        <td>Signs</td>
+        <td>Three signs corresponding to the three degrees, each made by a specific arrangement of the hands across the body.</td>
+        <td>Four signs (First and Second Tokens of the Aaronic and Melchizedek Priesthoods), made by similar hand arrangements across the body.</td>
+      </tr>
+      <tr>
+        <td>Tokens (Grips)</td>
+        <td>Specific handshakes assigned to each degree, used to identify a Mason in the dark.</td>
+        <td>Specific handshakes assigned to each priesthood token, taught at the veil to gain entry to the celestial room.</td>
+      </tr>
+      <tr>
+        <td>Penalties (pre-1990)</td>
+        <td>(1) Throat cut from ear to ear; (2) breast torn open and heart removed; (3) body severed and bowels burned. Enacted in pantomime.</td>
+        <td>The identical three penalties, enacted by the same hand gestures, sworn under the same vow of secrecy. Removed in April 1990.</td>
+      </tr>
+      <tr>
+        <td>Five Points of Fellowship</td>
+        <td>Foot to foot, knee to knee, breast to breast, hand to back, mouth to ear — by which the Master's Word is communicated.</td>
+        <td>Identical five-point posture, by which the "True Order of Prayer" and the new name were communicated through the veil. Removed in April 1990.</td>
+      </tr>
+      <tr>
+        <td>Lost Word / New Name</td>
+        <td>The "Master's Word" was lost at the death of Hiram Abiff; substitute words ("Mahabone," "Tubalcain," etc.) are given.</td>
+        <td>A "new name" is given to each initiate at the veil, known only to themselves and their spouse, required for celestial entry.</td>
+      </tr>
+      <tr>
+        <td>The Veil</td>
+        <td>Symbolic veil in the Royal Arch degree, with the candidate passing through to receive sacred knowledge.</td>
+        <td>Literal veil dividing the endowment room from the celestial room, marked with the identical Masonic compass, square, navel mark, and knee mark.</td>
+      </tr>
+      <tr>
+        <td>Marks on the Garment</td>
+        <td>Compass and square appear on the Masonic apron and aprons of officers.</td>
+        <td>The compass and square are stitched into the temple garment over the breasts; a navel mark and knee mark complete the four.</td>
+      </tr>
+      <tr>
+        <td>Oath of Secrecy</td>
+        <td>Sworn never to reveal "the secrets, arts, or hidden mysteries" of Masonry on pain of the penalties.</td>
+        <td>Sworn never to reveal the signs, tokens, names, or penalties on pain of the same penalties (pre-1990) or a more generalized covenant (post-1990).</td>
+      </tr>
+      <tr>
+        <td>Ritual Drama</td>
+        <td>The Hiramic legend: a dramatic enactment of the death and recovery of Hiram Abiff.</td>
+        <td>The Adamic drama: a dramatic enactment of the Creation, the Fall, and the journey through the telestial, terrestrial, and celestial kingdoms.</td>
+      </tr>
+      <tr>
+        <td>Architectural Setting</td>
+        <td>Lodge laid out with East/West orientation, with the Worshipful Master in the East, two pillars, a checkered floor.</td>
+        <td>Temple endowment progression originally moved east through ascending rooms (Creation, Garden, World, Terrestrial, Celestial) toward the throne.</td>
+      </tr>
+      <tr>
+        <td>Sun, Moon, Star</td>
+        <td>The sun, moon, and stars appear on the Master Mason's apron and tracing board.</td>
+        <td>The three degrees of glory in LDS theology are named after and represented by the sun (celestial), moon (terrestrial), and stars (telestial).</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="critique-box">
+    <span class="label">The Burden of Explanation</span>
+    The volume and specificity of the parallels — the same penalties enacted with the same gestures, the same five-point posture, the same marks on the same garments, the same handshakes given through the same kind of veil — exceeds what coincidence or independent inspiration can plausibly explain. A defender of the endowment as ancient revelation must account not only for the parallels themselves but for their concentration into a ceremony introduced seven weeks after Smith's initiation, performed before an audience composed almost entirely of Master Masons.
+  </div>
+</main>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">III.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>What Joseph Smith Added</h2>
+
+  <p>The endowment is not a Masonic copy. Atop the Masonic substrate, Joseph Smith layered a distinct theological architecture that cannot be found in any Masonic ritual past or present. The result is a hybrid: Masonic in its bodily forms and ritual mechanics, Smith-an in its cosmology and soteriology.</p>
+
+  <div class="two-col">
+    <div class="col-card">
+      <h4>From Masonry</h4>
+      <ul>
+        <li>The ritual washing and anointing</li>
+        <li>The system of signs and grips</li>
+        <li>The three-degree progression</li>
+        <li>The penalties and oaths of secrecy</li>
+        <li>The five points of fellowship</li>
+        <li>The veil with its sacred marks</li>
+        <li>The new name communicated in secret</li>
+        <li>The ritual apron</li>
+        <li>The compass and square symbolism</li>
+        <li>The sun/moon/star imagery</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>From Smith's Theology</h4>
+      <ul>
+        <li>The Creation drama (Elohim, Jehovah, Michael)</li>
+        <li>Adam-God overtones in early versions</li>
+        <li>The Fall and expulsion as ritual narrative</li>
+        <li>The Aaronic/Melchizedek priesthood frame</li>
+        <li>The three degrees of glory cosmology</li>
+        <li>Sealing ordinances and eternal marriage</li>
+        <li>The Second Anointing (calling and election)</li>
+        <li>The Protestant minister as Lucifer's emissary (pre-1990)</li>
+        <li>Identification with Adam, Eve, and the patriarchal line</li>
+        <li>The covenant to consecrate to "the Church"</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The Smith-an Cosmology</h3>
+
+  <p>The theological scaffolding Smith built is not incidental decoration. It is the substance of what makes the endowment specifically Latter-day Saint. The Masonic ritual asks the candidate to seek light; the endowment asks the candidate to ascend through tiered kingdoms toward exaltation as a god in embryo. The Masonic Hiramic drama is a moral parable about fidelity unto death; the endowment's Adamic drama is a cosmological reenactment in which the initiate plays Adam or Eve in their own progression toward divinity.</p>
+
+  <p>This is the King Follett Discourse in ritual form. "God himself was once as we are now, and is an exalted man," Smith would preach in April 1844; the endowment provides the ceremonial machinery by which mortals are inducted into the path toward becoming what God once was. No Masonic lodge has ever taught such a thing; no Masonic ritual contains it.</p>
+
+  <div class="patristic-block">
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; text-align: center; color: var(--ink-soft); margin: 0;">
+      The Masonic forms gave Smith a vocabulary of gesture, secrecy, and ascent. His own revelations gave that vocabulary an entirely new sentence to speak. To recognize the borrowing is not yet to settle the meaning — but it does establish that the meaning, whatever it is, comes from Joseph Smith, and not from any tradition older than 1842.
+    </p>
+  </div>
+</main>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">IV.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>An Evolving Rite</h2>
+
+  <p>An ordinance presented as the unchanging pattern of celestial worship has been changed repeatedly, in significant ways, across the past 180 years. The historical evolution is itself instructive. The elements most obviously and embarrassingly Masonic have been the ones most aggressively pruned — but only over time, and only after the parallels became public knowledge.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="date">15–16 March 1842</span>
+      <div class="event">Joseph Smith Made a Master Mason</div>
+      <div class="desc">Initiated as Entered Apprentice on March 15; raised to Master Mason on March 16. The Nauvoo Lodge had been installed only the day before Smith's initiation.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">4 May 1842</span>
+      <div class="event">First Endowment Administered</div>
+      <div class="desc">Smith administers the endowment to nine men in the upper room of his Red Brick Store. Eight of the nine recipients are Master Masons. The ceremony includes signs, tokens, penalties, an apron, a new name, and a veil with Masonic marks.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">December 1845</span>
+      <div class="event">Nauvoo Temple Endowments Begin</div>
+      <div class="desc">Mass administration of the endowment in the unfinished Nauvoo Temple before the exodus west. Heber C. Kimball, presiding, records in his journal that "Masonry was taken from priesthood but has become degenerated" — an explicit acknowledgment of the connection, with an apologetic frame: Masonry as a fallen remnant of the original.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">1877</span>
+      <div class="event">St. George Temple — First Written Text</div>
+      <div class="desc">Under Brigham Young, the previously oral ceremony is committed to writing for the first time. The recorded form retains all the Masonic elements: signs, tokens, penalties, five points of fellowship, the Protestant minister character.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">1893–1894</span>
+      <div class="event">Wilford Woodruff Revisions</div>
+      <div class="desc">Modest revisions following Woodruff's accession. The Oath of Vengeance — sworn since the 1840s, calling on God to avenge the blood of the prophets on this generation — comes under scrutiny. It is formally removed in 1927.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">1919–1927</span>
+      <div class="event">Heber J. Grant Era Changes</div>
+      <div class="desc">A committee chaired by George F. Richards undertakes the most significant revision to that point. Penalties are softened in their verbal form; the Oath of Vengeance is removed; some explicit Masonic gestures are reduced. The ceremony's bones, however, remain.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">1953</span>
+      <div class="event">Filmed Version Introduced</div>
+      <div class="desc">Under David O. McKay, the Creation and Garden portions are presented on film rather than enacted live, standardizing the ceremony across temples and beginning the transition toward a non-theatrical format.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">April 1990</span>
+      <div class="event">The Great Revision</div>
+      <div class="desc">The most consequential changes since 1842. <strong>Removed:</strong> the three penalty gestures and their verbal forms; the Five Points of Fellowship at the veil; the Protestant minister-as-Lucifer's-emissary character; the requirement for women to covenant obedience to their husbands as their husbands obey God (the law is reframed but the structure remains). The changes follow several years of leaked exposés and a 1988 internal survey of temple-going members.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">2005</span>
+      <div class="event">Further Streamlining</div>
+      <div class="desc">Minor refinements to the film and to ceremonial language. The endowment continues to shorten.</div>
+    </div>
+    <div class="timeline-item">
+      <span class="date">January 2019</span>
+      <div class="event">Second Major Revision</div>
+      <div class="desc">Women no longer veil their faces during the prayer circle. Eve is given expanded speaking lines in the Creation drama. The covenant language for women is restructured so that they no longer covenant directly to their husbands but rather alongside them to God. The endowment is shortened by roughly 15 minutes. The changes are announced as "adjustments" by the First Presidency.</div>
+    </div>
+  </div>
+
+  <div class="critique-box">
+    <span class="label">The Pattern of Pruning</span>
+    The trajectory is unmistakable: every revision removes Masonic-looking material, never adds it. The 1927 changes softened the most graphic penalties. The 1990 changes removed the penalties altogether and excised the Five Points of Fellowship — the two elements most obviously identical to Masonic forms. The 2019 changes addressed elements (such as women's veiling and submissive covenants) that had become objectionable on independent grounds. If the endowment were the unchanging ancient pattern restored through revelation, what accounts for the systematic excision of precisely those elements that historical scrutiny had identified as borrowed?
+  </div>
+</main>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">V.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>The Apologetic Responses</h2>
+
+  <p>LDS scholarship has not denied the Masonic parallels; the parallels are too obvious to deny. What it has done is offer interpretive frames that allow the borrowing to be acknowledged without conceding what the borrowing implies. Three principal responses recur.</p>
+
+  <h3>1. The Restoration Thesis</h3>
+
+  <p>The position articulated by Heber C. Kimball in 1845 and developed by later writers including Hugh Nibley: Masonry preserves, in degenerated form, the genuine ritual of Solomon's Temple. What Joseph Smith received by revelation was not a borrowing from Masonry but the restoration of the original from which Masonry itself descended. The similarities between the endowment and Masonic ritual are therefore not embarrassing but confirmatory — they show that Smith had access to the same ancient stream.</p>
+
+  <div class="critique-box">
+    <span class="label">Response</span>
+    The thesis depends on a chain of historical claims that no serious scholar of Masonic history accepts. Speculative Masonry is a product of late 17th and 18th century England, with the Grand Lodge of England founded in 1717. Its rituals are not ancient. They were composed, in their recognizable form, in the generations immediately before Joseph Smith was born. The "ancient temple ritual" supposedly preserved in Masonry has no documentary existence prior to the early modern period. The thesis asks us to believe that an Enlightenment-era English fraternity preserved Solomonic ritual that no Jewish, Christian, or Near Eastern source preserves anywhere else — and that Joseph Smith, surrounded by Masons in a Masonic lodge, independently recovered it.
+  </div>
+
+  <h3>2. The Pedagogical Vehicle Thesis</h3>
+
+  <p>A subtler version, prominent in more recent LDS scholarship (Don Bradley, Michael Homer's interlocutors): Smith used Masonic forms as a familiar pedagogical scaffolding to convey genuinely new revelations. The ritual mechanics are Masonic; the ritual content is divine. The form is a teaching aid; the substance is the truth being taught.</p>
+
+  <div class="critique-box">
+    <span class="label">Response</span>
+    This position is more candid than the Restoration thesis and concedes the historical point. But it surrenders the ceremony's claim to be the unchanging ancient pattern. If the forms are pedagogical conveniences chosen because they were familiar to a particular 1842 audience, then the forms are dispensable, contingent, and culture-bound. This is in fact what subsequent revisions imply: the forms <em>have</em> been treated as dispensable, and most of the specifically Masonic ones have been dispensed with. The pedagogical thesis quietly grants the entire critical case while preserving the appearance of revelatory authority.
+  </div>
+
+  <h3>3. The Common-Source Thesis</h3>
+
+  <p>A third position holds that both Masonry and the endowment draw on a common stock of religious-ritual archetypes — washing, anointing, sacred meals, vows of secrecy, passwords, sacred ascent — and that the similarities reflect this shared archetypal substrate rather than direct borrowing.</p>
+
+  <div class="critique-box">
+    <span class="label">Response</span>
+    This thesis is true at the level of generality and false at the level of specificity. Yes, ritual washing is widespread; yes, vows of secrecy appear in many traditions; yes, sacred ascent is a near-universal religious motif. But the endowment does not borrow archetypes from Masonry — it borrows particulars. The specific posture of the five points of fellowship, the specific gestures of the three penalties, the specific arrangement of the compass and square on the apron and the garment, the specific structure of three ascending degrees keyed to sun-moon-star imagery — these are not archetypal universals. They are the signature ritual language of one specific late-modern English fraternity. The hypothesis that two ritual systems independently arrived at all of these particular forms is not historically credible.
+  </div>
+
+  <h3>The Position That Cannot Be Maintained</h3>
+
+  <p>What the parallels foreclose is the simplest and most pastorally important claim: that the endowment is, in its forms, the unchanging celestial ordinance revealed unaltered from heaven. That position is not defended by any serious LDS scholar today. The defenses on offer are sophisticated; they require sophistication because the simplest version of the truth claim is no longer tenable.</p>
+</main>
+
+<div class="section-divider">
+  <div class="line"></div>
+  <div class="number">VI.</div>
+  <div class="line"></div>
+</div>
+
+<main>
+  <h2>A Catholic Reading</h2>
+
+  <p>Catholicism is not a stranger to ritual, to sacred signs, to consecrated gestures, to oaths, to the use of symbol and matter as bearers of grace. The Catholic objection to the endowment is not that it is ritualistic. The objection is more specific, and it has two parts.</p>
+
+  <h3>What Catholic Liturgy Claims for Itself</h3>
+
+  <p>The Catholic Mass does not claim to be the unchanging ritual of Eden, restored by a 19th-century prophet from a heavenly source. It claims, far more modestly and more verifiably, to be the development of the apostolic <em>memorial</em> of the Last Supper, traceable through a continuous, public, historically documented liturgical tradition — through the <em>Didache</em> (late first century), Justin Martyr's <em>First Apology</em> (c. 155), the Apostolic Tradition attributed to Hippolytus (early third century), the Roman Canon, the medieval missals, the reforms of Trent, and the reforms of Vatican II. The Mass has changed over time — substantially. But it has changed in continuity, in public, with documented sources, and within a Church that has never claimed its liturgical forms are unchanging.</p>
+
+  <p>The endowment, by contrast, was introduced in 1842 with the claim of being the celestial pattern, has been changed repeatedly in ways its initial recipients were not warned would happen, and has been most extensively pruned precisely where its borrowed character is most visible.</p>
+
+  <h3>What Sacraments Do</h3>
+
+  <p>Catholic sacraments do not require new names whispered through veils or grips taught in private. They are not secret. The form of baptism, the words of consecration at Mass, the formula of absolution — all are public, taught openly, known to every catechumen. The Catholic instinct, deepened in the Catechumenate of the early Church, was to admit the unbaptized to instruction freely and to reserve only the Eucharist itself (the <em>disciplina arcani</em>) for the baptized — and even this was not a permanent secret, but a discipline of reverence for the sacred. Nothing in apostolic Christianity required permanent secrecy under penalty of death.</p>
+
+  <div class="key-point">
+    <span class="label">The Question Behind the Comparison</span>
+    The deepest question raised by the endowment is not whether its forms are Masonic. They are. The deepest question is what kind of sacred ritual ought to characterize the Bride of Christ. Is it a ritual whose forms are received in public continuity from the apostles, capable of historical examination, taught openly, and unchanging in its substance? Or is it a ritual whose forms appear suddenly in 1842, derived from a fraternal order founded a century before, modified repeatedly, defended through layered apologetics, and protected by oaths of secrecy? The endowment may be many things. The unchanging celestial ordinance, restored unaltered, is not one of them.
+  </div>
+
+  <p>For those who have left the temple and find themselves still hungering for sacred ritual, for vows that bind, for matter sanctified, for ceremony freighted with meaning — Catholicism is not the absence of these things. It is their fulfillment, in a form that does not depend on private gestures or hidden names, and whose history can bear the daylight.</p>
+
+  <div class="patristic-block">
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; text-align: center; margin: 0;">
+      "What the Church has handed on, the Church has received from the apostles. We hold what we have received; we have received what we hold."
+      <br><span style="font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-muted); display: block; margin-top: 0.75rem;">— after the principle of <em>Quod ubique, quod semper, quod ab omnibus</em>, St. Vincent of Lérins, Commonitorium (434)</span>
+    </p>
+  </div>
+
+  <div class="sources">
+    <h4>Principal Sources</h4>
+    <ul>
+      <li>Nauvoo Masonic Lodge Records, March 1842 (Joseph Smith Papers Project).</li>
+      <li>Heber C. Kimball, Journal entries, 1842–1845, especially regarding the relation of Masonry and the priesthood.</li>
+      <li>Joseph Fielding, Diary, 1842, on the introduction of the endowment.</li>
+      <li>William Clayton, Journal, 1842–1846.</li>
+      <li>Joseph Smith, "History of the Church," Vol. 5, on Masonic initiation and the May 4, 1842 ceremony.</li>
+      <li>"Joseph Smith and Freemasonry," Gospel Topics Essay (acknowledging the historical connection).</li>
+      <li>Michael W. Homer, <em>Joseph's Temples: The Dynamic Relationship Between Freemasonry and Mormonism</em> (University of Utah Press, 2014).</li>
+      <li>David John Buerger, <em>The Mysteries of Godliness: A History of Mormon Temple Worship</em> (Signature Books, rev. ed. 2002).</li>
+      <li>Devery S. Anderson, ed., <em>The Development of LDS Temple Worship, 1846–2000: A Documentary History</em> (Signature Books, 2011).</li>
+      <li>Joseph Smith, "King Follett Discourse," 7 April 1844, on the cosmology underlying the endowment's theological additions.</li>
+      <li>Justin Martyr, <em>First Apology</em>, ch. 65–67 (on the public form of early Christian liturgy).</li>
+      <li>St. Vincent of Lérins, <em>Commonitorium</em> (434), on the test of catholicity.</li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  One Faith Delivered<br>
+  <span style="font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--ink-muted);">BY FORMER MORMONS, FOR FUTURE CATHOLICS</span>
+</footer>
+
+<script>
+  // Reading progress
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrolled / max) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // Theme toggle
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  }
+</script>
+
+</body>
+</html>
